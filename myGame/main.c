@@ -1,20 +1,30 @@
-// Inclui as bibliotecas necessárias
+// ============================================================================
+// Inclusão de bibliotecas
+// ============================================================================
 #include "librays/raylib.h"       // Biblioteca Raylib para gráficos, janelas e entrada
 #include "librays/cJSON.h"        // Biblioteca cJSON para ler arquivos JSON (mapas do Tiled)
-#include <stdlib.h>               // Funções padrão (malloc, free, etc)
-#include <stdio.h>                // Entrada e saída padrão (fopen, fprintf, etc)
+#include <stdlib.h>               // Funções padrão (malloc, free, etc.)
+#include <stdio.h>                // Entrada e saída padrão (fopen, fprintf, etc.)
 #include "player/player.h"        // Cabeçalho do jogador
 #include "staminaBar/stamina.h"   // Cabeçalho da barra de stamina
 
-// Definições constantes para tiles e mapas
+
+// ============================================================================
+// Definições constantes
+// ============================================================================
 #define TILE_SIZE 32              // Tamanho de cada tile em pixels
 #define TILESET1_TILECOUNT 36     // Número de tiles no primeiro tileset
 #define TILESET1_FIRSTGID 1       // Primeiro GID do tileset 1
 #define TILESET2_FIRSTGID 37      // Primeiro GID do tileset 2 (37 = 1 + 36)
 #define TILESET3_FIRSTGID 73      // Primeiro GID do tileset 3
-#define MAP_COUNT 3              // Quantidade de mapas
+#define MAP_COUNT 3               // Quantidade de mapas
 
-// Estrutura que representa um mapa
+
+// ============================================================================
+// Estruturas
+// ============================================================================
+
+// Estrutura que representa um mapa carregado do Tiled
 typedef struct
 {
     int width, height;           // Largura e altura do mapa em tiles
@@ -22,7 +32,12 @@ typedef struct
     int *data;                   // Array contendo os GIDs dos tiles
 } TileMap;
 
-// Função para carregar um mapa JSON
+
+// ============================================================================
+// Funções auxiliares para mapas
+// ============================================================================
+
+// Carrega um mapa no formato JSON exportado pelo Tiled
 TileMap LoadTileMap(const char *fileName)
 {
     TileMap map = {0};
@@ -52,15 +67,15 @@ TileMap LoadTileMap(const char *fileName)
         return map;
     }
 
-    // Pega informações gerais do mapa
-    map.width = cJSON_GetObjectItem(root, "width")->valueint;
-    map.height = cJSON_GetObjectItem(root, "height")->valueint;
-    map.tileWidth = cJSON_GetObjectItem(root, "tilewidth")->valueint;
+    // Informações gerais do mapa
+    map.width      = cJSON_GetObjectItem(root, "width")->valueint;
+    map.height     = cJSON_GetObjectItem(root, "height")->valueint;
+    map.tileWidth  = cJSON_GetObjectItem(root, "tilewidth")->valueint;
     map.tileHeight = cJSON_GetObjectItem(root, "tileheight")->valueint;
 
-    // Pega os dados da primeira camada (camada 0)
+    // Dados da primeira camada (layer 0)
     cJSON *layer0 = cJSON_GetArrayItem(cJSON_GetObjectItem(root, "layers"), 0);
-    cJSON *data = cJSON_GetObjectItem(layer0, "data");
+    cJSON *data   = cJSON_GetObjectItem(layer0, "data");
 
     map.data = malloc(sizeof(int) * map.width * map.height);
 
@@ -74,7 +89,7 @@ TileMap LoadTileMap(const char *fileName)
     return map;
 }
 
-// Função para liberar um mapa da memória
+// Libera a memória alocada para o mapa
 void UnloadTileMap(TileMap *map)
 {
     if (map->data)
@@ -83,7 +98,11 @@ void UnloadTileMap(TileMap *map)
     }
 }
 
-// Função para desenhar o mapa com múltiplos tilesets
+
+// ============================================================================
+// Função de desenho do mapa com múltiplos tilesets
+// ============================================================================
+
 void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3)
 {
     for (int y = 0; y < map->height; y++)
@@ -92,13 +111,12 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
         {
             int gid = map->data[y * map->width + x];
 
-            if (gid <= 0)
-                continue; // Tile vazio, não desenha
+            if (gid <= 0) continue; // Tile vazio, não desenha
 
             Texture2D texture;
             int localId;
 
-            // Decide qual tileset usar baseado no GID
+            // Determina qual tileset usar baseado no GID
             if (gid >= TILESET1_FIRSTGID && gid < TILESET2_FIRSTGID)
             {
                 texture = tileset1;
@@ -123,21 +141,30 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
             Rectangle sourceRec = {
                 (float)(localId % 6) * TILE_SIZE,
                 (float)(localId / 6) * TILE_SIZE,
-                TILE_SIZE, TILE_SIZE};
+                TILE_SIZE,
+                TILE_SIZE
+            };
 
             // Calcula a posição na tela
-            Vector2 position = {x * map->tileWidth, y * map->tileHeight};
+            Vector2 position = {
+                x * map->tileWidth,
+                y * map->tileHeight
+            };
 
-            // Desenha o tile na posição
+            // Desenha o tile na tela
             DrawTextureRec(texture, sourceRec, position, RAYWHITE);
         }
     }
 }
 
+
+// ============================================================================
 // Função principal
+// ============================================================================
+
 int main(void)
 {
-    // Arquivos dos mapas
+    // Lista dos arquivos de mapas
     const char *mapFiles[MAP_COUNT] = {
         "assets/maps/castle/mapcastle_1/castle_map.json",
         "assets/maps/castle/mapcastle_1/castle_map2.json",
@@ -148,13 +175,14 @@ int main(void)
 
     // Carrega o primeiro mapa
     TileMap map = LoadTileMap(mapFiles[currentMapIndex]);
-    if (!map.data)
-        return 1;
+    if (!map.data) return 1;
 
-    // Cria a janela com o tamanho do mapa
-    InitWindow(map.width * map.tileWidth,
-               map.height * map.tileHeight,
-               "Troca de Mapas");
+    // Cria a janela do jogo com o tamanho do mapa
+    InitWindow(
+        map.width * map.tileWidth,
+        map.height * map.tileHeight,
+        "Troca de Mapas"
+    );
 
     SetTargetFPS(60);
 
@@ -167,7 +195,7 @@ int main(void)
     Texture2D tileset2 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlesky.png");
     Texture2D tileset3 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/endcastle.png");
 
-    // Carrega a textura da barra de stamina
+    // Carrega a barra de stamina
     Texture2D staminaBar = LoadTexture("resources/sprites/stamina/staminaBar.png");
 
     // Loop principal do jogo
@@ -175,13 +203,14 @@ int main(void)
     {
         float delta = GetFrameTime();
 
-        // Atualiza o player e a stamina
+        // Atualiza o player e a barra de stamina
         UpdatePlayer(&player, delta);
         UpdateStaminaBar(&player, delta);
 
         // Verifica se o player chegou no final do mapa (lado direito)
         if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
         {
+            // Avança para o próximo mapa
             currentMapIndex = (currentMapIndex + 1) % MAP_COUNT;
 
             // Descarrega o mapa atual e carrega o próximo
@@ -189,7 +218,10 @@ int main(void)
             map = LoadTileMap(mapFiles[currentMapIndex]);
 
             // Ajusta o tamanho da janela para o novo mapa
-            SetWindowSize(map.width * map.tileWidth, map.height * map.tileHeight);
+            SetWindowSize(
+                map.width * map.tileWidth,
+                map.height * map.tileHeight
+            );
 
             // Reposiciona o player no início do mapa
             player.position.x = 0;
@@ -200,7 +232,7 @@ int main(void)
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        // Desenha o mapa e o player
+        // Desenha o mapa, o player e a barra de stamina
         DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
         DrawPlayer(&player);
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){20, 20}, 2.0f);
@@ -208,7 +240,7 @@ int main(void)
         EndDrawing();
     }
 
-    // Libera todos os recursos
+    // Libera todos os recursos carregados
     UnloadTexture(tileset1);
     UnloadTexture(tileset2);
     UnloadTexture(tileset3);
@@ -216,7 +248,7 @@ int main(void)
     UnloadPlayer(&player);
     UnloadTexture(staminaBar);
 
-    // Fecha a janela
+    // Encerra a janela
     CloseWindow();
     return 0;
 }
