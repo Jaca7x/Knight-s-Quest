@@ -1,40 +1,66 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "../librays/raylib.h" // Biblioteca Raylib
 
-#include "../librays/raylib.h" //Biblioteca raylib
-
-typedef struct player //struct player
+/// @brief Struct que representa o jogador
+typedef struct player
 {
-    Vector2 position; //posição X e Y
-    float speedWalk; //velocidade de caminhada
-    float speedRun; //velocidade de corrida
-    float speedWalkBack; //velocidade andando pra trás
-    int currentFrame; //frame atual
-    int frameCounter; //contador de frames
-    int frameWidth; //largura do frame
-    int frameHeight; //altura do frame
-    Texture2D spritePlayerRun; //textura da corrida
-    Texture2D spritePlayerWalk; //textura da caminhada
-    Texture2D spritePlayerIdle; //textura quando está parado
-    Texture2D spritePlayerJump; //textura quando está pulando
-    bool isRunning; //está correndo?
-    bool isMoving; //está se movendo?
-    bool isJumping; //está pulando?
-    float stamina; //estamina 
-    int frameRun; //quantidade de frames da textura de corrida
-    int frameWalk; //quantidade de frames da textura de caminhada
-    int frameIdle; //quantidade de frames da textura de ficar parado
-    int frameJump; //quantidade de frames da textura de pular
-    float groundY; //posição y do chão
-    float gravity; //gravidade
-    float velocityY; //velocidade vertical do player
+    // Posição
+    Vector2 position;
+
+    // Velocidades
+    float speedWalk;       // Velocidade andando
+    float speedRun;        // Velocidade correndo
+    float speedWalkBack;   // (Opcional) Velocidade andando para trás
+
+    // Animação
+    int currentFrame;      // Frame atual da animação
+    int frameCounter;      // Contador de frames (controle de tempo)
+    int frameWidth;        // Largura de cada frame
+    int frameHeight;       // Altura de cada frame
+
+    // Texturas (sprites)
+    Texture2D spritePlayerRun;   // Sprite correndo
+    Texture2D spritePlayerWalk;  // Sprite andando
+    Texture2D spritePlayerIdle;  // Sprite parado
+    Texture2D spritePlayerJump;  // Sprite pulando
+
+    // Estados
+    bool isRunning;   // Está correndo?
+    bool isMoving;    // Está se movendo?
+    bool isJumping;   // Está pulando?
+
+    // Stamina
+    float stamina;    // Energia para correr
+
+    // Frames por animação
+    int frameRun;
+    int frameWalk;
+    int frameIdle;
+    int frameJump;
+
+    // Física
+    float groundY;    // Posição Y do chão
+    float gravity;    // Gravidade
+    float velocityY;  // Velocidade vertical
+
+    // Direção (1 = direita, -1 = esquerda)
     float direction;
+
 } Player;
 
-void InitPlayer(Player *player); //Func para inicializar o player
-void UpdatePlayer(Player *player, float delta); //Func para atualizar o player
-void DrawPlayer(Player *player); //Func para desenhar o player  
-void UnloadPlayer(Player *player); //Func para descarregar as texturas
+/// @brief Inicializa os dados e texturas do jogador
+void InitPlayer(Player *player);
 
-#endif //FIM
+/// @brief Atualiza a física, movimento e animação do jogador
+/// @param delta Tempo entre os frames (GetFrameTime())
+void UpdatePlayer(Player *player, float delta);
+
+/// @brief Desenha o jogador na tela
+void DrawPlayer(Player *player);
+
+/// @brief Descarrega as texturas do jogador da memória
+void UnloadPlayer(Player *player);
+
+#endif // PLAYER_H
