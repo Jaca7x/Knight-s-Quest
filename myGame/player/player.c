@@ -9,12 +9,15 @@ void InitPlayer(Player *player)
     player->spritePlayerWalk = LoadTexture("resources/sprites/player/WALK.png");
     player->spritePlayerIdle = LoadTexture("resources/sprites/player/IDLE.png");
     player->spritePlayerJump = LoadTexture("resources/sprites/player/JUMP.png");
+    player->spritePlayerAttack1 = LoadTexture("resources/sprites/player/ATTACK 1.png");
+    player->spritePlayerAttack2 = LoadTexture("resources/sprites/player/ATTACK 2.png");
 
     // Quantidade de frames de cada animação
     player->frameRun  = 8;
     player->frameWalk = 8;
     player->frameIdle = 7;
     player->frameJump = 5;
+    player->frameAtk = 6;
 
     // Tamanho dos frames baseado no sprite WALK (todos seguem o mesmo padrão)
     player->frameWidth  = player->spritePlayerWalk.width / 8;
@@ -26,7 +29,7 @@ void InitPlayer(Player *player)
     // Configurações físicas
     player->speedWalk = 200.0f;
     player->speedRun  = 280.0f;
-    player->gravity   = 800.0f;
+    player->gravity   = 950.0f;
     player->groundY   = 520.0f;
     player->velocityY = 0.0f;
 
@@ -41,6 +44,7 @@ void InitPlayer(Player *player)
     player->isRunning = false;
     player->isMoving  = false;
     player->isJumping = false;
+    player->isAttacking = false;
 
     // Stamina inicial
     player->stamina = 150;
@@ -54,8 +58,10 @@ void UpdatePlayer(Player *player, float delta)
     // Verificar estado de movimento
     bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
     bool isWalking = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && (!IsKeyDown(KEY_LEFT_SHIFT) || player->stamina <= 0));
+    bool isAttacking = ((IsMouseButtonDown(MOUSE_LEFT_BUTTON) || IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) && player->stamina > 0);
 
     player->isRunning = isRunning;
+    player->isAttacking = isAttacking;
     player->isMoving  = isRunning || isWalking;
 
     // Movimento horizontal com controle de direção
@@ -95,6 +101,17 @@ void UpdatePlayer(Player *player, float delta)
         if (player->isJumping)
         {
             player->currentFrame = (player->currentFrame + 1) % player->frameJump;
+        }
+        else if (player->isAttacking) 
+        {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+            {
+                player->currentFrame = (player->currentFrame + 1) % player->frameAtk;
+            } 
+            else 
+            {
+                player->currentFrame = (player->currentFrame + 1) % player->frameAtk;
+            } 
         }
         else if (player->isRunning)
         {
@@ -151,6 +168,19 @@ void DrawPlayer(Player *player)
         texture = player->spritePlayerJump;
         frameWidth = texture.width / player->frameJump;
     }
+    else if (player->isAttacking)
+    {
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+        {
+            texture = player->spritePlayerAttack1;
+            frameWidth = texture.width / player->frameAtk;
+        } 
+        else
+        {
+            texture = player->spritePlayerAttack2;
+            frameWidth = texture.width / player->frameAtk;
+        }   
+    }
     else if (!player->isMoving)
     {
         texture = player->spritePlayerIdle;
@@ -161,8 +191,7 @@ void DrawPlayer(Player *player)
         texture = player->spritePlayerRun;
         frameWidth = texture.width / player->frameRun;
     }
-    else
-    {
+     else {
         texture = player->spritePlayerWalk;
         frameWidth = texture.width / player->frameWalk;
     }
@@ -195,4 +224,5 @@ void UnloadPlayer(Player *player)
     UnloadTexture(player->spritePlayerWalk);
     UnloadTexture(player->spritePlayerIdle);
     UnloadTexture(player->spritePlayerJump);
+    UnloadTexture(player->spritePlayerAttack1);
 }

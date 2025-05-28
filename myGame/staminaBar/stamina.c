@@ -55,17 +55,41 @@ void UpdateStaminaBar(Player *player, float delta)
         // Se ainda houver stamina, ela é reduzida durante a corrida
         if (player->stamina > 0)
         {
-            player->stamina -= 20.0f * delta;
+            player->stamina -= 25.0f * delta;
 
             // Garante que a stamina não fique negativa
             if (player->stamina < 0)
                 player->stamina = 0;
         }
     }
+
+    // Ataque leve
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+    {
+        if (player->stamina > 0)
+        {
+            player->stamina -= 20.0f * delta;
+
+            if (player->stamina < 0)
+                player->stamina = 0;
+        }    
+    }
+    // Ataque pesado
+    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+    {
+        if (player->stamina > 0)
+        {
+            player->stamina -= 25.0f * delta;
+
+            if (player->stamina < 0)
+                player->stamina = 0;
+        }    
+    }
+    
     else
     {
         // Se não estiver correndo, stamina regenera gradualmente
-        player->stamina += 10.0f * delta;
+        player->stamina += 15.0f * delta;
 
         // Garante que a stamina não ultrapasse o valor máximo
         if (player->stamina > MAX_STAMINA)

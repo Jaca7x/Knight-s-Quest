@@ -25,11 +25,14 @@ typedef struct player
     Texture2D spritePlayerWalk;  // Sprite andando
     Texture2D spritePlayerIdle;  // Sprite parado
     Texture2D spritePlayerJump;  // Sprite pulando
+    Texture2D spritePlayerAttack1; // Sprite atacando leve
+    Texture2D spritePlayerAttack2; // Sprite atacando pesado
 
     // Estados
     bool isRunning;   // Está correndo?
     bool isMoving;    // Está se movendo?
     bool isJumping;   // Está pulando?
+    bool isAttacking; // Está atacando?
 
     // Stamina
     float stamina;    // Energia para correr
@@ -39,6 +42,7 @@ typedef struct player
     int frameWalk;
     int frameIdle;
     int frameJump;
+    int frameAtk;
 
     // Física
     float groundY;    // Posição Y do chão

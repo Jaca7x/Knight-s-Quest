@@ -236,7 +236,6 @@ int main(void)
         DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
         DrawPlayer(&player);
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){20, 20}, 2.0f);
-
         EndDrawing();
     }
 
