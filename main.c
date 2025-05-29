@@ -7,7 +7,7 @@
 #include <stdio.h>                // Entrada e saída padrão (fopen, fprintf, etc.)
 #include "player/player.h"        // Cabeçalho do jogador
 #include "staminaBar/stamina.h"   // Cabeçalho da barra de stamina
-
+#include "wolf/wolf.h"
 
 // ============================================================================
 // Definições constantes
@@ -190,6 +190,9 @@ int main(void)
     Player player;
     InitPlayer(&player);
 
+    Wolf wolf;
+    InitWolf(&wolf);
+
     // Carrega os tilesets
     Texture2D tileset1 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlemap1.png");
     Texture2D tileset2 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlesky.png");
@@ -205,7 +208,9 @@ int main(void)
 
         // Atualiza o player e a barra de stamina
         UpdatePlayer(&player, delta);
+        UpdateWolf(&wolf, delta);
         UpdateStaminaBar(&player, delta);
+        
 
         // Verifica se o player chegou no final do mapa (lado direito)
         if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
@@ -235,6 +240,7 @@ int main(void)
         // Desenha o mapa, o player e a barra de stamina
         DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
         DrawPlayer(&player);
+        DrawWolf(&wolf);
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){20, 20}, 2.0f);
         EndDrawing();
     }
@@ -246,6 +252,7 @@ int main(void)
     UnloadTileMap(&map);
     UnloadPlayer(&player);
     UnloadTexture(staminaBar);
+    UnloadWolf(&wolf);
 
     // Encerra a janela
     CloseWindow();

@@ -6,8 +6,12 @@
 typedef struct wolf
 {
     Vector2 position;
+    Vector2 start;
+    Vector2 end;
 
     int life;
+
+    float speed;
 
     int currentFrame;
     int frameCounter;
@@ -16,11 +20,16 @@ typedef struct wolf
     Texture2D spriteAtkWolf;
     Texture2D spriteIdleWolf;
     Texture2D spriteDeadWolf;
+    
+    int frameWidth;
+    int frameHeight;
 
     int frameWalk;
     int frameAtk;
     int frameIdle;
     int frameDead;
+
+    int direction;
 
 } Wolf;
 
