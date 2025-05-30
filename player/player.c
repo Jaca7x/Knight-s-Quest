@@ -128,10 +128,14 @@ void UpdatePlayer(Player *player, float delta)
     }
 
     // Pulo (apertar espaço)
-    if (IsKeyPressed(KEY_SPACE) && !player->isJumping)
+    if (IsKeyDown(KEY_SPACE) && !player->isJumping)
     {
         player->velocityY = -400.0f;
         player->isJumping = true;
+            if (player->stamina <= 0)
+            {
+                player->velocityY = 0.0f;
+            }
     }
 
     // Aplicar gravidade

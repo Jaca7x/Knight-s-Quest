@@ -49,62 +49,48 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale)
 /// @param delta Delta time para movimento suave independente de FPS
 void UpdateStaminaBar(Player *player, float delta)
 {
-    // Verifica se o player está pressionando (D ou A) + SHIFT (correndo)
-    if ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT))
+    // Corrida
+if ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT))
+{
+    if (player->stamina > 0)
     {
-        // Se ainda houver stamina, ela é reduzida durante a corrida
-        if (player->stamina > 0)
-        {
-            player->stamina -= 60.0f * delta;
-
-            // Garante que a stamina não fique negativa
-            if (player->stamina < 0)
-                player->stamina = 0;
-        }
+        player->stamina -= 25.0f * delta;
+        if (player->stamina < 0) player->stamina = 0; 
     }
+}
 
-    // Pulo
-    if (IsKeyDown(KEY_SPACE))
+// Pulo
+else if (IsKeyDown(KEY_SPACE))
+{
+    if (player->stamina > 0)
     {
-        if (player->stamina > 0)
-        {
-            player->stamina -= 150.0f * delta;
-
-            if (player->stamina < 0)
-                player->stamina = 0;
-        }    
+        player->stamina -= 75.0f * delta;
+        if (player->stamina < 0) player->stamina = 0;
     }
+}
 
-    // Ataque leve
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+// Ataque leve
+else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+{
+    if (player->stamina > 0)
     {
-        if (player->stamina > 0)
-        {
-            player->stamina -= 40.0f * delta;
-
-            if (player->stamina < 0)
-                player->stamina = 0;
-        }    
+        player->stamina -= 30.0f * delta;
+        if (player->stamina < 0) player->stamina = 0;
     }
-    // Ataque pesado
-    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+}
+// Ataque pesado
+else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+{
+    if (player->stamina > 0)
     {
-        if (player->stamina > 0)
-        {
-            player->stamina -= 50.0f * delta;
-
-            if (player->stamina < 0)
-                player->stamina = 0;
-        }    
+        player->stamina -= 30.0f * delta;
+        if (player->stamina < 0) player->stamina = 0;
     }
-    
-    else
-    {
-        // Se não estiver correndo, stamina regenera gradualmente
-        player->stamina += 15.0f * delta;
-
-        // Garante que a stamina não ultrapasse o valor máximo
-        if (player->stamina > MAX_STAMINA)
-            player->stamina = MAX_STAMINA;
-    }
+}
+else
+{
+    // Regeneração
+    player->stamina += 20.0f * delta;
+    if (player->stamina > MAX_STAMINA) player->stamina = MAX_STAMINA;
+}
 }
