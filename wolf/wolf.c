@@ -67,9 +67,6 @@ void DrawWolf(Wolf *wolf) {
 
     Vector2 origin = {0, 0};
 
-    
-
-
     DrawTexturePro(wolf->spriteWalkWolf, source, dest, origin, 0.0f, WHITE);
 }
 

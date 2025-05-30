@@ -3,6 +3,9 @@
 
 #include "../librays/raylib.h"
 
+#define MAP_WOLF_AREA 1
+
+
 typedef struct wolf
 {
     Vector2 position;
