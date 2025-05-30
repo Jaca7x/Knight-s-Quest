@@ -24,13 +24,13 @@ void InitPlayer(Player *player)
     player->frameHeight = player->spritePlayerWalk.height;
 
     // Posição inicial
-    player->position = (Vector2){120, 520};
+    player->position = (Vector2){120, 518};
 
     // Configurações físicas
     player->speedWalk = 200.0f;
     player->speedRun  = 280.0f;
     player->gravity   = 950.0f;
-    player->groundY   = 520.0f;
+    player->groundY   = 518.0f;
     player->velocityY = 0.0f;
 
     // Direção inicial (1 = direita, -1 = esquerda)
