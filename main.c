@@ -194,7 +194,7 @@ int main(void)
     InitWolf(&wolf);
 
     // Carrega os tilesets
-    Texture2D tileset1 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlemap1.png");
+    Texture2D tileset1 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlesky.png");
     Texture2D tileset3 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/endcastle.png");
 
@@ -240,7 +240,10 @@ int main(void)
         // Desenha o mapa, o player e a barra de stamina
         DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
         DrawPlayer(&player);
-        DrawWolf(&wolf);
+        if (currentMapIndex == MAP_WOLF_AREA)
+        {
+            DrawWolf(&wolf);
+        }
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){20, 20}, 2.0f);
         EndDrawing();
     }
