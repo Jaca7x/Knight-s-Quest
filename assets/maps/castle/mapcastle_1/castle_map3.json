@@ -53,11 +53,11 @@
         {
          "columns":6,
          "firstgid":1,
-         "image":"..\/Downloads\/castlemap1.png",
+         "image":"..\/Downloads\/castlemap.png",
          "imageheight":192,
          "imagewidth":192,
          "margin":0,
-         "name":"castlemap1",
+         "name":"castlemap",
          "spacing":0,
          "tilecount":36,
          "tileheight":32,
