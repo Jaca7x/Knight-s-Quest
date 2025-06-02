@@ -181,7 +181,7 @@ int main(void)
     InitWindow(
         map.width * map.tileWidth,
         map.height * map.tileHeight,
-        "Troca de Mapas"
+        "Knights`s Quest the Goblin Saga"
     );
 
     SetTargetFPS(60);
@@ -260,4 +260,4 @@ int main(void)
     // Encerra a janela
     CloseWindow();
     return 0;
-}
+}   
