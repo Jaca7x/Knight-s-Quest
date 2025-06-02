@@ -50,46 +50,78 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale)
 void UpdateStaminaBar(Player *player, float delta)
 {
     // Corrida
+// -------- Corrida --------
 if ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT))
 {
     if (player->stamina > 0)
     {
+        player->isRunning = true;
         player->stamina -= 25.0f * delta;
         if (player->stamina < 0) player->stamina = 0; 
     }
 }
-
-// Pulo
-else if (IsKeyDown(KEY_SPACE))
-{
-    if (player->stamina > 0)
-    {
-        player->stamina -= 75.0f * delta;
-        if (player->stamina < 0) player->stamina = 0;
-    }
-}
-
-// Ataque leve
-else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-{
-    if (player->stamina > 0)
-    {
-        player->stamina -= 30.0f * delta;
-        if (player->stamina < 0) player->stamina = 0;
-    }
-}
-// Ataque pesado
-else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
-{
-    if (player->stamina > 0)
-    {
-        player->stamina -= 30.0f * delta;
-        if (player->stamina < 0) player->stamina = 0;
-    }
-}
 else
 {
-    // Regeneração
+    player->isRunning = false;
+}
+
+// -------- Pulo correndo --------
+if (player->isRunning && IsKeyDown(KEY_SPACE) && (IsKeyDown(KEY_A) || IsKeyDown(KEY_D)))
+{
+    if (player->stamina > 75)
+    {
+        player->stamina -= 35.0f * delta;
+        if (player->stamina < 0) player->stamina = 0;
+    } 
+    else 
+    {
+        player->position.y = player->groundY;
+        player->velocityY = 0.0f;
+        player->isJumping = false;
+    }
+}
+
+// -------- Pulo normal --------
+else if (IsKeyDown(KEY_SPACE))
+{
+    if (player->stamina > 75)
+    {
+        player->stamina -= 35.0f * delta;
+        if (player->stamina < 0) player->stamina = 0;
+    } 
+    else 
+    {
+        player->position.y = player->groundY;
+        player->velocityY = 0.0f;
+        player->isJumping = false;
+    }
+}
+
+// -------- Ataque leve --------
+if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+{
+    if (player->stamina > 0)
+    {
+        player->stamina -= 30.0f * delta;
+        if (player->stamina < 0) player->stamina = 0;
+    }
+}
+
+// -------- Ataque pesado --------
+if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+{
+    if (player->stamina > 0)
+    {
+        player->stamina -= 30.0f * delta;
+        if (player->stamina < 0) player->stamina = 0;
+    }
+}
+
+// -------- Regeneração --------
+if ( !IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_SPACE)
+        || IsMouseButtonDown(MOUSE_BUTTON_LEFT) || 
+        IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
+{
     player->stamina += 20.0f * delta;
     if (player->stamina > MAX_STAMINA) player->stamina = MAX_STAMINA;
 }
