@@ -1,8 +1,12 @@
 #ifndef LIFE_H
 #define LIFE_H
 
+typedef struct player Player; // <- Declaração antecipada
+typedef struct wolf Wolf; // <- Declaração antecipada
+
 #include "../librays/raylib.h"   // Biblioteca Raylib
-#include "../player/player.h"    // Arquivo do player (usa a stamina do player)
+#include "../player/player.h"
+#include "../wolf/wolf.h"     // Arquivo do player (usa a stamina do player)
 
 #define MAX_LIFE 200
 
@@ -11,13 +15,12 @@
 
 #define LIFE_FRAME_CONT 8
 
-typedef struct lifeBar
+typedef struct life
 {
-    Texture2D lifeBar;
-} LifeBar;
+    Texture2D barLifeSprite;
+} Life;
 
-void DrawLifeBar(Texture2D lifeBar, float life, Vector2 position, float scale);
+void DrawLifeBar(Texture2D barLifeSprite, float life, Vector2 position, float scale);
 
-void UpdateLifeBar(Player *player, float delta);
-
+void UpdateLifeBar(Player *player, Wolf *wolf, float delta);
 #endif //LIFE_H
