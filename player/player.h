@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include "../librays/raylib.h" // Biblioteca Raylib
+#include "../wolf/wolf.h" // Biblioteca wolf
 
 /// @brief Struct que representa o jogador
 typedef struct player
@@ -37,6 +38,8 @@ typedef struct player
     // Stamina
     float stamina;    // Energia para correr
 
+    float life;
+
     // Frames por animação
     int frameRun;
     int frameWalk;
@@ -59,12 +62,15 @@ void InitPlayer(Player *player);
 
 /// @brief Atualiza a física, movimento e animação do jogador
 /// @param delta Tempo entre os frames (GetFrameTime())
-void UpdatePlayer(Player *player, float delta);
+void UpdatePlayer(Player *player, Wolf *wolf, float delta);
 
 /// @brief Desenha o jogador na tela
 void DrawPlayer(Player *player);
 
 /// @brief Descarrega as texturas do jogador da memória
 void UnloadPlayer(Player *player);
+
+/// @brief Verifica a colisão 
+void CheckCollisionWolf(Player *player, Wolf *wolf, float delta);
 
 #endif // PLAYER_H

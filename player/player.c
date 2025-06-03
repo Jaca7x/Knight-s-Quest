@@ -48,12 +48,14 @@ void InitPlayer(Player *player)
 
     // Stamina inicial
     player->stamina = 150;
+
+    player->life = 200;
 }
 
 /// @brief Atualiza o estado do jogador (movimento, física e animação).
 /// @param player Ponteiro para a struct Player
 /// @param delta Delta time (tempo entre frames)
-void UpdatePlayer(Player *player, float delta)
+void UpdatePlayer(Player *player, Wolf *wolf, float delta)
 {
     // Verificar estado de movimento
     bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
@@ -63,6 +65,8 @@ void UpdatePlayer(Player *player, float delta)
     player->isRunning = isRunning;
     player->isAttacking = isAttacking;
     player->isMoving  = isRunning || isWalking;
+
+    
 
     // Movimento horizontal com controle de direção
     if (isRunning)
@@ -153,6 +157,8 @@ void UpdatePlayer(Player *player, float delta)
     // Limites da tela
     if (player->position.x < 0) player->position.x = 0;
     if (player->position.y < 0) player->position.y = 0;
+
+    
 }
 
 /// @brief Desenha o jogador na tela com base no estado atual.
@@ -229,4 +235,16 @@ void UnloadPlayer(Player *player)
     UnloadTexture(player->spritePlayerIdle);
     UnloadTexture(player->spritePlayerJump);
     UnloadTexture(player->spritePlayerAttack1);
+}
+
+void CheckCollisionWolf(Player *player, Wolf *wolf, float delta) 
+{
+    if (player->position.x < wolf->position.x + wolf->frameWidth &&
+        player->position.x + player->frameWidth > wolf->position.x &&
+        player->position.y < wolf->position.y + wolf->frameHeight &&
+        player->position.y + player->frameHeight > wolf->position.y
+    )
+    {
+        player->position.x -= 140;
+    }
 }
