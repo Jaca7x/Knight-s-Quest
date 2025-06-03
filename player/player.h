@@ -4,6 +4,9 @@
 #include "../librays/raylib.h" // Biblioteca Raylib
 #include "../wolf/wolf.h" // Biblioteca wolf
 
+
+typedef struct wolf Wolf; // <- Declaração antecipada
+
 /// @brief Struct que representa o jogador
 typedef struct player
 {
@@ -28,6 +31,7 @@ typedef struct player
     Texture2D spritePlayerJump;  // Sprite pulando
     Texture2D spritePlayerAttack1; // Sprite atacando leve
     Texture2D spritePlayerAttack2; // Sprite atacando pesado
+    Texture2D spritePlayerHurt; // estiver sendo atacado
 
     // Estados
     bool isRunning;   // Está correndo?
@@ -69,8 +73,5 @@ void DrawPlayer(Player *player);
 
 /// @brief Descarrega as texturas do jogador da memória
 void UnloadPlayer(Player *player);
-
-/// @brief Verifica a colisão 
-void CheckCollisionWolf(Player *player, Wolf *wolf, float delta);
 
 #endif // PLAYER_H
