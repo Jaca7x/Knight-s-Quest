@@ -204,7 +204,7 @@ int main(void)
     Texture2D staminaBar = LoadTexture("resources/sprites/stamina/staminaBar.png");
 
     // Carrega a barra de vida
-    Texture2D lifeBar = LoadTexture("resources/sprites/life/life.png");
+    Texture2D barLifeSprite = LoadTexture("resources/sprites/life/life.png");
 
     // Loop principal do jogo
     while (!WindowShouldClose())
@@ -213,10 +213,8 @@ int main(void)
 
         // Atualiza o player e a barra de stamina
         UpdatePlayer(&player, &wolf, delta);
-        UpdateWolf(&wolf, delta);
         UpdateStaminaBar(&player, delta);
         
-
         // Verifica se o player chegou no final do mapa (lado direito)
         if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
         {
@@ -248,10 +246,10 @@ int main(void)
         if (currentMapIndex == MAP_WOLF_AREA)
         {
             DrawWolf(&wolf);
-            CheckCollisionWolf(&player, &wolf, delta);
+            UpdateWolf(&wolf, &player, delta);
         }
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
-        DrawLifeBar(lifeBar, player.life, (Vector2){20, 10}, 2.0f);
+        DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
         EndDrawing();
     }
 
@@ -262,6 +260,7 @@ int main(void)
     UnloadTileMap(&map);
     UnloadPlayer(&player);
     UnloadTexture(staminaBar);
+    UnloadTexture(barLifeSprite);
     UnloadWolf(&wolf);
 
     // Encerra a janela
