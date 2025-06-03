@@ -51,19 +51,17 @@ void UpdateStaminaBar(Player *player, float delta)
 {
     // Corrida
 // -------- Corrida --------
-if ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT))
+if ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0)
 {
-    if (player->stamina > 0)
-    {
-        player->isRunning = true;
-        player->stamina -= 25.0f * delta;
-        if (player->stamina < 0) player->stamina = 0; 
-    }
+    player->isRunning = true;
+    player->stamina -= 25.0f * delta;
+    if (player->stamina < 0) player->stamina = 0;
 }
 else
 {
     player->isRunning = false;
 }
+
 
 // -------- Pulo correndo --------
 if (player->isRunning && IsKeyDown(KEY_SPACE) && (IsKeyDown(KEY_A) || IsKeyDown(KEY_D)))
@@ -97,23 +95,22 @@ else if (IsKeyDown(KEY_SPACE))
     }
 }
 
-// -------- Ataque leve --------
-if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+// -------- Ataque pesado e leve --------
+if (player->isAttacking)
 {
-    if (player->stamina > 0)
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
-        player->stamina -= 30.0f * delta;
-        if (player->stamina < 0) player->stamina = 0;
+        player->stamina -= 50.0f * delta;
     }
-}
-
-// -------- Ataque pesado --------
-if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
-{
-    if (player->stamina > 0)
+    else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
     {
-        player->stamina -= 30.0f * delta;
-        if (player->stamina < 0) player->stamina = 0;
+        player->stamina -= 75.0f * delta;
+    }
+
+    if (player->stamina < 0)
+    {
+        player->stamina = 0;
+        player->isAttacking = false;
     }
 }
 
