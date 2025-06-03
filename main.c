@@ -8,6 +8,8 @@
 #include "player/player.h"        // Cabeçalho do jogador
 #include "staminaBar/stamina.h"   // Cabeçalho da barra de stamina
 #include "wolf/wolf.h"
+#include "lifeBar/lifeBar.h"
+
 
 // ============================================================================
 // Definições constantes
@@ -201,13 +203,16 @@ int main(void)
     // Carrega a barra de stamina
     Texture2D staminaBar = LoadTexture("resources/sprites/stamina/staminaBar.png");
 
+    // Carrega a barra de vida
+    Texture2D lifeBar = LoadTexture("resources/sprites/life/life.png");
+
     // Loop principal do jogo
     while (!WindowShouldClose())
     {
         float delta = GetFrameTime();
 
         // Atualiza o player e a barra de stamina
-        UpdatePlayer(&player, delta);
+        UpdatePlayer(&player, &wolf, delta);
         UpdateWolf(&wolf, delta);
         UpdateStaminaBar(&player, delta);
         
@@ -243,8 +248,10 @@ int main(void)
         if (currentMapIndex == MAP_WOLF_AREA)
         {
             DrawWolf(&wolf);
+            CheckCollisionWolf(&player, &wolf, delta);
         }
-        DrawStaminaBar(staminaBar, player.stamina, (Vector2){20, 20}, 2.0f);
+        DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
+        DrawLifeBar(lifeBar, player.life, (Vector2){20, 10}, 2.0f);
         EndDrawing();
     }
 
