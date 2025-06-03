@@ -1,6 +1,6 @@
 #include "lifeBar.h"
 
-void DrawLifeBar(Texture2D lifeBar, float life, Vector2 position, float scale) 
+void DrawLifeBar(Texture2D barLifeSprite, float life, Vector2 position, float scale) 
 {
 
     int frame;
@@ -30,10 +30,10 @@ void DrawLifeBar(Texture2D lifeBar, float life, Vector2 position, float scale)
 
     Vector2 origin = {0, 0};
 
-    DrawTexturePro(lifeBar, source, dest, origin, 0.0f, WHITE);
+    DrawTexturePro(barLifeSprite, source, dest, origin, 0.0f, WHITE);
 }
 
-void UpdateLifeBar(Player *player, float delta) 
+void UpdateLifeBar(Player *player, Wolf *wolf, float delta) 
 {
-    /* =========== EM ANDAMENTO ============ */
+
 }
