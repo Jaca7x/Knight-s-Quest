@@ -2,9 +2,12 @@
 #define WOLF_H
 
 #include "../librays/raylib.h"
+#include "../player/player.h"
+#include "math.h"
 
 #define MAP_WOLF_AREA 1
 
+typedef struct player Player; // <- Declaração antecipada
 
 typedef struct wolf
 {
@@ -23,6 +26,7 @@ typedef struct wolf
     Texture2D spriteAtkWolf;
     Texture2D spriteIdleWolf;
     Texture2D spriteDeadWolf;
+    Texture2D spriteRunAtkWolf;
     
     int frameWidth;
     int frameHeight;
@@ -33,11 +37,19 @@ typedef struct wolf
     int frameDead;
 
     int direction;
+    bool isMoving;
+
+    bool isAttacking;
+    float attackRange;
+    float attackCooldown;
+    bool hasHitPlayer;
+    float attackDamageTimer;
+    int damage;
 
 } Wolf;
 
 void InitWolf(Wolf *wolf);
-void UpdateWolf(Wolf *wolf, float delta);
+void UpdateWolf(Wolf *wolf, Player *player, float delta);
 void DrawWolf(Wolf *wolf);
 void UnloadWolf(Wolf *wolf);
 
