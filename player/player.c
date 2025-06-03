@@ -11,6 +11,7 @@ void InitPlayer(Player *player)
     player->spritePlayerJump = LoadTexture("resources/sprites/player/JUMP.png");
     player->spritePlayerAttack1 = LoadTexture("resources/sprites/player/ATTACK 1.png");
     player->spritePlayerAttack2 = LoadTexture("resources/sprites/player/ATTACK 2.png");
+    player->spritePlayerHurt = LoadTexture("resources/sprites/player/HURT.png");
 
     // Quantidade de frames de cada animação
     player->frameRun  = 8;
@@ -235,16 +236,4 @@ void UnloadPlayer(Player *player)
     UnloadTexture(player->spritePlayerIdle);
     UnloadTexture(player->spritePlayerJump);
     UnloadTexture(player->spritePlayerAttack1);
-}
-
-void CheckCollisionWolf(Player *player, Wolf *wolf, float delta) 
-{
-    if (player->position.x < wolf->position.x + wolf->frameWidth &&
-        player->position.x + player->frameWidth > wolf->position.x &&
-        player->position.y < wolf->position.y + wolf->frameHeight &&
-        player->position.y + player->frameHeight > wolf->position.y
-    )
-    {
-        player->position.x -= 140;
-    }
 }
