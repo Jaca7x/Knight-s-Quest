@@ -100,7 +100,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, float delta)
     {
         player->frameCounter = 0;
 
-        if (player->hasHit)
+        if (player->hasHit) //Quando sofre hit 
         {
             player->currentFrame = (player->currentFrame + 1) % player->frameHurt;
         }
