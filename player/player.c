@@ -1,40 +1,40 @@
 #include "player.h"
 
-/// @brief Inicializa as variáveis do jogador e carrega os sprites.
-/// @param player Ponteiro para a struct Player
+// Inicializa as variáveis do jogador e carrega os sprites.
 void InitPlayer(Player *player)
 {
-    // Carregamento dos sprites do player
-    player->spritePlayerRun  = LoadTexture("resources/sprites/player/RUN.png");
-    player->spritePlayerWalk = LoadTexture("resources/sprites/player/WALK.png");
-    player->spritePlayerIdle = LoadTexture("resources/sprites/player/IDLE.png");
-    player->spritePlayerJump = LoadTexture("resources/sprites/player/JUMP.png");
-    player->spritePlayerAttack1 = LoadTexture("resources/sprites/player/ATTACK 1.png");
-    player->spritePlayerAttack2 = LoadTexture("resources/sprites/player/ATTACK 2.png");
-    player->spritePlayerHurt = LoadTexture("resources/sprites/player/HURT.png");
+    // Carregar sprites
+    player->spritePlayerRun      = LoadTexture("resources/sprites/player/RUN.png");
+    player->spritePlayerWalk     = LoadTexture("resources/sprites/player/WALK.png");
+    player->spritePlayerIdle     = LoadTexture("resources/sprites/player/IDLE.png");
+    player->spritePlayerJump     = LoadTexture("resources/sprites/player/JUMP.png");
+    player->spritePlayerAttack1  = LoadTexture("resources/sprites/player/ATTACK 1.png");
+    player->spritePlayerAttack2  = LoadTexture("resources/sprites/player/ATTACK 2.png");
+    player->spritePlayerHurt     = LoadTexture("resources/sprites/player/HURT.png");
 
     // Quantidade de frames de cada animação
-    player->frameRun  = 8;
-    player->frameWalk = 8;
-    player->frameIdle = 7;
-    player->frameJump = 5;
-    player->frameAtk = 6;
+    player->frameRun    = 8;
+    player->frameWalk   = 8;
+    player->frameIdle   = 7;
+    player->frameJump   = 5;
+    player->frameAtk    = 6;
+    player->frameHurt   = 4;
 
-    // Tamanho dos frames baseado no sprite WALK (todos seguem o mesmo padrão)
-    player->frameWidth  = player->spritePlayerWalk.width / 8;
+    // Frame padrão
+    player->frameWidth  = player->spritePlayerWalk.width / player->frameWalk;
     player->frameHeight = player->spritePlayerWalk.height;
 
     // Posição inicial
-    player->position = (Vector2){120, 518};
+    player->position = (Vector2){ 120, 518 };
 
-    // Configurações físicas
+    // Física
     player->speedWalk = 200.0f;
     player->speedRun  = 280.0f;
     player->gravity   = 950.0f;
     player->groundY   = 518.0f;
     player->velocityY = 0.0f;
 
-    // Direção inicial (1 = direita, -1 = esquerda)
+    // Direção inicial
     player->direction = 1.0f;
 
     // Controle de animação
@@ -42,34 +42,31 @@ void InitPlayer(Player *player)
     player->frameCounter = 0;
 
     // Estados
-    player->isRunning = false;
-    player->isMoving  = false;
-    player->isJumping = false;
+    player->isRunning   = false;
+    player->isMoving    = false;
+    player->isJumping   = false;
     player->isAttacking = false;
+    player->hasHit      = false;
 
-    // Stamina inicial
+    // Atributos
     player->stamina = 150;
-
-    player->life = 200;
+    player->life    = 100;
 }
 
-/// @brief Atualiza o estado do jogador (movimento, física e animação).
-/// @param player Ponteiro para a struct Player
-/// @param delta Delta time (tempo entre frames)
+// Atualiza o estado do jogador (movimento, física e animação).
 void UpdatePlayer(Player *player, Wolf *wolf, float delta)
 {
-    // Verificar estado de movimento
-    bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
-    bool isWalking = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && (!IsKeyDown(KEY_LEFT_SHIFT) || player->stamina <= 0));
+    // Verificar entradas
+    bool isRunning   = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
+    bool isWalking   = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && (!IsKeyDown(KEY_LEFT_SHIFT) || player->stamina <= 0));
     bool isAttacking = ((IsMouseButtonDown(MOUSE_LEFT_BUTTON) || IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) && player->stamina > 0);
 
-    player->isRunning = isRunning;
+    // Atualizar estados
+    player->isRunning   = isRunning;
     player->isAttacking = isAttacking;
-    player->isMoving  = isRunning || isWalking;
+    player->isMoving    = isRunning || isWalking;
 
-    
-
-    // Movimento horizontal com controle de direção
+    // Movimento horizontal
     if (isRunning)
     {
         if (IsKeyDown(KEY_D))
@@ -97,26 +94,23 @@ void UpdatePlayer(Player *player, Wolf *wolf, float delta)
         }
     }
 
-    // Controle de animação (10 frames por segundo)
+    // Controle de animação (10 FPS)
     player->frameCounter++;
     if (player->frameCounter >= (60 / 10))
     {
         player->frameCounter = 0;
 
-        if (player->isJumping)
+        if (player->hasHit)
+        {
+            player->currentFrame = (player->currentFrame + 1) % player->frameHurt;
+        }
+        else if (player->isJumping)
         {
             player->currentFrame = (player->currentFrame + 1) % player->frameJump;
         }
-        else if (player->isAttacking) 
+        else if (player->isAttacking)
         {
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-            {
-                player->currentFrame = (player->currentFrame + 1) % player->frameAtk;
-            } 
-            else 
-            {
-                player->currentFrame = (player->currentFrame + 1) % player->frameAtk;
-            } 
+            player->currentFrame = (player->currentFrame + 1) % player->frameAtk;
         }
         else if (player->isRunning)
         {
@@ -132,49 +126,52 @@ void UpdatePlayer(Player *player, Wolf *wolf, float delta)
         }
     }
 
-    // Pulo (apertar espaço)
+    // Pulo
     if (IsKeyDown(KEY_SPACE) && !player->isJumping)
     {
         player->velocityY = -400.0f;
         player->isJumping = true;
-            if (player->stamina <= 0)
-            {
-                player->velocityY = 0.0f;
-            }
+
+        if (player->stamina <= 0)
+        {
+            player->velocityY = 0.0f;
+        }
     }
 
-    // Aplicar gravidade
+    // Gravidade
     player->velocityY += player->gravity * delta;
     player->position.y += player->velocityY * delta;
 
-    // Verificar se está no chão
+    // Colisão com chão
     if (player->position.y >= player->groundY)
     {
         player->position.y = player->groundY;
-        player->velocityY = 0;
-        player->isJumping = false;
+        player->velocityY  = 0;
+        player->isJumping  = false;
     }
 
     // Limites da tela
     if (player->position.x < 0) player->position.x = 0;
     if (player->position.y < 0) player->position.y = 0;
-
-    
 }
 
-/// @brief Desenha o jogador na tela com base no estado atual.
-/// @param player Ponteiro para a struct Player
+// Desenha o jogador na tela
 void DrawPlayer(Player *player)
 {
-    Rectangle source;      // Parte da textura a ser desenhada
-    Rectangle dest;        // Onde será desenhado na tela
-    Vector2 origin = {0, 0};
+    Rectangle source;
+    Rectangle dest;
+    Vector2 origin = { 0, 0 };
 
     int frameWidth;
     Texture2D texture;
 
-    // Seleciona o sprite com base no estado
-    if (player->isJumping)
+    // Selecionar textura com prioridade
+    if (player->hasHit)
+    {
+        texture = player->spritePlayerHurt;
+        frameWidth = texture.width / player->frameHurt;
+    }
+    else if (player->isJumping)
     {
         texture = player->spritePlayerJump;
         frameWidth = texture.width / player->frameJump;
@@ -184,13 +181,12 @@ void DrawPlayer(Player *player)
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
         {
             texture = player->spritePlayerAttack1;
-            frameWidth = texture.width / player->frameAtk;
-        } 
+        }
         else
         {
             texture = player->spritePlayerAttack2;
-            frameWidth = texture.width / player->frameAtk;
-        }   
+        }
+        frameWidth = texture.width / player->frameAtk;
     }
     else if (!player->isMoving)
     {
@@ -202,33 +198,33 @@ void DrawPlayer(Player *player)
         texture = player->spritePlayerRun;
         frameWidth = texture.width / player->frameRun;
     }
-     else {
+    else
+    {
         texture = player->spritePlayerWalk;
         frameWidth = texture.width / player->frameWalk;
     }
 
-    // Retângulo de origem (flip horizontal usando direção)
+    // Retângulo de origem
     source = (Rectangle){
-        player->currentFrame * frameWidth, // X do frame
-        0,                                 // Y (sempre zero)
-        frameWidth * player->direction,    // Flip horizontal se direção = -1
-        player->frameHeight                // Altura
+        player->currentFrame * frameWidth,
+        0,
+        frameWidth * player->direction, // Flip com direção
+        player->frameHeight
     };
 
-    // Retângulo de destino (na tela com escala 2x)
+    // Retângulo de destino (2x escala)
     dest = (Rectangle){
-        player->position.x,                // Posição X
-        player->position.y,                // Posição Y
-        frameWidth * 2,                    // Largura
-        player->frameHeight * 2            // Altura
+        player->position.x,
+        player->position.y,
+        frameWidth * 2,
+        player->frameHeight * 2
     };
 
-    // Desenha o sprite na tela
+    // Desenhar
     DrawTexturePro(texture, source, dest, origin, 0.0f, WHITE);
 }
 
-/// @brief Libera da memória as texturas do player.
-/// @param player Ponteiro para a struct Player
+// Libera as texturas do jogador da memória
 void UnloadPlayer(Player *player)
 {
     UnloadTexture(player->spritePlayerRun);
@@ -236,4 +232,6 @@ void UnloadPlayer(Player *player)
     UnloadTexture(player->spritePlayerIdle);
     UnloadTexture(player->spritePlayerJump);
     UnloadTexture(player->spritePlayerAttack1);
+    UnloadTexture(player->spritePlayerAttack2);
+    UnloadTexture(player->spritePlayerHurt);
 }

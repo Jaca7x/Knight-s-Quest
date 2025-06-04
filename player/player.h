@@ -38,6 +38,7 @@ typedef struct player
     bool isMoving;    // Está se movendo?
     bool isJumping;   // Está pulando?
     bool isAttacking; // Está atacando?
+    bool hasHit; //Está tomando hit?
 
     // Stamina
     float stamina;    // Energia para correr
@@ -50,6 +51,7 @@ typedef struct player
     int frameIdle;
     int frameJump;
     int frameAtk;
+    int frameHurt;
 
     // Física
     float groundY;    // Posição Y do chão
