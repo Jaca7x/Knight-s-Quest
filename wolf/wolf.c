@@ -13,6 +13,7 @@ bool CheckCollisionAABB(float x1, float y1, float w1, float h1,
 void InitWolf(Wolf *wolf)
 {
     wolf->position = (Vector2){800, 450};
+    wolf->positionRunning = (Vector2){600, 450};
     wolf->start = (Vector2){800, 450};
     wolf->end = (Vector2){920, 450};
 
@@ -26,17 +27,21 @@ void InitWolf(Wolf *wolf)
     wolf->spriteAtkWolf  = LoadTexture("resources/sprites/wolf/Attack_1.png");
     wolf->spriteIdleWolf = LoadTexture("resources/sprites/wolf/Idle.png");
     wolf->spriteDeadWolf = LoadTexture("resources/sprites/wolf/Dead.png");
+    wolf->spriteRunAtkWolf = LoadTexture("resources/sprites/wolf/Run+Attack.png");
 
     wolf->frameWalk  = 11;
     wolf->frameAtk   = 6;
     wolf->frameIdle  = 8;
     wolf->frameDead  = 2;
+    wolf->frameRunAtk = 7;
 
     wolf->frameWidth  = wolf->spriteWalkWolf.width / wolf->frameWalk;
     wolf->frameHeight = wolf->spriteWalkWolf.height;
 
     wolf->direction = 1;
     wolf->isMoving = true;
+    wolf->isRuning = false;
+    wolf->isIdle = true;
     wolf->isAttacking = false;
     wolf->hasHitPlayer = false;
 
@@ -162,20 +167,24 @@ void DrawWolf(Wolf *wolf)
         wolf->frameWidth * 1.5f,
         wolf->frameHeight * 1.5f};
 
+        Rectangle destRunning = {
+        wolf->positionRunning.x,
+        wolf->positionRunning.y,
+        wolf->frameWidth * 1.5f,
+        wolf->frameHeight * 1.5f};
+
     Vector2 origin = {0, 0};
 
     if (wolf->isAttacking)
     {
         DrawTexturePro(wolf->spriteAtkWolf, source, dest, origin, 0.0f, WHITE);
     }
-    else if (wolf->isMoving)
+    else  
     {
         DrawTexturePro(wolf->spriteWalkWolf, source, dest, origin, 0.0f, WHITE);
     }
-    else
-    {
-        DrawTexturePro(wolf->spriteIdleWolf, source, dest, origin, 0.0f, WHITE);
-    }
+    
+    DrawTexturePro(wolf->spriteIdleWolf, source, destRunning, origin, 0.0f, WHITE);
 }
 
 void UnloadWolf(Wolf *wolf)

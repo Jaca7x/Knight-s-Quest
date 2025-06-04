@@ -12,12 +12,14 @@ typedef struct player Player; // <- Declaração antecipada
 typedef struct wolf
 {
     Vector2 position;
+    Vector2 positionRunning;
     Vector2 start;
     Vector2 end;
 
     int life;
 
     float speed;
+    float speedRun;
 
     int currentFrame;
     int frameCounter;
@@ -35,9 +37,12 @@ typedef struct wolf
     int frameAtk;
     int frameIdle;
     int frameDead;
+    int frameRunAtk;
 
     int direction;
     bool isMoving;
+    bool isRuning;
+    bool isIdle;
 
     bool isAttacking;
     float attackRange;
