@@ -8,7 +8,7 @@ typedef struct wolf Wolf; // <- Declaração antecipada
 #include "../player/player.h"
 #include "../wolf/wolf.h"     // Arquivo do player (usa a stamina do player)
 
-#define MAX_LIFE 200
+#define MAX_LIFE 100
 
 #define LIFE_FRAME_WIDTH 32
 #define LIFE_FRAME_HEIGHT 32
