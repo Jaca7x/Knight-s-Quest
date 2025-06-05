@@ -27,7 +27,8 @@ typedef struct wolfRun
     Texture2D spriteAtkWolf;
     Texture2D spriteIdleWolf;
     Texture2D spriteDeadWolf;
-    Texture2D spriteRunAtkWolf;
+    Texture2D spriteRunWolf;
+
     
     int frameWidth;
     int frameHeight;
@@ -36,7 +37,7 @@ typedef struct wolfRun
     int frameAtk;
     int frameIdle;
     int frameDead;
-    int frameRunAtk;
+    int frameRun;
 
     int direction;
     bool isWalking;
@@ -50,7 +51,6 @@ typedef struct wolfRun
     bool hasHitPlayer;
     float attackDamageTimer;
     int damage;
-    int damageJump;
     float viewPlayer;
 
 } WolfRun;

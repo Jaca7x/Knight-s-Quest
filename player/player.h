@@ -44,7 +44,7 @@ typedef struct player
     float stamina;    // Energia para correr
 
     float life;
-
+    
     // Frames por animação
     int frameRun;
     int frameWalk;
