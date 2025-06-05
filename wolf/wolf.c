@@ -43,7 +43,7 @@ void InitWolf(Wolf *wolf)
     wolf->attackRange = 100.0f;
     wolf->attackCooldown = 0.0f;
     wolf->attackDamageTimer = 0.0f;
-    wolf->damage = 50;
+    wolf->damage = 20;
 }
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta)

@@ -40,10 +40,11 @@ typedef struct wolfRun
 
     int direction;
     bool isWalking;
-    bool isRuning;
+    bool isRunning;
     bool isIdle;
 
     bool isAttacking;
+    bool hasRunAttack;
     float attackRange;
     float attackCooldown;
     bool hasHitPlayer;
