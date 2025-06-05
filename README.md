@@ -1,5 +1,5 @@
 # Knight's Quest: Journey to the Goblin Throne
-This game is currently under development.
+### This game is currently under development.
 
 🚀 Development Progress
 The development of the game is going well.
