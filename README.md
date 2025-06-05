@@ -9,9 +9,9 @@ In addition, I have started working on the first enemies. One of them is the Bla
 
 The stamina bar is nearly finished, with only a few details left to polish. The health bar is also at the same stage, close to completion.
 
-🗺️ Leaks — Sneak Peeks
+🗺️ Leaks — Sneak Peeks</br>
 🏰 Maps
-<img src="readme/map1.png" width="500"> <img src="readme/map2.png" width="500"> <img src="readme/map3.png" width="500">
+<img src="readme/map1.png" width="500"></br><img src="readme/map2.png" width="500"></br><img src="readme/map3.png" width="500"></br>
 ⚔️ Player Attack Animation
 <img src="readme/atk.png" width="400">
 # ⚖️ Copyright
