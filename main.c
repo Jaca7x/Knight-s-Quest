@@ -8,6 +8,7 @@
 #include "player/player.h"        // Cabeçalho do jogador
 #include "staminaBar/stamina.h"   // Cabeçalho da barra de stamina
 #include "wolf/wolf.h"
+#include "wolf/wolfRunning.h"
 #include "lifeBar/lifeBar.h"
 
 
@@ -195,6 +196,9 @@ int main(void)
     Wolf wolf;
     InitWolf(&wolf);
 
+    WolfRun wolfRun;
+    InitRunningWolf(&wolfRun);
+
     // Carrega os tilesets
     Texture2D tileset1 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlesky.png");
@@ -247,6 +251,9 @@ int main(void)
         {
             DrawWolf(&wolf);
             UpdateWolf(&wolf, &player, delta);
+
+            DrawRunningWolf(&wolfRun);
+            UpdateRunningWolf(&wolfRun, &player, delta);
         }
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
         DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
@@ -262,6 +269,7 @@ int main(void)
     UnloadTexture(staminaBar);
     UnloadTexture(barLifeSprite);
     UnloadWolf(&wolf);
+    UnloadRunningWolf(&wolfRun);
 
     // Encerra a janela
     CloseWindow();
