@@ -28,6 +28,7 @@ typedef struct wolfRun
     Texture2D spriteIdleWolf;
     Texture2D spriteDeadWolf;
     Texture2D spriteRunWolf;
+    Texture2D spriteHurtWolf;
 
     
     int frameWidth;
@@ -38,11 +39,13 @@ typedef struct wolfRun
     int frameIdle;
     int frameDead;
     int frameRun;
+    int frameHurt;
 
     int direction;
     bool isWalking;
     bool isRunning;
     bool isIdle;
+    bool wolfHasHit;
 
     bool isAttacking;
     bool hasRunAttack;

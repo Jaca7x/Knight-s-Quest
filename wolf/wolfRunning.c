@@ -29,12 +29,14 @@ void InitRunningWolf(WolfRun *wolfRun)
     wolfRun->spriteIdleWolf = LoadTexture("resources/sprites/wolf/Idle.png");
     wolfRun->spriteDeadWolf = LoadTexture("resources/sprites/wolf/Dead.png");
     wolfRun->spriteRunWolf = LoadTexture("resources/sprites/wolf/Run.png");
+    wolfRun->spriteHurtWolf = LoadTexture("resources/sprites/wolf/Hurt.png");
 
     wolfRun->frameWalk   = 11;
     wolfRun->frameAtk   = 6;
     wolfRun->frameIdle  = 8;
     wolfRun->frameDead  = 2;
     wolfRun->frameRun = 9;
+    wolfRun->frameHurt  = 2;
 
     wolfRun->frameWidth  = wolfRun->spriteWalkWolf.width / wolfRun->frameWalk;
     wolfRun->frameHeight = wolfRun->spriteWalkWolf.height;
@@ -45,6 +47,7 @@ void InitRunningWolf(WolfRun *wolfRun)
     wolfRun->isIdle = true;
     wolfRun->isAttacking = false;
     wolfRun->hasHitPlayer = false;
+    wolfRun->wolfHasHit = false;
 
     wolfRun->attackRange = 100.0f;
     wolfRun->attackCooldown = 0.0f;
@@ -59,8 +62,11 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
     if (wolfRun->frameCounter >= (60 / 10))
     {
         wolfRun->frameCounter = 0;
-
-        if (wolfRun->isAttacking)
+        if (wolfRun->wolfHasHit)
+        {
+            wolfRun->currentFrame = (wolfRun->currentFrame + 1) % wolfRun->frameHurt;
+        }
+        else if (wolfRun->isAttacking)
         {
             wolfRun->currentFrame = (wolfRun->currentFrame + 1) % wolfRun->frameAtk;
         }
@@ -76,6 +82,17 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
         {
             wolfRun->currentFrame = (wolfRun->currentFrame + 1) % wolfRun->frameIdle;
         }
+    }
+
+    if (wolfRun->wolfHasHit)
+    {
+        wolfRun->speed = 0.0f;
+        wolfRun->speedRun = 0.0f;
+    } 
+    else 
+    {
+        wolfRun->speed = 95.0f;
+        wolfRun->speedRun = 120.0f;
     }
 
     float distanceToPlayer = fabs(player->position.x - wolfRun->position.x);
@@ -189,7 +206,11 @@ void DrawRunningWolf(WolfRun *wolfRun)
     Texture2D currentSprite;
 
     // Escolhe o sprite baseado no estado atual
-    if (wolfRun->isAttacking)
+    if (wolfRun->wolfHasHit)
+    {
+        currentSprite = wolfRun->spriteHurtWolf;
+    }
+    else if (wolfRun->isAttacking)
     {
         currentSprite = wolfRun->spriteAtkWolf;
     }
@@ -227,7 +248,10 @@ void DrawRunningWolf(WolfRun *wolfRun)
 
 void UnloadRunningWolf(WolfRun *wolfRun) 
 {
+    UnloadTexture(wolfRun->spriteWalkWolf);
     UnloadTexture(wolfRun->spriteAtkWolf);
     UnloadTexture(wolfRun->spriteIdleWolf);
     UnloadTexture(wolfRun->spriteDeadWolf);
+    UnloadTexture(wolfRun->spriteRunWolf);
+    UnloadTexture(wolfRun->spriteHurtWolf);
 }

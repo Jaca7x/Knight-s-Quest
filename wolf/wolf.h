@@ -26,6 +26,7 @@ typedef struct wolf
     Texture2D spriteAtkWolf;
     Texture2D spriteIdleWolf;
     Texture2D spriteDeadWolf;
+    Texture2D spriteHurtWolf;
     
     int frameWidth;
     int frameHeight;
@@ -34,6 +35,7 @@ typedef struct wolf
     int frameAtk;
     int frameIdle;
     int frameDead;
+    int frameHurt;
 
     int direction;
     bool isMoving;
@@ -42,6 +44,7 @@ typedef struct wolf
     float attackRange;
     float attackCooldown;
     bool hasHitPlayer;
+    bool wolfHasHit;
     float attackDamageTimer;
     int damage;
 

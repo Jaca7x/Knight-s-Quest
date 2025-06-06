@@ -26,11 +26,13 @@ void InitWolf(Wolf *wolf)
     wolf->spriteAtkWolf  = LoadTexture("resources/sprites/wolf/Attack_1.png");
     wolf->spriteIdleWolf = LoadTexture("resources/sprites/wolf/Idle.png");
     wolf->spriteDeadWolf = LoadTexture("resources/sprites/wolf/Dead.png");
+    wolf->spriteHurtWolf = LoadTexture("resources/sprites/wolf/Hurt.png");
 
     wolf->frameWalk  = 11;
     wolf->frameAtk   = 6;
     wolf->frameIdle  = 8;
     wolf->frameDead  = 2;
+    wolf->frameHurt  = 2;
 
     wolf->frameWidth  = wolf->spriteWalkWolf.width / wolf->frameWalk;
     wolf->frameHeight = wolf->spriteWalkWolf.height;
@@ -39,6 +41,7 @@ void InitWolf(Wolf *wolf)
     wolf->isMoving = true;
     wolf->isAttacking = false;
     wolf->hasHitPlayer = false;
+    wolf->wolfHasHit = false;
 
     wolf->attackRange = 100.0f;
     wolf->attackCooldown = 0.0f;
@@ -69,7 +72,11 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta)
     {
         wolf->frameCounter = 0;
 
-        if (wolf->isAttacking)
+        if (wolf->wolfHasHit)
+        {
+            wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameHurt;
+        }
+        else if (wolf->isAttacking)
         {
             wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameAtk;
         }
@@ -86,6 +93,14 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta)
     // ====== ATAQUE ======
     float distance = fabs(player->position.x - wolf->position.x);
 
+    if (wolf->wolfHasHit)
+    {
+        wolf->speed = 0.0f;
+    } else 
+    {
+        wolf->speed = 95.0f;
+    }
+    
     if (wolf->isAttacking)
     {
         wolf->attackDamageTimer -= delta;
@@ -166,7 +181,11 @@ void DrawWolf(Wolf *wolf)
 
     Vector2 origin = {0, 0};
 
-    if (wolf->isAttacking)
+    if (wolf->wolfHasHit)
+    {
+        DrawTexturePro(wolf->spriteHurtWolf, source, dest, origin, 0.0f, WHITE);
+    }
+    else if (wolf->isAttacking)
     {
         DrawTexturePro(wolf->spriteAtkWolf, source, dest, origin, 0.0f, WHITE);
     }
@@ -182,4 +201,5 @@ void UnloadWolf(Wolf *wolf)
     UnloadTexture(wolf->spriteAtkWolf);
     UnloadTexture(wolf->spriteIdleWolf);
     UnloadTexture(wolf->spriteDeadWolf);
+    UnloadTexture(wolf->spriteHurtWolf);
 }
