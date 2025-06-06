@@ -249,8 +249,8 @@ int main(void)
         DrawPlayer(&player);
         if (currentMapIndex == MAP_WOLF_AREA)
         {
-            DrawWolf(&wolf);
-            UpdateWolf(&wolf, &player, delta);
+            //DrawWolf(&wolf);
+            //UpdateWolf(&wolf, &player, delta);
 
             DrawRunningWolf(&wolfRun);
             UpdateRunningWolf(&wolfRun, &player, delta);

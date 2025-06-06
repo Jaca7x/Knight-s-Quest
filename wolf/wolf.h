@@ -4,6 +4,8 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 #include "math.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MAP_WOLF_AREA 1
 

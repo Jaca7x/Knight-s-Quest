@@ -10,6 +10,26 @@ bool CheckCollisionAABB(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
+void DrawWolfLifeBar(Wolf *wolf)
+{
+    float barWidth = 60.0f;
+    float barHeight = 8.0f;
+    float x = wolf->position.x + 20;  // ajuste horizontal
+    float y = wolf->position.y + 30;  // acima do sprite
+
+    float lifePercent = wolf->life / 100.0f;
+    float currentBarWidth = barWidth * lifePercent;
+
+    // Fundo (vermelho)
+    DrawRectangle(x, y, barWidth, barHeight, RED);
+
+    // Vida atual (verde)
+    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
+
+    // Contorno
+    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
+}
+
 void InitWolf(Wolf *wolf)
 {
     wolf->position = (Vector2){500, 450};
@@ -193,6 +213,8 @@ void DrawWolf(Wolf *wolf)
     {
         DrawTexturePro(wolf->spriteWalkWolf, source, dest, origin, 0.0f, WHITE);
     }
+
+    DrawWolfLifeBar(wolf);
 }
 
 void UnloadWolf(Wolf *wolf)
