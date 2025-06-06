@@ -3,9 +3,11 @@
 
 #include "../librays/raylib.h" // Biblioteca Raylib
 #include "../wolf/wolf.h" // Biblioteca wolf
+#include "../wolf/wolfRunning.h" 
 
 
-typedef struct wolf Wolf; // <- Declaração antecipada
+typedef struct wolf Wolf; 
+typedef struct wolfRun WolfRun; 
 
 /// @brief Struct que representa o jogador
 typedef struct player
@@ -38,7 +40,9 @@ typedef struct player
     bool isMoving;    // Está se movendo?
     bool isJumping;   // Está pulando?
     bool isAttacking; // Está atacando?
-    bool hasHit; //Está tomando hit?
+    bool hasHit;    //Está tomando hit?
+    bool isAttackingHeavy;
+    bool isAttackingLight;
 
     // Stamina
     float stamina;    // Energia para correr
@@ -61,6 +65,10 @@ typedef struct player
     // Direção (1 = direita, -1 = esquerda)
     float direction;
 
+    float attackRange;
+    int lightDamage;
+    int heavyDamage;
+
 } Player;
 
 /// @brief Inicializa os dados e texturas do jogador
@@ -68,7 +76,7 @@ void InitPlayer(Player *player);
 
 /// @brief Atualiza a física, movimento e animação do jogador
 /// @param delta Tempo entre os frames (GetFrameTime())
-void UpdatePlayer(Player *player, Wolf *wolf, float delta);
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta);
 
 /// @brief Desenha o jogador na tela
 void DrawPlayer(Player *player);
