@@ -100,11 +100,11 @@ if (player->isAttacking)
 {
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
-        player->stamina -= 50.0f * delta;
+        player->stamina -= 75.0f * delta;
     }
     else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
     {
-        player->stamina -= 75.0f * delta;
+        player->stamina -= 90.0f * delta;
     }
 
     if (player->stamina < 0)
