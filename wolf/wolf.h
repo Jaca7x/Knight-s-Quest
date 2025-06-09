@@ -9,7 +9,7 @@
 
 #define MAP_WOLF_AREA 1
 
-typedef struct player Player; // <- Declaração antecipada
+typedef struct player Player;
 
 typedef struct wolf
 {

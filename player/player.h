@@ -65,6 +65,7 @@ typedef struct player
     // Direção (1 = direita, -1 = esquerda)
     float direction;
 
+    float hitTimer;
     float attackRange;
     int lightDamage;
     int heavyDamage;

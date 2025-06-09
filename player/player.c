@@ -54,6 +54,7 @@ void InitPlayer(Player *player)
     player->stamina = 150;
     player->life    = 100;
 
+    player->hitTimer = 0.0f;
     player->attackRange = 115.0f;
     player->lightDamage = 50;
     player->heavyDamage = 100;
@@ -135,6 +136,16 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
         }
     }
 
+    if (player->hitTimer > 0) 
+    {
+        player->hitTimer -= delta;
+        player->hasHit = true;
+    } 
+    else 
+    {
+        player->hasHit = false;
+    }
+
     // Pulo
     if (IsKeyDown(KEY_SPACE) && !player->isJumping)
     {
@@ -189,7 +200,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
     {
         wolfRun->wolfHasHit = false;
     }
-    
+     
     // Gravidade
     player->velocityY += player->gravity * delta;
     player->position.y += player->velocityY * delta;
@@ -217,7 +228,6 @@ void DrawPlayer(Player *player)
     int frameWidth;
     Texture2D texture;
 
-    // Selecionar textura com prioridade
     if (player->hasHit)
     {
         texture = player->spritePlayerHurt;

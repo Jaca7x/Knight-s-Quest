@@ -132,6 +132,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta)
                 player->life -= wolf->damage;
                 wolf->hasHitPlayer = true;
                 player->hasHit = true;
+                player->hitTimer = 0.4f; 
 
                 if (player->position.x < wolf->position.x)
                 {
@@ -151,7 +152,6 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta)
             wolf->isAttacking = false;
             wolf->isMoving = true;
             wolf->hasHitPlayer = false;
-            player->hasHit = false;
         }
     }
     else
@@ -168,18 +168,17 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta)
     }
 
     // ====== COLISÃO FÍSICA (BLOQUEAR PLAYER) ======
-    if (CheckCollisionAABB(
+   if (CheckCollisionAABB(
             player->position.x, player->position.y, player->frameWidth, player->frameHeight,
             wolf->position.x, wolf->position.y, wolf->frameWidth, wolf->frameHeight))
     {
+        player->hasHit = true;
+        player->hitTimer = 0.3f;
+
         if (player->position.x < wolf->position.x)
-        {
             player->position.x = wolf->position.x - player->frameWidth;
-        }
         else
-        {
             player->position.x = wolf->position.x + wolf->frameWidth;
-        }
     }
 }
 
