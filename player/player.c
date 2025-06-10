@@ -57,7 +57,7 @@ void InitPlayer(Player *player)
     player->hitTimer = 0.0f;
     player->attackRange = 115.0f;
     player->lightDamage = 50;
-    player->heavyDamage = 100;
+    player->heavyDamage = 70;
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).

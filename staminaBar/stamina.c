@@ -49,7 +49,7 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale)
 /// @param delta Delta time para movimento suave independente de FPS
 void UpdateStaminaBar(Player *player, float delta)
 {
-    // Corrida
+    
 // -------- Corrida --------
 if ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0)
 {
@@ -62,11 +62,10 @@ else
     player->isRunning = false;
 }
 
-
 // -------- Pulo correndo --------
 if (player->isRunning && IsKeyDown(KEY_SPACE) && (IsKeyDown(KEY_A) || IsKeyDown(KEY_D)))
 {
-    if (player->stamina > 75)
+    if (player->stamina > 50)
     {
         player->stamina -= 35.0f * delta;
         if (player->stamina < 0) player->stamina = 0;
@@ -82,7 +81,7 @@ if (player->isRunning && IsKeyDown(KEY_SPACE) && (IsKeyDown(KEY_A) || IsKeyDown(
 // -------- Pulo normal --------
 else if (IsKeyDown(KEY_SPACE))
 {
-    if (player->stamina > 75)
+    if (player->stamina > 50)
     {
         player->stamina -= 35.0f * delta;
         if (player->stamina < 0) player->stamina = 0;
@@ -100,11 +99,11 @@ if (player->isAttacking)
 {
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
-        player->stamina -= 75.0f * delta;
+        player->stamina -= 20.0f * delta;
     }
     else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
     {
-        player->stamina -= 90.0f * delta;
+        player->stamina -= 40.0f * delta;
     }
 
     if (player->stamina < 0)

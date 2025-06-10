@@ -36,7 +36,7 @@ void InitWolf(Wolf *wolf)
     wolf->start = (Vector2){500, 450};
     wolf->end = (Vector2){600, 450};
 
-    wolf->life = 200;
+    wolf->life = 100;
     wolf->speed = 95.0f;
 
     wolf->currentFrame = 0;
@@ -59,6 +59,11 @@ void InitWolf(Wolf *wolf)
 
     wolf->direction = 1;
     wolf->isMoving = true;
+
+    wolf->isDead = false;
+    wolf->deathAnimationDone = false;
+    wolf->deathAnimTimer = 0.0f;
+
     wolf->isAttacking = false;
     wolf->hasHitPlayer = false;
     wolf->wolfHasHit = false;
@@ -91,25 +96,58 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta)
     if (wolf->frameCounter >= (60 / 10))
     {
         wolf->frameCounter = 0;
-
+        
         if (wolf->wolfHasHit)
         {
             wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameHurt;
         }
-        else if (wolf->isAttacking)
+        else if (wolf->isDead && !wolf->deathAnimationDone)
         {
-            wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameAtk;
-        }
-        else if (wolf->isMoving)
+            wolf->deathAnimTimer += delta;
+
+            if (wolf->deathAnimTimer >= 0.2f)
+            {   
+            wolf->frameDead++;
+            wolf->deathAnimTimer = 0.0f;
+
+            if (wolf->frameDead >= 2)
+            {
+                wolf->frameDead = 0;
+                wolf->deathAnimationDone = true;
+            }
+            }
+            wolf->currentFrame = wolf->frameDead;
+        } 
+        else if (!wolf->isDead) 
         {
-            wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameWalk;
-        }
-        else
-        {
-            wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameIdle;
+            if (wolf->isAttacking)
+            {
+                wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameAtk;
+            }
+            else if (wolf->isMoving)
+            {
+                wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameWalk;
+            }
+            else
+            {
+                wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameIdle;
+            }
         }
     }
 
+    if (wolf->life <= 0 && !wolf->isDead)
+{
+    wolf->isDead = true;
+    wolf->speed = 0.0f;
+    wolf->hasHitPlayer = false;
+    wolf->wolfHasHit = false;
+
+    wolf->frameDead = 0;
+    wolf->deathAnimTimer = 0.0f;
+    wolf->deathAnimationDone = false;
+    wolf->currentFrame = 0;
+}
+    
     // ====== ATAQUE ======
     float distance = fabs(player->position.x - wolf->position.x);
 
@@ -203,6 +241,10 @@ void DrawWolf(Wolf *wolf)
     if (wolf->wolfHasHit)
     {
         DrawTexturePro(wolf->spriteHurtWolf, source, dest, origin, 0.0f, WHITE);
+    }
+    else if (wolf->isDead)
+    {
+        DrawTexturePro(wolf->spriteDeadWolf, source, dest, origin, 0.0f, WHITE);
     }
     else if (wolf->isAttacking)
     {
