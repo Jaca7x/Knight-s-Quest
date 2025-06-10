@@ -135,6 +135,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta)
         }
     }
 
+    //TERMINAR
     if (wolf->life <= 0 && !wolf->isDead)
 {
     wolf->isDead = true;
