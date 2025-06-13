@@ -46,6 +46,8 @@ typedef struct wolf
     float deathAnimTimer;
     bool deathAnimationDone;
 
+    bool isPatrolling;
+
     bool isAttacking;
     float attackRange;
     float attackCooldown;
