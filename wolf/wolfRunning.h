@@ -46,6 +46,10 @@ typedef struct wolfRun
     bool isRunning;
     bool isIdle;
     bool wolfHasHit;
+    bool isDead;
+
+    float deathAnimTimer;
+    bool deathAnimationDone;
 
     bool isAttacking;
     bool hasRunAttack;
