@@ -48,8 +48,7 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale)
 /// @param player Ponteiro para a struct Player
 /// @param delta Delta time para movimento suave independente de FPS
 void UpdateStaminaBar(Player *player, float delta)
-{
-    
+{   
 // -------- Corrida --------
 if ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0)
 {
@@ -94,31 +93,26 @@ else if (IsKeyDown(KEY_SPACE))
     }
 }
 
-// -------- Ataque pesado e leve --------
-if (player->isAttacking)
-{
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-    {
-        player->stamina -= 20.0f * delta;
-    }
-    else if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
-    {
-        player->stamina -= 40.0f * delta;
-    }
+float regenTimer = 0.0f;
 
-    if (player->stamina < 0)
-    {
-        player->stamina = 0;
-        player->isAttacking = false;
-    }
-}
+
 
 // -------- Regeneração --------
-if ( !IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_SPACE)
+if ( IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_SPACE)
         || IsMouseButtonDown(MOUSE_BUTTON_LEFT) || 
         IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
 {
+    regenTimer = 1.0f;
+}
+else 
+{
+    regenTimer -= delta;
+
+    if (regenTimer <= 0.0f)
+    {
     player->stamina += 20.0f * delta;
     if (player->stamina > MAX_STAMINA) player->stamina = MAX_STAMINA;
+    }
+}   
 }
-}
+
