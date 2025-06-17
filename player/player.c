@@ -50,6 +50,10 @@ void InitPlayer(Player *player)
     player->isAttackingLight = false;
     player->hasHit      = false;
 
+    player->attackCooldownTimer = 0.0f;
+    player->attackTimer = 0.0f;
+    player->isAttackingInProgress = false;
+
     // Atributos
     player->stamina = 150;
     player->life    = 100;
@@ -63,18 +67,13 @@ void InitPlayer(Player *player)
 // Atualiza o estado do jogador (movimento, física e animação).
 void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
 {
-    // Verificar entradas
-    bool isRunning   = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
-    bool isWalking   = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && (!IsKeyDown(KEY_LEFT_SHIFT) || player->stamina <= 0));
-    bool isAttackingLight = ((IsMouseButtonDown(MOUSE_BUTTON_LEFT)) && player->stamina > 0);
-    bool isAttackingHeavy = ((IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) && player->stamina > 0);
+    // Verificar entradas de movimento
+    bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
+    bool isWalking = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && (!IsKeyDown(KEY_LEFT_SHIFT) || player->stamina <= 0));
 
-    // Atualizar estados
-    player->isRunning        = isRunning;
-    player->isAttackingLight = isAttackingLight;
-    player->isAttackingHeavy = isAttackingHeavy;
-    player->isAttacking      = isAttackingLight || isAttackingHeavy;
-    player->isMoving         = isRunning || isWalking;
+    // Atualizar estados de movimento
+    player->isRunning = isRunning;
+    player->isMoving = isRunning || isWalking;
 
     // Movimento horizontal
     if (isRunning)
@@ -102,6 +101,45 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
             player->direction = -1.0f;
             player->position.x -= player->speedWalk * delta;
         }
+    }
+
+    // Ataque com cooldown
+    player->attackCooldownTimer -= delta;
+    player->attackTimer -= delta;
+
+    if (!player->isAttackingInProgress && player->attackCooldownTimer <= 0.0f)
+    {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && player->stamina > 0)
+        {
+            player->isAttackingInProgress = true;
+            player->isAttacking = true;
+            player->isAttackingLight = true;
+            player->isAttackingHeavy = false;
+            player->attackTimer = 0.6f;
+            player->attackCooldownTimer = 0.3f;
+
+            player->stamina -= 20.0f;
+        }
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && player->stamina > 0)
+        {
+            player->isAttackingInProgress = true;
+            player->isAttacking = true;
+            player->isAttackingLight = false;
+            player->isAttackingHeavy = true;
+            player->attackTimer = 0.5f;
+            player->attackCooldownTimer = 0.3f;
+
+            player->stamina -= 40.0f;
+        }
+    }
+
+    // Finaliza ataque após o tempo
+    if (player->isAttackingInProgress && player->attackTimer <= 0.0f)
+    {
+        player->isAttackingInProgress = false;
+        player->isAttacking = false;
+        player->isAttackingLight = false;
+        player->isAttackingHeavy = false;
     }
 
     // Controle de animação (10 FPS)
@@ -136,6 +174,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
         }
     }
 
+    // Hit temporário
     if (player->hitTimer > 0) 
     {
         player->hitTimer -= delta;
@@ -158,21 +197,18 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
         }
     }
 
+    // Lógica de dano nos lobos
     float distanceToWolf = fabs(wolf->position.x - player->position.x);
     float distanceToRunningWolf = fabs(wolfRun->position.x - player->position.x);
 
     if (player->isAttacking && distanceToWolf <= player->attackRange)
     {   
-        if (!wolf->wolfHasHit) // Evita tirar vida várias vezes no mesmo ataque
+        if (!wolf->wolfHasHit)
         {
             if (player->isAttackingLight)
-            {
                 wolf->life -= player->lightDamage;
-            }
             else if (player->isAttackingHeavy)
-            {
                 wolf->life -= player->heavyDamage;
-            }
             wolf->wolfHasHit = true;
         }
     } 
@@ -183,16 +219,12 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
 
     if (player->isAttacking && distanceToRunningWolf <= player->attackRange)
     {   
-        if (!wolfRun->wolfHasHit) // Evita tirar vida várias vezes no mesmo ataque
+        if (!wolfRun->wolfHasHit)
         {
             if (player->isAttackingLight)
-            {
                 wolfRun->life -= player->lightDamage;
-            }
             else if (player->isAttackingHeavy)
-            {
                 wolfRun->life -= player->heavyDamage;
-            }
             wolfRun->wolfHasHit = true;
         }
     } 
@@ -200,7 +232,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
     {
         wolfRun->wolfHasHit = false;
     }
-     
+
     // Gravidade
     player->velocityY += player->gravity * delta;
     player->position.y += player->velocityY * delta;
@@ -217,6 +249,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
     if (player->position.x < 0) player->position.x = 0;
     if (player->position.y < 0) player->position.y = 0;
 }
+
 
 // Desenha o jogador na tela
 void DrawPlayer(Player *player)

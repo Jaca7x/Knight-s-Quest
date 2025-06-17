@@ -44,6 +44,10 @@ typedef struct player
     bool isAttackingHeavy;
     bool isAttackingLight;
 
+    float attackCooldownTimer;
+    float attackTimer;
+    bool isAttackingInProgress; 
+
     // Stamina
     float stamina;    // Energia para correr
 
