@@ -93,11 +93,9 @@ else if (IsKeyDown(KEY_SPACE))
     }
 }
 
+// -------- Regeneração --------
 float regenTimer = 0.0f;
 
-
-
-// -------- Regeneração --------
 if ( IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_SPACE)
         || IsMouseButtonDown(MOUSE_BUTTON_LEFT) || 
         IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
