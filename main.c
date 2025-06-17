@@ -10,6 +10,7 @@
 #include "wolf/wolf.h"
 #include "wolf/wolfRunning.h"
 #include "lifeBar/lifeBar.h"
+#include "goblin/goblin.h"
 
 
 // ============================================================================
@@ -199,6 +200,9 @@ int main(void)
     WolfRun wolfRun;
     InitRunningWolf(&wolfRun);
 
+    Goblin goblin;
+    InitGoblin(&goblin);
+
     // Carrega os tilesets
     Texture2D tileset1 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlesky.png");
@@ -247,6 +251,13 @@ int main(void)
         // Desenha o mapa, o player e a barra de stamina
         DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
         DrawPlayer(&player);
+
+        if (currentMapIndex == GOBLIN_MAP)
+        {
+            DrawGoblin(&goblin);
+            UpdateGoblin(&goblin, delta);
+        }
+        
         if (currentMapIndex == MAP_WOLF_AREA)
         {
             DrawWolf(&wolf);
@@ -255,6 +266,7 @@ int main(void)
             DrawRunningWolf(&wolfRun);
             UpdateRunningWolf(&wolfRun, &player, delta);
         }
+
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
         DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
         EndDrawing();
@@ -270,6 +282,7 @@ int main(void)
     UnloadTexture(barLifeSprite);
     UnloadWolf(&wolf);
     UnloadRunningWolf(&wolfRun);
+    UnloadGoblin(&goblin);
 
     // Encerra a janela
     CloseWindow();
