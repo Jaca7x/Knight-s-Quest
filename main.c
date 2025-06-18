@@ -220,7 +220,7 @@ int main(void)
         float delta = GetFrameTime();
 
         // Atualiza o player e a barra de stamina
-        UpdatePlayer(&player, &wolf, &wolfRun, delta);
+        UpdatePlayer(&player, &wolf, &wolfRun, currentMapIndex, delta);
         UpdateStaminaBar(&player, delta);
         
         // Verifica se o player chegou no final do mapa (lado direito)

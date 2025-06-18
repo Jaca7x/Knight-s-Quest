@@ -81,7 +81,7 @@ void InitPlayer(Player *player);
 
 /// @brief Atualiza a física, movimento e animação do jogador
 /// @param delta Tempo entre os frames (GetFrameTime())
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta);
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, int currentMapIndex, float delta);
 
 /// @brief Desenha o jogador na tela
 void DrawPlayer(Player *player);

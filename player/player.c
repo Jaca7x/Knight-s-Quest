@@ -65,7 +65,7 @@ void InitPlayer(Player *player)
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, int currentMapIndex, float delta)
 {
     // Verificar entradas de movimento
     bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
@@ -103,6 +103,46 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
         }
     }
 
+    // Lógica de dano nos lobos (apenas se estiver no mapa certo)
+if (currentMapIndex == MAP_WOLF_AREA)
+{
+    float distanceToWolf = fabs(wolf->position.x - player->position.x);
+    float distanceToRunningWolf = fabs(wolfRun->position.x - player->position.x);
+
+    if (player->isAttacking && distanceToWolf <= player->attackRange)
+    {   
+        if (!wolf->wolfHasHit)
+        {
+            if (player->isAttackingLight)
+                wolf->life -= player->lightDamage;
+            else if (player->isAttackingHeavy)
+                wolf->life -= player->heavyDamage;
+
+            wolf->wolfHasHit = true;
+        }
+    } 
+    else 
+    {
+        wolf->wolfHasHit = false;
+    }
+
+    if (player->isAttacking && distanceToRunningWolf <= player->attackRange)
+    {   
+        if (!wolfRun->wolfHasHit)
+        {
+            if (player->isAttackingLight)
+                wolfRun->life -= player->lightDamage;
+            else if (player->isAttackingHeavy)
+                wolfRun->life -= player->heavyDamage;
+
+            wolfRun->wolfHasHit = true;
+        }
+    } 
+    else 
+    {
+        wolfRun->wolfHasHit = false;
+    }
+}
     // Ataque com cooldown
     player->attackCooldownTimer -= delta;
     player->attackTimer -= delta;
@@ -195,42 +235,6 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, float delta)
         {
             player->velocityY = 0.0f;
         }
-    }
-
-    // Lógica de dano nos lobos
-    float distanceToWolf = fabs(wolf->position.x - player->position.x);
-    float distanceToRunningWolf = fabs(wolfRun->position.x - player->position.x);
-
-    if (player->isAttacking && distanceToWolf <= player->attackRange)
-    {   
-        if (!wolf->wolfHasHit)
-        {
-            if (player->isAttackingLight)
-                wolf->life -= player->lightDamage;
-            else if (player->isAttackingHeavy)
-                wolf->life -= player->heavyDamage;
-            wolf->wolfHasHit = true;
-        }
-    } 
-    else 
-    {
-        wolf->wolfHasHit = false;
-    }
-
-    if (player->isAttacking && distanceToRunningWolf <= player->attackRange)
-    {   
-        if (!wolfRun->wolfHasHit)
-        {
-            if (player->isAttackingLight)
-                wolfRun->life -= player->lightDamage;
-            else if (player->isAttackingHeavy)
-                wolfRun->life -= player->heavyDamage;
-            wolfRun->wolfHasHit = true;
-        }
-    } 
-    else 
-    {
-        wolfRun->wolfHasHit = false;
     }
 
     // Gravidade
