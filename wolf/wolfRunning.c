@@ -218,6 +218,7 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
                     player->life -= wolfRun->damage;
                     wolfRun->hasHitPlayer = true;
                     player->hasHit = true;
+                    player->hitTimer = 0.4f; 
 
                     if (player->position.x < wolfRun->position.x)
                         player->position.x -= 70;
@@ -255,6 +256,7 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
             wolfRun->position.x, wolfRun->position.y, wolfRun->frameWidth, wolfRun->frameHeight))
     {
         player->hasHit = true;
+        player->hitTimer = 0.3f;
 
         if (player->position.x < wolfRun->position.x)
             player->position.x = wolfRun->position.x - player->frameWidth;
