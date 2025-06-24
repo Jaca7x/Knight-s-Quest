@@ -255,7 +255,7 @@ int main(void)
         if (currentMapIndex == GOBLIN_MAP)
         {
             DrawGoblin(&goblin);
-            UpdateGoblin(&goblin, delta);
+            UpdateGoblin(&goblin, &player, delta);
         }
         
         if (currentMapIndex == MAP_WOLF_AREA)

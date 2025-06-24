@@ -2,6 +2,9 @@
 #define GOBLIN_H
 
 #include "../librays/raylib.h"
+#include "../player/player.h"
+
+typedef struct player Player;
 
 #define GOBLIN_MAP 0
 
@@ -32,6 +35,8 @@ typedef struct goblin {
 
     int direction;
 
+    float scale;
+    
     int life;
 
     int damage;
@@ -40,7 +45,7 @@ typedef struct goblin {
 
 
 void InitGoblin(Goblin *goblin);
-void UpdateGoblin(Goblin *goblin, float delta);
+void UpdateGoblin(Goblin *goblin, Player *player, float delta);
 void DrawGoblin(Goblin *goblin);
 void UnloadGoblin(Goblin *goblin);
 

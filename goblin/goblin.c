@@ -1,8 +1,18 @@
 #include "goblin.h"
 
+/// Função de colisão AABB
+bool CheckCollisionGoblin(float x1, float y1, float w1, float h1,
+                        float x2, float y2, float w2, float h2)
+{
+    return (x1 < x2 + w2 &&
+            x1 + w1 > x2 &&
+            y1 < y2 + h2 &&
+            y1 + h1 > y2);
+}
+
 void InitGoblin(Goblin *goblin) 
 {
-    goblin->position = (Vector2){780, 543};
+    goblin->position = (Vector2){780, 567};
 
     goblin->goblinSpriteWalk = LoadTexture("resources/sprites/goblin/goblin-walk.png");
     goblin->goblinSpriteHurt = LoadTexture("resources/sprites/goblin/goblin-hurt.png");
@@ -25,12 +35,14 @@ void InitGoblin(Goblin *goblin)
     goblin->isWalking = false;
     goblin->isAtacking = false;
 
+    goblin->scale = 0.02f;
+
     goblin->life = 100;
 
     goblin->damage = 20;
 }
 
-void UpdateGoblin(Goblin *goblin, float delta)
+void UpdateGoblin(Goblin *goblin, Player *player, float delta)
 {
     goblin->frameCounter++;
     if (goblin->frameCounter >= (60 / 10))
@@ -50,6 +62,20 @@ void UpdateGoblin(Goblin *goblin, float delta)
             goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameAtk;
         }    
     }
+
+    float push = 50.0f;
+
+    if (CheckCollisionGoblin(
+            player->position.x, player->position.y, player->frameWidth , player->frameHeight,
+            goblin->position.x, goblin->position.y, goblin->frameWidth * goblin->scale, goblin->frameHeight * goblin->scale))
+    {
+        if (player->position.x < goblin->position.x)
+        
+            player->position.x -= push;
+        else
+            player->position.x -= push;
+    }   
+
 }
 
 void DrawGoblin(Goblin *goblin) 
@@ -64,8 +90,8 @@ void DrawGoblin(Goblin *goblin)
     Rectangle dest = {
         goblin->position.x,
         goblin->position.y,
-        goblin->frameWidth * 0.20f,
-        goblin->frameHeight * 0.20f
+        goblin->frameWidth * 0.15f,
+        goblin->frameHeight * 0.15f
     };
 
     Vector2 origin = {0, 0};
