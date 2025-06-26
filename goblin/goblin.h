@@ -34,7 +34,12 @@ typedef struct goblin {
     bool isAtacking;
 
     float viewPlayer;
+    float goblinAttackRange;
+    bool goblinHasHitPlayer;
     int direction;
+
+    float attackTimer;
+    float attackCooldown;
 
     float scale;
     
