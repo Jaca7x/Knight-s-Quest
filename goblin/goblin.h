@@ -33,11 +33,13 @@ typedef struct goblin {
     bool isWalking;
     bool isAtacking;
 
+    float viewPlayer;
     int direction;
 
     float scale;
     
     int life;
+    float speed;
 
     int damage;
 

@@ -12,7 +12,7 @@ bool CheckCollisionGoblin(float x1, float y1, float w1, float h1,
 
 void InitGoblin(Goblin *goblin) 
 {
-    goblin->position = (Vector2){780, 567};
+    goblin->position = (Vector2){780, 569};
 
     goblin->goblinSpriteWalk = LoadTexture("resources/sprites/goblin/goblin-walk.png");
     goblin->goblinSpriteHurt = LoadTexture("resources/sprites/goblin/goblin-hurt.png");
@@ -35,9 +35,13 @@ void InitGoblin(Goblin *goblin)
     goblin->isWalking = false;
     goblin->isAtacking = false;
 
+    goblin->viewPlayer = 300.0f;
+    goblin->direction = 1;
+
     goblin->scale = 0.02f;
 
     goblin->life = 100;
+    goblin->speed = 100.0f;
 
     goblin->damage = 20;
 }
@@ -63,6 +67,24 @@ void UpdateGoblin(Goblin *goblin, Player *player, float delta)
         }    
     }
 
+    float distanceToPlayer = fabs(player->position.x - goblin->position.x);
+    if (distanceToPlayer <= goblin->viewPlayer)
+    {
+        goblin->direction = (player->position.x > goblin->position.x) ? 1 : -1;
+
+        goblin->isWalking = true;
+        goblin->isIdle = false;
+        goblin->isAtacking = false;
+
+        goblin->position.x += goblin->speed * goblin->direction * delta;
+    } else 
+    {
+        goblin->isIdle = true;
+        goblin->isWalking = false;
+        goblin->isAtacking = false;
+    }
+    
+
     float push = 50.0f;
 
     if (CheckCollisionGoblin(
@@ -73,9 +95,8 @@ void UpdateGoblin(Goblin *goblin, Player *player, float delta)
         
             player->position.x -= push;
         else
-            player->position.x -= push;
+            player->position.x += push;
     }   
-
 }
 
 void DrawGoblin(Goblin *goblin) 
@@ -83,7 +104,7 @@ void DrawGoblin(Goblin *goblin)
     Rectangle source = {
         goblin->currentFrame * goblin->frameWidth,
         0,
-        goblin->frameWidth,
+        goblin->frameWidth * goblin->direction,
         goblin->frameHeight
     };
 
