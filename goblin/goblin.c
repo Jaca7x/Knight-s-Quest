@@ -36,7 +36,8 @@ void InitGoblin(Goblin *goblin)
     goblin->isAtacking = false;
 
     goblin->viewPlayer = 300.0f;
-    goblin->goblinAttackRange = 100.0f;
+    goblin->goblinAttackRangeRight = 100.0f;
+    goblin->goblinAttackRangeLeft = 15.0f;
     goblin->goblinHasHitPlayer = false;
     goblin->direction = 1;
 
@@ -93,22 +94,37 @@ if (distanceToPlayer <= goblin->viewPlayer)
 
     goblin->position.x += goblin->speed * goblin->direction * delta;
 
-    if (distanceToPlayer <= goblin->goblinAttackRange)
+    if (distanceToPlayer <= goblin->goblinAttackRangeRight && goblin->direction == -1)
     {
         goblin->isAtacking = true;
         goblin->attackTimer = goblin->attackCooldown;
         player->life -= goblin->damage;
         goblin->goblinHasHitPlayer = true;
         player->hasHit = true;
-        player->hitTimer = 0.4f; 
-
+        player->hitTimer = 0.4f;   
+    
         // Knockback
         if (player->position.x < goblin->position.x)
             player->position.x -= 50;
         else
             player->position.x += 50;
     }
-}
+    else if (distanceToPlayer <= goblin->goblinAttackRangeLeft && goblin->direction)
+    {
+        goblin->isAtacking = true;
+        goblin->attackTimer = goblin->attackCooldown;
+        player->life -= goblin->damage;
+        goblin->goblinHasHitPlayer = true;
+        player->hasHit = true;
+        player->hitTimer = 0.4f;   
+    
+        // Knockback
+        if (player->position.x < goblin->position.x)
+            player->position.x -= 50;
+        else
+            player->position.x += 50;
+    }
+} 
 else
 {
     goblin->isIdle = true;
