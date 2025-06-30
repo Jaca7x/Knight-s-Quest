@@ -220,7 +220,7 @@ int main(void)
         float delta = GetFrameTime();
 
         // Atualiza o player e a barra de stamina
-        UpdatePlayer(&player, &wolf, &wolfRun, currentMapIndex, delta);
+        UpdatePlayer(&player, &wolf, &wolfRun, &goblin, currentMapIndex, delta);
         UpdateStaminaBar(&player, delta);
         
         // Verifica se o player chegou no final do mapa (lado direito)
@@ -255,7 +255,7 @@ int main(void)
         if (currentMapIndex == GOBLIN_MAP)
         {
             DrawGoblin(&goblin);
-            UpdateGoblin(&goblin, &player, delta);
+            UpdateGoblin(&goblin, &player, currentMapIndex, delta);
         }
         
         if (currentMapIndex == MAP_WOLF_AREA)
