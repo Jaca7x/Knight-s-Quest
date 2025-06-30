@@ -10,6 +10,26 @@ bool CheckCollisionGoblin(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
+void DrawGoblinLifeBar(Goblin *goblin)
+{
+    float barWidth = 60.0f;
+    float barHeight = 8.0f;
+    float x = goblin->position.x + 10;  // ajuste horizontal
+    float y = goblin->position.y - 10;  // acima do sprite
+
+    float lifePercent = goblin->life / 50.0f;
+    float currentBarWidth = barWidth * lifePercent;
+
+    // Fundo (vermelho)
+    DrawRectangle(x, y, barWidth, barHeight, RED);
+
+    // Vida atual (verde)
+    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
+
+    // Contorno
+    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
+}
+
 void InitGoblin(Goblin *goblin) 
 {
     goblin->position = (Vector2){780, 569};
@@ -34,6 +54,8 @@ void InitGoblin(Goblin *goblin)
     goblin->isIdle = true;
     goblin->isWalking = false;
     goblin->isAtacking = false;
+    goblin->isDead = false;
+    goblin->goblinHasHit = false;
 
     goblin->viewPlayer = 300.0f;
     goblin->goblinAttackRangeRight = 100.0f;
@@ -52,13 +74,17 @@ void InitGoblin(Goblin *goblin)
     goblin->damage = 20;
 }
 
-void UpdateGoblin(Goblin *goblin, Player *player, float delta)
+void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta)
 {
     goblin->frameCounter++;
     if (goblin->frameCounter >= (60 / 10))
     {
         goblin->frameCounter = 0;
-        if (goblin->isAtacking) 
+        if (goblin->goblinHasHit)
+        {
+            goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameHurt;
+        }
+        else if (goblin->isAtacking) 
         {
             goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameAtk;
         }
@@ -70,6 +96,11 @@ void UpdateGoblin(Goblin *goblin, Player *player, float delta)
         {
             goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameIdle;
         }  
+    }
+    
+    if (goblin->goblinHasHit)
+    {
+        goblin->speed = 0.0f;
     }
     
     if (goblin->attackTimer > 0.0f) 
@@ -166,8 +197,11 @@ void DrawGoblin(Goblin *goblin)
     };
 
     Vector2 origin = {0, 0};
-
-    if (goblin->isIdle)
+    if (goblin->goblinHasHit)
+    {
+       DrawTexturePro(goblin->goblinSpriteHurt, source, dest, origin, 0.0f, WHITE); 
+    }
+    else if (goblin->isIdle)
     {
         DrawTexturePro(goblin->goblinSpriteIdle, source, dest, origin, 0.0f, WHITE);
     } 
@@ -178,6 +212,11 @@ void DrawGoblin(Goblin *goblin)
     else if (goblin->isAtacking)
     {
         DrawTexturePro(goblin->goblinSpriteAtk, source, dest, origin, 0.0f, WHITE);
+    }
+
+    if (!goblin->isDead)
+    {
+        DrawGoblinLifeBar(goblin);
     }
 }
 

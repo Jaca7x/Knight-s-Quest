@@ -32,6 +32,8 @@ typedef struct goblin {
     bool isIdle;
     bool isWalking;
     bool isAtacking;
+    bool isDead;
+    bool goblinHasHit;
 
     float viewPlayer;
     float goblinAttackRangeRight;
@@ -53,7 +55,7 @@ typedef struct goblin {
 
 
 void InitGoblin(Goblin *goblin);
-void UpdateGoblin(Goblin *goblin, Player *player, float delta);
+void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta);
 void DrawGoblin(Goblin *goblin);
 void UnloadGoblin(Goblin *goblin);
 
