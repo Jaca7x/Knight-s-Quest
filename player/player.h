@@ -4,10 +4,12 @@
 #include "../librays/raylib.h" // Biblioteca Raylib
 #include "../wolf/wolf.h" // Biblioteca wolf
 #include "../wolf/wolfRunning.h" 
+#include "../goblin/goblin.h" 
 
 
 typedef struct wolf Wolf; 
 typedef struct wolfRun WolfRun; 
+typedef struct goblin Goblin; 
 
 /// @brief Struct que representa o jogador
 typedef struct player
@@ -81,7 +83,7 @@ void InitPlayer(Player *player);
 
 /// @brief Atualiza a física, movimento e animação do jogador
 /// @param delta Tempo entre os frames (GetFrameTime())
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, int currentMapIndex, float delta);
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, int currentMapIndex, float delta);
 
 /// @brief Desenha o jogador na tela
 void DrawPlayer(Player *player);

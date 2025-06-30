@@ -65,7 +65,7 @@ void InitPlayer(Player *player)
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, int currentMapIndex, float delta)
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, int currentMapIndex, float delta)
 {
     // Verificar entradas de movimento
     bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
@@ -143,6 +143,33 @@ if (currentMapIndex == MAP_WOLF_AREA)
         wolfRun->wolfHasHit = false;
     }
 }
+
+    if (currentMapIndex == GOBLIN_MAP)
+    {
+        float distanceToGoblin = fabs(goblin->position.x - player->position.x);
+
+        if (player->isAttacking && distanceToGoblin <= player->attackRange)
+        {
+            if (!goblin->goblinHasHit)
+            {
+                if (player->isAttackingLight)
+                {
+                    goblin->life -= player->lightDamage;
+                }
+                else if (player->isAttackingHeavy)
+                {
+                    goblin->life -= player->heavyDamage;
+                }
+
+                goblin->goblinHasHit = true;
+            }  
+        }
+        else
+        {
+            goblin->goblinHasHit = false;
+        }   
+    }
+    
     // Ataque com cooldown
     player->attackCooldownTimer -= delta;
     player->attackTimer -= delta;
