@@ -28,13 +28,16 @@ typedef struct goblin {
     int frameCounter;      // Contador de frames (controle de tempo)
     int frameWidth;        // Largusra de cada frame
     int frameHeight;       // Altura de cada frame
-
+    
     bool isIdle;
     bool isWalking;
     bool isAtacking;
     bool isDead;
     bool goblinHasHit;
+    bool deathAnimationDone;
 
+
+    float deathAnimTimer; 
     float viewPlayer;
     float goblinAttackRangeRight;
     float goblinAttackRangeLeft;

@@ -42,7 +42,7 @@ void InitGoblin(Goblin *goblin)
 
     goblin->frameWalk = 6;
     goblin->frameHurt = 4;
-    goblin->frameDead = 6;
+    goblin->frameDead = 8;
     goblin->frameIdle = 8;
     goblin->frameAtk = 6;
 
@@ -56,6 +56,7 @@ void InitGoblin(Goblin *goblin)
     goblin->isAtacking = false;
     goblin->isDead = false;
     goblin->goblinHasHit = false;
+    goblin->deathAnimationDone = false;
 
     goblin->viewPlayer = 300.0f;
     goblin->goblinAttackRangeRight = 100.0f;
@@ -76,6 +77,28 @@ void InitGoblin(Goblin *goblin)
 
 void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta)
 {
+    if (goblin->life <= 0 && !goblin->isDead) 
+    {
+        goblin->isDead = true;
+        goblin->goblinHasHit = false;
+        goblin->currentFrame = 0;
+        goblin->goblinHasHitPlayer = false;
+        goblin->attackTimer = 0.0f; 
+        goblin->frameDead = 7;
+        goblin->deathAnimationDone = false;
+        goblin->isWalking = false;
+        goblin->isAtacking = false;
+        goblin->isIdle = false;
+    }
+
+    if (goblin->isDead && goblin->deathAnimationDone)
+        return;
+    
+    if (goblin->goblinHasHit)
+    {
+        goblin->speed = 0.0f;
+    }
+    
     goblin->frameCounter++;
     if (goblin->frameCounter >= (60 / 10))
     {
@@ -83,6 +106,24 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         if (goblin->goblinHasHit)
         {
             goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameHurt;
+        }
+        else if (goblin->isDead && !goblin->deathAnimationDone) 
+        {
+           goblin->deathAnimTimer += delta;
+
+            if (goblin->deathAnimTimer >= 0.7f)
+            {   
+                goblin->frameDead++;
+                goblin->deathAnimTimer = 0.0f;
+
+                if (goblin->frameDead >= 8)
+                {
+                    goblin->frameDead = 7;
+                    goblin->deathAnimationDone = true;
+                    goblin->speed = 0.0f;
+                }
+            }
+            goblin->currentFrame = goblin->frameDead;   
         }
         else if (goblin->isAtacking) 
         {
@@ -96,11 +137,6 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         {
             goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameIdle;
         }  
-    }
-    
-    if (goblin->goblinHasHit)
-    {
-        goblin->speed = 0.0f;
     }
     
     if (goblin->attackTimer > 0.0f) 
@@ -197,7 +233,11 @@ void DrawGoblin(Goblin *goblin)
     };
 
     Vector2 origin = {0, 0};
-    if (goblin->goblinHasHit)
+    if (goblin->isDead)
+    {
+        DrawTexturePro(goblin->goblinSpriteDead, source, dest, origin, 0.0f, WHITE);
+    }
+    else if (goblin->goblinHasHit)
     {
        DrawTexturePro(goblin->goblinSpriteHurt, source, dest, origin, 0.0f, WHITE); 
     }
