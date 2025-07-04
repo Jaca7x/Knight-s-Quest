@@ -173,7 +173,7 @@ if (wolf->isPatrolling)
         wolf->speed = 95.0f;
     }
     
-    if (wolf->isAttacking)
+    if (!wolf->isDead && wolf->isAttacking)
     {
         wolf->attackDamageTimer -= delta;
 
@@ -220,7 +220,7 @@ if (wolf->isPatrolling)
     }
 
     // ====== COLISÃO FÍSICA (BLOQUEAR PLAYER) ======
-   if (CheckCollisionAABB(
+   if (!wolf->isDead && CheckCollisionAABB(
             player->position.x, player->position.y, player->frameWidth, player->frameHeight,
             wolf->position.x, wolf->position.y, wolf->frameWidth, wolf->frameHeight))
     {

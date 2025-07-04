@@ -150,7 +150,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
 
     float distanceToPlayer = fabs(player->position.x - goblin->position.x);
 
-if (distanceToPlayer <= goblin->viewPlayer)
+if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer)
 {
     goblin->direction = (player->position.x > goblin->position.x) ? 1 : -1;
 
@@ -204,12 +204,11 @@ else
 
 float push = 50.0f;
 
-   if (CheckCollisionGoblin(
+   if (!goblin->isDead && CheckCollisionGoblin(
             player->position.x, player->position.y, player->frameWidth , player->frameHeight,
             goblin->position.x, goblin->position.y, goblin->frameWidth * goblin->scale, goblin->frameHeight * goblin->scale ))
     {
         if (player->position.x < goblin->position.x)
-        
             player->position.x -= push;
         else
             player->position.x += push;

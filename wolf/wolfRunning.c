@@ -159,7 +159,7 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
 
     float distanceToPlayer = fabs(player->position.x - wolfRun->position.x);
 
-    if (distanceToPlayer <= wolfRun->viewPlayer)
+    if (!wolfRun->isDead && distanceToPlayer <= wolfRun->viewPlayer)
     {
         wolfRun->direction = (player->position.x > wolfRun->position.x) ? 1 : -1;
         player->hasHit = false;
@@ -176,7 +176,7 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
 
             wolfRun->position.x += wolfRun->speedRun * wolfRun->direction * delta;
 
-            if (distanceToPlayer <= wolfRun->attackRange)
+            if (!wolfRun->isDead && distanceToPlayer <= wolfRun->attackRange)
             {
                 if (!wolfRun->hasHitPlayer)
                 {
@@ -255,7 +255,7 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
         player->hasHit = false;
     }
 
-    if (CheckCollision(
+    if (!wolfRun->isDead && CheckCollision(
             player->position.x, player->position.y, player->frameWidth, player->frameHeight,
             wolfRun->position.x, wolfRun->position.y, wolfRun->frameWidth, wolfRun->frameHeight))
     {
