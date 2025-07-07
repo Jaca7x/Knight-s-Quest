@@ -261,6 +261,7 @@ int main(void)
         if (isGameOver)
         {
             DrawTexture(deathImage, 0, 0, RAYWHITE);
+            DrawText("Para recomeçar clique ENTER", GetScreenWidth() / 2 - MeasureText("Game Over", 40) / 2, GetScreenHeight() / 1.5 - 20, 40, YELLOW);
         } 
         else
         {
