@@ -214,6 +214,9 @@ int main(void)
     // Carrega a barra de vida
     Texture2D barLifeSprite = LoadTexture("resources/sprites/life/life.png");
 
+    //Carregar imagem de morte
+    Texture2D deathImage = LoadTexture("resources/img/deathImage.png");
+
     // Loop principal do jogo
     while (!WindowShouldClose())
     {
@@ -244,10 +247,23 @@ int main(void)
             player.position.y = 520;
         }
 
+        bool isGameOver = false;
+
+        if (player.life <= 0)
+        {
+            isGameOver = true;
+        }
+        
         // Desenho na tela
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
+        if (isGameOver)
+        {
+            DrawTexture(deathImage, 0, 0, RAYWHITE);
+        } 
+        else
+        {
         // Desenha o mapa, o player e a barra de stamina
         DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
         DrawPlayer(&player);
@@ -269,6 +285,7 @@ int main(void)
 
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
         DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
+    }
         EndDrawing();
     }
 
