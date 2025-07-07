@@ -36,6 +36,7 @@ typedef struct player
     Texture2D spritePlayerAttack1; // Sprite atacando leve
     Texture2D spritePlayerAttack2; // Sprite atacando pesado
     Texture2D spritePlayerHurt; // estiver sendo atacado
+    Texture2D spritePlayerDead; // Sprite de morte
 
     // Estados
     bool isRunning;   // Está correndo?
@@ -45,6 +46,8 @@ typedef struct player
     bool hasHit;    //Está tomando hit?
     bool isAttackingHeavy;
     bool isAttackingLight;
+    bool isDead;
+    bool deathAnimationDone; // Animação de morte concluída
 
     float attackCooldownTimer;
     float attackTimer;
@@ -62,6 +65,7 @@ typedef struct player
     int frameJump;
     int frameAtk;
     int frameHurt;
+    int frameDead;
 
     // Física
     float groundY;    // Posição Y do chão

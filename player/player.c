@@ -11,6 +11,7 @@ void InitPlayer(Player *player)
     player->spritePlayerAttack1  = LoadTexture("resources/sprites/player/ATTACK 1.png");
     player->spritePlayerAttack2  = LoadTexture("resources/sprites/player/ATTACK 2.png");
     player->spritePlayerHurt     = LoadTexture("resources/sprites/player/HURT.png");
+    player->spritePlayerDead     = LoadTexture("resources/sprites/player/DEATH.png");
 
     // Quantidade de frames de cada animação
     player->frameRun    = 8;
@@ -19,6 +20,7 @@ void InitPlayer(Player *player)
     player->frameJump   = 5;
     player->frameAtk    = 6;
     player->frameHurt   = 4;
+    player->frameDead   = 12;
 
     // Frame padrão
     player->frameWidth  = player->spritePlayerWalk.width / player->frameWalk;
@@ -49,6 +51,8 @@ void InitPlayer(Player *player)
     player->isAttackingHeavy = false;
     player->isAttackingLight = false;
     player->hasHit      = false;
+    player->isDead      = false;
+    player->deathAnimationDone = false;
 
     player->attackCooldownTimer = 0.0f;
     player->attackTimer = 0.0f;
@@ -75,6 +79,19 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, 
     player->isRunning = isRunning;
     player->isMoving = isRunning || isWalking;
 
+    if (player->life <= 0)
+    {
+        player->isDead = true;
+        player->isMoving = false;
+        player->isRunning = false;
+        player->isJumping = false;
+        player->isAttacking = false;
+        player->hasHit = false;
+        player->hitTimer = 0.0f;
+        player->attackCooldownTimer = 0.0f;
+        player->attackTimer = 0.0f;
+    }
+    
     // Movimento horizontal
     if (isRunning)
     {
