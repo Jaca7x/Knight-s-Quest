@@ -217,15 +217,23 @@ int main(void)
     //Carregar imagem de morte
     Texture2D deathImage = LoadTexture("resources/img/deathImage.png");
 
+    bool isGameOver = false;
+    
     // Loop principal do jogo
     while (!WindowShouldClose())
-    {
-        float delta = GetFrameTime();
+{
+    float delta = GetFrameTime();
 
-        // Atualiza o player e a barra de stamina
+    if (!isGameOver)
+    {
         UpdatePlayer(&player, &wolf, &wolfRun, &goblin, currentMapIndex, delta);
         UpdateStaminaBar(&player, delta);
         
+        if (player.life <= 0 && player.deathAnimationDone)
+        {
+            isGameOver = true;
+        }
+
         // Verifica se o player chegou no final do mapa (lado direito)
         if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
         {
@@ -246,26 +254,21 @@ int main(void)
             player.position.x = 0;
             player.position.y = 520;
         }
+    }
 
-        bool isGameOver = false;
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
 
-        if (player.life <= 0)
-        {
-            isGameOver = true;
-        }
-        
-        // Desenho na tela
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        if (isGameOver)
-        {
-            DrawTexture(deathImage, 0, 0, RAYWHITE);
-            DrawText("Para recomeçar clique ENTER", GetScreenWidth() / 2 - MeasureText("Game Over", 40) / 2, GetScreenHeight() / 1.5 - 20, 40, YELLOW);
-        } 
-        else
-        {
-        // Desenha o mapa, o player e a barra de stamina
+    if (isGameOver)
+    {
+        // Desenha imagem de morte no meio da tela
+        DrawTexture(deathImage, 
+            (GetScreenWidth() - deathImage.width) / 2, 
+            (GetScreenHeight() - deathImage.height) / 2, 
+            WHITE);
+    }
+    else
+    {
         DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
         DrawPlayer(&player);
 
@@ -287,8 +290,10 @@ int main(void)
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
         DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
     }
-        EndDrawing();
-    }
+
+    EndDrawing();
+}
+
 
     // Libera todos os recursos carregados
     UnloadTexture(tileset1);
