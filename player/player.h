@@ -1,11 +1,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../librays/raylib.h" // Biblioteca Raylib
-#include "../wolf/wolf.h" // Biblioteca wolf
+#include "../librays/raylib.h"       // Biblioteca Raylib
+#include "../wolf/wolf.h"            // Biblioteca wolf
 #include "../wolf/wolfRunning.h" 
 #include "../goblin/goblin.h" 
-
 
 typedef struct wolf Wolf; 
 typedef struct wolfRun WolfRun; 
@@ -20,44 +19,48 @@ typedef struct player
     // Velocidades
     float speedWalk;       // Velocidade andando
     float speedRun;        // Velocidade correndo
-    float speedWalkBack;   // (Opcional) Velocidade andando para trás
 
     // Animação
     int currentFrame;      // Frame atual da animação
-    int frameCounter;      // Contador de frames (controle de tempo)
+    int frameCounter;      // Contador para trocar frames
     int frameWidth;        // Largura de cada frame
     int frameHeight;       // Altura de cada frame
 
     // Texturas (sprites)
-    Texture2D spritePlayerRun;   // Sprite correndo
-    Texture2D spritePlayerWalk;  // Sprite andando
-    Texture2D spritePlayerIdle;  // Sprite parado
-    Texture2D spritePlayerJump;  // Sprite pulando
-    Texture2D spritePlayerAttack1; // Sprite atacando leve
-    Texture2D spritePlayerAttack2; // Sprite atacando pesado
-    Texture2D spritePlayerHurt; // estiver sendo atacado
-    Texture2D spritePlayerDead; // Sprite de morte
+    Texture2D spritePlayerRun;
+    Texture2D spritePlayerWalk;
+    Texture2D spritePlayerIdle;
+    Texture2D spritePlayerJump;
+    Texture2D spritePlayerAttack1;
+    Texture2D spritePlayerAttack2;
+    Texture2D spritePlayerHurt;
+    Texture2D spritePlayerDead;
 
     // Estados
-    bool isRunning;   // Está correndo?
-    bool isMoving;    // Está se movendo?
-    bool isJumping;   // Está pulando?
-    bool isAttacking; // Está atacando?
-    bool hasHit;    //Está tomando hit?
-    bool isAttackingHeavy;
+    bool isRunning;
+    bool isMoving;
+    bool isJumping;
+    bool isAttacking;
     bool isAttackingLight;
+    bool isAttackingHeavy;
+    bool hasHit;
     bool isDead;
-    bool deathAnimationDone; // Animação de morte concluída
+    bool deathAnimationDone;     // Concluiu animação de morte
+    bool isAttackingInProgress; // Controle do ataque
 
+    // Timers
     float attackCooldownTimer;
     float attackTimer;
-    bool isAttackingInProgress; 
+    float hitTimer;
+    float deathAnimTimer;       // Timer da animação de morte
 
-    // Stamina
-    float stamina;    // Energia para correr
-
+    // Atributos
+    float stamina;
     float life;
-    
+    float attackRange;
+    int lightDamage;
+    int heavyDamage;
+
     // Frames por animação
     int frameRun;
     int frameWalk;
@@ -68,17 +71,12 @@ typedef struct player
     int frameDead;
 
     // Física
-    float groundY;    // Posição Y do chão
-    float gravity;    // Gravidade
-    float velocityY;  // Velocidade vertical
+    float groundY;
+    float gravity;
+    float velocityY;
 
     // Direção (1 = direita, -1 = esquerda)
     float direction;
-
-    float hitTimer;
-    float attackRange;
-    int lightDamage;
-    int heavyDamage;
 
 } Player;
 
@@ -86,7 +84,6 @@ typedef struct player
 void InitPlayer(Player *player);
 
 /// @brief Atualiza a física, movimento e animação do jogador
-/// @param delta Tempo entre os frames (GetFrameTime())
 void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, int currentMapIndex, float delta);
 
 /// @brief Desenha o jogador na tela
