@@ -11,6 +11,7 @@
 #include "wolf/wolfRunning.h"
 #include "lifeBar/lifeBar.h"
 #include "goblin/goblin.h"
+#include "goblin/goblinTank.h"
 
 
 // ============================================================================
@@ -203,6 +204,9 @@ int main(void)
     Goblin goblin;
     InitGoblin(&goblin);
 
+    GoblinTank goblinTank;
+    InitGoblinTank(&goblinTank);
+
     // Carrega os tilesets
     Texture2D tileset1 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlesky.png");
@@ -285,6 +289,12 @@ int main(void)
 
             DrawRunningWolf(&wolfRun);
             UpdateRunningWolf(&wolfRun, &player, delta);
+        }
+
+        if (currentMapIndex == MAP_GOBLIN_TANK_AREA)
+        {
+            DrawGoblinTank(&goblinTank);
+            UpdateGoblinTank(&goblinTank, &player, delta);
         }
 
         DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
