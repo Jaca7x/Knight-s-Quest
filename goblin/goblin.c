@@ -103,7 +103,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
     if (goblin->frameCounter >= (60 / 10))
     {
         goblin->frameCounter = 0;
-        if (goblin->goblinHasHit)
+        if (goblin->goblinHasHit && !goblin->isDead)
         {
             goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameHurt;
         }
@@ -111,7 +111,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         {
            goblin->deathAnimTimer += delta;
 
-            if (goblin->deathAnimTimer >= 0.7f)
+            if (goblin->deathAnimTimer >= 0.2f)
             {   
                 goblin->frameDead++;
                 goblin->deathAnimTimer = 0.0f;
@@ -121,6 +121,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
                     goblin->frameDead = 7;
                     goblin->deathAnimationDone = true;
                     goblin->speed = 0.0f;
+        
                 }
             }
             goblin->currentFrame = goblin->frameDead;   

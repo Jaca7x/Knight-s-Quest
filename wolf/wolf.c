@@ -122,7 +122,7 @@ if (wolf->isPatrolling)
     {
         wolf->frameCounter = 0;
         
-        if (wolf->wolfHasHit)
+        if (wolf->wolfHasHit && !wolf->isDead)
         {
             wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameHurt;
         }

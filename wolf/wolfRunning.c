@@ -107,7 +107,7 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
     if (wolfRun->frameCounter >= (60 / 10))
     {
         wolfRun->frameCounter = 0;
-        if (wolfRun->wolfHasHit)
+        if (wolfRun->wolfHasHit && !wolfRun->isDead)
         {
             wolfRun->currentFrame = (wolfRun->currentFrame + 1) % wolfRun->frameHurt;
         }
