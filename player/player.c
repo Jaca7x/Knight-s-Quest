@@ -144,8 +144,72 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, 
         }
     }
 
-    // Aqui mantive TODA a sua lógica de ataque, dano nos lobos e goblin...
-    // (não repeti aqui para não poluir, mas mantenha ela igual ao seu código!)
+        // Lógica de dano nos lobos (apenas se estiver no mapa certo)
+    if (currentMapIndex == MAP_WOLF_AREA)
+    {
+        float distanceToWolf = fabs(wolf->position.x - player->position.x);
+        float distanceToRunningWolf = fabs(wolfRun->position.x - player->position.x);
+
+        if (player->isAttacking && distanceToWolf <= player->attackRange)
+        {   
+            if (!wolf->wolfHasHit)
+            {
+                if (player->isAttackingLight)
+                    wolf->life -= player->lightDamage;
+                else if (player->isAttackingHeavy)
+                    wolf->life -= player->heavyDamage;
+
+                wolf->wolfHasHit = true;
+            }
+        } 
+        else 
+        {
+            wolf->wolfHasHit = false;
+        }   
+
+        if (player->isAttacking && distanceToRunningWolf <= player->attackRange)
+        {   
+            if (!wolfRun->wolfHasHit)
+            {
+                if (player->isAttackingLight)
+                    wolfRun->life -= player->lightDamage;
+                else if (player->isAttackingHeavy)
+                    wolfRun->life -= player->heavyDamage;
+
+                wolfRun->wolfHasHit = true;
+            }
+        } 
+        else 
+        {
+            wolfRun->wolfHasHit = false;
+        }
+    }
+
+    if (currentMapIndex == GOBLIN_MAP)
+    {
+        float distanceToGoblin = fabs(goblin->position.x - player->position.x);
+
+        if (player->isAttacking && distanceToGoblin <= player->attackRange)
+        {
+            if (!goblin->goblinHasHit)
+            {
+                if (player->isAttackingLight)
+                {
+                    goblin->life -= player->lightDamage;
+                }
+                else if (player->isAttackingHeavy)
+                {
+                    goblin->life -= player->heavyDamage;
+                }
+
+                goblin->goblinHasHit = true;
+            }  
+        }
+        else
+        {
+            goblin->goblinHasHit = false;
+        }   
+    }
 
     // Ataque com cooldown
     player->attackCooldownTimer -= delta;
