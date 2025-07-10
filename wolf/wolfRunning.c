@@ -118,7 +118,7 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
             if (wolfRun->deathAnimTimer >= 0.2f)
             {   
             wolfRun->frameDead++;
-            wolfRun->deathAnimTimer = 0.0f;
+            wolfRun->deathAnimTimer = 0.3f;
 
             if (wolfRun->frameDead >= 2)
             {

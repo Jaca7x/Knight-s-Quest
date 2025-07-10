@@ -114,7 +114,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
             if (goblin->deathAnimTimer >= 0.2f)
             {   
                 goblin->frameDead++;
-                goblin->deathAnimTimer = 0.0f;
+                goblin->deathAnimTimer = 0.3f;
 
                 if (goblin->frameDead >= 8)
                 {

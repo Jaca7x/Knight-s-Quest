@@ -133,7 +133,7 @@ if (wolf->isPatrolling)
             if (wolf->deathAnimTimer >= 0.2f)
             {   
             wolf->frameDead++;
-            wolf->deathAnimTimer = 0.0f;
+            wolf->deathAnimTimer = 0.3f;
 
             if (wolf->frameDead >= 2)
             {
