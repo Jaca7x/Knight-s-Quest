@@ -40,11 +40,11 @@ typedef struct goblinTank
     bool isIdle;
     bool goblinHasHit;
     bool isDead;
+    bool isAtacking;
 
     float deathAnimTimer;
     bool deathAnimationDone;
 
-    bool isAttacking;
     bool hasRunAttack;
     float attackRange;
     float attackCooldown;
