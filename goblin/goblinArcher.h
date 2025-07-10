@@ -1,14 +1,14 @@
-#ifndef GOBLINTANK_H
-#define GOBLINTANK_H
+#ifndef GOBLINARCHER_H
+#define GOBLINARCHER_H
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
 
-#define MAP_GOBLIN_TANK_AREA 2
+#define MAP_GOBLIN_ARCHER_AREA 2
 
 typedef struct player Player; // declaração antecipada
 
-typedef struct goblinTank
+typedef struct goblinArcher
 {
     Vector2 position;
 
@@ -19,11 +19,11 @@ typedef struct goblinTank
     int currentFrame;
     int frameCounter;
 
-    Texture2D spriteWalkGoblinTank;
-    Texture2D spriteAtkGoblinTank;
-    Texture2D spriteIdleGoblinTank;
-    Texture2D spriteDeadGoblinTank;
-    Texture2D spriteHurtGoblinTank;
+    Texture2D spriteWalkGoblinArcher;
+    Texture2D spriteAtkGoblinArcher;
+    Texture2D spriteIdleGoblinArcher;
+    Texture2D spriteDeadGoblinArcher;
+    Texture2D spriteHurtGoblinArcher;
 
     int frameWidth;
     int frameHeight;
@@ -50,11 +50,11 @@ typedef struct goblinTank
     float attackCooldown;
     bool hasHitPlayer;
     float attackDamageTimer;
-} GoblinTank;
+} GoblinArcher;
 
-void InitGoblinTank(GoblinTank *goblinTank);
-void UpdateGoblinTank(GoblinTank *goblinTank, Player *player, float delta);
-void DrawGoblinTank(GoblinTank *goblinTank);    
-void UnloadGoblinTank(GoblinTank *goblinTank);
+void InitGoblinArcher(GoblinArcher *goblinArcher);
+void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta);
+void DrawGoblinArcher(GoblinArcher *goblinArcher);    
+void UnloadGoblinArcher(GoblinArcher *goblinArcher);
 
-#endif // GOBLINTANK_H
+#endif // goblinArcher_H
