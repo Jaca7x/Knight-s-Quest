@@ -15,12 +15,13 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->spriteIdleGoblinArcher = LoadTexture("resources/sprites/goblinArcher/goblinArcher-idle.png");
     goblinArcher->spriteDeadGoblinArcher = LoadTexture("resources/sprites/goblinArcher/goblinArcher-dead.png");
     goblinArcher->spriteHurtGoblinArcher = LoadTexture("resources/sprites/goblinArcher/goblinArcher-hurt.png");
+    goblinArcher->arrow = LoadTexture("resources/sprites/goblinArcher/Arrow.png");
 
-    goblinArcher->frameWalk = 11;
-    goblinArcher->frameAtk = 6;
+    goblinArcher->frameWalk = 6;
+    goblinArcher->frameAtk = 9;
     goblinArcher->frameIdle = 8;
-    goblinArcher->frameDead = 2;
-    goblinArcher->frameHurt = 2;
+    goblinArcher->frameDead = 9;
+    goblinArcher->frameHurt = 4;
 
     goblinArcher->frameWidth = goblinArcher->spriteIdleGoblinArcher.width / goblinArcher->frameIdle;
     goblinArcher->frameHeight = goblinArcher->spriteIdleGoblinArcher.height;

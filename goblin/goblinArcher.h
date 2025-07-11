@@ -24,6 +24,7 @@ typedef struct goblinArcher
     Texture2D spriteIdleGoblinArcher;
     Texture2D spriteDeadGoblinArcher;
     Texture2D spriteHurtGoblinArcher;
+    Texture2D arrow;
 
     int frameWidth;
     int frameHeight;
