@@ -32,7 +32,7 @@ void DrawGoblinLifeBar(Goblin *goblin)
 
 void InitGoblin(Goblin *goblin) 
 {
-    goblin->position = (Vector2){780, 569};
+    goblin->position = (Vector2){780, 567};
 
     goblin->goblinSpriteWalk = LoadTexture("resources/sprites/goblin/goblin-walk.png");
     goblin->goblinSpriteHurt = LoadTexture("resources/sprites/goblin/goblin-hurt.png");
@@ -148,7 +148,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         goblin->isIdle = false;
         return;  // Durante o ataque, não anda nem faz mais nada
     }
-
+ 
     float distanceToPlayer = fabs(player->position.x - goblin->position.x);
 
 if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer)
