@@ -48,13 +48,23 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->hasHitPlayer = false;
 }
 
+
 void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 {
+    // Debug: Antes da atualização
+    if (player->hasHit) {
+        fprintf(stderr, "[DEBUG] PRE-Update: Player hasHit = TRUE\n");
+    } else {
+        fprintf(stderr, "[DEBUG] PRE-Update: Player hasHit = FALSE\n");
+    }
+
     if (goblinArcher->life <= 0 && !goblinArcher->isDead)
     {
         goblinArcher->isDead = true;
         goblinArcher->currentFrame = 0;
-        goblinArcher->hasHitPlayer = false;
+        goblinArcher->hasHitPlayer = false;  
+        goblinArcher->goblinHasHit = false;
+        player->hasHit = false; // Resetar hasHit do jogador ao morrer
         goblinArcher->deathAnimTimer = 0.0f;
         goblinArcher->deathAnimationDone = false;
         goblinArcher->isWalking = false;
@@ -97,12 +107,10 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 
     if (distanceToPlayer <= goblinArcher->goblinView && player->life > 0)
     {
-        // Define direção
         goblinArcher->direction = (player->position.x < goblinArcher->position.x) ? -1 : 1;
 
         if (distanceToPlayer <= goblinArcher->attackRange)
         {
-            // Ataca
             goblinArcher->isAtacking = true;
             goblinArcher->isWalking = false;
             goblinArcher->isIdle = false;
@@ -110,9 +118,6 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
             if (!goblinArcher->arrow.active)
             {
                 goblinArcher->arrow.active = true;
-                goblinArcher->hasHitPlayer = false; // prepara nova flecha
-                player->hasHit = false;
-
                 goblinArcher->arrow.position = (Vector2){
                     goblinArcher->position.x,
                     goblinArcher->position.y + goblinArcher->frameHeight * 0.05f
@@ -123,7 +128,6 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         }
         else
         {
-            // Anda até o player
             goblinArcher->isWalking = true;
             goblinArcher->isAtacking = false;
             goblinArcher->isIdle = false;
@@ -133,48 +137,28 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
     }
     else
     {
-        // Fora da visão
         goblinArcher->isIdle = true;
         goblinArcher->isWalking = false;
         goblinArcher->isAtacking = false;
     }
 
-   // Atualiza flecha se ativa
-if (goblinArcher->arrow.active)
-{
-    goblinArcher->arrow.position.x += goblinArcher->arrow.speed * goblinArcher->arrow.direction * delta;
-
-    // Começa sempre como false
-    goblinArcher->hasHitPlayer = false;
-    player->hasHit = false;
-
-    // Verifica colisão simples
-    if (fabs(goblinArcher->arrow.position.x - player->position.x) < goblinArcher->arrowTolerance)
+    // Atualiza flecha se ativa
+    if (goblinArcher->arrow.active)
     {
-        // Acertou neste frame
-        player->life -= goblinArcher->arrowDamage;
+        goblinArcher->arrow.position.x += goblinArcher->arrow.speed * goblinArcher->arrow.direction * delta;
 
-        goblinArcher->hasHitPlayer = true;
-        player->hasHit = true;
-
-        goblinArcher->arrow.active = false; // Desativa flecha após o hit
-    }
-
-    // Se saiu da tela, desativa flecha sem hit
-    if (goblinArcher->arrow.position.x < 0 || goblinArcher->arrow.position.x > GetScreenWidth())
-    {
-        goblinArcher->arrow.active = false;
-        goblinArcher->hasHitPlayer = false;
-        player->hasHit = false;
+        // Verifica se a flecha atingiu o jogador
+        if (fabs(goblinArcher->arrow.position.x - player->position.x) < goblinArcher->arrowTolerance)
+        {
+            player->life -= goblinArcher->arrowDamage;
+            goblinArcher->hasHitPlayer = true;
+            player->hasHit = true; // Define hasHit como true apenas quando o jogador é atingido
+            
+            goblinArcher->arrow.active = false; // Desativa a flecha após o impacto
+        }
     }
 }
-else
-{
-    // Flecha não está ativa: garantimos que ambos sejam false
-    goblinArcher->hasHitPlayer = false;
-    player->hasHit = false;
-}
-}
+
 
 void DrawGoblinArcher(GoblinArcher *goblinArcher)
 {
