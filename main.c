@@ -230,7 +230,7 @@ int main(void)
 
     if (!isGameOver)
     {
-        UpdatePlayer(&player, &wolf, &wolfRun, &goblin, currentMapIndex, delta);
+        UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta);
         UpdateStaminaBar(&player, delta);
         
         if (player.life <= 0 && player.deathAnimationDone)
@@ -316,6 +316,7 @@ int main(void)
     UnloadWolf(&wolf);
     UnloadRunningWolf(&wolfRun);
     UnloadGoblin(&goblin);
+    UnloadGoblinArcher(&goblinArcher);
 
     // Encerra a janela
     CloseWindow();
