@@ -8,14 +8,14 @@
 
 typedef struct player Player; // declaração antecipada
 
-typedef struct Arrow {
+typedef struct arrow {
     Vector2 position;
     float speed;
     int direction;     // -1 = esquerda, 1 = direita
     bool active;
 } Arrow;
 
-typedef struct GoblinArcher
+typedef struct goblinArcher
 {
     // Posição e movimento
     Vector2 position;
