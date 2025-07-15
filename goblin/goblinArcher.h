@@ -13,6 +13,9 @@ typedef struct Arrow {
     float speed;
     int direction;     // -1 = esquerda, 1 = direita
     bool active;
+    float scale;
+    float rotation;
+    float arrowYOffset; // Deslocamento vertical da flecha
 } Arrow;
 
 typedef struct goblinArcher
@@ -30,6 +33,7 @@ typedef struct goblinArcher
     int frameCounter;
     int frameWidth;
     int frameHeight;
+    float frameFactor;
 
     int frameWalk;
     int frameAtk;
