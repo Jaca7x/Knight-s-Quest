@@ -68,6 +68,7 @@ void InitGoblin(Goblin *goblin)
     goblin->attackCooldown = 1.0f;
 
     goblin->scale = 0.02f;
+    goblin->frameFactor = 0.15f;
 
     goblin->life = 50;
     goblin->speed = 100.0f;
@@ -148,7 +149,8 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         goblin->isIdle = false;
         return;  // Durante o ataque, não anda nem faz mais nada
     }
- 
+    
+    float push = 50.0f;
     float distanceToPlayer = fabs(player->position.x - goblin->position.x);
 
 if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer)
@@ -173,9 +175,9 @@ if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer)
     
         // Knockback
         if (player->position.x < goblin->position.x)
-            player->position.x -= 50;
+            player->position.x -= push;
         else
-            player->position.x += 50;
+            player->position.x += push;
     }
     else if (distanceToPlayer <= goblin->goblinAttackRangeLeft && goblin->direction)
     {
@@ -188,9 +190,9 @@ if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer)
     
         // Knockback
         if (player->position.x < goblin->position.x)
-            player->position.x -= 50;
+            player->position.x -= push;
         else
-            player->position.x += 50;
+            player->position.x += push;
     }
 } 
 else
@@ -203,7 +205,6 @@ else
 }
     
 
-float push = 50.0f;
 
    if (!goblin->isDead && CheckCollisionGoblin(
             player->position.x, player->position.y, player->frameWidth , player->frameHeight,
@@ -228,30 +229,33 @@ void DrawGoblin(Goblin *goblin)
     Rectangle dest = {
         goblin->position.x,
         goblin->position.y,
-        goblin->frameWidth * 0.15f,
-        goblin->frameHeight * 0.15f
+        goblin->frameWidth * goblin->frameFactor,
+        goblin->frameHeight * goblin->frameFactor
     };
 
     Vector2 origin = {0, 0};
+
+    float rotation = 0.0f;
+
     if (goblin->isDead)
     {
-        DrawTexturePro(goblin->goblinSpriteDead, source, dest, origin, 0.0f, WHITE);
+        DrawTexturePro(goblin->goblinSpriteDead, source, dest, origin, rotation, WHITE);
     }
     else if (goblin->goblinHasHit)
     {
-       DrawTexturePro(goblin->goblinSpriteHurt, source, dest, origin, 0.0f, WHITE); 
+       DrawTexturePro(goblin->goblinSpriteHurt, source, dest, origin, rotation, WHITE); 
     }
     else if (goblin->isIdle)
     {
-        DrawTexturePro(goblin->goblinSpriteIdle, source, dest, origin, 0.0f, WHITE);
+        DrawTexturePro(goblin->goblinSpriteIdle, source, dest, origin, rotation, WHITE);
     } 
     else if (goblin->isWalking)
     {
-        DrawTexturePro(goblin->goblinSpriteWalk, source, dest, origin, 0.0f, WHITE);
+        DrawTexturePro(goblin->goblinSpriteWalk, source, dest, origin, rotation, WHITE);
     } 
     else if (goblin->isAtacking)
     {
-        DrawTexturePro(goblin->goblinSpriteAtk, source, dest, origin, 0.0f, WHITE);
+        DrawTexturePro(goblin->goblinSpriteAtk, source, dest, origin, rotation, WHITE);
     }
 
     if (!goblin->isDead)

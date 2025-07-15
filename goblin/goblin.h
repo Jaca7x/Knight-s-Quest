@@ -28,6 +28,7 @@ typedef struct goblin {
     int frameCounter;      // Contador de frames (controle de tempo)
     int frameWidth;        // Largusra de cada frame
     int frameHeight;       // Altura de cada frame
+    float frameFactor;     // Fator de escala do frame
     
     bool isIdle;
     bool isWalking;
