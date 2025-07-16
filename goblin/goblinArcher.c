@@ -155,23 +155,23 @@ if (goblinArcher->arrow.active)
 {
     goblinArcher->arrow.position.x += goblinArcher->arrow.speed * goblinArcher->arrow.direction * delta;
 
-    // Verifica se a flecha atingiu o jogador usando AABB
+    Rectangle hitbox = GetPlayerHitbox(player);
+
     if (CheckCollisionArrow(
-            goblinArcher->arrow.position.x,
-            goblinArcher->arrow.position.y,
-            goblinArcher->arrowTexture.width * goblinArcher->arrow.scale,
-            goblinArcher->arrowTexture.height * goblinArcher->arrow.scale,
-            player->position.x,
-            player->position.y,
-            player->frameWidth,
-            player->frameHeight))
+        goblinArcher->arrow.position.x,
+        goblinArcher->arrow.position.y,
+        goblinArcher->arrowTexture.width * goblinArcher->arrow.scale,
+        goblinArcher->arrowTexture.height * goblinArcher->arrow.scale,
+        hitbox.x,
+        hitbox.y,
+        hitbox.width,
+        hitbox.height))
     {
         player->life -= goblinArcher->arrowDamage;
         player->hitTimer = 0.4f;   
         goblinArcher->hasHitPlayer = true;
-        player->hasHit = true; // Define hasHit como true apenas quando o jogador é atingido
-        
-        goblinArcher->arrow.active = false; // Desativa a flecha após o impacto
+        player->hasHit = true; 
+        goblinArcher->arrow.active = false;
     }
 }
 
@@ -240,6 +240,7 @@ void DrawGoblinArcher(GoblinArcher *goblinArcher)
         );
     }
 }
+
 
 void UnloadGoblinArcher(GoblinArcher *goblinArcher)
 {
