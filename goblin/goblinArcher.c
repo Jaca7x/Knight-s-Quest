@@ -8,6 +8,26 @@ bool CheckCollisionArrow (float x1, float y1, float w1, float h1,
             y1 < y2 + h2 &&
             y1 + h1 > y2);
 }
+
+void DrawGoblinArcherLifeBar(GoblinArcher *goblinArcher)
+{
+    float barWidth = 60.0f;
+    float barHeight = 8.0f;
+    float x = goblinArcher->position.x + 10;  // ajuste horizontal
+    float y = goblinArcher->position.y - 10;  // acima do sprite
+
+    float lifePercent = goblinArcher->life / 50.0f;
+    float currentBarWidth = barWidth * lifePercent;
+
+    // Fundo (vermelho)
+    DrawRectangle(x, y, barWidth, barHeight, RED);
+
+    // Vida atual (verde)
+    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
+
+    // Contorno
+    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
+}
                      
 void InitGoblinArcher(GoblinArcher *goblinArcher)
 {
@@ -38,7 +58,7 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
 
     goblinArcher->arrowSpeed = 380.0f;
     goblinArcher->arrowTolerance = 90;
-    goblinArcher->arrowDamage = 0;
+    goblinArcher->arrowDamage = 15;
     goblinArcher->arrow.active = false;
 
     goblinArcher->direction = 1;
@@ -56,6 +76,7 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->attackRange = 400.0f;
     goblinArcher->attackCooldown = 1.5f;
     goblinArcher->hasHitPlayer = false;
+    goblinArcher->arrowCooldown = 0.0f;
 
 }
 
@@ -115,24 +136,34 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 
         if (distanceToPlayer <= goblinArcher->attackRange)
         {
-            goblinArcher->isAtacking = true;
             goblinArcher->isWalking = false;
-            goblinArcher->isIdle = false;
 
-            if (!goblinArcher->arrow.active)
-            {   
+            if (goblinArcher->arrowCooldown > 0.0f)
+            {
+                goblinArcher->isIdle = true;
+                goblinArcher->isAtacking = false;
+            }
+            else
+            {
+                goblinArcher->isIdle = false;
+                goblinArcher->isAtacking = true;
 
-                goblinArcher->arrow.active = true;
-                goblinArcher->arrow.arrowYOffset = 0.05f;
-                goblinArcher->arrow.position = (Vector2){
+                // Lança flecha
+                if (!goblinArcher->arrow.active)
+                {
+                    goblinArcher->arrow.active = true;
+                    goblinArcher->arrow.arrowYOffset = 0.05f;
+                    goblinArcher->arrowCooldown = 1.5f; // Tempo de recarga do ataque
+                    goblinArcher->arrow.position = (Vector2){
                     goblinArcher->position.x,
                     goblinArcher->position.y + goblinArcher->frameHeight * goblinArcher->arrow.arrowYOffset
-                };
-                goblinArcher->arrow.scale = 0.2f;
-                goblinArcher->arrow.rotation = 0.0f;
-                goblinArcher->arrow.direction = goblinArcher->direction;
-                goblinArcher->arrow.speed = goblinArcher->arrowSpeed;
-            }
+                    };
+                    goblinArcher->arrow.scale = 0.2f;
+                    goblinArcher->arrow.rotation = 0.0f;
+                    goblinArcher->arrow.direction = goblinArcher->direction;
+                    goblinArcher->arrow.speed = goblinArcher->arrowSpeed;
+                }
+             }
         }
         else
         {
@@ -150,30 +181,36 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         goblinArcher->isAtacking = false;
     }
     {
-       // Atualiza a posição da flecha
-if (goblinArcher->arrow.active)
-{
-    goblinArcher->arrow.position.x += goblinArcher->arrow.speed * goblinArcher->arrow.direction * delta;
 
-    Rectangle hitbox = GetPlayerHitbox(player);
-
-    if (CheckCollisionArrow(
-        goblinArcher->arrow.position.x,
-        goblinArcher->arrow.position.y,
-        goblinArcher->arrowTexture.width * goblinArcher->arrow.scale,
-        goblinArcher->arrowTexture.height * goblinArcher->arrow.scale,
-        hitbox.x,
-        hitbox.y,
-        hitbox.width,
-        hitbox.height))
+   if (goblinArcher->arrowCooldown > 0.0f)
     {
-        player->life -= goblinArcher->arrowDamage;
-        player->hitTimer = 0.4f;   
-        goblinArcher->hasHitPlayer = true;
-        player->hasHit = true; 
-        goblinArcher->arrow.active = false;
+        goblinArcher->arrowCooldown -= delta;
     }
-}
+
+    // Atualiza a posição da flecha
+    if (goblinArcher->arrow.active)
+    {
+        goblinArcher->arrow.position.x += goblinArcher->arrow.speed * goblinArcher->arrow.direction * delta;
+
+        Rectangle hitbox = GetPlayerHitbox(player);
+
+        if (CheckCollisionArrow(
+            goblinArcher->arrow.position.x,
+            goblinArcher->arrow.position.y,
+            goblinArcher->arrowTexture.width * goblinArcher->arrow.scale,
+            goblinArcher->arrowTexture.height * goblinArcher->arrow.scale,
+            hitbox.x,
+            hitbox.y,
+            hitbox.width,
+            hitbox.height))
+        {
+            player->life -= goblinArcher->arrowDamage;
+            player->hitTimer = 0.4f;   
+            goblinArcher->hasHitPlayer = true;
+            player->hasHit = true; 
+            goblinArcher->arrow.active = false;
+        }
+    }
 
     // Verifica se a flecha saiu da tela
     if (goblinArcher->arrow.active)
@@ -184,7 +221,6 @@ if (goblinArcher->arrow.active)
             goblinArcher->arrow.active = false;
         }
     }
-    
     }
 }
 
@@ -239,7 +275,9 @@ void DrawGoblinArcher(GoblinArcher *goblinArcher)
             WHITE
         );
     }
-}
+
+    DrawGoblinArcherLifeBar(goblinArcher);
+}   
 
 
 void UnloadGoblinArcher(GoblinArcher *goblinArcher)
