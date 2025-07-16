@@ -1,5 +1,24 @@
 #include "player.h"
 
+Rectangle GetPlayerHitbox(Player *player)
+{
+    float scale = 2.0f;
+    float hitboxWidth  = player->frameWidth  * scale * 0.3f;    // Reduz largura 
+    float hitboxHeight = player->frameHeight * scale * 0.35f;    // Reduz altura 
+
+    // Centraliza a hitbox no sprite
+    float offsetX = (player->frameWidth  * scale - hitboxWidth)  / 2.0f;
+    float offsetY = (player->frameHeight * scale - hitboxHeight) / 2.0f;
+
+    return (Rectangle){
+        player->position.x + offsetX,
+        player->position.y + offsetY,
+        hitboxWidth,
+        hitboxHeight
+    };
+}
+
+
 // Inicializa as variáveis do jogador e carrega os sprites.
 void InitPlayer(Player *player)
 {
@@ -394,6 +413,8 @@ void DrawPlayer(Player *player)
 
     // Desenhar
     DrawTexturePro(texture, source, dest, origin, 0.0f, WHITE);
+
+    Rectangle hitbox = GetPlayerHitbox(player);
 }
 
 // Libera as texturas do jogador da memória

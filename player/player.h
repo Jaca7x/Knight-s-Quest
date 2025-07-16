@@ -94,4 +94,6 @@ void DrawPlayer(Player *player);
 /// @brief Descarrega as texturas do jogador da memória
 void UnloadPlayer(Player *player);
 
+Rectangle GetPlayerHitbox(Player *player);
+
 #endif // PLAYER_H
