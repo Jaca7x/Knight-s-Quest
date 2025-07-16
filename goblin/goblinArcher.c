@@ -150,11 +150,13 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         goblinArcher->isAtacking = false;
     }
     {
+       // Atualiza a posição da flecha
+if (goblinArcher->arrow.active)
+{
     goblinArcher->arrow.position.x += goblinArcher->arrow.speed * goblinArcher->arrow.direction * delta;
 
     // Verifica se a flecha atingiu o jogador usando AABB
-    if (goblinArcher->arrow.active &&
-        CheckCollisionArrow(
+    if (CheckCollisionArrow(
             goblinArcher->arrow.position.x,
             goblinArcher->arrow.position.y,
             goblinArcher->arrowTexture.width * goblinArcher->arrow.scale,
@@ -171,19 +173,20 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         
         goblinArcher->arrow.active = false; // Desativa a flecha após o impacto
     }
+}
 
+    // Verifica se a flecha saiu da tela
     if (goblinArcher->arrow.active)
-{
-    if (goblinArcher->arrow.position.x < 0 ||
-        goblinArcher->arrow.position.x > GetScreenWidth() * 1)
     {
-        goblinArcher->arrow.active = false;
+        if (goblinArcher->arrow.position.x < 0 ||
+            goblinArcher->arrow.position.x > GetScreenWidth())
+        {
+            goblinArcher->arrow.active = false;
+        }
+    }
+    
     }
 }
-}
-}
-
-
 
 void DrawGoblinArcher(GoblinArcher *goblinArcher)
 {
