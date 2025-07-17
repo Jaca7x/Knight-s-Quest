@@ -72,6 +72,8 @@ typedef struct goblinArcher
     float attackRange;          // distância para atacar
     float arrowCooldown;        // tempo de recarga do ataque
 
+    float attackAnimTimer;
+
 } GoblinArcher;
 
 // Funções

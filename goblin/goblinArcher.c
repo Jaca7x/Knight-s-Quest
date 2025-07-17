@@ -32,7 +32,7 @@ void DrawGoblinArcherLifeBar(GoblinArcher *goblinArcher)
 void InitGoblinArcher(GoblinArcher *goblinArcher)
 {
     goblinArcher->position = (Vector2){1120, 567};
-    goblinArcher->life = 100;
+    goblinArcher->life = 50;
 
     goblinArcher->speed = 95.0f;
 
@@ -78,6 +78,7 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->hasHitPlayer = false;
     goblinArcher->arrowCooldown = 0.0f;
 
+    goblinArcher->attackAnimTimer = 0.0f;
 }
 
 
@@ -89,13 +90,14 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         goblinArcher->currentFrame = 0;
         goblinArcher->hasHitPlayer = false;  
         goblinArcher->goblinHasHit = false;
-        player->hasHit = false; // Resetar hasHit do jogador ao morrer
+        player->hasHit = false;
         goblinArcher->deathAnimTimer = 0.0f;
         goblinArcher->deathAnimationDone = false;
         goblinArcher->isWalking = false;
         goblinArcher->isAtacking = false;
         goblinArcher->isIdle = false;
         goblinArcher->arrow.active = false;
+        goblinArcher->attackAnimTimer = 0.0f;
     }
 
     if (goblinArcher->isDead && goblinArcher->deathAnimationDone)
@@ -128,6 +130,21 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         }
     }
 
+    // Cooldowns
+    if (goblinArcher->arrowCooldown > 0.0f)
+    {
+        goblinArcher->arrowCooldown -= delta;
+        if (goblinArcher->arrowCooldown < 0.0f)
+            goblinArcher->arrowCooldown = 0.0f;
+    }
+
+    if (goblinArcher->attackAnimTimer > 0.0f)
+    {
+        goblinArcher->attackAnimTimer -= delta;
+        if (goblinArcher->attackAnimTimer < 0.0f)
+            goblinArcher->attackAnimTimer = 0.0f;
+    }
+
     float distanceToPlayer = fabs(player->position.x - goblinArcher->position.x);
 
     if (distanceToPlayer <= goblinArcher->goblinView && player->life > 0)
@@ -138,32 +155,34 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         {
             goblinArcher->isWalking = false;
 
-            if (goblinArcher->arrowCooldown > 0.0f)
+            if (goblinArcher->arrowCooldown <= 0.0f)
+            {
+                // Lança flecha
+                goblinArcher->arrow.active = true;
+                goblinArcher->arrow.arrowYOffset = 0.05f;
+                goblinArcher->arrowCooldown = 1.5f;
+                goblinArcher->attackAnimTimer = 0.4f;
+                goblinArcher->arrow.position = (Vector2){
+                    goblinArcher->position.x,
+                    goblinArcher->position.y + goblinArcher->frameHeight * goblinArcher->arrow.arrowYOffset
+                };
+                goblinArcher->arrow.scale = 0.2f;
+                goblinArcher->arrow.rotation = 0.0f;
+                goblinArcher->arrow.direction = goblinArcher->direction;
+                goblinArcher->arrow.speed = goblinArcher->arrowSpeed;
+            }
+
+            // Controle da animação de ataque separado do cooldown
+            if (goblinArcher->attackAnimTimer > 0.0f)
+            {
+                goblinArcher->isIdle = false;
+                goblinArcher->isAtacking = true;
+            }
+            else
             {
                 goblinArcher->isIdle = true;
                 goblinArcher->isAtacking = false;
             }
-            else
-            {
-                goblinArcher->isIdle = false;
-                goblinArcher->isAtacking = true;
-
-                // Lança flecha
-                if (!goblinArcher->arrow.active)
-                {
-                    goblinArcher->arrow.active = true;
-                    goblinArcher->arrow.arrowYOffset = 0.05f;
-                    goblinArcher->arrowCooldown = 1.5f; // Tempo de recarga do ataque
-                    goblinArcher->arrow.position = (Vector2){
-                    goblinArcher->position.x,
-                    goblinArcher->position.y + goblinArcher->frameHeight * goblinArcher->arrow.arrowYOffset
-                    };
-                    goblinArcher->arrow.scale = 0.2f;
-                    goblinArcher->arrow.rotation = 0.0f;
-                    goblinArcher->arrow.direction = goblinArcher->direction;
-                    goblinArcher->arrow.speed = goblinArcher->arrowSpeed;
-                }
-             }
         }
         else
         {
@@ -173,18 +192,6 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 
             goblinArcher->position.x += goblinArcher->speed * goblinArcher->direction * delta;
         }
-    }
-    else
-    {
-        goblinArcher->isIdle = true;
-        goblinArcher->isWalking = false;
-        goblinArcher->isAtacking = false;
-    }
-    {
-
-   if (goblinArcher->arrowCooldown > 0.0f)
-    {
-        goblinArcher->arrowCooldown -= delta;
     }
 
     // Atualiza a posição da flecha
@@ -205,10 +212,10 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
             hitbox.height))
         {
             player->life -= goblinArcher->arrowDamage;
+            goblinArcher->arrow.active = false;
             player->hitTimer = 0.4f;   
             goblinArcher->hasHitPlayer = true;
             player->hasHit = true; 
-            goblinArcher->arrow.active = false;
         }
     }
 
@@ -221,8 +228,9 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
             goblinArcher->arrow.active = false;
         }
     }
-    }
 }
+
+
 
 void DrawGoblinArcher(GoblinArcher *goblinArcher)
 {
