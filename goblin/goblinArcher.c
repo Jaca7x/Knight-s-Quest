@@ -91,6 +91,7 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         goblinArcher->hasHitPlayer = false;  
         goblinArcher->goblinHasHit = false;
         player->hasHit = false;
+        goblinArcher->frameDead = 7;
         goblinArcher->deathAnimTimer = 0.0f;
         goblinArcher->deathAnimationDone = false;
         goblinArcher->isWalking = false;
@@ -98,6 +99,8 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         goblinArcher->isIdle = false;
         goblinArcher->arrow.active = false;
         goblinArcher->attackAnimTimer = 0.0f;
+        goblinArcher->arrow.active = false;
+        goblinArcher->arrowDamage = 0.0f;
     }
 
     if (goblinArcher->isDead && goblinArcher->deathAnimationDone)
@@ -110,7 +113,22 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 
         if (goblinArcher->isDead && !goblinArcher->deathAnimationDone)
         {
-            // animação de morte
+            goblinArcher->deathAnimTimer += delta;
+
+            if (goblinArcher->deathAnimTimer >= 0.2f)
+            {   
+                goblinArcher->frameDead++;
+                goblinArcher->deathAnimTimer = 0.3f;
+
+                if (goblinArcher->frameDead >= 8)
+                {
+                    goblinArcher->frameDead = 8;
+                    goblinArcher->deathAnimationDone = true;
+                    goblinArcher->speed = 0.0f;
+        
+                }
+            }
+            goblinArcher->currentFrame = goblinArcher->frameDead;  
         }
         else if (goblinArcher->goblinHasHit && !goblinArcher->isDead)
         {
@@ -284,7 +302,10 @@ void DrawGoblinArcher(GoblinArcher *goblinArcher)
         );
     }
 
-    DrawGoblinArcherLifeBar(goblinArcher);
+    if (!goblinArcher->isDead && goblinArcher->life > 0)
+    {
+        DrawGoblinArcherLifeBar(goblinArcher);
+    }
 }   
 
 

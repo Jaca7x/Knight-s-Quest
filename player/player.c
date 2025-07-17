@@ -230,6 +230,32 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, 
         }   
     }
 
+    if (currentMapIndex == MAP_GOBLIN_ARCHER_AREA)
+    {
+        float distanceToGoblinArcher = fabs(goblinArcher->position.x - player->position.x);
+
+        if (player->isAttacking && distanceToGoblinArcher <= player->attackRange)
+        {
+            if (!goblinArcher->goblinHasHit)
+            {
+                if (player->isAttackingLight)
+                {
+                    goblinArcher->life -= player->lightDamage;
+                }
+                else if (player->isAttackingHeavy)
+                {
+                    goblinArcher->life -= player->heavyDamage;
+                }
+
+                goblinArcher->goblinHasHit = true;
+            }  
+        }
+        else
+        {
+            goblinArcher->goblinHasHit = false;
+        }   
+    }
+
     // Ataque com cooldown
     player->attackCooldownTimer -= delta;
     player->attackTimer -= delta;
