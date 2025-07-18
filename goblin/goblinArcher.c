@@ -165,7 +165,7 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 
     float distanceToPlayer = fabs(player->position.x - goblinArcher->position.x);
 
-    if (distanceToPlayer <= goblinArcher->goblinView && player->life > 0)
+    if (distanceToPlayer <= goblinArcher->goblinView && player->life > 0 && !goblinArcher->isDead)
     {
         goblinArcher->direction = (player->position.x < goblinArcher->position.x) ? -1 : 1;
 

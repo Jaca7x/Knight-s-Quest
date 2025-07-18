@@ -114,8 +114,6 @@ if (wolf->isPatrolling)
     }
 }
 
-    
-
     // ====== ANIMAÇÃO ======
     wolf->frameCounter++;
     if (wolf->frameCounter >= (60 / 10))
