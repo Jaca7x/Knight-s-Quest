@@ -12,6 +12,7 @@
 #include "lifeBar/lifeBar.h"
 #include "goblin/goblin.h"
 #include "goblin/goblinArcher.h"
+#include "drops/heart.h"         // Cabeçalho do coração
 
 
 // ============================================================================
