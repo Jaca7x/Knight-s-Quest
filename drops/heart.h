@@ -23,11 +23,11 @@ typedef struct heart
     int healthValue;       // Valor de vida que o coração representa
 } Heart;
 
-void initHeart(Heart *heart);
-void updateHeart(Heart *heart, float deltaTime, Player *player, 
+void InitHeart(Heart *heart);
+void UpdateHeart(Heart *heart, float deltaTime, Player *player, 
                  Wolf *wolf, Goblin *goblin, 
                  GoblinArcher *goblinArcher, WolfRun *wolfRun);
-void drawHeart(const Heart *heart);
-void unloadHeart(Heart *heart);
+void DrawHeart(const Heart *heart);
+void UnloadHeart(Heart *heart);
 
 #endif // HEART_H
