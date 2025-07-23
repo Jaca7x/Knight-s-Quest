@@ -13,7 +13,7 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale)
     if (stamina == 0)
     {
         // Se stamina zerada, usa o penúltimo frame (índice = STAMINA_FRAME_COUNT - 2)
-        frame = STAMINA_FRAME_COUNT - 2;
+        frame = STAMINA_FRAME_COUNT + 5;
     }
     else 
     {
