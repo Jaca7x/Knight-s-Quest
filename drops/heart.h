@@ -8,6 +8,8 @@
 #include "../goblin/goblinArcher.h" // Biblioteca goblinArcher
 #include "../wolf/wolfRunning.h" // Biblioteca wolfRunning
 
+#define MAX_HEARTS 4
+
 typedef struct player Player;
 typedef struct wolf Wolf;
 typedef struct goblin Goblin;
@@ -17,17 +19,24 @@ typedef struct wolfRun WolfRun;
 /// @brief Struct que representa um coração
 typedef struct heart
 {
-    Vector2 position;          // Posição do coração
-    Texture2D texture;        // Textura do coração
-    bool isActive;            // Indica se o coração está ativo
+    Vector2 position;      // Posição do coração
+    Texture2D texture;     // Textura do coração
+    bool isActive;         // Indica se o coração está ativo
     int healthValue;       // Valor de vida que o coração representa
 } Heart;
 
-void InitHeart(Heart *heart);
-void UpdateHeart(Heart *heart, float deltaTime, Player *player, 
-                 Wolf *wolf, Goblin *goblin, 
-                 GoblinArcher *goblinArcher, WolfRun *wolfRun);
-void DrawHeart(const Heart *heart);
-void UnloadHeart(Heart *heart);
+/// @brief Inicializa todos os corações
+void InitHearts(Heart hearts[]);
+
+/// @brief Atualiza os corações com base nos inimigos mortos
+void UpdateHearts(Heart hearts[], float delta, Player *player, 
+                  Wolf *wolf, Goblin *goblin, 
+                  GoblinArcher *goblinArcher, WolfRun *wolfRun);
+
+/// @brief Desenha todos os corações ativos
+void DrawHearts(const Heart hearts[]);
+
+/// @brief Libera a textura de todos os corações
+void UnloadHearts(Heart hearts[]);
 
 #endif // HEART_H
