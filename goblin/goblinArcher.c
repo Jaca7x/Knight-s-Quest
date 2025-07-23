@@ -171,7 +171,9 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 
         if (distanceToPlayer <= goblinArcher->attackRange)
         {
+            goblinArcher->isIdle = false;
             goblinArcher->isWalking = false;
+            goblinArcher->isAtacking = true;
 
             if (goblinArcher->arrowCooldown <= 0.0f)
             {
@@ -210,6 +212,11 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 
             goblinArcher->position.x += goblinArcher->speed * goblinArcher->direction * delta;
         }
+    } else 
+    {
+        goblinArcher->isWalking = false;
+        goblinArcher->isAtacking = false;
+        goblinArcher->isIdle = true;
     }
 
     // Atualiza a posição da flecha
