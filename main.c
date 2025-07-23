@@ -208,8 +208,8 @@ int main(void)
     GoblinArcher goblinArcher;
     InitGoblinArcher(&goblinArcher);
 
-    Heart heart;
-    InitHeart(&heart);
+    Heart hearts[MAX_HEARTS];
+    InitHearts(hearts);
 
     // Carrega os tilesets
     Texture2D tileset1 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlemap.png");
@@ -280,8 +280,8 @@ int main(void)
         DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
         DrawPlayer(&player);
 
-        DrawHeart(&heart);
-        UpdateHeart(&heart, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
+        UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
+        DrawHearts(hearts);
 
         if (currentMapIndex == GOBLIN_MAP)
         {
@@ -324,7 +324,8 @@ int main(void)
     UnloadRunningWolf(&wolfRun);
     UnloadGoblin(&goblin);
     UnloadGoblinArcher(&goblinArcher);
-    UnloadHeart(&heart);
+    UnloadHearts(hearts);
+
 
     // Encerra a janela
     CloseWindow();
