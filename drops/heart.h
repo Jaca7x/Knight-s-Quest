@@ -35,7 +35,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player,
 
 /// @brief Desenha todos os corações ativos
 void DrawHearts(const Heart hearts[]);
-
+    
 /// @brief Libera a textura de todos os corações
 void UnloadHearts(Heart hearts[]);
 
