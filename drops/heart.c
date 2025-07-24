@@ -5,29 +5,41 @@
             hearts[i].position = (Vector2){0, 0};
             hearts[i].texture = LoadTexture("resources/sprites/life/heartDrop.png");
             hearts[i].isActive = false;
-            hearts[i].healthValue = 50;
+            hearts[i].healthValue = 25;
         }
     }
 
     void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Goblin *goblin, GoblinArcher *goblinArcher, WolfRun *wolfRun) {
         
     // Goblin
-    hearts[0].isActive = goblin->isDead;
-    hearts[0].position = goblin->position;
+    if (goblin->isDead && !goblin->droppedHeart) {
+        hearts[0].isActive = true; 
+        hearts[0].position = goblin->position;
+        goblin->droppedHeart = true; // Marca que o coração foi solto
+    }
 
-    // Wolf
-    hearts[1].isActive = wolf->isDead;
-    hearts[1].position.x = wolf->position.x + 50;
-    hearts[1].position.y = wolf->position.y + 100;
-
+    //Wolf
+    if (wolf->isDead && !wolf->droppedHeart) {  
+        hearts[1].isActive = true; 
+        hearts[1].position.x = wolf->position.x + 50; // Ajusta a posição do coração
+        hearts[1].position.y = wolf->position.y + 100; // Ajusta a posição do coração
+        wolf->droppedHeart = true; // Marca que o coração foi solto
+    }
+    
     // GoblinArcher
-    hearts[2].isActive = goblinArcher->isDead;
-    hearts[2].position = goblinArcher->position;
+    if (goblinArcher->isDead && !goblinArcher-> droppedHeart) {
+        hearts[2].isActive = true; 
+        hearts[2].position = goblinArcher->position;
+        goblinArcher->droppedHeart = true; // Marca que o coração foi solto
+    }
 
     // WolfRun
-    hearts[3].isActive = wolfRun->isDead;
-    hearts[3].position.x = wolfRun->position.x + 50;
-    hearts[3].position.y = wolfRun->position.y + 100;
+    if (wolfRun->isDead && !wolfRun->droppedHeart) {
+        hearts[3].isActive = true; 
+        hearts[3].position.x = wolfRun->position.x + 50; // Ajusta a posição do coração
+        hearts[3].position.y = wolfRun->position.y + 100; // Ajusta a posição do coração
+        wolfRun->droppedHeart = true; // Marca que o coração foi solto
+    }
 
     // Verifica colisão com o player
     for (int i = 0; i < MAX_HEARTS; i++) {
@@ -35,25 +47,21 @@
             Rectangle heartRect = {
                 hearts[i].position.x,
                 hearts[i].position.y,
-                hearts[i].texture.width * 2.0f,
-                hearts[i].texture.height * 2.0f
+                hearts[i].texture.width,
+                hearts[i].texture.height
             };
 
             Rectangle playerRect = {
                 player->position.x,
                 player->position.y,
-                player->frameWidth * 2.0f,
-                player->frameHeight * 2.0f
+                player->frameWidth,
+                player->frameHeight
             };
 
             if (CheckCollisionRecs(heartRect, playerRect)) {
                 player->life += hearts[i].healthValue;
                 if (player->life > 100) player->life = 100; // define um limite fixo
-
- 
-
-                // Desativa o coração
-                hearts[i].isActive = false;
+                 hearts[i].isActive = false;
             }
         }
     }

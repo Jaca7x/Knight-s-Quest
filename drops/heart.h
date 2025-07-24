@@ -22,7 +22,7 @@ typedef struct heart
     Vector2 position;      // Posição do coração
     Texture2D texture;     // Textura do coração
     bool isActive;         // Indica se o coração está ativo
-    int healthValue;       // Valor de vida que o coração representa
+    int healthValue;       // Valor de vida que o coração fornece
 } Heart;
 
 /// @brief Inicializa todos os corações
