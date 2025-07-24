@@ -74,6 +74,8 @@ void InitGoblin(Goblin *goblin)
     goblin->speed = 100.0f;
 
     goblin->damage = 20;
+
+    goblin->droppedHeart = false; // Inicializa como falso
 }
 
 void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta)

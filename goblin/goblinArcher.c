@@ -79,6 +79,8 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->arrowCooldown = 0.0f;
 
     goblinArcher->attackAnimTimer = 0.0f;
+
+    goblinArcher->droppedHeart = false; // Inicializa como falso
 }
 
 

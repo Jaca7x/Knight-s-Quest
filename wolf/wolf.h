@@ -56,6 +56,8 @@ typedef struct wolf
     float attackDamageTimer;
     int damage;
 
+    bool droppedHeart; // Indica se o coração foi solto
+
 } Wolf;
 
 void InitWolf(Wolf *wolf);

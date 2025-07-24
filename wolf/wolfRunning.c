@@ -98,6 +98,8 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
         wolfRun->isAttacking = false;
         wolfRun->speed = 0.0f;
         wolfRun->speedRun = 0.0f;
+
+        wolfRun->droppedHeart = false; // Reseta o estado do coração
     }
 
     if (wolfRun->isDead && wolfRun->deathAnimationDone)

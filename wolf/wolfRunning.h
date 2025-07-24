@@ -60,6 +60,8 @@ typedef struct wolfRun
     int damage;
     float viewPlayer;
 
+    bool droppedHeart; // Indica se o coração foi solto
+    
 } WolfRun;
 
 

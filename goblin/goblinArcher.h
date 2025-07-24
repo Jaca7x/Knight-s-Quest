@@ -74,6 +74,8 @@ typedef struct goblinArcher
 
     float attackAnimTimer;
 
+    bool droppedHeart; // Indica se o coração foi solto
+
 } GoblinArcher;
 
 // Funções

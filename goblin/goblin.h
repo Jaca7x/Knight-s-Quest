@@ -55,6 +55,8 @@ typedef struct goblin {
 
     int damage;
 
+    bool droppedHeart; // Indica se o coração foi solto
+
 } Goblin;
 
 

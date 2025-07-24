@@ -74,6 +74,8 @@ void InitWolf(Wolf *wolf)
     wolf->attackCooldown = 0.0f;
     wolf->attackDamageTimer = 0.0f;
     wolf->damage = 20;
+
+    wolf->droppedHeart = false; // Inicializa como falso
 }
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta)
