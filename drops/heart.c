@@ -15,7 +15,7 @@
 
         if (messageTimer < 1.0f) 
         {
-            Font medieval = LoadFontEx("resources/fonts/Goudy Mediaeval DemiBold.ttf", 32, 0, 250);
+            Font medieval = LoadFontEx("resources/fonts/Goudy-Mediaeval-DemiBold.ttf", 32, 0, 250);
             DrawTextPro(
                 medieval,
                 "Coração coletado! +25 de vida!", 
