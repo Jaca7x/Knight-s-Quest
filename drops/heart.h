@@ -34,7 +34,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player,
                   GoblinArcher *goblinArcher, WolfRun *wolfRun);
 
 /// @brief Desenha todos os corações ativos
-void DrawHearts(const Heart hearts[]);
+void DrawHearts(const Heart hearts[], float delta, Player *player);
     
 /// @brief Libera a textura de todos os corações
 void UnloadHearts(Heart hearts[]);
