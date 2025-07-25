@@ -49,7 +49,7 @@
 
     // Goblin
     if (goblin->isDead && !goblin->droppedHeart) {
-        int chanceGoblin = GetRandomValue(0, 99); // Chance de drop do coração (0 a 99)
+        int chanceGoblin = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
         if (chanceGoblin < 70) // 70% de chance de drop
         {
             hearts[0].isActive = true; 
@@ -60,8 +60,8 @@
 
     //Wolf
     if (wolf->isDead && !wolf->droppedHeart) { 
-        int chanceWolf = GetRandomValue(0, 99); // Chance de drop do coração (0 a 99)
-        if (chanceWolf < 70) // 70% de chance de drop
+        int chanceWolf = GetRandomValue(0, 100); // Chance de drop do coração (0 a 10)
+        if (chanceWolf < 50) // 50% de chance de drop
         {
             hearts[1].isActive = true; 
             hearts[1].position.x = wolf->position.x + 50; // Ajusta a posição do coração
@@ -72,7 +72,7 @@
   
     // GoblinArcher
     if (goblinArcher->isDead && !goblinArcher->droppedHeart) {
-        int chanceGoblinArcher = GetRandomValue(0, 99); // Chance de drop do coração (0 a 99)
+        int chanceGoblinArcher = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
         if (chanceGoblinArcher < 70) // 70% de chance de drop
         {
             hearts[2].isActive = true; 
@@ -83,8 +83,8 @@
 
     // WolfRun 
     if (wolfRun->isDead && !wolfRun->droppedHeart) {
-        int chanceWolfRun = GetRandomValue(0, 99); // Chance de drop do coração (0 a 99)
-        if (chanceWolfRun < 70) // 70% de chance de drop
+        int chanceWolfRun = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
+        if (chanceWolfRun < 60) // 60% de chance de drop
         {
             hearts[3].isActive = true; 
             hearts[3].position.x = wolfRun->position.x + 50; // Ajusta a posição do coração
