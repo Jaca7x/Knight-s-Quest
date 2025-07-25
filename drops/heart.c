@@ -13,7 +13,7 @@
     {
         messageTimer += delta;
 
-        if (messageTimer < 2.0f) 
+        if (messageTimer < 1.0f) 
         {
             Font medieval = LoadFontEx("resources/fonts/Goudy Mediaeval DemiBold.ttf", 32, 0, 250);
             DrawTextPro(
