@@ -1,5 +1,39 @@
     #include "heart.h"
 
+    float messageTimer = 0.0f;
+    bool showMessage = false;
+
+    void triggerMassage() {
+        messageTimer = 0.0f; // Reseta o timer para exibir a mensagem
+        showMessage = true; // Variável para controlar a exibição da mensagem
+    }
+
+    void drawMassage(float delta, Player *player) {
+    if (showMessage) 
+    {
+        messageTimer += delta;
+
+        if (messageTimer < 2.0f) 
+        {
+            Font medieval = LoadFontEx("resources/fonts/Goudy Mediaeval DemiBold.ttf", 32, 0, 250);
+            DrawTextPro(
+                medieval,
+                "Coração coletado! +25 de vida!", 
+                (Vector2){player->position.x - 50, player->position.y}, 
+                (Vector2){0, 0}, 
+                0.0f, 
+                30.0f, 
+                1.0f, 
+                (Color){255, 0, 0, 255}
+            );
+        } else 
+        {
+            showMessage = false;  // Para de mostrar a mensagem
+        }
+    }
+}
+
+
     void InitHearts(Heart hearts[]) {
         for (int i = 0; i < MAX_HEARTS; i++) {
             hearts[i].position = (Vector2){0, 0};
@@ -76,15 +110,17 @@
                 player->frameHeight
             };
 
-            if (CheckCollisionRecs(heartRect, playerRect)) {
+            if (CheckCollisionRecs(heartRect, playerRect)) 
+            {
                 player->life += hearts[i].healthValue;
                 if (player->life > 100) player->life = 100; // define um limite fixo
-                 hearts[i].isActive = false;
+                hearts[i].isActive = false;
+                triggerMassage(); // Chama a função para exibir a mensagem
             }
         }
     }
 }
-    void DrawHearts(const Heart hearts[]) {
+    void DrawHearts(const Heart hearts[], float delta, Player *player) {
         for (int i = 0; i < MAX_HEARTS; i++) {
             if (hearts[i].isActive) {
                 Vector2 origin = {hearts[i].texture.width / 2.0f, hearts[i].texture.height / 2.0f};
@@ -93,6 +129,7 @@
                 DrawTexturePro(hearts[i].texture, source, dest, origin, 0.0f, WHITE);
             }
         }
+        drawMassage(delta, player);
     }
 
     void UnloadHearts(Heart hearts[]) {
