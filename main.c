@@ -281,7 +281,7 @@ int main(void)
         DrawPlayer(&player);
 
         UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
-        DrawHearts(hearts);
+        DrawHearts(hearts, delta, &player);
 
         if (currentMapIndex == GOBLIN_MAP)
         {
