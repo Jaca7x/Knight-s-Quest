@@ -5,7 +5,7 @@
 #include "../player/player.h"
 #include "math.h"
 
-#define MAP_WOLF_AREA 1
+#define MAP_WOLF_AREA 2
 
 typedef struct player Player; // <- Declaração antecipada
 
