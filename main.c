@@ -23,7 +23,8 @@
 #define TILESET1_FIRSTGID 1       // Primeiro GID do tileset 1
 #define TILESET2_FIRSTGID 37      // Primeiro GID do tileset 2 (37 = 1 + 36)
 #define TILESET3_FIRSTGID 73      // Primeiro GID do tileset 3
-#define MAP_COUNT 3               // Quantidade de mapas
+#define TILESET4_FIRSTGID 109     // Primeiro GID do tileset 4
+#define MAP_COUNT 4              // Quantidade de mapas
 
 
 // ============================================================================
@@ -109,7 +110,7 @@ void UnloadTileMap(TileMap *map)
 // Função de desenho do mapa com múltiplos tilesets
 // ============================================================================
 
-void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3)
+void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3, Texture2D tileset4)
 {
     for (int y = 0; y < map->height; y++)
     {
@@ -123,6 +124,7 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
             int localId;
 
             // Determina qual tileset usar baseado no GID
+            // Determina qual tileset usar baseado no GID
             if (gid >= TILESET1_FIRSTGID && gid < TILESET2_FIRSTGID)
             {
                 texture = tileset1;
@@ -133,10 +135,15 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
                 texture = tileset2;
                 localId = gid - TILESET2_FIRSTGID;
             }
-            else if (gid >= TILESET3_FIRSTGID)
+            else if (gid >= TILESET3_FIRSTGID && gid < TILESET4_FIRSTGID)
             {
                 texture = tileset3;
                 localId = gid - TILESET3_FIRSTGID;
+            }
+            else if (gid >= TILESET4_FIRSTGID)
+            {
+                texture = tileset4;
+                localId = gid - TILESET4_FIRSTGID;
             }
             else
             {
@@ -172,9 +179,10 @@ int main(void)
 {
     // Lista dos arquivos de mapas
     const char *mapFiles[MAP_COUNT] = {
-        "assets/maps/castle/mapcastle_1/castle_map.json",
-        "assets/maps/castle/mapcastle_1/castle_map2.json",
-        "assets/maps/castle/mapcastle_1/castle_map3.json"
+        "assets/maps/castle_map.json",
+        "assets/maps/castle_map2.json",
+        "assets/maps/castle_map3.json",
+        "assets/maps/florest1.json"
     };
 
     int currentMapIndex = 0;
@@ -212,9 +220,10 @@ int main(void)
     InitHearts(hearts);
 
     // Carrega os tilesets
-    Texture2D tileset1 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlemap.png");
-    Texture2D tileset2 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/castlesky.png");
-    Texture2D tileset3 = LoadTexture("assets/maps/castle/mapcastle_1/tiles_map_1/endcastle.png");
+    Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
+    Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
+    Texture2D tileset3 = LoadTexture("assets/maps/tiles_map/endcastle.png");
+    Texture2D tileset4 = LoadTexture("assets/maps/tiles_map/floresta1.png");
 
     // Carrega a barra de stamina
     Texture2D staminaBar = LoadTexture("resources/sprites/stamina/staminaBar.png");
@@ -277,7 +286,7 @@ int main(void)
     }
     else
     {
-        DrawTileMapIndividual(&map, tileset1, tileset2, tileset3);
+        DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4);
         DrawPlayer(&player);
 
         UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
