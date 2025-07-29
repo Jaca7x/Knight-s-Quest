@@ -88,6 +88,19 @@
          "tilecount":36,
          "tileheight":32,
          "tilewidth":32
+        }, 
+        {
+         "columns":6,
+         "firstgid":109,
+         "image":"..\/Downloads\/floresta1.png",
+         "imageheight":192,
+         "imagewidth":192,
+         "margin":0,
+         "name":"floresta1",
+         "spacing":0,
+         "tilecount":36,
+         "tileheight":32,
+         "tilewidth":32
         }],
  "tilewidth":32,
  "type":"map",
