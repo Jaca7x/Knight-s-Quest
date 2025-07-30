@@ -12,7 +12,7 @@ The stamina bar is nearly complete, with only minor details left to finish. The 
 ## 🗺️ Leaks — Sneak Peeks<br>
 ### 🏰 Bastion Castle of Eldur<br>
 <img src="readme/map1.png" alt="Map 1" width="500"/> <br> <img src="readme/map2.png" alt="Map 2" width="500"/> <br> <img src="readme/map3.png" alt="Map 3" width="500"/><br>
-### ⚔️ Wolf Attack Animation<br>
+### ⚔️ Wolf Attack<br>
 <img src="readme/atk.png" alt="Attack" width="500"/><br>
 # ⚖️ Copyright<br>
 © Jaca7x
