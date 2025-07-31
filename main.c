@@ -24,7 +24,7 @@
 #define TILESET2_FIRSTGID 37      // Primeiro GID do tileset 2 (37 = 1 + 36)
 #define TILESET3_FIRSTGID 73      // Primeiro GID do tileset 3
 #define TILESET4_FIRSTGID 109     // Primeiro GID do tileset 4
-#define MAP_COUNT 4              // Quantidade de mapas
+#define MAP_COUNT 5             // Quantidade de mapas
 
 
 // ============================================================================
@@ -182,7 +182,8 @@ int main(void)
         "assets/maps/castle_map.json",
         "assets/maps/castle_map2.json",
         "assets/maps/castle_map3.json",
-        "assets/maps/florest1.json"
+        "assets/maps/florest1.json",
+        "assets/maps/florest2.json"
     };
 
     int currentMapIndex = 0;
