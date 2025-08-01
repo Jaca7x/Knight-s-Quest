@@ -243,13 +243,18 @@ int main(void)
     //Carregar imagem de morte
     Texture2D deathImage = LoadTexture("resources/img/deathImage.png");
 
+    Font titleMaps = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
+
     bool isGameOver = false;
     
     // Loop principal do jogo
-    while (!WindowShouldClose())
+while (!WindowShouldClose())
 {
     float delta = GetFrameTime();
 
+    // =====================
+    // Atualizações do jogo
+    // =====================
     if (!isGameOver)
     {
         UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta);
@@ -260,53 +265,44 @@ int main(void)
             isGameOver = true;
         }
 
-        // Verifica se o player chegou no final do mapa (lado direito)
+        // Avança para o próximo mapa se o player chegar ao fim
         if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
         {
-            // Avança para o próximo mapa
             currentMapIndex = (currentMapIndex + 1) % MAP_COUNT;
 
-            // Descarrega o mapa atual e carrega o próximo
             UnloadTileMap(&map);
             map = LoadTileMap(mapFiles[currentMapIndex]);
 
-            // Ajusta o tamanho da janela para o novo mapa
             SetWindowSize(
                 map.width * map.tileWidth,
                 map.height * map.tileHeight
             );
 
-            // Reposiciona o player no início do mapa
             player.position.x = 0;
             player.position.y = 520;
         }
     }
 
+    // =====================
+    // Desenho da tela
+    // =====================
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    if (isGameOver)
-    {
-        // Desenha imagem de morte no meio da tela
-        DrawTexture(deathImage, 
-            (GetScreenWidth() - deathImage.width) / 2, 
-            (GetScreenHeight() - deathImage.height) / 2, 
-            WHITE);
-    }
-    else
-    {
-        DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5);
-        DrawPlayer(&player);
+    // ----- 1. Desenha o mapa primeiro -----
+    DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5);
 
-        UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
-        DrawHearts(hearts, delta, &player);
+    // ----- 2. Desenha o jogador e inimigos -----
+    if (!isGameOver)
+    {
+        DrawPlayer(&player);
 
         if (currentMapIndex == GOBLIN_MAP)
         {
             DrawGoblin(&goblin);
             UpdateGoblin(&goblin, &player, currentMapIndex, delta);
         }
-        
+
         if (currentMapIndex == MAP_WOLF_AREA)
         {
             DrawWolf(&wolf);
@@ -322,12 +318,52 @@ int main(void)
             UpdateGoblinArcher(&goblinArcher, &player, delta);
         }
 
-        DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
-        DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
+        // Corações (drops de vida)
+        UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
+        DrawHearts(hearts, delta, &player);
+    }
+
+   // ----- 3. Texto de título (por cima do mapa) -----
+if (currentMapIndex == 0)
+{
+    const char* titulo = "Castelo Bastion de Eldur";
+    float fontSize = 60.0f;
+    float spacing = 1.0f;
+
+    // Medir tamanho do texto
+    Vector2 textSize = MeasureTextEx(titleMaps, titulo, fontSize, spacing);
+
+    // Centraliza
+    Vector2 textPosition = {
+        GetScreenWidth() / 2 - textSize.x / 2,
+        GetScreenHeight() / 2 - 220
+    };
+
+    // Desenha o fundo preto com transparência (alpha 160)
+    DrawRectangle((int)(textPosition.x - 20), (int)(textPosition.y - 10), 
+                  (int)(textSize.x + 40), (int)(textSize.y + 20), 
+                  (Color){0, 0, 0, 160});
+
+    // Desenha o texto por cima
+    DrawTextPro(titleMaps, titulo, textPosition, (Vector2){0, 0}, 0.0f, fontSize, spacing, GOLD);
+}
+
+    // ----- 4. Interface do usuário (HUD) -----
+    DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
+    DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
+
+    // ----- 5. Tela de game over -----
+    if (isGameOver)
+    {
+        DrawTexture(deathImage, 
+                    (GetScreenWidth() - deathImage.width) / 2, 
+                    (GetScreenHeight() - deathImage.height) / 2, 
+                    WHITE);
     }
 
     EndDrawing();
 }
+
 
 
     // Libera todos os recursos carregados
@@ -343,6 +379,7 @@ int main(void)
     UnloadGoblin(&goblin);
     UnloadGoblinArcher(&goblinArcher);
     UnloadHearts(hearts);
+    UnloadFont(titleMaps);
 
 
     // Encerra a janela
