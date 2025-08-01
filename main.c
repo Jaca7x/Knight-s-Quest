@@ -364,8 +364,6 @@ if (currentMapIndex == 0)
     EndDrawing();
 }
 
-
-
     // Libera todos os recursos carregados
     UnloadTexture(tileset1);
     UnloadTexture(tileset2);
