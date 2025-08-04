@@ -13,6 +13,7 @@
 #include "goblin/goblin.h"
 #include "goblin/goblinArcher.h"
 #include "drops/heart.h"         // Cabeçalho do coração
+#include "npcs/npc.h"           // Cabeçalho do npc
 
 
 // ============================================================================
@@ -227,6 +228,9 @@ int main(void)
     Heart hearts[MAX_HEARTS];
     InitHearts(hearts);
 
+    Npc npc;
+    InitNpc(&npc);
+
     // Carrega os tilesets
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
@@ -247,6 +251,8 @@ int main(void)
 
     bool isGameOver = false;
     
+    float textTime = 0.0f;
+
     // Loop principal do jogo
 while (!WindowShouldClose())
 {
@@ -259,6 +265,7 @@ while (!WindowShouldClose())
     {
         UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta);
         UpdateStaminaBar(&player, delta);
+        UpdateNpc(&npc, delta);
         
         if (player.life <= 0 && player.deathAnimationDone)
         {
@@ -294,7 +301,8 @@ while (!WindowShouldClose())
 
     // ----- 2. Desenha o jogador e inimigos -----
     if (!isGameOver)
-    {
+
+    {   DrawNpc(&npc, &player);
         DrawPlayer(&player);
 
         if (currentMapIndex == GOBLIN_MAP)
@@ -324,29 +332,28 @@ while (!WindowShouldClose())
     }
 
    // ----- 3. Texto de título (por cima do mapa) -----
-if (currentMapIndex == 0)
-{
-    const char* titulo = "Castelo Bastion de Eldur";
-    float fontSize = 60.0f;
-    float spacing = 1.0f;
+    if (currentMapIndex == 0 && textTime < 2.0f)
+    {
+        textTime += delta; // Acumula tempo
 
-    // Medir tamanho do texto
-    Vector2 textSize = MeasureTextEx(titleMaps, titulo, fontSize, spacing);
+        const char* titulo = "Castelo Bastion de Eldur";
+        float fontSize = 60.0f;
+        float spacing = 1.0f;
 
-    // Centraliza
-    Vector2 textPosition = {
-        GetScreenWidth() / 2 - textSize.x / 2,
-        GetScreenHeight() / 2 - 220
-    };
+        Vector2 textSize = MeasureTextEx(titleMaps, titulo, fontSize, spacing);
 
-    // Desenha o fundo preto com transparência (alpha 160)
-    DrawRectangle((int)(textPosition.x - 20), (int)(textPosition.y - 10), 
-                  (int)(textSize.x + 40), (int)(textSize.y + 20), 
+        Vector2 textPosition = {
+            GetScreenWidth() / 2 - textSize.x / 2,
+            GetScreenHeight() / 2 - 220
+        };
+
+        DrawRectangle((int)(textPosition.x - 20), (int)(textPosition.y - 10),
+                  (int)(textSize.x + 40), (int)(textSize.y + 20),
                   (Color){0, 0, 0, 160});
 
-    // Desenha o texto por cima
-    DrawTextPro(titleMaps, titulo, textPosition, (Vector2){0, 0}, 0.0f, fontSize, spacing, GOLD);
-}
+        DrawTextPro(titleMaps, titulo, textPosition, (Vector2){0, 0}, 0.0f, fontSize, spacing, GOLD);
+    }
+
 
     // ----- 4. Interface do usuário (HUD) -----
     DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
@@ -378,6 +385,8 @@ if (currentMapIndex == 0)
     UnloadGoblinArcher(&goblinArcher);
     UnloadHearts(hearts);
     UnloadFont(titleMaps);
+    UnloadNpc(&npc);
+    UnloadTexture(deathImage);
 
 
     // Encerra a janela
