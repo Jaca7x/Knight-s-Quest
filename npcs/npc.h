@@ -11,6 +11,7 @@ typedef struct npc {
     Texture2D spriteNpc; // Sprite do NPC
     Texture2D btnE;     // Botão de interação (E)
     Texture2D spriteNpcIdle;
+    Texture2D npcSpeech; // Sprite de fala do NPC (se necessário)
     Vector2 position;    // Posição do NPC na tela
     
     int frameTalking;
@@ -20,7 +21,7 @@ typedef struct npc {
     int frameHeight;  // Altura de cada frame do sprite
     int currentFrame; // Frame atual do sprite
     int frameCounter; // Contador de frames para animação
-    
+
     bool isTalking;   // Flag para saber se o NPC está falando
     bool isIdle;      // Flag para saber se o NPC está idle
 

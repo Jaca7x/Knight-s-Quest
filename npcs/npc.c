@@ -12,10 +12,11 @@ void InitNpc(Npc *npc)
     npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); // Carrega o sprite do NPC
     npc->btnE = LoadTexture("resources/sprites/btns/btn-E.png"); // Carrega o botão de interação (E)
     npc->spriteNpcIdle = LoadTexture("resources/sprites/npc/npc-map1-idle.png"); // Carrega o sprite de idle do NPC
+    npc->npcSpeech = LoadTexture("resources/sprites/npc/npc-speech.png"); // Carrega o sprite de fala do NPC (se necessário)
     npc->position = (Vector2){1000, 546}; // Define a posição inicial do NPC
 
     npc->frameTalking = 4; // Define o número de frames para a animação de fala
-    npc->frameIdle = 2; // Define o número de frames para a animação de idle
+    npc->frameIdle = 2; // Define o número de frames para a animação de idle    
 
     npc->frameWidth = npc->spriteNpc.width / npc->frameTalking; // Define a largura de cada frame do sprite
     npc->frameHeight = npc->spriteNpc.height; // Define a altura de cada frame do sprite
@@ -70,6 +71,18 @@ void DrawNpc(Npc *npc, Player *player)
         npc->frameWidth,   
         npc->frameHeight
     };
+    
+
+// No seu loop de desenho:
+Rectangle source2 = { 0, 0, npc->npcSpeech.width, npc->npcSpeech.height }; // Usa a imagem toda
+Rectangle dest2 = { 100, 100, npc->npcSpeech.width, npc->npcSpeech.height }; // Desenha na posição desejada
+Vector2 origin2 = { 0, 0 };
+
+DrawTexturePro(npc->npcSpeech, source2, dest2, origin2, 0.0f, WHITE);
+
+
+DrawTexturePro(npc->npcSpeech, source2, dest, origin2, 0.0f, WHITE);
+
 
     Vector2 origin = {0, 0};
 
