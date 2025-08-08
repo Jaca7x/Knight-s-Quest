@@ -80,10 +80,6 @@ Vector2 origin2 = { 0, 0 };
 
 DrawTexturePro(npc->npcSpeech, source2, dest2, origin2, 0.0f, WHITE);
 
-
-DrawTexturePro(npc->npcSpeech, source2, dest, origin2, 0.0f, WHITE);
-
-
     Vector2 origin = {0, 0};
 
     if (npc->isTalking)  // Se o NPC estiver falando, desenha o sprite de fala
