@@ -209,6 +209,9 @@ int main(void)
 
     SetTargetFPS(60);
 
+    DialogoEstado dialogoEstado = DIALOGO_FECHADO;
+    float dialogoTimer = 0.0f;  
+
     // Inicializa o player
     Player player;
     InitPlayer(&player);
@@ -263,9 +266,10 @@ while (!WindowShouldClose())
     // =====================
     if (!isGameOver)
     {
-        UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta);
+        UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
         UpdateStaminaBar(&player, delta);
-        UpdateNpc(&npc, delta);
+        UpdateNpc(&npc, delta, &player, &dialogoEstado, &dialogoTimer);
+
         
         if (player.life <= 0 && player.deathAnimationDone)
         {
@@ -302,9 +306,7 @@ while (!WindowShouldClose())
     // ----- 2. Desenha o jogador e inimigos -----
     if (!isGameOver)
 
-    {   DrawNpc(&npc, &player);
-        DrawPlayer(&player);
-
+    {   
         if (currentMapIndex == GOBLIN_MAP)
         {
             DrawGoblin(&goblin);
@@ -329,6 +331,9 @@ while (!WindowShouldClose())
         // Corações (drops de vida)
         UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
         DrawHearts(hearts, delta, &player);
+
+        DrawNpc(&npc, &player, dialogoEstado);
+        DrawPlayer(&player);
     }
 
    // ----- 3. Texto de título (por cima do mapa) -----
