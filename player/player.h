@@ -6,11 +6,13 @@
 #include "../wolf/wolfRunning.h" 
 #include "../goblin/goblin.h" 
 #include "../goblin/goblinArcher.h" // Biblioteca goblinArcher
+#include "../npcs/npc.h"         // Biblioteca heart
 
 typedef struct wolf Wolf; 
 typedef struct wolfRun WolfRun; 
 typedef struct goblin Goblin; 
 typedef struct goblinArcher GoblinArcher;
+typedef struct npc Npc;
 
 /// @brief Struct que representa o jogador
 typedef struct player
@@ -86,7 +88,7 @@ typedef struct player
 void InitPlayer(Player *player);
 
 /// @brief Atualiza a física, movimento e animação do jogador
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta);
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc);
 
 /// @brief Desenha o jogador na tela
 void DrawPlayer(Player *player);

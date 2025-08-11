@@ -88,8 +88,8 @@ void InitPlayer(Player *player)
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta)
-{
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc)
+{   
     // Verificar se morreu pela primeira vez
     if (player->life <= 0 && !player->isDead)
     {
