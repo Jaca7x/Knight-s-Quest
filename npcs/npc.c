@@ -7,6 +7,23 @@ bool checkNpcInteraction(Npc *npc, Player *player)
     return distance < 100.0f; // Distância de interação
 }
 
+void talkingNpc(Npc *npc, Player *player)
+{
+    if (npc->isTalking)
+    {
+        DrawText("Rápido eles estão vindo!", 
+                 npc->position.x + 10, 
+                 npc->position.y - 30, 
+                 20, 
+                 WHITE);
+    }
+    else 
+    {
+        npc->isTalking = false;
+        npc->isIdle = true; // Se não está falando, volta para idle
+    }
+}
+
 void InitNpc(Npc *npc)
 {
     npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); // Carrega o sprite do NPC
@@ -27,24 +44,14 @@ void InitNpc(Npc *npc)
     bool isIdle = true; // Inicia o NPC como idle
 }
 
-void UpdateNpc(Npc *npc, float deltaTime)
+void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogoEstado *dialogoEstado, float *dialogoTimer)
 {
     static float idleTimer = 0.0f;
     static float talkingTimer = 0.0f;
 
     // Suponha que você tenha uma flag para saber se o NPC está falando
    
-
-    if (npc->isTalking)
-    {
-        talkingTimer += deltaTime;
-        if (talkingTimer >= 1.0f) // 1 FPS para fala
-        {
-            talkingTimer = 0.0f;
-            npc->currentFrame = (npc->currentFrame + 1) % npc->frameTalking;
-        }
-    }
-    else if (npc->isIdle)
+    if (npc->isIdle)
     {
         idleTimer += deltaTime;
         if (idleTimer >= 0.5f) // 2 FPS para idle
@@ -53,10 +60,31 @@ void UpdateNpc(Npc *npc, float deltaTime)
             npc->currentFrame = (npc->currentFrame + 1) % npc->frameIdle;
         }
     }
+    else if (npc->isTalking)
+    {
+        talkingTimer += deltaTime;
+        if (talkingTimer >= 1.0f) // 1 FPS para fala
+        {
+            talkingTimer = 0.0f;
+            npc->currentFrame = (npc->currentFrame + 1) % npc->frameTalking;
+        }
+    }
+    
+
+    if (checkNpcInteraction(npc, player))
+    {
+        // Se o jogador pressionar a tecla de interação (E)
+        if (IsKeyPressed(KEY_E))
+        {
+            npc->isTalking = true; // Alterna entre falar e não falar
+            npc->isIdle = false; // Se está falando, não está idle
+            npc->currentFrame = 0; // Reseta o frame atual ao iniciar fala
+        }
+    }
 }
 
 
-void DrawNpc(Npc *npc, Player *player)
+void DrawNpc(Npc *npc, Player *player, DialogoEstado dialogoEstado)
 {
     Rectangle source = {
         npc->currentFrame * npc->frameWidth, 
@@ -74,22 +102,12 @@ void DrawNpc(Npc *npc, Player *player)
     
 
 // No seu loop de desenho:
-Rectangle source2 = { 0, 0, npc->npcSpeech.width, npc->npcSpeech.height }; // Usa a imagem toda
-Rectangle dest2 = { 100, 100, npc->npcSpeech.width, npc->npcSpeech.height }; // Desenha na posição desejada
+Rectangle sourceSpeech = { 0, 0, npc->npcSpeech.width, npc->npcSpeech.height }; // Usa a imagem toda
+Rectangle destSpeech = { 500, 655, npc->npcSpeech.width, npc->npcSpeech.height }; // Desenha na posição desejada
 Vector2 origin2 = { 0, 0 };
 
-DrawTexturePro(npc->npcSpeech, source2, dest2, origin2, 0.0f, WHITE);
 
     Vector2 origin = {0, 0};
-
-    if (npc->isTalking)  // Se o NPC estiver falando, desenha o sprite de fala
-    {
-        DrawTexturePro(npc->spriteNpc, source, dest, origin, 0.0f, WHITE);
-    }
-    else if (npc->isIdle)
-    {
-        DrawTexturePro(npc->spriteNpcIdle, source, dest, origin, 0.0f, WHITE);
-    }
 
     // Desenha o botão de interação (E) se o NPC estiver próximo
     if (checkNpcInteraction(npc, player))
@@ -102,7 +120,24 @@ DrawTexturePro(npc->npcSpeech, source2, dest2, origin2, 0.0f, WHITE);
         };
         DrawTexture(npc->btnE, btnDest.x, btnDest.y, WHITE);
     }
+
+    if (npc->isIdle)
+    {
+        DrawTexturePro(npc->spriteNpcIdle, source, dest, origin, 0.0f, WHITE);
+    }
+    else if (npc->isTalking)  // Se o NPC estiver falando, desenha o sprite de fala
+    {
+        DrawTexturePro(npc->spriteNpc, source, dest, origin, 0.0f, WHITE);
+
+        DrawRectangle(0, 0, 2000, 2000, (Color){0, 0, 0, 160}); // Fundo semi-transparente para o diálogo
+
+        DrawTexturePro(npc->npcSpeech, sourceSpeech, destSpeech, origin2, 0.0f, WHITE);
+
+        talkingNpc(npc, player); // Desenha o texto de interação
+    }
 }
+
+
 
 
 void UnloadNpc(Npc *npc)

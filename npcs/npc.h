@@ -7,6 +7,13 @@
     
 typedef struct Player player;
 
+typedef enum {
+    DIALOGO_FECHADO,
+    DIALOGO_NPC_FALANDO,
+    DIALOGO_PLAYER_FALANDO
+} DialogoEstado;
+
+
 typedef struct npc {
     Texture2D spriteNpc; // Sprite do NPC
     Texture2D btnE;     // Botão de interação (E)
@@ -29,8 +36,8 @@ typedef struct npc {
 } Npc;
 
 void InitNpc(Npc *npc);
-void UpdateNpc(Npc *npc, float deltaTime);
-void DrawNpc(Npc *npc, Player *player);
+void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogoEstado *dialogoEstado, float *dialogoTimer);
+void DrawNpc(Npc *npc, Player *player, DialogoEstado dialogoEstado);
 void UnloadNpc(Npc *npc);
 
 #endif // NPC_H
