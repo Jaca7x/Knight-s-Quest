@@ -28,14 +28,14 @@ void InitNpc(Npc *npc)
 {
     npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); // Carrega o sprite do NPC
     npc->btnE = LoadTexture("resources/sprites/btns/btn-E.png"); // Carrega o botão de interação (E)
-    npc->spriteNpcIdle = LoadTexture("resources/sprites/npc/npc-map1-idle.png"); // Carrega o sprite de idle do NPC
+    npc->spriteNpcIdle = LoadTexture("resources/sprites/npc/npc1-idle.png"); // Carrega o sprite de idle do NPC
     npc->npcSpeech = LoadTexture("resources/sprites/npc/npc-speech.png"); // Carrega o sprite de fala do NPC (se necessário)
     npc->position = (Vector2){1000, 546}; // Define a posição inicial do NPC
 
     npc->frameTalking = 4; // Define o número de frames para a animação de fala
-    npc->frameIdle = 2; // Define o número de frames para a animação de idle    
+    npc->frameIdle = 4; // Define o número de frames para a animação de idle    
 
-    npc->frameWidth = npc->spriteNpc.width / npc->frameTalking; // Define a largura de cada frame do sprite
+    npc->frameWidth = npc->spriteNpc.width / npc->frameIdle; // Define a largura de cada frame do sprite
     npc->frameHeight = npc->spriteNpc.height; // Define a altura de cada frame do sprite
     npc->currentFrame = 0; // Inicia no primeiro frame
     npc->frameCounter = 0; // Inicia o contador de frames
