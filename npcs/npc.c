@@ -2,42 +2,41 @@
 
 bool checkNpcInteraction(Npc *npc, Player *player)
 {
-    // Verifica se o jogador está próximo do NPC
+    // Check if the player is close to the NPC
     float distance = Vector2Distance(npc->position, player->position);
-    return distance < 100.0f; // Distância de interação
+    return distance < 100.0f; // Interaction distance
 }
 
 void InitNpc(Npc *npc)
 {
-    npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); // Carrega o sprite do NPC
-    npc->btnE = LoadTexture("resources/sprites/btns/btn-E.png"); // Carrega o botão de interação (E)
-    npc->spriteNpcIdle = LoadTexture("resources/sprites/npc/npc1-idle.png"); // Carrega o sprite de idle do NPC
-    npc->npcSpeech = LoadTexture("resources/sprites/npc/npc-speech.png"); // Carrega o sprite de fala do NPC (se necessário)
-    npc->position = (Vector2){1000, 546}; // Define a posição inicial do NPC
+    npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); // Load NPC sprite
+    npc->btnE = LoadTexture("resources/sprites/btns/btn-E.png"); // Load interaction button (E)
+    npc->spriteNpcIdle = LoadTexture("resources/sprites/npc/npc1-idle.png"); // Load NPC idle sprite
+    npc->npcSpeech = LoadTexture("resources/sprites/npc/npc-speech.png"); // Load NPC speech bubble sprite (if necessary)
+    npc->position = (Vector2){1000, 546}; // Set NPC initial position
 
-    npc->frameTalking = 4; // Define o número de frames para a animação de fala
-    npc->frameIdle = 4; // Define o número de frames para a animação de idle    
+    npc->frameTalking = 4; // Number of frames for talking animation
+    npc->frameIdle = 4; // Number of frames for idle animation    
 
-    npc->frameWidth = npc->spriteNpc.width / npc->frameIdle; // Define a largura de cada frame do sprite
-    npc->frameHeight = npc->spriteNpc.height; // Define a altura de cada frame do sprite
-    npc->currentFrame = 0; // Inicia no primeiro frame
-    npc->frameCounter = 0; // Inicia o contador de frames
+    npc->frameWidth = npc->spriteNpc.width / npc->frameIdle; // Frame width
+    npc->frameHeight = npc->spriteNpc.height; // Frame height
+    npc->currentFrame = 0; // Start at first frame
+    npc->frameCounter = 0; // Start frame counter
      
     bool isTalking = false;
-    bool isIdle = true; // Inicia o NPC como idle
+    bool isIdle = true; // NPC starts idle
 }
 
-void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogoEstado *dialogoEstado, float *dialogoTimer)
+void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogState, float *dialogTimer)
 {
     Vector2 mousePos = GetMousePosition();
-
 
     printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
 
     static float idleTimer = 0.0f;
     static float talkingTimer = 0.0f;
 
-    if (*dialogoEstado == DIALOGO_FECHADO)
+    if (*dialogState == DIALOG_CLOSED)
     {
         idleTimer += deltaTime;
         if (idleTimer >= 0.5f)
@@ -48,15 +47,15 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogoEstado *dialogo
 
         if (checkNpcInteraction(npc, player) && IsKeyPressed(KEY_E))
         {
-            *dialogoEstado = DIALOGO_NPC_FALANDO;
-            *dialogoTimer = 0.0f;
+            *dialogState = DIALOG_NPC_TALKING;
+            *dialogTimer = 0.0f;
             npc->currentFrame = 0;
         }
     }
-    else if (*dialogoEstado == DIALOGO_NPC_FALANDO)
+    else if (*dialogState == DIALOG_NPC_TALKING)
     {
         talkingTimer += deltaTime;
-        *dialogoTimer += deltaTime;
+        *dialogTimer += deltaTime;
 
         if (talkingTimer >= 1.0f)
         {
@@ -64,31 +63,75 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogoEstado *dialogo
             npc->currentFrame = (npc->currentFrame + 1) % npc->frameTalking;
         }
 
-        if (*dialogoTimer >= 3.0f)
+        if (*dialogTimer >= 1.0f)
         {
             if (IsKeyPressed(KEY_SPACE))
             {
-                *dialogoEstado = DIALOGO_PLAYER_FALANDO;
-                *dialogoTimer = 0.0f;
+                *dialogState = DIALOG_PLAYER_TALKING;
+                *dialogTimer = 0.0f;
                 npc->currentFrame = 0;
             }
         }
     }
-    else if (*dialogoEstado == DIALOGO_PLAYER_FALANDO)
+    else if (*dialogState == DIALOG_PLAYER_TALKING)
     {
+        talkingTimer += deltaTime;
+        *dialogTimer += deltaTime;
+
         npc->currentFrame = 0;
 
-        if (IsKeyPressed(KEY_SPACE))
+        if (*dialogTimer >= 1.0f)
         {
-            *dialogoEstado = DIALOGO_FECHADO;
-            *dialogoTimer = 0.0f;
+            if (IsKeyPressed(KEY_SPACE))
+            {
+                *dialogState = DIALOG_NPC_TALKING2;
+                *dialogTimer = 0.0f;
+                npc->currentFrame = 0;
+            }
         }
+    }
+    else if (*dialogState == DIALOG_NPC_TALKING2)
+    {
+        talkingTimer += deltaTime;
+        *dialogTimer += deltaTime;
+
+        npc->currentFrame = 0;
+
+        if (*dialogTimer >= 1.0f)
+        {
+            if (IsKeyPressed(KEY_SPACE))
+            {
+                *dialogState = DIALOG_PLAYER_TALKING2;
+                *dialogTimer = 0.0f;
+                npc->currentFrame = 0;
+            }
+        }
+    }  
+    else if (*dialogState == DIALOG_PLAYER_TALKING2)
+    {
+        talkingTimer += deltaTime;
+        *dialogTimer += deltaTime;
+
+        npc->currentFrame = 0;
+
+        if (*dialogTimer >= 1.0f)
+        {
+            if (IsKeyPressed(KEY_SPACE))
+            {
+                *dialogState = DIALOG_CLOSED;
+                *dialogTimer = 0.0f;
+            }
+        }   
     }
 }
 
 
-void DrawNpc(Npc *npc, Player *player, DialogoEstado dialogoEstado)
+void DrawNpc(Npc *npc, Player *player, DialogState dialogState)
 {
+    static int visibleLetters = 0;
+    static float timeWriting = 0.0f;
+    float writingSpeed = 0.04f; // Seconds per letter
+
     Font textSpeech = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
     Rectangle source = {
@@ -105,55 +148,108 @@ void DrawNpc(Npc *npc, Player *player, DialogoEstado dialogoEstado)
     };
     Vector2 origin = {0, 0};
 
-    // Desenha botão E se perto
-    if (checkNpcInteraction(npc, player) && dialogoEstado == DIALOGO_FECHADO)
+    // Layout variables
+    int speechFontSize = 30;
+    int hintFontSize = 14;
+    float textSpacing = 0.0f;
+    int lineHeightOffset = 20;
+
+    int speechMarginBottom = 10;
+    int speechMarginSide = 20;
+    int speechMarginSideNpc = 20;
+
+    int playerSpeechTextOffsetX = 210;
+    int playerSpeechTextOffsetY = 80;
+
+    int npcSpeechTextOffsetX = 100;
+    int npcSpeechTextOffsetY = 80;
+
+    int speechY = GetScreenHeight() - npc->npcSpeech.height - speechMarginBottom;
+    int npcSpeechX = GetScreenWidth() - npc->npcSpeech.width - speechMarginSideNpc;
+    int playerSpeechX = speechMarginSide;
+
+    int nextMsgTextPlayerX = 246;
+    int nextMsgTextNpcX = 996;
+    int nextMsgTextY = 848;
+
+    // Dialog lines
+    const char *lines[] = {
+        "Cavaleiro Jovem: Rápido, eles estão vindo!", //DIALOG_NPC_TALKING
+        "Gareth II: Quem são eles!?",            // DIALOG_PLAYER_TALKING
+        "Cavaleiro Jovem: Os goblins do reino de Gorzugar!\nEles estão atacando o castelo!", // DIALOG_NPC_TALKING2
+        "Gareth II: Não se preocupe, avise aos soldados para\nse prepararem! Vou ganhar tempo enquanto isso!" // DIALOG_PLAYER_TALKING2
+    };
+
+    // Determine current line index
+    int lineIndex = -1;
+    if (dialogState == DIALOG_NPC_TALKING) lineIndex = 0;
+    else if (dialogState == DIALOG_PLAYER_TALKING) lineIndex = 1;
+    else if (dialogState == DIALOG_NPC_TALKING2) lineIndex = 2;
+    else if (dialogState == DIALOG_PLAYER_TALKING2) lineIndex = 3;
+
+    // Reset writing when dialog changes
+    static DialogState lastState = DIALOG_CLOSED;
+    if (dialogState != lastState)
     {
-        Rectangle btnDest = {
-            npc->position.x + 5,
-            npc->position.y - 40,
-            npc->btnE.width,
-            npc->btnE.height
-        };
-        DrawTexture(npc->btnE, btnDest.x, btnDest.y, WHITE);
+        visibleLetters = 0;
+        timeWriting = 0.0f;
+    }
+    lastState = dialogState;
+
+    // Interaction button (E)
+    if (checkNpcInteraction(npc, player) && dialogState == DIALOG_CLOSED)
+    {
+        DrawTexture(npc->btnE, npc->position.x + 5, npc->position.y - 40, WHITE);
     }
 
-    // Desenha o NPC
-    if (dialogoEstado == DIALOGO_FECHADO)
+    // Draw NPC
+    if (dialogState == DIALOG_CLOSED)
     {
         DrawTexturePro(npc->spriteNpcIdle, source, dest, origin, 0.0f, WHITE);
     }
     else
     {
         DrawTexturePro(npc->spriteNpc, source, dest, origin, 0.0f, WHITE);
-
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0,0,0,160});
-        
-        int ySpeech = GetScreenHeight() - npc->npcSpeech.height - 10;
 
-        int playerX = 20;
-
-        int npcX = GetScreenWidth() - npc->npcSpeech.width - 20;
-
-        if (dialogoEstado == DIALOGO_NPC_FALANDO)
+        // Update animated writing
+        if (lineIndex >= 0)
         {
-            DrawTexture(npc->npcSpeech, npcX, ySpeech, WHITE);
-            DrawTextEx(textSpeech, "Cavaleiro Jovem: Rápido, eles estão vindo!", 
-               (Vector2){npcX + 100, ySpeech + 80}, 30, 0, BLACK);
-            DrawText("Aperte ESPAÇO para continuar", 996, 848, 14,  BLACK);
-        }
-        else if (dialogoEstado == DIALOGO_PLAYER_FALANDO)
-        {
-            DrawTexture(player->playerSpeech, playerX, ySpeech, WHITE);
-            DrawTextEx(textSpeech, "Gareth II: Quem são eles!?",
-                 (Vector2){playerX + 260, ySpeech + 100}, 30, 0, BLACK);
-            DrawText("Aperte ESPAÇO para continuar", 246, 848, 14,  BLACK);
-        }
+            timeWriting += GetFrameTime();
+            if (timeWriting >= writingSpeed && visibleLetters < strlen(lines[lineIndex]))
+            {
+                visibleLetters++;
+                timeWriting = 0.0f;
+            }
 
+            // Choose speech bubble and text position
+            if (dialogState == DIALOG_NPC_TALKING || dialogState == DIALOG_NPC_TALKING2)
+            {
+                DrawTexture(npc->npcSpeech, npcSpeechX, speechY, WHITE);
+                DrawTextEx(textSpeech,
+                           TextSubtext(lines[lineIndex], 0, visibleLetters),
+                           (Vector2){npcSpeechX + npcSpeechTextOffsetX, speechY + npcSpeechTextOffsetY},
+                           speechFontSize, textSpacing, BLACK);
+
+                if (visibleLetters >= strlen(lines[lineIndex]))
+                    DrawText("Pressione ESPAÇO para pular", nextMsgTextNpcX, nextMsgTextY, hintFontSize, BLACK);
+            }
+            else
+            {
+                DrawTexture(player->playerSpeech, playerSpeechX, speechY, WHITE);
+                DrawTextEx(textSpeech,
+                           TextSubtext(lines[lineIndex], 0, visibleLetters),
+                           (Vector2){playerSpeechX + playerSpeechTextOffsetX, speechY + playerSpeechTextOffsetY},
+                           speechFontSize, textSpacing, BLACK);
+
+                if (visibleLetters >= strlen(lines[lineIndex]))
+                    DrawText("Pressione ESPAÇO para continuar", nextMsgTextPlayerX, nextMsgTextY, hintFontSize, BLACK);
+            }
+        }
     }
 }
 
-
 void UnloadNpc(Npc *npc)
 {
-    UnloadTexture(npc->spriteNpc); // Libera a memória do sprite do NPC
+    UnloadTexture(npc->spriteNpc); // Free NPC sprite memory
 }
