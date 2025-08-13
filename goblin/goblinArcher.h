@@ -4,7 +4,7 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 
-#define MAP_GOBLIN_ARCHER_AREA 0
+#define MAP_GOBLIN_ARCHER_AREA 1
 
 typedef struct player Player; // declaração antecipada
 
