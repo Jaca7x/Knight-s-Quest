@@ -39,6 +39,7 @@ typedef struct player
     Texture2D spritePlayerAttack2;
     Texture2D spritePlayerHurt;
     Texture2D spritePlayerDead;
+    Texture2D playerSpeech;
 
     // Estados
     bool isRunning;

@@ -31,6 +31,7 @@ void InitPlayer(Player *player)
     player->spritePlayerAttack2  = LoadTexture("resources/sprites/player/ATTACK 2.png");
     player->spritePlayerHurt     = LoadTexture("resources/sprites/player/HURT.png");
     player->spritePlayerDead     = LoadTexture("resources/sprites/player/DEATH.png");
+    player->playerSpeech         = LoadTexture("resources/sprites/player/player-speech.png");
 
     // Quantidade de frames de cada animação
     player->frameRun    = 8;
