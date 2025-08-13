@@ -4,15 +4,18 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 #include "../librays/raymath.h"
+#include <string.h>
     
 typedef struct Player player;
 
-typedef enum {
-    DIALOGO_FECHADO,
-    DIALOGO_NPC_FALANDO,
-    DIALOGO_PLAYER_FALANDO
-} DialogoEstado;
 
+typedef enum {
+    DIALOG_CLOSED,
+    DIALOG_NPC_TALKING,
+    DIALOG_PLAYER_TALKING,
+    DIALOG_NPC_TALKING2,
+    DIALOG_PLAYER_TALKING2,
+} DialogState;
 
 typedef struct npc {
     Texture2D spriteNpc; // Sprite do NPC
@@ -36,8 +39,8 @@ typedef struct npc {
 } Npc;
 
 void InitNpc(Npc *npc);
-void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogoEstado *dialogoEstado, float *dialogoTimer);
-void DrawNpc(Npc *npc, Player *player, DialogoEstado dialogoEstado);
+void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogState, float *dialogoTimer);
+void DrawNpc(Npc *npc, Player *player, DialogState dialogState);
 void UnloadNpc(Npc *npc);
 
 #endif // NPC_H
