@@ -7,23 +7,6 @@ bool checkNpcInteraction(Npc *npc, Player *player)
     return distance < 100.0f; // Distância de interação
 }
 
-void talkingNpc(Npc *npc, Player *player)
-{
-    if (npc->isTalking)
-    {
-        DrawText("Rápido eles estão vindo!", 
-                 npc->position.x + 10, 
-                 npc->position.y - 30, 
-                 20, 
-                 WHITE);
-    }
-    else 
-    {
-        npc->isTalking = false;
-        npc->isIdle = true; // Se não está falando, volta para idle
-    }
-}
-
 void InitNpc(Npc *npc)
 {
     npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); // Carrega o sprite do NPC
@@ -46,39 +29,59 @@ void InitNpc(Npc *npc)
 
 void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogoEstado *dialogoEstado, float *dialogoTimer)
 {
+    Vector2 mousePos = GetMousePosition();
+
+
+    printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
+
     static float idleTimer = 0.0f;
     static float talkingTimer = 0.0f;
 
-    // Suponha que você tenha uma flag para saber se o NPC está falando
-   
-    if (npc->isIdle)
+    if (*dialogoEstado == DIALOGO_FECHADO)
     {
         idleTimer += deltaTime;
-        if (idleTimer >= 0.5f) // 2 FPS para idle
+        if (idleTimer >= 0.5f)
         {
             idleTimer = 0.0f;
             npc->currentFrame = (npc->currentFrame + 1) % npc->frameIdle;
         }
+
+        if (checkNpcInteraction(npc, player) && IsKeyPressed(KEY_E))
+        {
+            *dialogoEstado = DIALOGO_NPC_FALANDO;
+            *dialogoTimer = 0.0f;
+            npc->currentFrame = 0;
+        }
     }
-    else if (npc->isTalking)
+    else if (*dialogoEstado == DIALOGO_NPC_FALANDO)
     {
         talkingTimer += deltaTime;
-        if (talkingTimer >= 1.0f) // 1 FPS para fala
+        *dialogoTimer += deltaTime;
+
+        if (talkingTimer >= 1.0f)
         {
             talkingTimer = 0.0f;
             npc->currentFrame = (npc->currentFrame + 1) % npc->frameTalking;
         }
-    }
-    
 
-    if (checkNpcInteraction(npc, player))
-    {
-        // Se o jogador pressionar a tecla de interação (E)
-        if (IsKeyPressed(KEY_E))
+        if (*dialogoTimer >= 3.0f)
         {
-            npc->isTalking = true; // Alterna entre falar e não falar
-            npc->isIdle = false; // Se está falando, não está idle
-            npc->currentFrame = 0; // Reseta o frame atual ao iniciar fala
+            if (IsKeyPressed(KEY_SPACE))
+            {
+                *dialogoEstado = DIALOGO_PLAYER_FALANDO;
+                *dialogoTimer = 0.0f;
+                npc->currentFrame = 0;
+            }
+        }
+    }
+    else if (*dialogoEstado == DIALOGO_PLAYER_FALANDO)
+    {
+        npc->currentFrame = 0;
+
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            *dialogoEstado = DIALOGO_FECHADO;
+            *dialogoTimer = 0.0f;
         }
     }
 }
@@ -86,58 +89,68 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogoEstado *dialogo
 
 void DrawNpc(Npc *npc, Player *player, DialogoEstado dialogoEstado)
 {
+    Font textSpeech = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
+
     Rectangle source = {
-        npc->currentFrame * npc->frameWidth, 
+        npc->currentFrame * npc->frameWidth,
         0,
         npc->frameWidth,
         npc->frameHeight
     };
-
     Rectangle dest = {
         npc->position.x,
         npc->position.y,
-        npc->frameWidth,   
+        npc->frameWidth,
         npc->frameHeight
     };
-    
-
-// No seu loop de desenho:
-Rectangle sourceSpeech = { 0, 0, npc->npcSpeech.width, npc->npcSpeech.height }; // Usa a imagem toda
-Rectangle destSpeech = { 500, 655, npc->npcSpeech.width, npc->npcSpeech.height }; // Desenha na posição desejada
-Vector2 origin2 = { 0, 0 };
-
-
     Vector2 origin = {0, 0};
 
-    // Desenha o botão de interação (E) se o NPC estiver próximo
-    if (checkNpcInteraction(npc, player))
+    // Desenha botão E se perto
+    if (checkNpcInteraction(npc, player) && dialogoEstado == DIALOGO_FECHADO)
     {
         Rectangle btnDest = {
-            npc->position.x + 5, // Posição do botão em relação ao NPC
-            npc->position.y - 40, // Acima do NPC
+            npc->position.x + 5,
+            npc->position.y - 40,
             npc->btnE.width,
             npc->btnE.height
         };
         DrawTexture(npc->btnE, btnDest.x, btnDest.y, WHITE);
     }
 
-    if (npc->isIdle)
+    // Desenha o NPC
+    if (dialogoEstado == DIALOGO_FECHADO)
     {
         DrawTexturePro(npc->spriteNpcIdle, source, dest, origin, 0.0f, WHITE);
     }
-    else if (npc->isTalking)  // Se o NPC estiver falando, desenha o sprite de fala
+    else
     {
         DrawTexturePro(npc->spriteNpc, source, dest, origin, 0.0f, WHITE);
 
-        DrawRectangle(0, 0, 2000, 2000, (Color){0, 0, 0, 160}); // Fundo semi-transparente para o diálogo
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0,0,0,160});
+        
+        int ySpeech = GetScreenHeight() - npc->npcSpeech.height - 10;
 
-        DrawTexturePro(npc->npcSpeech, sourceSpeech, destSpeech, origin2, 0.0f, WHITE);
+        int playerX = 20;
 
-        talkingNpc(npc, player); // Desenha o texto de interação
+        int npcX = GetScreenWidth() - npc->npcSpeech.width - 20;
+
+        if (dialogoEstado == DIALOGO_NPC_FALANDO)
+        {
+            DrawTexture(npc->npcSpeech, npcX, ySpeech, WHITE);
+            DrawTextEx(textSpeech, "Cavaleiro Jovem: Rápido, eles estão vindo!", 
+               (Vector2){npcX + 100, ySpeech + 80}, 30, 0, BLACK);
+            DrawText("Aperte ESPAÇO para continuar", 996, 848, 14,  BLACK);
+        }
+        else if (dialogoEstado == DIALOGO_PLAYER_FALANDO)
+        {
+            DrawTexture(player->playerSpeech, playerX, ySpeech, WHITE);
+            DrawTextEx(textSpeech, "Gareth II: Quem são eles!?",
+                 (Vector2){playerX + 260, ySpeech + 100}, 30, 0, BLACK);
+            DrawText("Aperte ESPAÇO para continuar", 246, 848, 14,  BLACK);
+        }
+
     }
 }
-
-
 
 
 void UnloadNpc(Npc *npc)
