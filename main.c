@@ -209,7 +209,7 @@ int main(void)
 
     SetTargetFPS(60);
 
-    DialogoEstado dialogoEstado = DIALOGO_FECHADO;
+    DialogState dialogState = DIALOG_CLOSED;
     float dialogoTimer = 0.0f;  
 
     // Inicializa o player
@@ -268,7 +268,7 @@ while (!WindowShouldClose())
     {
         UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
         UpdateStaminaBar(&player, delta);
-        UpdateNpc(&npc, delta, &player, &dialogoEstado, &dialogoTimer);
+        UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
 
         
         if (player.life <= 0 && player.deathAnimationDone)
@@ -332,7 +332,7 @@ while (!WindowShouldClose())
         UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
         DrawHearts(hearts, delta, &player);
 
-        DrawNpc(&npc, &player, dialogoEstado);
+        DrawNpc(&npc, &player, dialogState);
         DrawPlayer(&player);
     }
 
