@@ -63,7 +63,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
             npc->currentFrame = (npc->currentFrame + 1) % npc->frameTalking;
         }
 
-        if (*dialogTimer >= 1.0f)
+        if (*dialogTimer >= 2.5f)
         {
             if (IsKeyPressed(KEY_SPACE))
             {
@@ -80,7 +80,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
 
         npc->currentFrame = 0;
 
-        if (*dialogTimer >= 1.0f)
+        if (*dialogTimer >= 1.5f)
         {
             if (IsKeyPressed(KEY_SPACE))
             {
@@ -97,7 +97,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
 
         npc->currentFrame = 0;
 
-        if (*dialogTimer >= 1.0f)
+        if (*dialogTimer >= 4.0f)
         {
             if (IsKeyPressed(KEY_SPACE))
             {
@@ -114,7 +114,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
 
         npc->currentFrame = 0;
 
-        if (*dialogTimer >= 1.0f)
+        if (*dialogTimer >= 5.0f)
         {
             if (IsKeyPressed(KEY_SPACE))
             {
