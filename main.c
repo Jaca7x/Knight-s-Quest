@@ -332,7 +332,10 @@ while (!WindowShouldClose())
         UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
         DrawHearts(hearts, delta, &player);
 
-        DrawNpc(&npc, &player, dialogState);
+        if (MAP_NPC == currentMapIndex) {
+            DrawNpc(&npc, &player, dialogState);
+        }
+        
         DrawPlayer(&player);
     }
 
