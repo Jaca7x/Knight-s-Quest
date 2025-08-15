@@ -5,7 +5,9 @@
 #include "../player/player.h"
 #include "../librays/raymath.h"
 #include <string.h>
-    
+
+#define MAP_NPC 0
+
 typedef struct Player player;
 
 
