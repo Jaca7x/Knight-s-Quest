@@ -33,6 +33,13 @@
 // Estruturas
 // ============================================================================
 
+typedef enum GameState 
+{
+    MENU,
+    PLAYING,
+    GAME_OVER
+} GameState;
+
 // Estrutura que representa um mapa carregado do Tiled
 typedef struct
 {
@@ -184,6 +191,8 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
 
 int main(void)
 {
+    GameState gameState = MENU;
+
     // Lista dos arquivos de mapas
     const char *mapFiles[MAP_COUNT] = {
         "assets/maps/castle_map.json",
@@ -250,34 +259,63 @@ int main(void)
     //Carregar imagem de morte
     Texture2D deathImage = LoadTexture("resources/img/deathImage.png");
 
+    Texture2D menuImage = LoadTexture("resources/img/menu.png");
+
     Font titleMaps = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
     bool isGameOver = false;
     
     float textTime = 0.0f;
 
-    // Loop principal do jogo
 while (!WindowShouldClose())
 {
     float delta = GetFrameTime();
 
-    // =====================
-    // Atualizações do jogo
-    // =====================
-    if (!isGameOver)
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+
+    switch (gameState)
     {
-        UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
-        UpdateStaminaBar(&player, delta);
-        UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
-
-        
-        if (player.life <= 0 && player.deathAnimationDone)
+        // ========================================================
+        // ESTADO: MENU
+        // ========================================================
+        case MENU:
         {
-            isGameOver = true;
-        }
+            // Desenha imagem de fundo do menu
+            DrawTexture(menuImage, 0, 0, WHITE);
 
-        // Avança para o próximo mapa se o player chegar ao fim
-        if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
+            // Botão "Jogar"
+            Rectangle playBtn = { GetScreenWidth()/2 - 100, GetScreenHeight()/2, 200, 60 };
+            DrawRectangleRec(playBtn, DARKGRAY);
+            DrawText("JOGAR", playBtn.x + 40, playBtn.y + 15, 30, RAYWHITE);
+
+            // Clique do mouse -> começa o jogo
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+                CheckCollisionPointRec(GetMousePosition(), playBtn))
+            {
+                gameState = PLAYING;
+            }
+        } break;
+
+        // ========================================================
+        // ESTADO: PLAYING
+        // ========================================================
+        case PLAYING:
+        {
+            // --- Atualizações ---
+            UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
+            UpdateStaminaBar(&player, delta);
+            UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
+
+            if (player.life <= 0 && player.deathAnimationDone)
+            {
+                gameState = GAME_OVER;
+            }
+
+            // --- Desenho ---
+            DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5);
+
+            if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
         {
             currentMapIndex = (currentMapIndex + 1) % MAP_COUNT;
 
@@ -292,92 +330,87 @@ while (!WindowShouldClose())
             player.position.x = 0;
             player.position.y = 520;
         }
-    }
 
-    // =====================
-    // Desenho da tela
-    // =====================
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
+            if (currentMapIndex == GOBLIN_MAP)
+            {
+                DrawGoblin(&goblin);
+                UpdateGoblin(&goblin, &player, currentMapIndex, delta);
+            }
 
-    // ----- 1. Desenha o mapa primeiro -----
-    DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5);
+            if (currentMapIndex == MAP_WOLF_AREA)
+            {
+                DrawWolf(&wolf);
+                UpdateWolf(&wolf, &player, delta);
 
-    // ----- 2. Desenha o jogador e inimigos -----
-    if (!isGameOver)
+                DrawRunningWolf(&wolfRun);
+                UpdateRunningWolf(&wolfRun, &player, delta);
+            }
 
-    {   
-        if (currentMapIndex == GOBLIN_MAP)
+            if (currentMapIndex == MAP_GOBLIN_ARCHER_AREA)
+            {
+                DrawGoblinArcher(&goblinArcher);
+                UpdateGoblinArcher(&goblinArcher, &player, delta);
+            }
+
+            UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
+            DrawHearts(hearts, delta, &player);
+
+            if (MAP_NPC == currentMapIndex) {
+                DrawNpc(&npc, &player, dialogState);
+            }
+
+            DrawPlayer(&player);
+
+            // HUD
+            DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
+            DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
+
+            // Texto de título
+            if (currentMapIndex == 0 && textTime < 2.0f)
+            {
+                textTime += delta;
+                const char* titulo = "Castelo Bastion de Eldur";
+                float fontSize = 60.0f;
+                float spacing = 1.0f;
+
+                Vector2 textSize = MeasureTextEx(titleMaps, titulo, fontSize, spacing);
+                Vector2 textPosition = {
+                    GetScreenWidth() / 2 - textSize.x / 2,
+                    GetScreenHeight() / 2 - 220
+                };
+
+                DrawRectangle((int)(textPosition.x - 20), (int)(textPosition.y - 10),
+                            (int)(textSize.x + 40), (int)(textSize.y + 20),
+                            (Color){0, 0, 0, 160});
+
+                DrawTextPro(titleMaps, titulo, textPosition, (Vector2){0, 0}, 0.0f, fontSize, spacing, GOLD);
+            }
+        } break;
+
+        // ========================================================
+        // ESTADO: GAME_OVER
+        // ========================================================
+        case GAME_OVER:
         {
-            DrawGoblin(&goblin);
-            UpdateGoblin(&goblin, &player, currentMapIndex, delta);
-        }
+            // Tela de morte
+            DrawTexture(deathImage, 
+                        (GetScreenWidth() - deathImage.width) / 2, 
+                        (GetScreenHeight() - deathImage.height) / 2, 
+                        WHITE);
 
-        if (currentMapIndex == MAP_WOLF_AREA)
-        {
-            DrawWolf(&wolf);
-            UpdateWolf(&wolf, &player, delta);
+            DrawText("Pressione ENTER para voltar ao menu",
+                     GetScreenWidth()/2 - 200, GetScreenHeight() - 100, 20, RAYWHITE);
 
-            DrawRunningWolf(&wolfRun);
-            UpdateRunningWolf(&wolfRun, &player, delta);
-        }
-
-        if (currentMapIndex == MAP_GOBLIN_ARCHER_AREA)
-        {
-            DrawGoblinArcher(&goblinArcher);
-            UpdateGoblinArcher(&goblinArcher, &player, delta);
-        }
-
-        // Corações (drops de vida)
-        UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
-        DrawHearts(hearts, delta, &player);
-
-        if (MAP_NPC == currentMapIndex) {
-            DrawNpc(&npc, &player, dialogState);
-        }
-        
-        DrawPlayer(&player);
-    }
-
-   // ----- 3. Texto de título (por cima do mapa) -----
-    if (currentMapIndex == 0 && textTime < 2.0f)
-    {
-        textTime += delta; // Acumula tempo
-
-        const char* titulo = "Castelo Bastion de Eldur";
-        float fontSize = 60.0f;
-        float spacing = 1.0f;
-
-        Vector2 textSize = MeasureTextEx(titleMaps, titulo, fontSize, spacing);
-
-        Vector2 textPosition = {
-            GetScreenWidth() / 2 - textSize.x / 2,
-            GetScreenHeight() / 2 - 220
-        };
-
-        DrawRectangle((int)(textPosition.x - 20), (int)(textPosition.y - 10),
-                  (int)(textSize.x + 40), (int)(textSize.y + 20),
-                  (Color){0, 0, 0, 160});
-
-        DrawTextPro(titleMaps, titulo, textPosition, (Vector2){0, 0}, 0.0f, fontSize, spacing, GOLD);
-    }
-
-
-    // ----- 4. Interface do usuário (HUD) -----
-    DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
-    DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
-
-    // ----- 5. Tela de game over -----
-    if (isGameOver)
-    {
-        DrawTexture(deathImage, 
-                    (GetScreenWidth() - deathImage.width) / 2, 
-                    (GetScreenHeight() - deathImage.height) / 2, 
-                    WHITE);
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                gameState = MENU;
+            }
+        } break;
     }
 
     EndDrawing();
 }
+
 
     // Libera todos os recursos carregados
     UnloadTexture(tileset1);
