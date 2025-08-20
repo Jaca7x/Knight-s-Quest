@@ -29,10 +29,6 @@ void InitNpc(Npc *npc)
 
 void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogState, float *dialogTimer)
 {
-    Vector2 mousePos = GetMousePosition();
-
-    printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
-
     static float idleTimer = 0.0f;
     static float talkingTimer = 0.0f;
 
