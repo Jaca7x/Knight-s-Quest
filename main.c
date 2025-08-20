@@ -2,6 +2,7 @@
 // Inclusão de bibliotecas
 // ============================================================================
 #include "librays/raylib.h"       // Biblioteca Raylib para gráficos, janelas e entrada
+#include "librays/raymath.h"
 #include "librays/cJSON.h"        // Biblioteca cJSON para ler arquivos JSON (mapas do Tiled)
 #include <stdlib.h>               // Funções padrão (malloc, free, etc.)
 #include <stdio.h>                // Entrada e saída padrão (fopen, fprintf, etc.)
@@ -281,20 +282,43 @@ while (!WindowShouldClose())
         // ========================================================
         case MENU:
         {
+            Vector2 mousePos = GetMousePosition();
+            printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
+
+            float x1 = 930, y1 = 418;   // canto superior esquerdo
+            float x2 = 1300, y2 = 532;  // canto inferior direito
+            float checkY1 = 345, checkY2 = 460;
+
+            Rectangle rect 
+            = {
+                x1,
+                y1,
+                x2 - x1,   // largura
+                y2 - y1    // altura
+            };
+    
+            Rectangle check 
+            = {
+                x1,
+                checkY1,
+                x2 - x1,
+                checkY2 - checkY1
+            };
+
             // Desenha imagem de fundo do menu
             DrawTexture(menuImage, 0, 0, WHITE);
 
-            // Botão "Jogar"
-            Rectangle playBtn = { GetScreenWidth()/2 - 100, GetScreenHeight()/2, 200, 60 };
-            DrawRectangleRec(playBtn, DARKGRAY);
-            DrawText("JOGAR", playBtn.x + 40, playBtn.y + 15, 30, RAYWHITE);
+            if (CheckCollisionPointRec(mousePos, check)) {
+                DrawRectangleRec(rect, (Color){247,173,7,75});
+            }
 
             // Clique do mouse -> começa o jogo
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
-                CheckCollisionPointRec(GetMousePosition(), playBtn))
+                CheckCollisionPointRec(GetMousePosition(), rect))
             {
                 gameState = PLAYING;
             }
+            
         } break;
 
         // ========================================================
