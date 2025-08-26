@@ -37,6 +37,7 @@
 typedef enum GameState 
 {
     MENU,
+    CREDITS,
     PLAYING,
     GAME_OVER
 } GameState;
@@ -285,40 +286,70 @@ while (!WindowShouldClose())
             Vector2 mousePos = GetMousePosition();
             printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
 
-            float x1 = 930, y1 = 418;   // canto superior esquerdo
-            float x2 = 1300, y2 = 532;  // canto inferior direito
-            float checkY1 = 345, checkY2 = 460;
+            float x1Jogar = 930, y1Jogar = 418;   // canto superior esquerdo
+            float x2Jogar = 1300, y2Jogar = 532;  // canto inferior direito
+            float checkY1Jogar = 418, checkY2Jogar = 530;
 
-            Rectangle rect 
+            Rectangle rectJogar
             = {
-                x1,
-                y1,
-                x2 - x1,   // largura
-                y2 - y1    // altura
+                x1Jogar,
+                y1Jogar,
+                x2Jogar - x1Jogar,   // largura
+                y2Jogar - y1Jogar    // altura
             };
     
-            Rectangle check 
+            Rectangle checkJogar
             = {
-                x1,
-                checkY1,
-                x2 - x1,
-                checkY2 - checkY1
+                x1Jogar,
+                checkY1Jogar,
+                x2Jogar - x1Jogar,
+                checkY2Jogar - checkY1Jogar
             };
+
+            float x1Creditos = 890, y1Creditos = 555;  
+            float x2Creditos = 1340, y2Creditos = 660;
+            float checkY1Creditos = 554, checkY2Creditos = 660;
+            
+            Rectangle rectCreditos
+            = {
+                x1Creditos,
+                y1Creditos,
+                x2Creditos - x1Creditos,  
+                y2Creditos - y1Creditos    
+            };
+    
+            Rectangle checkCreditos
+            = {
+                x1Creditos,
+                checkY1Creditos,
+                x2Creditos - x1Creditos,
+                checkY2Creditos - checkY1Creditos
+            };
+
 
             // Desenha imagem de fundo do menu
             DrawTexture(menuImage, 0, 0, WHITE);
 
-            if (CheckCollisionPointRec(mousePos, check)) {
-                DrawRectangleRec(rect, (Color){247,173,7,75});
+            if (CheckCollisionPointRec(mousePos, checkJogar)) {
+                DrawRectangleRec(rectJogar, (Color){247,173,7,75});
             }
 
             // Clique do mouse -> começa o jogo
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
-                CheckCollisionPointRec(GetMousePosition(), rect))
+                CheckCollisionPointRec(GetMousePosition(), rectJogar))
             {
                 gameState = PLAYING;
             }
-            
+
+            if (CheckCollisionPointRec(mousePos, checkCreditos)) {
+                DrawRectangleRec(rectCreditos, (Color){247,173,7,75});
+            }
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
+                CheckCollisionPointRec(GetMousePosition(), rectCreditos))
+            {
+                gameState = CREDITS;
+            }
+    
         } break;
 
         // ========================================================
