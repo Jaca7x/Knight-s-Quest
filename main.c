@@ -39,7 +39,8 @@ typedef enum GameState
     MENU,
     CREDITS,
     PLAYING,
-    GAME_OVER
+    GAME_OVER,
+    GITHUB
 } GameState;
 
 // Estrutura que representa um mapa carregado do Tiled
@@ -326,8 +327,9 @@ while (!WindowShouldClose())
                 checkY2Creditos - checkY1Creditos
             };
 
+            Vector2 center = {1352, 835};
+            float radius = 59;
 
-            // Desenha imagem de fundo do menu
             DrawTexture(menuImage, 0, 0, WHITE);
 
             if (CheckCollisionPointRec(mousePos, checkJogar)) {
@@ -349,7 +351,24 @@ while (!WindowShouldClose())
             {
                 gameState = CREDITS;
             }
-    
+
+            if (CheckCollisionPointCircle(GetMousePosition(), center, radius)) 
+            {
+                // Desenha destaque quando o mouse está em cima
+                DrawCircleV(center, radius, (Color){247,173,7,75});
+
+                // Se clicar com o botão esquerdo
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+                {
+                    #if defined(_WIN32)
+                        system("start https://github.com/Jaca7x/Knight-s-Quest");
+                    #elif defined(__APPLE__)
+                        system("open https://github.com/Jaca7x/Knight-s-Quest");
+                    #else
+                        system("xdg-open https://github.com/Jaca7x/Knight-s-Quest");
+                    #endif
+                }
+            }
         } break;
 
         // ========================================================
