@@ -287,44 +287,44 @@ while (!WindowShouldClose())
             Vector2 mousePos = GetMousePosition();
             printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
 
-            float x1Jogar = 930, y1Jogar = 418;   // canto superior esquerdo
-            float x2Jogar = 1300, y2Jogar = 532;  // canto inferior direito
-            float checkY1Jogar = 418, checkY2Jogar = 530;
+            float x1Play = 930, y1Play = 418;   // canto superior esquerdo
+            float x2Play = 1300, y2Play = 532;  // canto inferior direito
+            float checkY1Play = 418, checkY2Play = 530;
 
-            Rectangle rectJogar
+            Rectangle rectPlay
             = {
-                x1Jogar,
-                y1Jogar,
-                x2Jogar - x1Jogar,   // largura
-                y2Jogar - y1Jogar    // altura
+                x1Play,
+                y1Play,
+                x2Play - x1Play,   // largura
+                y2Play - y1Play    // altura
             };
     
-            Rectangle checkJogar
+            Rectangle checkPlay
             = {
-                x1Jogar,
-                checkY1Jogar,
-                x2Jogar - x1Jogar,
-                checkY2Jogar - checkY1Jogar
+                x1Play,
+                checkY1Play,
+                x2Play - x1Play,
+                checkY2Play - checkY1Play
             };
 
-            float x1Creditos = 890, y1Creditos = 555;  
-            float x2Creditos = 1340, y2Creditos = 660;
-            float checkY1Creditos = 554, checkY2Creditos = 660;
+            float x1Credits = 890, y1Credits = 555;  
+            float x2Credits = 1340, y2Credits = 660;
+            float checkY1Credits = 554, checkY2Credits = 660;
             
-            Rectangle rectCreditos
+            Rectangle rectCredits
             = {
-                x1Creditos,
-                y1Creditos,
-                x2Creditos - x1Creditos,  
-                y2Creditos - y1Creditos    
+                x1Credits,
+                y1Credits,
+                x2Credits - x1Credits,  
+                y2Credits - y1Credits    
             };
     
-            Rectangle checkCreditos
+            Rectangle checkCredits
             = {
-                x1Creditos,
-                checkY1Creditos,
-                x2Creditos - x1Creditos,
-                checkY2Creditos - checkY1Creditos
+                x1Credits,
+                checkY1Credits,
+                x2Credits - x1Credits,
+                checkY2Credits - checkY1Credits
             };
 
             Vector2 center = {1352, 835};
@@ -332,22 +332,22 @@ while (!WindowShouldClose())
 
             DrawTexture(menuImage, 0, 0, WHITE);
 
-            if (CheckCollisionPointRec(mousePos, checkJogar)) {
-                DrawRectangleRec(rectJogar, (Color){247,173,7,75});
+            if (CheckCollisionPointRec(mousePos, checkPlay)) {
+                DrawRectangleRec(rectPlay, (Color){247,173,7,75});
             }
 
             // Clique do mouse -> começa o jogo
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
-                CheckCollisionPointRec(GetMousePosition(), rectJogar))
+                CheckCollisionPointRec(GetMousePosition(), rectPlay))
             {
                 gameState = PLAYING;
             }
 
-            if (CheckCollisionPointRec(mousePos, checkCreditos)) {
-                DrawRectangleRec(rectCreditos, (Color){247,173,7,75});
+            if (CheckCollisionPointRec(mousePos, checkCredits)) {
+                DrawRectangleRec(rectCredits, (Color){247,173,7,75});
             }
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
-                CheckCollisionPointRec(GetMousePosition(), rectCreditos))
+                CheckCollisionPointRec(GetMousePosition(), rectCredits))
             {
                 gameState = CREDITS;
             }
