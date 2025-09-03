@@ -277,6 +277,9 @@ while (!WindowShouldClose())
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
+    Vector2 mousePos = GetMousePosition();
+    printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
+
     switch (gameState)
     {
         // ========================================================
@@ -284,9 +287,6 @@ while (!WindowShouldClose())
         // ========================================================
         case MENU:
         {
-            Vector2 mousePos = GetMousePosition();
-            printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
-
             float x1Play = 930, y1Play = 418;   // canto superior esquerdo
             float x2Play = 1300, y2Play = 532;  // canto inferior direito
             float checkY1Play = 418, checkY2Play = 530;
@@ -465,6 +465,28 @@ while (!WindowShouldClose())
 
         case CREDITS:
         {
+            Rectangle checkX 
+            = {
+                5,
+                5,
+                120 - 5,
+                40 - 5
+            };
+
+            DrawRectangleLines(5, 5, 120, 40, WHITE);
+            DrawText("VOLTAR", 20, 15, 20, WHITE);
+
+            if (CheckCollisionPointRec(mousePos, checkX)) 
+            {
+                DrawRectangleLines(5, 5, 120, 40, GOLD);
+                DrawText("VOLTAR", 20, 15, 20, GOLD);
+
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                {
+                    gameState = MENU;
+                }
+            }
+
             ClearBackground(BLACK);
             DrawText("Créditos", GetScreenWidth()/2 - 70, 50, 40, WHITE);
             DrawText("Obrigado por jogar este jogo!\n", GetScreenWidth()/2 - 140, 150, 20, WHITE);
@@ -503,6 +525,34 @@ while (!WindowShouldClose())
                 gameState = MENU;
             }
         } break;
+
+        case GITHUB: 
+        {
+            Rectangle checkX 
+            = {
+                5,
+                5,
+                120 - 5,
+                40 - 5
+            };
+
+            DrawRectangleLines(5, 5, 120, 40, WHITE);
+            DrawText("VOLTAR", 20, 15, 20, WHITE);
+
+            if (CheckCollisionPointRec(mousePos, checkX)) 
+            {
+                DrawRectangleLines(5, 5, 120, 40, GOLD);
+                DrawText("VOLTAR", 20, 15, 20, GOLD);
+
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                {
+                    gameState = MENU;
+                }
+            }
+            
+            ClearBackground(BLACK);
+            DrawText("Abrindo repositório no seu navegador! Aguarde...", GetScreenWidth()/2 - 500, GetScreenHeight()/2, 40, WHITE);
+        }
     }
 
     EndDrawing();
