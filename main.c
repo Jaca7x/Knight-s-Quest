@@ -367,6 +367,8 @@ while (!WindowShouldClose())
                     #else
                         system("xdg-open https://github.com/Jaca7x/Knight-s-Quest");
                     #endif
+
+                    gameState = GITHUB;
                 }
             }
         } break;
@@ -460,6 +462,27 @@ while (!WindowShouldClose())
                 DrawTextPro(titleMaps, titulo, textPosition, (Vector2){0, 0}, 0.0f, fontSize, spacing, GOLD);
             }
         } break;
+
+        case CREDITS:
+        {
+            ClearBackground(BLACK);
+            DrawText("Créditos", GetScreenWidth()/2 - 70, 50, 40, WHITE);
+            DrawText("Obrigado por jogar este jogo!\n", GetScreenWidth()/2 - 140, 150, 20, WHITE);
+            DrawText("Ele foi uma das minhas primeiras experiencias\n", GetScreenWidth()/2 - 210, 180, 20, WHITE);
+            DrawText("no mundo do game dev, e com certeza ainda existem\n", GetScreenWidth()/2 - 230, 210, 20, WHITE);
+            DrawText("alguns problemas (como era de se esperar).\n", GetScreenWidth()/2 - 210, 240, 20, WHITE);
+            DrawText("\n", GetScreenWidth()/2 - 140, 270, 20, WHITE);
+            DrawText("Mas esse e apenas o inicio da minha jornada\n", GetScreenWidth()/2 - 210, 300, 20, WHITE);
+            DrawText("no desenvolvimento de jogos, e cada passo dado\n", GetScreenWidth()/2 - 230, 330, 20, WHITE);
+            DrawText("me motiva a aprender e evoluir cada vez mais.\n", GetScreenWidth()/2 - 210, 360, 20, WHITE);
+            DrawText("\n", GetScreenWidth()/2 - 140, 390, 20, WHITE);
+            DrawText("Muito obrigado por me dar essa chance\n", GetScreenWidth()/2 - 210, 420, 20, WHITE);
+            DrawText("e por dedicar seu tempo a jogar algo que\n", GetScreenWidth()/2 - 220, 450, 20, WHITE);
+            DrawText("fiz com tanto carinho e dedicação.\n", GetScreenWidth()/2 - 190, 480, 20, WHITE);
+            DrawText("\n", GetScreenWidth()/2 - 140, 510, 20, WHITE);
+            DrawText("Ass: Jaca7x\n", GetScreenWidth()/2 - 70, 540, 20, WHITE);
+
+        } break; 
 
         // ========================================================
         // ESTADO: GAME_OVER
