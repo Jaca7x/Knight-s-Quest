@@ -173,7 +173,7 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
             wolfRun->isWalking = false;
             wolfRun->isAttacking = false;
             //Verifica hit no player quando corre 
-            player->hasHit = true;
+            player->hasHit = false;
             wolfRun->hasHitPlayer = true;
 
             wolfRun->position.x += wolfRun->speedRun * wolfRun->direction * delta;
