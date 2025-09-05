@@ -186,11 +186,28 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
         }
     }
 }
-
-
 // ============================================================================
 // Função principal
 // ============================================================================
+int currentMapIndex = 0;
+
+void resetGame(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, GoblinArcher *goblinArcher, Heart hearts[], Npc *npc)
+    {
+    InitPlayer(player);
+
+    InitWolf(wolf);
+    InitRunningWolf(wolfRun);
+
+    InitGoblin(goblin);
+    InitGoblinArcher(goblinArcher);
+
+    InitHearts(hearts);
+
+    InitNpc(npc);
+    
+    int currentMapIndex = 0;
+
+    };
 
 int main(void)
 {
@@ -205,9 +222,7 @@ int main(void)
         "assets/maps/florest2.json",
         "assets/maps/florest3.json"
     };
-
-    int currentMapIndex = 0;
-
+    
     // Carrega o primeiro mapa
     TileMap map = LoadTileMap(mapFiles[currentMapIndex]);
     if (!map.data) return 1;
@@ -521,6 +536,7 @@ while (!WindowShouldClose())
             if (IsKeyPressed(KEY_ENTER))
             {
                 gameState = MENU;
+                resetGame(&player, &wolf, &wolfRun, &goblin, &goblinArcher, hearts, &npc);
             }
         } break;
 
