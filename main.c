@@ -266,8 +266,6 @@ int main(void)
 
     Font titleMaps = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
-    bool isGameOver = false;
-    
     float textTime = 0.0f;
 
 while (!WindowShouldClose())

@@ -328,16 +328,15 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, 
         }
     }
 
-    // Hit temporário
     if (player->hitTimer > 0) 
     {
         player->hitTimer -= delta;
-        player->hasHit = true;
-    } 
+    }
     else 
     {
         player->hasHit = false;
     }
+
 
     // Pulo
     if (IsKeyDown(KEY_SPACE) && !player->isJumping)
