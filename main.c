@@ -392,7 +392,6 @@ while (!WindowShouldClose())
         case PLAYING:
         {
             // --- Atualizações ---
-            UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
             UpdateStaminaBar(&player, delta);
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
 
@@ -428,12 +427,13 @@ while (!WindowShouldClose())
 
             if (currentMapIndex == MAP_WOLF_AREA)
             {
-                DrawWolf(&wolf);
                 UpdateWolf(&wolf, &player, delta);
+                DrawWolf(&wolf);
 
-                DrawRunningWolf(&wolfRun);
                 UpdateRunningWolf(&wolfRun, &player, delta);
+                DrawRunningWolf(&wolfRun);
             }
+
 
             if (currentMapIndex == MAP_GOBLIN_ARCHER_AREA)
             {
@@ -448,6 +448,7 @@ while (!WindowShouldClose())
                 DrawNpc(&npc, &player, dialogState);
             }
 
+            UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
             // HUD
