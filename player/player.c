@@ -165,10 +165,9 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, 
     }
 
         // Lógica de dano nos lobos (apenas se estiver no mapa certo)
-    if (currentMapIndex == MAP_WOLF_AREA)
+    if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
     {
         float distanceToWolf = fabs(wolf->position.x - player->position.x);
-        float distanceToRunningWolf = fabs(wolfRun->position.x - player->position.x);
 
         if (player->isAttacking && distanceToWolf <= player->attackRange)
         {   
@@ -186,6 +185,11 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, 
         {
             wolf->wolfHasHit = false;
         }   
+    }
+
+    if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
+    {
+        float distanceToRunningWolf = fabs(wolfRun->position.x - player->position.x);
 
         if (player->isAttacking && distanceToRunningWolf <= player->attackRange)
         {   
@@ -204,6 +208,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, 
             wolfRun->wolfHasHit = false;
         }
     }
+    
 
     if (currentMapIndex == GOBLIN_MAP)
     {
