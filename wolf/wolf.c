@@ -80,7 +80,6 @@ void InitWolf(Wolf *wolf)
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta)
 {
-
 if (wolf->life <= 0 && !wolf->isDead)
     {
         wolf->isDead = true;
@@ -184,7 +183,7 @@ if (wolf->isPatrolling)
                 player->life -= wolf->damage;
                 wolf->hasHitPlayer = true;
                 player->hasHit = true;
-                player->hitTimer = 0.4f; 
+                player->hitTimer = 0.6f; 
 
                 if (player->position.x < wolf->position.x)
                 {
@@ -215,7 +214,6 @@ if (wolf->isPatrolling)
             wolf->attackCooldown = 0.4f;
             wolf->attackDamageTimer = 0.4f;
             wolf->hasHitPlayer = false;
-            player->hasHit = true;
         }
     }
 
@@ -225,7 +223,7 @@ if (wolf->isPatrolling)
             wolf->position.x, wolf->position.y, wolf->frameWidth, wolf->frameHeight))
     {
         player->hasHit = true;
-        player->hitTimer = 0.3f;
+        player->hitTimer = 0.6f;
 
         if (player->position.x < wolf->position.x)
             player->position.x = wolf->position.x - player->frameWidth;
@@ -273,8 +271,6 @@ void DrawWolf(Wolf *wolf)
     {
         DrawWolfLifeBar(wolf);
     }
-
-    
 }
 
 void UnloadWolf(Wolf *wolf)
