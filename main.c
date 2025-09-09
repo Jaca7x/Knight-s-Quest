@@ -418,22 +418,21 @@ while (!WindowShouldClose())
             player.position.x = 0;
             player.position.y = 520;
         }
-
+        
             if (currentMapIndex == GOBLIN_MAP)
             {
                 DrawGoblin(&goblin);
                 UpdateGoblin(&goblin, &player, currentMapIndex, delta);
             }
-
-            if (currentMapIndex == MAP_WOLF_AREA)
+            
+            if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
             {
-                UpdateWolf(&wolf, &player, delta);
-                DrawWolf(&wolf);
-
                 UpdateRunningWolf(&wolfRun, &player, delta);
                 DrawRunningWolf(&wolfRun);
+                
+                UpdateWolf(&wolf, &player, delta);
+                DrawWolf(&wolf);
             }
-
 
             if (currentMapIndex == MAP_GOBLIN_ARCHER_AREA)
             {
