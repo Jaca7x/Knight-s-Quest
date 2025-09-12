@@ -191,23 +191,25 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
 // ============================================================================
 int currentMapIndex = 0;
 
-void resetGame(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, GoblinArcher *goblinArcher, Heart hearts[], Npc *npc)
-    {
+void resetGame(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin,
+               GoblinArcher *goblinArcher, Heart hearts[], Npc *npc, 
+               TileMap *map, const char *mapFiles[])
+{
     InitPlayer(player);
-
     InitWolf(wolf);
     InitRunningWolf(wolfRun);
-
     InitGoblin(goblin);
     InitGoblinArcher(goblinArcher);
-
     InitHearts(hearts);
-
     InitNpc(npc);
-    
-    int currentMapIndex = 0;
 
-    };
+    currentMapIndex = 0;
+
+    // Recarrega o mapa inicial
+    UnloadTileMap(map);
+    *map = LoadTileMap(mapFiles[currentMapIndex]);
+}
+
 
 int main(void)
 {
@@ -536,7 +538,7 @@ while (!WindowShouldClose())
             if (IsKeyPressed(KEY_ENTER))
             {
                 gameState = MENU;
-                resetGame(&player, &wolf, &wolfRun, &goblin, &goblinArcher, hearts, &npc);
+                resetGame(&player, &wolf, &wolfRun, &goblin, &goblinArcher, hearts, &npc, &map, mapFiles);
             }
         } break;
 
