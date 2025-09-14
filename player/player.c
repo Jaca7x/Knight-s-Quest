@@ -89,7 +89,7 @@ void InitPlayer(Player *player)
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc)
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc)
 {   
     // Verificar se morreu pela primeira vez
     if (player->life <= 0 && !player->isDead)
@@ -164,7 +164,51 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, 
         }
     }
 
-        // Lógica de dano nos lobos (apenas se estiver no mapa certo)
+    if (currentMapIndex == MAP_WOLF_RED_AREA)
+    {
+        float distanceToRedWolf = fabs(redWolf->position.x - player->position.x);
+
+        if (player->isAttacking && distanceToRedWolf <= player->attackRange)
+        {   
+            if (!redWolf->wolfHasHit)
+            {
+                if (player->isAttackingLight)
+                    redWolf->life -= player->lightDamage;
+                else if (player->isAttackingHeavy)
+                    redWolf->life -= player->heavyDamage;
+
+                redWolf->wolfHasHit = true;
+            }
+        } 
+        else 
+        {
+            redWolf->wolfHasHit = false;
+        }   
+    }
+
+    if (currentMapIndex == MAP_WOLF_WHITE_AREA)
+    {
+        float distanceToWhiteWolf = fabs(whiteWolf->position.x - player->position.x);
+
+        if (player->isAttacking && distanceToWhiteWolf <= player->attackRange)
+        {   
+            if (!whiteWolf->wolfHasHit)
+            {
+                if (player->isAttackingLight)
+                    whiteWolf->life -= player->lightDamage;
+                else if (player->isAttackingHeavy)
+                    whiteWolf->life -= player->heavyDamage;
+
+                whiteWolf->wolfHasHit = true;
+            }
+        } 
+        else 
+        {
+            whiteWolf->wolfHasHit = false;
+        }   
+    }
+    
+    // Lógica de dano nos lobos (apenas se estiver no mapa certo)
     if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
     {
         float distanceToWolf = fabs(wolf->position.x - player->position.x);
