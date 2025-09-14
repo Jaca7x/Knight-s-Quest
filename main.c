@@ -196,7 +196,8 @@ void resetGame(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin,
                TileMap *map, const char *mapFiles[])
 {
     InitPlayer(player);
-    InitWolf(wolf);
+    InitWolfBase(wolf, (Vector2){500, 450});
+    InitWolfWhite(wolf, (Vector2){800, 450});
     InitRunningWolf(wolfRun);
     InitGoblin(goblin);
     InitGoblinArcher(goblinArcher);
@@ -246,7 +247,10 @@ int main(void)
     InitPlayer(&player);
 
     Wolf wolf;
-    InitWolf(&wolf);
+    InitWolfBase(&wolf, (Vector2){500, 450});
+
+    Wolf wolfWhite;
+    InitWolfWhite(&wolfWhite, (Vector2){800, 450});
 
     WolfRun wolfRun;
     InitRunningWolf(&wolfRun);
@@ -420,7 +424,12 @@ while (!WindowShouldClose())
             player.position.x = 0;
             player.position.y = 520;
         }
-        
+            if (currentMapIndex == MAP_WOLF_WHITE_AREA)
+            {
+                UpdateWolf(&wolfWhite, &player, delta);
+                DrawWolf(&wolfWhite);
+            }
+            
             if (currentMapIndex == GOBLIN_MAP)
             {
                 DrawGoblin(&goblin);
