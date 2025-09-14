@@ -9,6 +9,7 @@
 
 #define MAP_WOLF_RUNNING_AREA 2
 #define MAP_WOLF_WHITE_AREA 3
+#define MAP_WOLF_RED_AREA 0
 
 typedef struct player Player;
 
@@ -19,6 +20,7 @@ typedef struct wolf
     Vector2 end;
 
     int life;
+    int maxLife;
 
     float speed;
 
@@ -63,7 +65,9 @@ typedef struct wolf
 
 void InitWolfBase(Wolf *wolf, Vector2 pos);
 
-void InitWolfWhite(Wolf *wolf, Vector2 pos);
+void InitWhiteWolf(Wolf *wolf, Vector2 pos);
+
+void InitRedWolf(Wolf *wolf, Vector2 pos);
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta);
 void DrawWolf(Wolf *wolf);
