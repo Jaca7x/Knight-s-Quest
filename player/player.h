@@ -89,7 +89,7 @@ typedef struct player
 void InitPlayer(Player *player);
 
 /// @brief Atualiza a física, movimento e animação do jogador
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc);
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc);
 
 /// @brief Desenha o jogador na tela
 void DrawPlayer(Player *player);
