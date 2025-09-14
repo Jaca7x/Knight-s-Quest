@@ -197,7 +197,7 @@ void resetGame(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin,
 {
     InitPlayer(player);
     InitWolfBase(wolf, (Vector2){500, 450});
-    InitWolfWhite(wolf, (Vector2){800, 450});
+    InitWhiteWolf(wolf, (Vector2){800, 450});
     InitRunningWolf(wolfRun);
     InitGoblin(goblin);
     InitGoblinArcher(goblinArcher);
@@ -249,8 +249,11 @@ int main(void)
     Wolf wolf;
     InitWolfBase(&wolf, (Vector2){500, 450});
 
-    Wolf wolfWhite;
-    InitWolfWhite(&wolfWhite, (Vector2){800, 450});
+    Wolf whiteWolf;
+    InitWhiteWolf(&whiteWolf, (Vector2){800, 450});
+
+    Wolf redWolf;
+    InitRedWolf(&redWolf, (Vector2){800, 450});
 
     WolfRun wolfRun;
     InitRunningWolf(&wolfRun);
@@ -423,11 +426,17 @@ while (!WindowShouldClose())
 
             player.position.x = 0;
             player.position.y = 520;
-        }
+        }   
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
-                UpdateWolf(&wolfWhite, &player, delta);
-                DrawWolf(&wolfWhite);
+                UpdateWolf(&whiteWolf, &player, delta);
+                DrawWolf(&whiteWolf);
+            }
+
+            if (currentMapIndex == MAP_WOLF_RED_AREA)
+            {
+                UpdateWolf(&redWolf, &player, delta);
+                DrawWolf(&redWolf);
             }
             
             if (currentMapIndex == GOBLIN_MAP)
@@ -458,7 +467,7 @@ while (!WindowShouldClose())
                 DrawNpc(&npc, &player, dialogState);
             }
 
-            UpdatePlayer(&player, &wolf, &wolfRun, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
+            UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
             // HUD
