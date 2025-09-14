@@ -30,11 +30,11 @@ void DrawWolfLifeBar(Wolf *wolf)
     DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
 }
 
-void InitWolf(Wolf *wolf)
+void InitWolfBase(Wolf *wolf, Vector2 pos)
 {
-    wolf->position = (Vector2){500, 450};
-    wolf->start = (Vector2){500, 450};
-    wolf->end = (Vector2){600, 450};
+    wolf->position = pos;
+    wolf->start = pos;
+    wolf->end = (Vector2){pos.x + 100, pos.y};
 
     wolf->life = 100;
     wolf->speed = 95.0f;
@@ -75,7 +75,21 @@ void InitWolf(Wolf *wolf)
     wolf->attackDamageTimer = 0.0f;
     wolf->damage = 20;
 
-    wolf->droppedHeart = false; // Inicializa como falso
+    wolf->droppedHeart = false;
+}
+
+void InitWolfWhite(Wolf *wolf, Vector2 pos) 
+{
+    InitWolfBase(wolf, pos);
+
+    wolf->speed = 120.0f;
+    wolf->life = 50;
+
+    wolf->spriteWalkWolf = LoadTexture("resources/sprites/wolfWhite/Walk.png");
+    wolf->spriteAtkWolf  = LoadTexture("resources/sprites/wolfWhite/Attack.png");
+    wolf->spriteIdleWolf = LoadTexture("resources/sprites/wolfWhite/Idle.png");
+    wolf->spriteDeadWolf = LoadTexture("resources/sprites/wolfWhite/Dead.png");
+    wolf->spriteHurtWolf = LoadTexture("resources/sprites/wolfWhite/Hurt.png");
 }
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta)
