@@ -12,12 +12,19 @@ bool CheckCollisionAABB(float x1, float y1, float w1, float h1,
 
 void DrawWolfLifeBar(Wolf *wolf)
 {
+    if (wolf->isDead) return;  // não desenha se estiver morto
+
     float barWidth = 60.0f;
     float barHeight = 8.0f;
     float x = wolf->position.x + 20;  // ajuste horizontal
     float y = wolf->position.y + 30;  // acima do sprite
 
-    float lifePercent = wolf->life / 100.0f;
+    // Define vida máxima do lobo
+    float maxLife = (wolf->life > 100) ? 200.0f : 100.0f;
+
+    float lifePercent = wolf->life / maxLife;
+    if (lifePercent < 0) lifePercent = 0;
+
     float currentBarWidth = barWidth * lifePercent;
 
     // Fundo (vermelho)
@@ -30,6 +37,8 @@ void DrawWolfLifeBar(Wolf *wolf)
     DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
 }
 
+
+
 void InitWolfBase(Wolf *wolf, Vector2 pos)
 {
     wolf->position = pos;
@@ -37,6 +46,7 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
     wolf->end = (Vector2){pos.x + 100, pos.y};
 
     wolf->life = 100;
+    wolf->maxLife = 100;
     wolf->speed = 95.0f;
 
     wolf->currentFrame = 0;
@@ -78,18 +88,41 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
     wolf->droppedHeart = false;
 }
 
-void InitWolfWhite(Wolf *wolf, Vector2 pos) 
+void InitWhiteWolf(Wolf *wolf, Vector2 pos) 
 {
     InitWolfBase(wolf, pos);
 
-    wolf->speed = 120.0f;
-    wolf->life = 50;
+    wolf->speed = 140.0f;
+    wolf->life = 100;
+    wolf->maxLife = 100;
 
-    wolf->spriteWalkWolf = LoadTexture("resources/sprites/wolfWhite/Walk.png");
-    wolf->spriteAtkWolf  = LoadTexture("resources/sprites/wolfWhite/Attack.png");
-    wolf->spriteIdleWolf = LoadTexture("resources/sprites/wolfWhite/Idle.png");
-    wolf->spriteDeadWolf = LoadTexture("resources/sprites/wolfWhite/Dead.png");
-    wolf->spriteHurtWolf = LoadTexture("resources/sprites/wolfWhite/Hurt.png");
+    wolf->spriteWalkWolf = LoadTexture("resources/sprites/whiteWolf/Walk.png");
+    wolf->spriteAtkWolf  = LoadTexture("resources/sprites/whiteWolf/Attack.png");
+    wolf->spriteIdleWolf = LoadTexture("resources/sprites/whiteWolf/Idle.png");
+    wolf->spriteDeadWolf = LoadTexture("resources/sprites/whiteWolf/Dead.png");
+    wolf->spriteHurtWolf = LoadTexture("resources/sprites/whiteWolf/Hurt.png");
+    wolf->spriteWalkWolf = LoadTexture("resources/sprites/whiteWolf/Walk.png");
+
+    wolf->frameAtk = 4;
+}
+
+void InitRedWolf(Wolf *wolf, Vector2 pos) 
+{
+    InitWolfBase(wolf, pos);
+
+    wolf->speed = 70.0f;
+    wolf->damage = 40;
+    wolf->life = 200;
+    wolf->maxLife = 200;
+
+    wolf->spriteWalkWolf = LoadTexture("resources/sprites/redWolf/Walk.png");
+    wolf->spriteAtkWolf  = LoadTexture("resources/sprites/redWolf/Attack.png");
+    wolf->spriteIdleWolf = LoadTexture("resources/sprites/redWolf/Idle.png");
+    wolf->spriteDeadWolf = LoadTexture("resources/sprites/redWolf/Dead.png");
+    wolf->spriteHurtWolf = LoadTexture("resources/sprites/redWolf/Hurt.png");
+    wolf->spriteWalkWolf = LoadTexture("resources/sprites/redWolf/Walk.png");
+    
+    wolf->frameAtk   = 5;
 }
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta)
@@ -197,7 +230,7 @@ if (wolf->isPatrolling)
                 player->life -= wolf->damage;
                 wolf->hasHitPlayer = true;
                 player->hasHit = true;
-                player->hitTimer = 0.6f; 
+                player->hitTimer = 0.5f; 
 
                 if (player->position.x < wolf->position.x)
                 {
@@ -237,7 +270,7 @@ if (wolf->isPatrolling)
             wolf->position.x, wolf->position.y, wolf->frameWidth, wolf->frameHeight))
     {
         player->hasHit = true;
-        player->hitTimer = 0.6f;
+        player->hitTimer = 0.5f;
 
         if (player->position.x < wolf->position.x)
             player->position.x = wolf->position.x - player->frameWidth;
@@ -281,10 +314,7 @@ void DrawWolf(Wolf *wolf)
         DrawTexturePro(wolf->spriteWalkWolf, source, dest, origin, 0.0f, WHITE);
     }
 
-    if (!wolf->isDead)
-    {
-        DrawWolfLifeBar(wolf);
-    }
+    DrawWolfLifeBar(wolf);
 }
 
 void UnloadWolf(Wolf *wolf)
