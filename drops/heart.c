@@ -43,12 +43,11 @@
         }
     }
 
-    void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Goblin *goblin, GoblinArcher *goblinArcher, WolfRun *wolfRun) {
-        
-    
-
+void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, GoblinArcher *goblinArcher, WolfRun *wolfRun) 
+{
     // Goblin
-    if (goblin->isDead && !goblin->droppedHeart) {
+    if (goblin->isDead && !goblin->droppedHeart) 
+    {
         int chanceGoblin = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
         if (chanceGoblin < 70) // 70% de chance de drop
         {
@@ -59,7 +58,8 @@
     }
 
     //Wolf
-    if (wolf->isDead && !wolf->droppedHeart) { 
+    if (wolf->isDead && !wolf->droppedHeart) 
+    { 
         int chanceWolf = GetRandomValue(0, 100); // Chance de drop do coração (0 a 10)
         if (chanceWolf < 50) // 50% de chance de drop
         {
@@ -71,7 +71,8 @@
     }
   
     // GoblinArcher
-    if (goblinArcher->isDead && !goblinArcher->droppedHeart) {
+    if (goblinArcher->isDead && !goblinArcher->droppedHeart) 
+    {
         int chanceGoblinArcher = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
         if (chanceGoblinArcher < 70) // 70% de chance de drop
         {
@@ -82,7 +83,8 @@
     }    
 
     // WolfRun 
-    if (wolfRun->isDead && !wolfRun->droppedHeart) {
+    if (wolfRun->isDead && !wolfRun->droppedHeart) 
+    {
         int chanceWolfRun = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
         if (chanceWolfRun < 60) // 60% de chance de drop
         {
@@ -92,7 +94,31 @@
         }
         wolfRun->droppedHeart = true; // Marca que o coração foi solto
     }
-    
+
+    if (redWolf->isDead && !redWolf->droppedHeart) 
+    {
+        int chanceRedWolf = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
+        if (chanceRedWolf < 60) // 60% de chance de drop
+        {
+            hearts[4].isActive = true; 
+            hearts[4].position.x = redWolf->position.x + 50; // Ajusta a posição do coração
+            hearts[4].position.y = redWolf->position.y + 100; // Ajusta a posição do coração
+        }
+        redWolf->droppedHeart = true; // Marca que o coração foi solto
+    }
+
+    if (whiteWolf->isDead && !whiteWolf->droppedHeart) 
+    {
+        int chanceWhiteWolf = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
+        if (chanceWhiteWolf < 60) // 60% de chance de drop
+        {
+            hearts[5].isActive = true; 
+            hearts[5].position.x = whiteWolf->position.x + 50; // Ajusta a posição do coração
+            hearts[5].position.y = whiteWolf->position.y + 100; // Ajusta a posição do coração
+        }
+        whiteWolf->droppedHeart = true; // Marca que o coração foi solto
+    }
+
     // Verifica colisão com o player
     for (int i = 0; i < MAX_HEARTS; i++) {
         if (hearts[i].isActive) {
