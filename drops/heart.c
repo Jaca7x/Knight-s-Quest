@@ -33,7 +33,6 @@
     }
 }
 
-
     void InitHearts(Heart hearts[]) {
         for (int i = 0; i < MAX_HEARTS; i++) {
             hearts[i].position = (Vector2){0, 0};
