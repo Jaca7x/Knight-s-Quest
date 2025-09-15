@@ -460,7 +460,7 @@ while (!WindowShouldClose())
                 UpdateGoblinArcher(&goblinArcher, &player, delta);
             }
 
-            UpdateHearts(hearts, delta, &player, &wolf, &goblin, &goblinArcher, &wolfRun);
+            UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &goblinArcher, &wolfRun);
             DrawHearts(hearts, delta, &player);
 
             if (MAP_NPC == currentMapIndex) {
