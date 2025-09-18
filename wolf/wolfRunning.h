@@ -7,7 +7,7 @@
 
 #define MAP_WOLF_RUNNING_AREA 2
 
-typedef struct player Player; // <- Declaração antecipada
+typedef struct player Player;
 
 typedef struct wolfRun
 {
@@ -30,7 +30,6 @@ typedef struct wolfRun
     Texture2D spriteRunWolf;
     Texture2D spriteHurtWolf;
 
-    
     int frameWidth;
     int frameHeight;
 
@@ -60,10 +59,9 @@ typedef struct wolfRun
     int damage;
     float viewPlayer;
 
-    bool droppedHeart; // Indica se o coração foi solto
+    bool droppedHeart;
     
 } WolfRun;
-
 
 void InitRunningWolf(WolfRun *wolfRun);
 void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta);

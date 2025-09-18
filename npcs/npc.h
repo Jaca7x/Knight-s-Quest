@@ -20,23 +20,22 @@ typedef enum {
 } DialogState;
 
 typedef struct npc {
-    Texture2D spriteNpc; // Sprite do NPC
-    Texture2D btnE;     // Botão de interação (E)
+    Texture2D spriteNpc; 
+    Texture2D btnE;     
     Texture2D spriteNpcIdle;
-    Texture2D npcSpeech; // Sprite de fala do NPC (se necessário)
-    Vector2 position;    // Posição do NPC na tela
+    Texture2D npcSpeech; 
+    Vector2 position;   
     
     int frameTalking;
     int frameIdle;
 
-    int frameWidth;   // Largura de cada frame do sprite
-    int frameHeight;  // Altura de cada frame do sprite
-    int currentFrame; // Frame atual do sprite
-    int frameCounter; // Contador de frames para animação
+    int frameWidth;   
+    int frameHeight;  
+    int currentFrame; 
+    int frameCounter; 
 
-    bool isTalking;   // Flag para saber se o NPC está falando
-    bool isIdle;      // Flag para saber se o NPC está idle
-
+    bool isTalking;   
+    bool isIdle;      
     
 } Npc;
 

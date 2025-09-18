@@ -6,16 +6,16 @@
 
 #define MAP_GOBLIN_ARCHER_AREA 1
 
-typedef struct player Player; // declaração antecipada
+typedef struct player Player;
 
 typedef struct Arrow {
     Vector2 position;
     float speed;
-    int direction;     // -1 = esquerda, 1 = direita
+    int direction;     
     bool active;
     float scale;
     float rotation;
-    float arrowYOffset; // Deslocamento vertical da flecha
+    float arrowYOffset; 
 } Arrow;
 
 typedef struct goblinArcher
@@ -23,7 +23,7 @@ typedef struct goblinArcher
     // Posição e movimento
     Vector2 position;
     float speed;
-    int direction;     // -1 = esquerda, 1 = direita
+    int direction;     
 
     // Vida
     int life;
@@ -65,20 +65,19 @@ typedef struct goblinArcher
     float arrowSpeed;
     int arrowTolerance;
     int arrowDamage;
-    bool arrowFired;            // indica se flecha foi disparada
+    bool arrowFired;            
     float attackCooldown;
     float attackDamageTimer;
-    float goblinView;           // distância para enxergar o player
-    float attackRange;          // distância para atacar
-    float arrowCooldown;        // tempo de recarga do ataque
+    float goblinView;           
+    float attackRange;          
+    float arrowCooldown;        
 
     float attackAnimTimer;
 
-    bool droppedHeart; // Indica se o coração foi solto
+    bool droppedHeart; 
 
 } GoblinArcher;
 
-// Funções
 void InitGoblinArcher(GoblinArcher *goblinArcher);
 void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta);
 void DrawGoblinArcher(GoblinArcher *goblinArcher);

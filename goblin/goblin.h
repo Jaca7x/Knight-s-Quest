@@ -25,11 +25,11 @@ typedef struct goblin {
     int frameIdle;
     int frameAtk;
 
-    int currentFrame;      // Frame atual da animação
-    int frameCounter;      // Contador de frames (controle de tempo)
-    int frameWidth;        // Largusra de cada frame
-    int frameHeight;       // Altura de cada frame
-    float frameFactor;     // Fator de escala do frame
+    int currentFrame;      
+    int frameCounter;      
+    int frameWidth;       
+    int frameHeight;       
+    float frameFactor;     
     
     bool isIdle;
     bool isWalking;
@@ -57,11 +57,11 @@ typedef struct goblin {
     int life;
     int maxLife;
     float speed;
-    float baseSpeed; // Velocidade base para restaurar após ser atingido
+    float baseSpeed; 
 
     int damage;
 
-    bool droppedHeart; // Indica se o coração foi solto
+    bool droppedHeart; 
 
 } Goblin;
 
