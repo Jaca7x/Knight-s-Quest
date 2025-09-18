@@ -7,6 +7,7 @@
 typedef struct player Player;
 
 #define GOBLIN_MAP 1
+#define RED_GOBLIN_MAP 0
 
 typedef struct goblin {
 
@@ -45,13 +46,18 @@ typedef struct goblin {
     bool goblinHasHitPlayer;
     int direction;
 
+    float hurtTimer;
+    float hurtDuration;
+
     float attackTimer;
     float attackCooldown;
 
     float scale;
     
     int life;
+    int maxLife;
     float speed;
+    float baseSpeed; // Velocidade base para restaurar após ser atingido
 
     int damage;
 
@@ -60,7 +66,10 @@ typedef struct goblin {
 } Goblin;
 
 
-void InitGoblin(Goblin *goblin);
+void InitGoblinBase(Goblin *goblin, Vector2 pos);
+
+void initRedGoblin(Goblin *goblin, Vector2 pos);
+
 void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta);
 void DrawGoblin(Goblin *goblin);
 void UnloadGoblin(Goblin *goblin);

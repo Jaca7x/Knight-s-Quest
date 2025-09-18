@@ -17,7 +17,11 @@ void DrawGoblinLifeBar(Goblin *goblin)
     float x = goblin->position.x + 10;  // ajuste horizontal
     float y = goblin->position.y - 10;  // acima do sprite
 
-    float lifePercent = goblin->life / 50.0f;
+    float maxLife = (goblin->life > 50) ? 70.0f : 50.0f;
+
+    float lifePercent = goblin->life / maxLife;
+    if (lifePercent < 0) lifePercent = 0;
+
     float currentBarWidth = barWidth * lifePercent;
 
     // Fundo (vermelho)
@@ -30,9 +34,9 @@ void DrawGoblinLifeBar(Goblin *goblin)
     DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
 }
 
-void InitGoblin(Goblin *goblin) 
+void InitGoblinBase(Goblin *goblin, Vector2 pos) 
 {
-    goblin->position = (Vector2){780, 567};
+    goblin->position = pos;
 
     goblin->goblinSpriteWalk = LoadTexture("resources/sprites/goblin/goblin-walk.png");
     goblin->goblinSpriteHurt = LoadTexture("resources/sprites/goblin/goblin-hurt.png");
@@ -64,6 +68,9 @@ void InitGoblin(Goblin *goblin)
     goblin->goblinHasHitPlayer = false;
     goblin->direction = 1;
 
+    goblin->hurtTimer = 0.0f;
+    goblin->hurtDuration = 0.4f;
+
     goblin->attackTimer = 0.0f;
     goblin->attackCooldown = 1.0f;
 
@@ -71,15 +78,35 @@ void InitGoblin(Goblin *goblin)
     goblin->frameFactor = 0.15f;
 
     goblin->life = 50;
+    goblin->maxLife = 50;
     goblin->speed = 100.0f;
+    goblin->baseSpeed = 100.0f;
 
     goblin->damage = 20;
 
     goblin->droppedHeart = false; // Inicializa como falso
 }
 
+void initRedGoblin(Goblin *goblin, Vector2 pos) 
+{
+    InitGoblinBase(goblin, pos);
+
+    goblin->life = 70;
+    goblin->maxLife = 70;
+    goblin->speed = 80.0f;
+    goblin->baseSpeed = 80.0f;
+    goblin->damage = 40;
+
+    goblin->goblinSpriteWalk = LoadTexture("resources/sprites/redGoblin/Walk.png");
+    goblin->goblinSpriteHurt = LoadTexture("resources/sprites/redGoblin/Hurt.png");
+    goblin->goblinSpriteDead = LoadTexture("resources/sprites/redGoblin/Dead.png");
+    goblin->goblinSpriteIdle = LoadTexture("resources/sprites/redGoblin/Idle.png");
+    goblin->goblinSpriteAtk = LoadTexture("resources/sprites/redGoblin/Attack.png");
+}
+
 void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta)
 {
+    // --- MORTE ---
     if (goblin->life <= 0 && !goblin->isDead) 
     {
         goblin->isDead = true;
@@ -95,13 +122,26 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
     }
 
     if (goblin->isDead && goblin->deathAnimationDone)
-        return;
-    
-    if (goblin->goblinHasHit)
+        return; // <- aqui sim pode sair, pq ele já morreu
+
+    // --- HURT ---
+    if (goblin->goblinHasHit) 
     {
-        goblin->speed = 0.0f;
+        goblin->isIdle = false;
+        goblin->isWalking = false;
+        goblin->isAtacking = false;
+
+        goblin->hurtTimer += delta;
+
+        if (goblin->hurtTimer >= goblin->hurtDuration) 
+        {
+            goblin->goblinHasHit = false;
+            goblin->hurtTimer = 0.0f;
+            goblin->isIdle = true;
+        }
     }
-    
+
+    // --- FRAME UPDATE ---
     goblin->frameCounter++;
     if (goblin->frameCounter >= (60 / 10))
     {
@@ -112,19 +152,16 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         }
         else if (goblin->isDead && !goblin->deathAnimationDone) 
         {
-           goblin->deathAnimTimer += delta;
-
+            goblin->deathAnimTimer += delta;
             if (goblin->deathAnimTimer >= 0.2f)
             {   
                 goblin->frameDead++;
-                goblin->deathAnimTimer = 0.3f;
+                goblin->deathAnimTimer = 0.0f;
 
                 if (goblin->frameDead >= 8)
                 {
                     goblin->frameDead = 7;
                     goblin->deathAnimationDone = true;
-                    goblin->speed = 0.0f;
-        
                 }
             }
             goblin->currentFrame = goblin->frameDead;   
@@ -142,82 +179,75 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
             goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameIdle;
         }  
     }
-    
+
+    // --- ATAQUE / COOLDOWN ---
     if (goblin->attackTimer > 0.0f) 
     {
         goblin->attackTimer -= delta;
         goblin->isAtacking = true;
         goblin->isWalking = false;
         goblin->isIdle = false;
-        return;  // Durante o ataque, não anda nem faz mais nada
     }
-    
-    float push = 50.0f;
-    float distanceToPlayer = fabs(player->position.x - goblin->position.x);
-
-if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer)
-{
-    goblin->direction = (player->position.x > goblin->position.x) ? 1 : -1;
-
-    goblin->isAtacking = false;
-    goblin->isWalking = true;
-    goblin->isIdle = false;
-    player->hasHit = false;
-
-    goblin->position.x += goblin->speed * goblin->direction * delta;
-
-    if (distanceToPlayer <= goblin->goblinAttackRangeRight && goblin->direction == -1)
+    else
     {
-        goblin->isAtacking = true;
-        goblin->attackTimer = goblin->attackCooldown;
-        player->life -= goblin->damage;
-        goblin->goblinHasHitPlayer = true;
-        player->hasHit = true;
-        player->hitTimer = 0.4f;   
-    
-        // Knockback
-        if (player->position.x < goblin->position.x)
-            player->position.x -= push;
+        // --- MOVIMENTO ---
+        float push = 50.0f;
+        float distanceToPlayer = fabs(player->position.x - goblin->position.x);
+
+        if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer && !goblin->goblinHasHit)
+        {
+            goblin->direction = (player->position.x > goblin->position.x) ? 1 : -1;
+
+            goblin->isAtacking = false;
+            goblin->isWalking = true;
+            goblin->isIdle = false;
+
+            goblin->position.x += goblin->speed * goblin->direction * delta;
+
+            // Range de ataque
+            if (distanceToPlayer <= goblin->goblinAttackRangeRight && goblin->direction == -1)
+            {
+                goblin->isAtacking = true;
+                goblin->attackTimer = goblin->attackCooldown;
+                player->life -= goblin->damage;
+                goblin->goblinHasHitPlayer = true;
+                player->hasHit = true;
+                player->hitTimer = 0.4f;
+
+                // Knockback
+                player->position.x += (player->position.x < goblin->position.x) ? -push : push;
+            }
+            else if (distanceToPlayer <= goblin->goblinAttackRangeLeft && goblin->direction == 1)
+            {
+                goblin->isAtacking = true;
+                goblin->attackTimer = goblin->attackCooldown;
+                player->life -= goblin->damage;
+                goblin->goblinHasHitPlayer = true;
+                player->hasHit = true;
+                player->hitTimer = 0.4f;
+
+                // Knockback
+                player->position.x += (player->position.x < goblin->position.x) ? -push : push;
+            }
+        }
         else
-            player->position.x += push;
+        {
+            goblin->isIdle = true;
+            goblin->isWalking = false;
+            goblin->isAtacking = false;
+            goblin->goblinHasHitPlayer = false;
+        }
+
+        // Colisão simples com o jogador
+        if (!goblin->isDead && CheckCollisionGoblin(
+                player->position.x, player->position.y, player->frameWidth , player->frameHeight,
+                goblin->position.x, goblin->position.y, goblin->frameWidth * goblin->scale, goblin->frameHeight * goblin->scale ))
+        {
+            player->position.x += (player->position.x < goblin->position.x) ? -push : push;
+        }
     }
-    else if (distanceToPlayer <= goblin->goblinAttackRangeLeft && goblin->direction)
-    {
-        goblin->isAtacking = true;
-        goblin->attackTimer = goblin->attackCooldown;
-        player->life -= goblin->damage;
-        goblin->goblinHasHitPlayer = true;
-        player->hasHit = true;
-        player->hitTimer = 0.4f;   
-    
-        // Knockback
-        if (player->position.x < goblin->position.x)
-            player->position.x -= push;
-        else
-            player->position.x += push;
-    }
-} 
-else
-{
-    goblin->isIdle = true;
-    goblin->isWalking = false;
-    goblin->isAtacking = false;
-    goblin->goblinHasHitPlayer = false;
-    player->hasHit = false;
 }
-    
 
-
-   if (!goblin->isDead && CheckCollisionGoblin(
-            player->position.x, player->position.y, player->frameWidth , player->frameHeight,
-            goblin->position.x, goblin->position.y, goblin->frameWidth * goblin->scale, goblin->frameHeight * goblin->scale ))
-    {
-        if (player->position.x < goblin->position.x)
-            player->position.x -= push;
-        else
-            player->position.x += push;
-    } 
-}
 
 void DrawGoblin(Goblin *goblin) 
 {
