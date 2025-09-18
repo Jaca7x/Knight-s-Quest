@@ -191,15 +191,15 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
 // ============================================================================
 int currentMapIndex = 0;
 
-void resetGame(Player *player, Wolf *wolf, WolfRun *wolfRun, Goblin *goblin,
-               GoblinArcher *goblinArcher, Heart hearts[], Npc *npc, 
-               TileMap *map, const char *mapFiles[])
+void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfRun *wolfRun, 
+                Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, Heart hearts[],
+                Npc *npc, TileMap *map, const char *mapFiles[])
 {
     InitPlayer(player);
     InitWolfBase(wolf, (Vector2){500, 450});
     InitWhiteWolf(wolf, (Vector2){800, 450});
     InitRunningWolf(wolfRun);
-    InitGoblin(goblin);
+    InitGoblinBase(goblin, (Vector2){780, 567});
     InitGoblinArcher(goblinArcher);
     InitHearts(hearts);
     InitNpc(npc);
@@ -259,7 +259,10 @@ int main(void)
     InitRunningWolf(&wolfRun);
 
     Goblin goblin;
-    InitGoblin(&goblin);
+    InitGoblinBase(&goblin, (Vector2){780, 567});
+
+    Goblin redGoblin;
+    initRedGoblin(&redGoblin, (Vector2){780, 567});
 
     GoblinArcher goblinArcher;
     InitGoblinArcher(&goblinArcher);
@@ -444,6 +447,13 @@ while (!WindowShouldClose())
                 DrawGoblin(&goblin);
                 UpdateGoblin(&goblin, &player, currentMapIndex, delta);
             }
+
+            if (currentMapIndex == RED_GOBLIN_MAP)
+            {
+                DrawGoblin(&redGoblin);
+                UpdateGoblin(&redGoblin, &player, currentMapIndex, delta);
+            }
+            
             
             if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
             {
@@ -460,14 +470,14 @@ while (!WindowShouldClose())
                 UpdateGoblinArcher(&goblinArcher, &player, delta);
             }
 
-            UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &goblinArcher, &wolfRun);
+            UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, &wolfRun);
             DrawHearts(hearts, delta, &player);
 
             if (MAP_NPC == currentMapIndex) {
                 DrawNpc(&npc, &player, dialogState);
             }
 
-            UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &goblinArcher, currentMapIndex, delta, &npc);
+            UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
             // HUD
@@ -556,7 +566,7 @@ while (!WindowShouldClose())
             if (IsKeyPressed(KEY_ENTER))
             {
                 gameState = MENU;
-                resetGame(&player, &wolf, &wolfRun, &goblin, &goblinArcher, hearts, &npc, &map, mapFiles);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &map, mapFiles);
             }
         } break;
 
