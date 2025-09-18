@@ -8,7 +8,7 @@
 #include "../goblin/goblinArcher.h" // Biblioteca goblinArcher
 #include "../wolf/wolfRunning.h" // Biblioteca wolfRunning
 
-#define MAX_HEARTS 5
+#define MAX_HEARTS 7
 
 typedef struct player Player;
 typedef struct wolf Wolf;
@@ -31,7 +31,8 @@ void InitHearts(Heart hearts[]);
 /// @brief Atualiza os corações com base nos inimigos mortos
     void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, 
                     Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, 
-                    GoblinArcher *goblinArcher, WolfRun *wolfRun) ;
+                    Goblin *redGoblin, GoblinArcher *goblinArcher, 
+                    WolfRun *wolfRun) ;
 
 /// @brief Desenha todos os corações ativos
 void DrawHearts(const Heart hearts[], float delta, Player *player);

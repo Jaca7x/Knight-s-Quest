@@ -42,7 +42,7 @@
         }
     }
 
-void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, GoblinArcher *goblinArcher, WolfRun *wolfRun) 
+void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, WolfRun *wolfRun) 
 {
     // Goblin
     if (goblin->isDead && !goblin->droppedHeart) 
@@ -116,6 +116,18 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
             hearts[5].position.y = whiteWolf->position.y + 100; // Ajusta a posição do coração
         }
         whiteWolf->droppedHeart = true; // Marca que o coração foi solto
+    }
+
+    if (redGoblin->isDead && !redGoblin->droppedHeart) 
+    {
+        int chanceRedGoblin = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
+        if (chanceRedGoblin < 60) // 60% de chance de drop
+        {
+            hearts[6].isActive = true; 
+            hearts[6].position.x = redGoblin->position.x + 0; // Ajusta a posição do coração
+            hearts[6].position.y = redGoblin->position.y + 0; // Ajusta a posição do coração
+        }
+        redGoblin->droppedHeart = true; // Marca que o coração foi solto
     }
 
     // Verifica colisão com o player
