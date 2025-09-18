@@ -4,8 +4,8 @@
     bool showMessage = false;
 
     void triggerMassage() {
-        messageTimer = 0.0f; // Reseta o timer para exibir a mensagem
-        showMessage = true; // Variável para controlar a exibição da mensagem
+        messageTimer = 0.0f;
+        showMessage = true;
     }
 
     void drawMassage(float delta, Player *player) {
@@ -28,7 +28,7 @@
             );
         } else 
         {
-            showMessage = false;  // Para de mostrar a mensagem
+            showMessage = false;
         }
     }
 }
@@ -47,8 +47,8 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
     // Goblin
     if (goblin->isDead && !goblin->droppedHeart) 
     {
-        int chanceGoblin = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
-        if (chanceGoblin < 70) // 70% de chance de drop
+        int chanceGoblin = GetRandomValue(0, 100); 
+        if (chanceGoblin < 70)
         {
             hearts[0].isActive = true; 
             hearts[0].position = goblin->position;
@@ -59,78 +59,80 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
     //Wolf
     if (wolf->isDead && !wolf->droppedHeart) 
     { 
-        int chanceWolf = GetRandomValue(0, 100); // Chance de drop do coração (0 a 10)
-        if (chanceWolf < 50) // 50% de chance de drop
+        int chanceWolf = GetRandomValue(0, 100); 
+        if (chanceWolf < 50)
         {
             hearts[1].isActive = true; 
-            hearts[1].position.x = wolf->position.x + 50; // Ajusta a posição do coração
-            hearts[1].position.y = wolf->position.y + 100; // Ajusta a posição do coração
+            hearts[1].position.x = wolf->position.x + 50; 
+            hearts[1].position.y = wolf->position.y + 100;
         }
-        wolf->droppedHeart = true; // Marca que o coração foi solto
+        wolf->droppedHeart = true;
     }
   
     // GoblinArcher
     if (goblinArcher->isDead && !goblinArcher->droppedHeart) 
     {
-        int chanceGoblinArcher = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
-        if (chanceGoblinArcher < 70) // 70% de chance de drop
+        int chanceGoblinArcher = GetRandomValue(0, 100); 
+        if (chanceGoblinArcher < 70) 
         {
             hearts[2].isActive = true; 
-            hearts[2].position = goblinArcher->position;// Ajusta a posição do coração
+            hearts[2].position = goblinArcher->position;
         }
-        goblinArcher->droppedHeart = true; // Marca que o coração foi solto
+        goblinArcher->droppedHeart = true; 
     }    
 
     // WolfRun 
     if (wolfRun->isDead && !wolfRun->droppedHeart) 
     {
-        int chanceWolfRun = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
-        if (chanceWolfRun < 60) // 60% de chance de drop
+        int chanceWolfRun = GetRandomValue(0, 100); 
+        if (chanceWolfRun < 60)
         {
             hearts[3].isActive = true; 
-            hearts[3].position.x = wolfRun->position.x + 50; // Ajusta a posição do coração
-            hearts[3].position.y = wolfRun->position.y + 100; // Ajusta a posição do coração
+            hearts[3].position.x = wolfRun->position.x + 50; 
+            hearts[3].position.y = wolfRun->position.y + 100; 
         }
-        wolfRun->droppedHeart = true; // Marca que o coração foi solto
+        wolfRun->droppedHeart = true; 
     }
 
+    // RedWolf
     if (redWolf->isDead && !redWolf->droppedHeart) 
     {
-        int chanceRedWolf = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
-        if (chanceRedWolf < 60) // 60% de chance de drop
+        int chanceRedWolf = GetRandomValue(0, 100);
+        if (chanceRedWolf < 60) 
         {
             hearts[4].isActive = true; 
-            hearts[4].position.x = redWolf->position.x + 50; // Ajusta a posição do coração
-            hearts[4].position.y = redWolf->position.y + 100; // Ajusta a posição do coração
+            hearts[4].position.x = redWolf->position.x + 50; 
+            hearts[4].position.y = redWolf->position.y + 100; 
         }
-        redWolf->droppedHeart = true; // Marca que o coração foi solto
+        redWolf->droppedHeart = true;
     }
 
+    // WhiteWolf
     if (whiteWolf->isDead && !whiteWolf->droppedHeart) 
     {
-        int chanceWhiteWolf = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
-        if (chanceWhiteWolf < 60) // 60% de chance de drop
+        int chanceWhiteWolf = GetRandomValue(0, 100); 
+        if (chanceWhiteWolf < 60) 
         {
             hearts[5].isActive = true; 
-            hearts[5].position.x = whiteWolf->position.x + 50; // Ajusta a posição do coração
-            hearts[5].position.y = whiteWolf->position.y + 100; // Ajusta a posição do coração
+            hearts[5].position.x = whiteWolf->position.x + 50;
+            hearts[5].position.y = whiteWolf->position.y + 100; 
         }
-        whiteWolf->droppedHeart = true; // Marca que o coração foi solto
+        whiteWolf->droppedHeart = true; 
     }
 
+    // RedGoblin
     if (redGoblin->isDead && !redGoblin->droppedHeart) 
     {
-        int chanceRedGoblin = GetRandomValue(0, 100); // Chance de drop do coração (0 a 100)
-        if (chanceRedGoblin < 60) // 60% de chance de drop
+        int chanceRedGoblin = GetRandomValue(0, 100); 
+        if (chanceRedGoblin < 60) 
         {
             hearts[6].isActive = true; 
-            hearts[6].position.x = redGoblin->position.x + 0; // Ajusta a posição do coração
-            hearts[6].position.y = redGoblin->position.y + 0; // Ajusta a posição do coração
+            hearts[6].position.x = redGoblin->position.x; 
+            hearts[6].position.y = redGoblin->position.y; 
         }
-        redGoblin->droppedHeart = true; // Marca que o coração foi solto
+        redGoblin->droppedHeart = true; 
     }
 
-    // Verifica colisão com o player
     for (int i = 0; i < MAX_HEARTS; i++) {
         if (hearts[i].isActive) {
             Rectangle heartRect = {
@@ -150,9 +152,9 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
             if (CheckCollisionRecs(heartRect, playerRect)) 
             {
                 player->life += hearts[i].healthValue;
-                if (player->life > 100) player->life = 100; // define um limite fixo
+                if (player->life > 100) player->life = 100; 
                 hearts[i].isActive = false;
-                triggerMassage(); // Chama a função para exibir a mensagem
+                triggerMassage(); 
             }
         }
     }
