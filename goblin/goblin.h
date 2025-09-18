@@ -7,7 +7,7 @@
 typedef struct player Player;
 
 #define GOBLIN_MAP 1
-#define RED_GOBLIN_MAP 0
+#define RED_GOBLIN_MAP 3
 
 typedef struct goblin {
 
