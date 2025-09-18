@@ -1,33 +1,33 @@
 // ============================================================================
 // Inclusão de bibliotecas
 // ============================================================================
-#include "librays/raylib.h"       // Biblioteca Raylib para gráficos, janelas e entrada
+#include "librays/raylib.h"       
 #include "librays/raymath.h"
-#include "librays/cJSON.h"        // Biblioteca cJSON para ler arquivos JSON (mapas do Tiled)
-#include <stdlib.h>               // Funções padrão (malloc, free, etc.)
-#include <stdio.h>                // Entrada e saída padrão (fopen, fprintf, etc.)
-#include "player/player.h"        // Cabeçalho do jogador
-#include "staminaBar/stamina.h"   // Cabeçalho da barra de stamina
+#include "librays/cJSON.h"        
+#include <stdlib.h>               
+#include <stdio.h>                
+#include "player/player.h"       
+#include "staminaBar/stamina.h"   
 #include "wolf/wolf.h"
 #include "wolf/wolfRunning.h"
 #include "lifeBar/lifeBar.h"
 #include "goblin/goblin.h"
 #include "goblin/goblinArcher.h"
-#include "drops/heart.h"         // Cabeçalho do coração
-#include "npcs/npc.h"           // Cabeçalho do npc
+#include "drops/heart.h"         
+#include "npcs/npc.h"           
 
 
 // ============================================================================
 // Definições constantes
 // ============================================================================
-#define TILE_SIZE 32              // Tamanho de cada tile em pixels
-#define TILESET1_TILECOUNT 36     // Número de tiles no primeiro tileset
-#define TILESET1_FIRSTGID 1       // Primeiro GID do tileset 1
-#define TILESET2_FIRSTGID 37      // Primeiro GID do tileset 2 (37 = 1 + 36)
-#define TILESET3_FIRSTGID 73      // Primeiro GID do tileset 3
-#define TILESET4_FIRSTGID 109     // Primeiro GID do tileset 4
-#define TILESET5_FIRSTGID 145   // Número de tiles no quarto tileset
-#define MAP_COUNT 6            // Quantidade de mapas
+#define TILE_SIZE 32              
+#define TILESET1_TILECOUNT 36     
+#define TILESET1_FIRSTGID 1       
+#define TILESET2_FIRSTGID 37     
+#define TILESET3_FIRSTGID 73      
+#define TILESET4_FIRSTGID 109    
+#define TILESET5_FIRSTGID 145   
+#define MAP_COUNT 6            
 
 
 // ============================================================================
@@ -46,9 +46,9 @@ typedef enum GameState
 // Estrutura que representa um mapa carregado do Tiled
 typedef struct
 {
-    int width, height;           // Largura e altura do mapa em tiles
-    int tileWidth, tileHeight;   // Dimensões de cada tile
-    int *data;                   // Array contendo os GIDs dos tiles
+    int width, height;           
+    int tileWidth, tileHeight;   
+    int *data;                   
 } TileMap;
 
 
@@ -86,19 +86,16 @@ TileMap LoadTileMap(const char *fileName)
         return map;
     }
 
-    // Informações gerais do mapa
     map.width      = cJSON_GetObjectItem(root, "width")->valueint;
     map.height     = cJSON_GetObjectItem(root, "height")->valueint;
     map.tileWidth  = cJSON_GetObjectItem(root, "tilewidth")->valueint;
     map.tileHeight = cJSON_GetObjectItem(root, "tileheight")->valueint;
 
-    // Dados da primeira camada (layer 0)
     cJSON *layer0 = cJSON_GetArrayItem(cJSON_GetObjectItem(root, "layers"), 0);
     cJSON *data   = cJSON_GetObjectItem(layer0, "data");
 
     map.data = malloc(sizeof(int) * map.width * map.height);
 
-    // Copia os dados dos tiles para o array
     for (int i = 0; i < map.width * map.height; i++)
     {
         map.data[i] = cJSON_GetArrayItem(data, i)->valueint;
@@ -108,7 +105,6 @@ TileMap LoadTileMap(const char *fileName)
     return map;
 }
 
-// Libera a memória alocada para o mapa
 void UnloadTileMap(TileMap *map)
 {
     if (map->data)
@@ -130,12 +126,11 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
         {
             int gid = map->data[y * map->width + x];
 
-            if (gid <= 0) continue; // Tile vazio, não desenha
+            if (gid <= 0) continue; 
 
             Texture2D texture;
             int localId;
 
-            // Determina qual tileset usar baseado no GID
             // Determina qual tileset usar baseado no GID
             if (gid >= TILESET1_FIRSTGID && gid < TILESET2_FIRSTGID)
             {
@@ -167,7 +162,6 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
                 continue;
             }
 
-            // Calcula qual parte do tileset desenhar
             Rectangle sourceRec = {
                 (float)(localId % 6) * TILE_SIZE,
                 (float)(localId / 6) * TILE_SIZE,
@@ -175,13 +169,11 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
                 TILE_SIZE
             };
 
-            // Calcula a posição na tela
             Vector2 position = {
                 x * map->tileWidth,
                 y * map->tileHeight
             };
-
-            // Desenha o tile na tela
+  
             DrawTextureRec(texture, sourceRec, position, RAYWHITE);
         }
     }
@@ -206,7 +198,6 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
 
     currentMapIndex = 0;
 
-    // Recarrega o mapa inicial
     UnloadTileMap(map);
     *map = LoadTileMap(mapFiles[currentMapIndex]);
 }
@@ -216,7 +207,6 @@ int main(void)
 {
     GameState gameState = MENU;
 
-    // Lista dos arquivos de mapas
     const char *mapFiles[MAP_COUNT] = {
         "assets/maps/castle_map.json",
         "assets/maps/castle_map2.json",
@@ -226,11 +216,9 @@ int main(void)
         "assets/maps/florest3.json"
     };
     
-    // Carrega o primeiro mapa
     TileMap map = LoadTileMap(mapFiles[currentMapIndex]);
     if (!map.data) return 1;
 
-    // Cria a janela do jogo com o tamanho do mapa
     InitWindow(
         map.width * map.tileWidth,
         map.height * map.tileHeight,
@@ -242,7 +230,6 @@ int main(void)
     DialogState dialogState = DIALOG_CLOSED;
     float dialogoTimer = 0.0f;  
 
-    // Inicializa o player
     Player player;
     InitPlayer(&player);
 
@@ -273,20 +260,16 @@ int main(void)
     Npc npc;
     InitNpc(&npc);
 
-    // Carrega os tilesets
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
     Texture2D tileset3 = LoadTexture("assets/maps/tiles_map/endcastle.png");
     Texture2D tileset4 = LoadTexture("assets/maps/tiles_map/floresta1.png");
     Texture2D tileset5 = LoadTexture("assets/maps/tiles_map/goblin1.png");
 
-    // Carrega a barra de stamina
     Texture2D staminaBar = LoadTexture("resources/sprites/stamina/staminaBar.png");
 
-    // Carrega a barra de vida
     Texture2D barLifeSprite = LoadTexture("resources/sprites/life/life.png");
 
-    //Carregar imagem de morte
     Texture2D deathImage = LoadTexture("resources/img/deathImage.png");
 
     Texture2D menuImage = LoadTexture("resources/img/menu.png");
@@ -312,16 +295,16 @@ while (!WindowShouldClose())
         // ========================================================
         case MENU:
         {
-            float x1Play = 930, y1Play = 418;   // canto superior esquerdo
-            float x2Play = 1300, y2Play = 532;  // canto inferior direito
+            float x1Play = 930, y1Play = 418;  
+            float x2Play = 1300, y2Play = 532;  
             float checkY1Play = 418, checkY2Play = 530;
 
             Rectangle rectPlay
             = {
                 x1Play,
                 y1Play,
-                x2Play - x1Play,   // largura
-                y2Play - y1Play    // altura
+                x2Play - x1Play,   
+                y2Play - y1Play    
             };
     
             Rectangle checkPlay
@@ -361,7 +344,6 @@ while (!WindowShouldClose())
                 DrawRectangleRec(rectPlay, (Color){247,173,7,75});
             }
 
-            // Clique do mouse -> começa o jogo
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
                 CheckCollisionPointRec(GetMousePosition(), rectPlay))
             {
@@ -379,10 +361,8 @@ while (!WindowShouldClose())
 
             if (CheckCollisionPointCircle(GetMousePosition(), center, radius)) 
             {
-                // Desenha destaque quando o mouse está em cima
                 DrawCircleV(center, radius, (Color){247,173,7,75});
 
-                // Se clicar com o botão esquerdo
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
                 {
                     #if defined(_WIN32)
@@ -480,11 +460,9 @@ while (!WindowShouldClose())
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
-            // HUD
             DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
             DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
 
-            // Texto de título
             if (currentMapIndex == 0 && textTime < 2.0f)
             {
                 textTime += delta;
@@ -602,8 +580,6 @@ while (!WindowShouldClose())
     EndDrawing();
 }
 
-
-    // Libera todos os recursos carregados
     UnloadTexture(tileset1);
     UnloadTexture(tileset2);
     UnloadTexture(tileset3);
@@ -621,7 +597,6 @@ while (!WindowShouldClose())
     UnloadTexture(deathImage);
 
 
-    // Encerra a janela
     CloseWindow();
     return 0;
 }   
