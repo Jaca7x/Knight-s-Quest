@@ -262,7 +262,7 @@ int main(void)
     InitGoblinBase(&goblin, (Vector2){780, 567});
 
     Goblin redGoblin;
-    initRedGoblin(&redGoblin, (Vector2){780, 567});
+    initRedGoblin(&redGoblin, (Vector2){450, 569});
 
     GoblinArcher goblinArcher;
     InitGoblinArcher(&goblinArcher);
