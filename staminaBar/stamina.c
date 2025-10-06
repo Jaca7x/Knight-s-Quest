@@ -3,6 +3,7 @@
 void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale, Player *player)
 {
     int frame;
+    float delta = GetFrameTime();
 
     // Define qual frame será usado de acordo com a stamina atual
     if (stamina == 0)
@@ -104,9 +105,10 @@ else
 
     if (regenTimer <= 0.0f)
     {
-    player->stamina += 20.0f * delta;
-    if (player->stamina > MAX_STAMINA) player->stamina = MAX_STAMINA;
+        player->stamina += 20.0f * delta;
+        if (player->stamina > MAX_STAMINA) player->stamina = MAX_STAMINA;
     }
-}   
+}  
 }
+
 
