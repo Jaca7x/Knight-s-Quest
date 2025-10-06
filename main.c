@@ -460,7 +460,7 @@ while (!WindowShouldClose())
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
-            DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f);
+            DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f, &player);
             DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
 
             if (currentMapIndex == 0 && textTime < 2.0f)

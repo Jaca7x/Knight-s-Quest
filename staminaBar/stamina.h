@@ -16,7 +16,7 @@ typedef struct staminaBar
     Texture2D barStamina;   
 } Stamina;
 
-void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale);
+void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale, Player *player);
 void UpdateStaminaBar(Player *player, float delta);
 
 #endif // STAMINA_H

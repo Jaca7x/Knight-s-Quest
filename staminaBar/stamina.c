@@ -1,11 +1,6 @@
 #include "stamina.h"
 
-/// @brief Desenha a barra de stamina na tela.
-/// @param bar Texture2D da barra (spritesheet com os frames da barra)
-/// @param stamina Valor atual da stamina
-/// @param position Posição na tela para desenhar
-/// @param scale Fator de escala para aumentar ou diminuir o tamanho
-void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale)
+void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale, Player *player)
 {
     int frame;
 
@@ -14,6 +9,7 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale)
     {
         // Se stamina zerada, usa o penúltimo frame (índice = STAMINA_FRAME_COUNT - 2)
         frame = STAMINA_FRAME_COUNT + 5;
+        DrawText("Stamina Esgotada!", player->position.x + 20, player->position.y - 20, 20, BLACK);
     }
     else 
     {
