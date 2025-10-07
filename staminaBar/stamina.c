@@ -107,7 +107,7 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale,
     else 
     {
         textTimer += delta;
-        if (textTimer < 2.0f)
+        if (textTimer < 1.0f)
         {
              DrawText("Estamina cheia!", player->position.x + 20, player->position.y - 20, 20, BLACK);
         }
