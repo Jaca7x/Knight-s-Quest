@@ -1,6 +1,7 @@
 #include "stamina.h"
 
 bool isRegenerating = false;
+float textTimer = 0.0f;
 
 void UpdateStaminaBar(Player *player, float delta)
 {   
@@ -97,16 +98,20 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale,
         // Calcula o frame proporcional à stamina atual
         frame = (int)((1.0f - stamina / MAX_STAMINA) * (STAMINA_FRAME_COUNT - 1));
     }
-
-    if (isRegenerating == true)
+    
+    if (isRegenerating)
     {
         DrawText("Estamina Regenerando...", player->position.x + 20, player->position.y - 20, 20, BLACK);
+        textTimer = 0.0f;
     } 
-    else
+    else 
     {
-        DrawText(" ", player->position.x + 20, player->position.y - 20, 20, BLACK);
+        textTimer += delta;
+        if (textTimer < 2.0f)
+        {
+             DrawText("Estamina cheia!", player->position.x + 20, player->position.y - 20, 20, BLACK);
+        }
     }
-    
 
     // Retângulo da textura (source) que será recortado
     Rectangle source = {
