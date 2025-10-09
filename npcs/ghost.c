@@ -1,0 +1,52 @@
+#include "ghost.h"
+
+void InitGhost(Ghost *ghost) 
+{
+    ghost->position = (Vector2){800, 540}; 
+    ghost->ghostIdle = LoadTexture("resources/sprites/npc/ghost-idle.png"); 
+    ghost->ghostBtnE = LoadTexture("resources/sprites/btns/btn-E.png");
+    ghost->ghostSppech = LoadTexture("resources/sprites/npc/ghost-speech.png");
+
+    ghost->frameIdle = 3;
+
+    ghost->frameWidth = ghost->ghostIdle.width / ghost->frameIdle; 
+    ghost->frameHeight = ghost->ghostIdle.height; 
+    ghost->currentFrame = 0; 
+    ghost->frameCounter = 0;
+}
+
+void UpdateGhost(Ghost *ghost, float delta) 
+{
+    ghost->frameCounter++;
+    if (ghost->frameCounter >= (200 / 5)) 
+    {
+        ghost->frameCounter = 0;
+        ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameIdle;
+    }
+}
+
+void DrawGhost(const Ghost *ghost) 
+{
+    Rectangle source = {
+        ghost->currentFrame * ghost->frameWidth,
+        0,
+        ghost->frameWidth,
+        ghost->frameHeight
+    };
+    Rectangle dest = {
+        ghost->position.x,
+        ghost->position.y,
+        ghost->frameWidth /2.5,
+        ghost->frameHeight / 2.5
+    };
+    Vector2 origin = {0, 0};
+
+    DrawTexturePro(ghost->ghostIdle, source, dest, origin, 0.0f, Fade(WHITE, 0.7f));
+}
+
+void UnloadGhost(Ghost *ghost) 
+{
+    UnloadTexture(ghost->ghostIdle);
+    UnloadTexture(ghost->ghostBtnE);
+    UnloadTexture(ghost->ghostSppech);
+}
