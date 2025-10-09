@@ -87,7 +87,7 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
     goblin->droppedHeart = false; // Inicializa como falso
 }
 
-void initRedGoblin(Goblin *goblin, Vector2 pos) 
+void InitRedGoblin(Goblin *goblin, Vector2 pos) 
 {
     InitGoblinBase(goblin, pos);
 

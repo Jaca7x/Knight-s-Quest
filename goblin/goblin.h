@@ -68,7 +68,7 @@ typedef struct goblin {
 
 void InitGoblinBase(Goblin *goblin, Vector2 pos);
 
-void initRedGoblin(Goblin *goblin, Vector2 pos);
+void InitRedGoblin(Goblin *goblin, Vector2 pos);
 
 void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta);
 void DrawGoblin(Goblin *goblin);
