@@ -15,7 +15,6 @@ void InitGhost(Ghost *ghost)
     ghost->ghostExclamation = LoadTexture("resources/sprites/npc/exclamation.png");
 
     ghost->frameIdle = 3;
-    ghost->frameExclamation = 2;
 
     ghost->frameWidth = ghost->ghostIdle.width / ghost->frameIdle; 
     ghost->frameHeight = ghost->ghostIdle.height; 
