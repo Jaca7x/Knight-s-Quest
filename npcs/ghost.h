@@ -2,6 +2,7 @@
 #define GHOST_H
 
 #include "librays/raylib.h"
+#include "player/player.h"
 
 // Ghost NPC structure
 typedef struct ghost {
@@ -9,6 +10,7 @@ typedef struct ghost {
     Texture2D ghostSppech;
     Texture2D ghostIdle;
     Texture2D ghostBtnE;
+    Texture2D ghostExclamation;
 
     int frameIdle;
 
@@ -20,7 +22,7 @@ typedef struct ghost {
 
 void InitGhost(Ghost *ghost);
 void UpdateGhost(Ghost *ghost, float delta);
-void DrawGhost(const Ghost *ghost);
+void DrawGhost(Ghost *ghost, Player *player);
 void UnloadGhost(Ghost *ghost);
 
 #endif // GHOST_H
