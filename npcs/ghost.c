@@ -1,5 +1,6 @@
 #include "ghost.h"
 
+//Calcula se o jogador está próximo o suficiente para interagir com o fantasma -- Utilizei dx para fazer um calculo entre x das entidades assim valores negativos são a esquerda e positivos a direita
 bool InteractionWithGhost(const Ghost *ghost, Player *player)
 {
     float dx = player->position.x - ghost->position.x;
