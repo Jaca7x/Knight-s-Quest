@@ -465,7 +465,7 @@ while (!WindowShouldClose())
                 DrawNpc(&npc, &player, dialogState);
             }
 
-            DrawGhost(&ghost);
+            DrawGhost(&ghost, &player);
 
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
