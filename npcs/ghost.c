@@ -13,14 +13,23 @@ void InitGhost(Ghost *ghost)
 {
     ghost->position = (Vector2){800, 540};
     ghost->ghostIdle = LoadTexture("resources/sprites/npc/ghost-idle.png");
-    ghost->ghostBtnE = LoadTexture("resources/sprites/btns/btn/-E.png");
+    ghost->ghostBtnE = LoadTexture("resources/sprites/btns/btn-E.png");
     ghost->ghostSpeech = LoadTexture("resources/sprites/npc/ghost-speech.png");
     ghost->ghostExclamation = LoadTexture("resources/sprites/npc/exclamation.png");
+    ghost->ghostInteraction = LoadTexture("resources/sprites/npc/interaction.png");
+
+    int columnsInteraction = 3;  
+    int rowsInteraction = 3; 
 
     ghost->frameIdle = 3;
+    ghost->frameInteraction = columnsInteraction * rowsInteraction;
+
+    bool isInteraction = false;
 
     ghost->frameWidth = ghost->ghostIdle.width / ghost->frameIdle;
     ghost->frameHeight = ghost->ghostIdle.height;
+    ghost->frameWidthInteraction = ghost->ghostInteraction.width / columnsInteraction;
+    ghost->frameHeightInteraction = ghost->ghostInteraction.height / rowsInteraction;
     ghost->currentFrame = 0;
     ghost->frameCounter = 0;
 
@@ -36,18 +45,30 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
         ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameIdle;
     }
 
+    ghost->frameCounter++;
+    if (ghost->frameCounter >= (100 / 5))
+    {
+        ghost->frameCounter = 0;
+        ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameInteraction;
+    }
+
     if (*dialogStateGhost == DIALOG_CLOSED_GHOST)
     {
+        ghost->isInteraction = false;
+        
         if (InteractionWithGhost(ghost, player) && IsKeyPressed(KEY_E))
         {
+            ghost->isInteraction = true;
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING;
             *dialogoTimer = 0.0f;
         }
         return;
     }
+    ghost->isInteraction = true;
 
     if (*dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING)
     {
+        ghost->isInteraction = true;
         *dialogoTimer += delta;
         if (*dialogoTimer >= 2.5f && IsKeyPressed(KEY_SPACE))
         {
@@ -57,6 +78,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     }
     else if (*dialogStateGhost == DIALOG_GHOST_TALKING)
     {
+        ghost->isInteraction = true;
         *dialogoTimer += delta;
         if (*dialogoTimer >= 2.5f && IsKeyPressed(KEY_SPACE))
         {
@@ -66,6 +88,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     }
     else if (*dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING2)
     {
+        ghost->isInteraction = true;
         *dialogoTimer += delta;
         if (*dialogoTimer >= 2.5f && IsKeyPressed(KEY_SPACE))
         {
@@ -75,6 +98,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     }
     else if (*dialogStateGhost == DIALOG_GHOST_TALKING2)
     {
+        ghost->isInteraction = true;
         *dialogoTimer += delta;
         if (*dialogoTimer >= 2.5f && IsKeyPressed(KEY_SPACE))
         {
@@ -84,11 +108,13 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     }
     else if (*dialogoTimer == DIALOG_PLAYER_GHOST_TALKING3)
     {
+        ghost->isInteraction = true;
         *dialogoTimer += delta;
         if (*dialogoTimer >= 2.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_CLOSED_GHOST;
             *dialogoTimer = 0.0f;
+            ghost->isInteraction = false;
         }
     }
 }
@@ -107,12 +133,35 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
         ghost->frameWidth,
         ghost->frameHeight
     };
+
+    int columnsInteraction = 3; 
+    int rowsInteraction = 3;
+
+    int frameX = ghost->currentFrame % columnsInteraction;
+    int frameY = ghost->currentFrame / columnsInteraction;
+
+    Rectangle sourceInteraction = {
+    frameX * ghost->frameWidthInteraction,
+    frameY * ghost->frameHeightInteraction,
+    ghost->frameWidthInteraction,
+    ghost->frameHeightInteraction
+    };
+
+
+    Rectangle dest2 = {
+        ghost->position.x,
+        ghost->position.y,
+        ghost->frameWidthInteraction,
+        ghost->frameHeightInteraction
+    };
+
     Rectangle dest = {
         ghost->position.x,
         ghost->position.y,
         ghost->frameWidth / 2.5f,
         ghost->frameHeight / 2.5f
     };
+
     Vector2 origin = {0, 0};
 
     int speechFontSize = 30;
@@ -204,6 +253,12 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
     {
         DrawTexture(ghost->ghostExclamation, ghost->position.x + 25, ghost->position.y - 25, WHITE);
     }
+
+    if (ghost->isInteraction)
+    {
+        DrawTexturePro(ghost->ghostInteraction, sourceInteraction, dest2, origin, 0.0f, WHITE);
+    }
+    
 }
 
 void UnloadGhost(Ghost *ghost)
