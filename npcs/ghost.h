@@ -22,11 +22,20 @@ typedef struct ghost {
     Texture2D ghostIdle;
     Texture2D ghostBtnE;
     Texture2D ghostExclamation;
+    Texture2D ghostInteraction;
 
     int frameIdle;
+    int frameInteraction;
+
+    bool isInteraction;
+
+    int columnsInteraction;  
+    int rowsInteraction;     
 
     int frameWidth;   
     int frameHeight;  
+    int frameWidthInteraction;
+    int frameHeightInteraction;
     int currentFrame; 
     int frameCounter; 
 
