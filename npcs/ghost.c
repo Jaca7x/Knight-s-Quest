@@ -1,11 +1,8 @@
 #include "ghost.h"
 
-// ================= InteractionWithGhost =================
 bool InteractionWithGhost(const Ghost *ghost, Player *player)
 {
-    // Usa deslocamento horizontal (dx). Ajuste os valores conforme necessário.
     float dx = player->position.x - ghost->position.x;
-    // jogador entre 150px à esquerda e 60px à direita do fantasma
     return (dx > -150.0f && dx < 60.0f);
 }
 
@@ -146,7 +143,6 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
     ghost->frameWidthInteraction,
     ghost->frameHeightInteraction
     };
-
 
     Rectangle dest2 = {
         ghost->position.x,
