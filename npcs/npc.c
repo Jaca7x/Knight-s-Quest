@@ -2,9 +2,8 @@
 
 bool checkNpcInteraction(Npc *npc, Player *player)
 {
-    // Check if the player is close to the NPC
-    float distance = Vector2Distance(npc->position, player->position);
-    return distance < 100.0f; // Interaction distance
+    float distance = player->position.x - npc->position.x;
+    return (distance > -150.0f && distance < 60.0f);
 }
 
 void InitNpc(Npc *npc)
