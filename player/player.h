@@ -6,7 +6,7 @@
 #include "../wolf/wolfRunning.h" 
 #include "../goblin/goblin.h" 
 #include "../goblin/goblinArcher.h" 
-#include "../npcs/npc.h"         
+#include "../npcs/npc.h"    
 
 typedef struct wolf Wolf; 
 typedef struct wolfRun WolfRun; 
