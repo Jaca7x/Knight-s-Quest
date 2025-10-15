@@ -164,6 +164,24 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
 
     Vector2 origin = {0, 0};
 
+    if (ghost->isInteraction)
+    {   
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0, 0, 0, 160});
+        DrawTexturePro(ghost->ghostInteraction, sourceInteraction, dest2, origin, 0.0f, WHITE);
+    }
+    else if (dialogStateGhost != DIALOG_CLOSED_GHOST)
+    {   
+        DrawTexturePro(ghost->ghostIdle, source, dest, origin, 0.0f, WHITE);
+    }
+    else if (InteractionWithGhost(ghost, player))
+    {
+        DrawTexture(ghost->ghostBtnE, ghost->position.x + 15, ghost->position.y - 35, WHITE);
+    }
+    else
+    {
+        DrawTexture(ghost->ghostExclamation, ghost->position.x + 25, ghost->position.y - 25, WHITE);
+    }
+
     int speechFontSize = 30;
     int hintFontSize = 14;
     float textSpacing = 0.0f;
@@ -242,23 +260,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
                 DrawText("Pressione ESPAÇO para continuar", nextMsgTextPlayerX, nextMsgTextY, hintFontSize, BLACK);
         }
     }
-
-    DrawTexturePro(ghost->ghostIdle, source, dest, origin, 0.0f, Fade(WHITE, 0.7f));
-
-    if (InteractionWithGhost(ghost, player))
-    {
-        DrawTexture(ghost->ghostBtnE, ghost->position.x + 15, ghost->position.y - 35, WHITE);
-    }
-    else
-    {
-        DrawTexture(ghost->ghostExclamation, ghost->position.x + 25, ghost->position.y - 25, WHITE);
-    }
-
-    if (ghost->isInteraction)
-    {
-        DrawTexturePro(ghost->ghostInteraction, sourceInteraction, dest2, origin, 0.0f, WHITE);
-    }
-    
+    DrawTexturePro(ghost->ghostIdle, source, dest, origin, 0.0f, WHITE);
 }
 
 void UnloadGhost(Ghost *ghost)
