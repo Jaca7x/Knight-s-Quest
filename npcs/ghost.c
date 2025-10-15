@@ -13,20 +13,16 @@ void InitGhost(Ghost *ghost)
     ghost->ghostBtnE = LoadTexture("resources/sprites/btns/btn-E.png");
     ghost->ghostSpeech = LoadTexture("resources/sprites/npc/ghost-speech.png");
     ghost->ghostExclamation = LoadTexture("resources/sprites/npc/exclamation.png");
-    ghost->ghostInteraction = LoadTexture("resources/sprites/npc/interaction.png");
 
     int columnsInteraction = 3;  
     int rowsInteraction = 3; 
 
     ghost->frameIdle = 3;
-    ghost->frameInteraction = columnsInteraction * rowsInteraction;
 
     bool isInteraction = false;
 
     ghost->frameWidth = ghost->ghostIdle.width / ghost->frameIdle;
     ghost->frameHeight = ghost->ghostIdle.height;
-    ghost->frameWidthInteraction = ghost->ghostInteraction.width / columnsInteraction;
-    ghost->frameHeightInteraction = ghost->ghostInteraction.height / rowsInteraction;
     ghost->currentFrame = 0;
     ghost->frameCounter = 0;
 
@@ -42,14 +38,6 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
         {
             ghost->frameCounter = 0;
             ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameIdle;
-        }
-    }
-    else
-    {
-        if (ghost->frameCounter >= (90 / 5))
-        {
-            ghost->frameCounter = 0;
-            ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameInteraction;
         }
     }
 
@@ -120,7 +108,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     }
 }
 
-void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
+void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction)
 {
     static int visibleLetters = 0;
     static float timeWriting = 0.0f;
@@ -141,20 +129,6 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
     int frameX = ghost->currentFrame % columnsInteraction;
     int frameY = ghost->currentFrame / columnsInteraction;
 
-    Rectangle sourceInteraction = {
-    frameX * ghost->frameWidthInteraction,
-    frameY * ghost->frameHeightInteraction,
-    ghost->frameWidthInteraction,
-    ghost->frameHeightInteraction
-    };
-
-    Rectangle dest2 = {
-        ghost->position.x + 20,
-        ghost->position.y - 20,
-        ghost->frameWidthInteraction,
-        ghost->frameHeightInteraction
-    };
-
     Rectangle dest = {
         ghost->position.x,
         ghost->position.y,
@@ -167,7 +141,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
     if (ghost->isInteraction)
     {   
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0, 0, 0, 160});
-        DrawTexturePro(ghost->ghostInteraction, sourceInteraction, dest2, origin, 0.0f, WHITE);
+        DrawInteraction(ghost, player, interaction);
     }
     else if (dialogStateGhost != DIALOG_CLOSED_GHOST)
     {   
