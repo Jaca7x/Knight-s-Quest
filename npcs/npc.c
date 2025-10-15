@@ -196,8 +196,7 @@ void DrawNpc(Npc *npc, Player *player, DialogState dialogState)
     {
         DrawTexture(npc->btnE, npc->position.x + 5, npc->position.y - 40, WHITE);
     }
-
-    // Draw NPC
+    
     if (dialogState == DIALOG_CLOSED)
     {
         DrawTexturePro(npc->spriteNpcIdle, source, dest, origin, 0.0f, WHITE);
