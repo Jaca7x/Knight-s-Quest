@@ -16,6 +16,7 @@
 #include "drops/heart.h"         
 #include "npcs/npc.h"   
 #include "npcs/ghost.h"        
+#include "npcs/interaction.h"
 
 
 // ============================================================================
@@ -186,7 +187,7 @@ int currentMapIndex = 0;
 
 void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfRun *wolfRun, 
                 Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, Heart hearts[],
-                Npc *npc, Ghost *ghost, TileMap *map, const char *mapFiles[])
+                Npc *npc, Ghost *ghost, Interaction *interaction, TileMap *map, const char *mapFiles[])
 {
     InitPlayer(player);
     InitWolfBase(wolf, (Vector2){500, 450});
@@ -199,6 +200,7 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
     InitHearts(hearts);
     InitNpc(npc);
     InitGhost(ghost);
+    InitInteraction(interaction);
 
     currentMapIndex = 0;
 
@@ -267,6 +269,9 @@ int main(void)
 
     Ghost ghost;
     InitGhost(&ghost);
+
+    Interaction interaction;
+    InitInteraction(&interaction);
 
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
@@ -395,6 +400,7 @@ while (!WindowShouldClose())
             UpdateStaminaBar(&player, delta);
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
             UpdateGhost(&ghost, &player, delta, &dialogStateGhost, &dialogoTimer);
+            UpdateInteraction(&ghost, &player, &interaction, delta); 
 
             if (player.life <= 0 && player.deathAnimationDone)
             {
@@ -466,7 +472,8 @@ while (!WindowShouldClose())
                 DrawNpc(&npc, &player, dialogState);
             }
 
-            DrawGhost(&ghost, &player, dialogStateGhost);
+            DrawGhost(&ghost, &player, dialogStateGhost, &interaction);
+            UpdateInteraction(&ghost, &player, &interaction, delta);
 
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
@@ -555,7 +562,7 @@ while (!WindowShouldClose())
             if (IsKeyPressed(KEY_ENTER))
             {
                 gameState = MENU;
-                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &map, mapFiles);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &map, mapFiles);
             }
         } break;
 
