@@ -3,7 +3,9 @@
 
 #include "librays/raylib.h"
 #include "player/player.h"
+#include "interaction.h"
 
+typedef struct interaction Interaction;
 
 typedef enum {
     DIALOG_CLOSED_GHOST,
@@ -14,7 +16,6 @@ typedef enum {
     DIALOG_PLAYER_GHOST_TALKING3,
 } DialogStateGhost;
 
-
 // Ghost NPC structure
 typedef struct ghost {
     Vector2 position;
@@ -22,20 +23,13 @@ typedef struct ghost {
     Texture2D ghostIdle;
     Texture2D ghostBtnE;
     Texture2D ghostExclamation;
-    Texture2D ghostInteraction;
 
     int frameIdle;
-    int frameInteraction;
 
     bool isInteraction;
 
-    int columnsInteraction;  
-    int rowsInteraction;     
-
     int frameWidth;   
-    int frameHeight;  
-    int frameWidthInteraction;
-    int frameHeightInteraction;
+    int frameHeight; 
     int currentFrame; 
     int frameCounter; 
 
@@ -44,7 +38,7 @@ typedef struct ghost {
 
 void InitGhost(Ghost *ghost);
 void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *dialogStateGhost, float *dialogoTimer);
-void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost);
+void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction);
 void UnloadGhost(Ghost *ghost);
 
 #endif // GHOST_H
