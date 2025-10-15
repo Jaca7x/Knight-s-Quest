@@ -36,17 +36,21 @@ void InitGhost(Ghost *ghost)
 void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *dialogStateGhost, float *dialogoTimer)
 {
     ghost->frameCounter++;
-    if (ghost->frameCounter >= (200 / 5))
+    if (!ghost->isInteraction)
     {
-        ghost->frameCounter = 0;
-        ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameIdle;
+        if (ghost->frameCounter >= (100 / 5))
+        {
+            ghost->frameCounter = 0;
+            ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameIdle;
+        }
     }
-
-    ghost->frameCounter++;
-    if (ghost->frameCounter >= (100 / 5))
+    else
     {
-        ghost->frameCounter = 0;
-        ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameInteraction;
+        if (ghost->frameCounter >= (90 / 5))
+        {
+            ghost->frameCounter = 0;
+            ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameInteraction;
+        }
     }
 
     if (*dialogStateGhost == DIALOG_CLOSED_GHOST)
@@ -145,8 +149,8 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost)
     };
 
     Rectangle dest2 = {
-        ghost->position.x,
-        ghost->position.y,
+        ghost->position.x + 20,
+        ghost->position.y - 20,
         ghost->frameWidthInteraction,
         ghost->frameHeightInteraction
     };
