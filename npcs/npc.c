@@ -3,7 +3,7 @@
 bool checkNpcInteraction(Npc *npc, Player *player)
 {
     float distance = player->position.x - npc->position.x;
-    return (distance > -150.0f && distance < 60.0f);
+    return (distance > -150.0f && distance < 10.0f);
 }
 
 void InitNpc(Npc *npc)

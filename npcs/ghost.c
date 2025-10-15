@@ -3,7 +3,7 @@
 bool InteractionWithGhost(const Ghost *ghost, Player *player)
 {
     float dx = player->position.x - ghost->position.x;
-    return (dx > -150.0f && dx < 60.0f);
+    return (dx > -150.0f && dx < 10.0f);
 }
 
 void InitGhost(Ghost *ghost)
