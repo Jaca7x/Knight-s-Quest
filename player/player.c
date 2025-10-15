@@ -18,7 +18,6 @@ Rectangle GetPlayerHitbox(Player *player)
     };
 }
 
-
 // Inicializa as variáveis do jogador e carrega os sprites.
 void InitPlayer(Player *player)
 {
@@ -446,8 +445,8 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
 // Desenha o jogador na tela
 void DrawPlayer(Player *player)
 {
-    //DrawText(TextFormat("Player X: %.2f", player->position.x), 10, 10, 20, BLACK);
-    //DrawText(TextFormat("Player Y: %.2f", player->position.y), 10, 30, 20, BLACK);
+    DrawText(TextFormat("Player X: %.2f", player->position.x), 10, 10, 20, BLACK);
+    DrawText(TextFormat("Player Y: %.2f", player->position.y), 10, 30, 20, BLACK);
 
     Rectangle source;
     Rectangle dest;
