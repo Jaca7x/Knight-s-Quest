@@ -14,6 +14,7 @@ typedef enum {
     DIALOG_PLAYER_GHOST_TALKING2,
     DIALOG_GHOST_TALKING2,
     DIALOG_PLAYER_GHOST_TALKING3,
+    DIALOG_GHOST_TALKING3
 } DialogStateGhost;
 
 // Ghost NPC structure
