@@ -59,7 +59,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     {
         ghost->isInteraction = true;
         *dialogoTimer += delta;
-        if (*dialogoTimer >= 1.0f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimer >= 1.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_GHOST_TALKING;
             *dialogoTimer = 0.0f;
@@ -69,7 +69,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     {
         ghost->isInteraction = true;
         *dialogoTimer += delta;
-        if (*dialogoTimer >= 1.0f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimer >= 5.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING2;
             *dialogoTimer = 0.0f;
@@ -79,7 +79,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     {
         ghost->isInteraction = true;
         *dialogoTimer += delta;
-        if (*dialogoTimer >= 2.5f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimer >= 3.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_GHOST_TALKING2;
             *dialogoTimer = 0.0f;
@@ -89,7 +89,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     {
         ghost->isInteraction = true;
         *dialogoTimer += delta;
-        if (*dialogoTimer >= 1.0f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimer >= 6.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING3;
             *dialogoTimer = 0.0f;
@@ -99,7 +99,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     {
         ghost->isInteraction = true;
         *dialogoTimer += delta;
-        if (*dialogoTimer >= 1.0f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimer >= 3.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_GHOST_TALKING3;
             *dialogoTimer = 0.0f;
@@ -109,7 +109,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     {
         ghost->isInteraction = true;
         *dialogoTimer += delta;
-        if (*dialogoTimer >= 1.0f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimer >= 4.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_CLOSED_GHOST;
             *dialogoTimer = 0.0f;
@@ -190,11 +190,11 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
 
     const char *lines[] = {
         "Gareth II: Ahh! Quem é você?",
-        "Cavaleiro Fantasma: Olá, eu sou um cavaleiro fantasma, ire te ajudar na sua jornada até o reino goblin",
-        "Gareth II: Ainda, bem que você apareceu! Quem são esses goblins?",
-        "Cavaleiro Fantasma: Os goblins do reino de Gorzugar!\nEles estão atacando o castelo!",
-        "Gareth II: Mas o por que disso? Estavamos em paz a mais de 200 anos...",  
-        "Cavaleiro Fantasma: Foque em defender o reino agora, depois conversamos mais sobre isso.",
+        "Cavaleiro Fantasma: Olá, eu sou um cavaleiro\n fantasma, ire te ajudar na sua jornada\n até o reino goblin!",
+        "Gareth II: Ainda, bem que você apareceu!\nQuem são esses goblins?",
+        "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin,\nlogo após o Bosque de Arvendel.",
+        "Gareth II: Mas o por que desse ataque?\n Estavamos em paz a mais de 200 anos...",  
+        "Cavaleiro Fantasma: Foque em defender o reino\nagora, depois conversamos mais sobre isso.",
     };
 
     int lineIndex = -1;
