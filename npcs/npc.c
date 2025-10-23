@@ -8,22 +8,25 @@ bool checkNpcInteraction(Npc *npc, Player *player)
 
 void InitNpc(Npc *npc)
 {
-    npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); // Load NPC sprite
-    npc->btnE = LoadTexture("resources/sprites/btns/btn-E.png"); // Load interaction button (E)
-    npc->spriteNpcIdle = LoadTexture("resources/sprites/npc/npc1-idle.png"); // Load NPC idle sprite
-    npc->npcSpeech = LoadTexture("resources/sprites/npc/npc-speech.png"); // Load NPC speech bubble sprite (if necessary)
-    npc->position = (Vector2){1000, 546}; // Set NPC initial position
+    npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); 
+    npc->btnE = LoadTexture("resources/sprites/btns/btn-E.png"); 
+    npc->spriteNpcIdle = LoadTexture("resources/sprites/npc/npc1-idle.png");
+    npc->npcSpeech = LoadTexture("resources/sprites/npc/npc-speech.png"); 
+    npc->exclamation = LoadTexture("resources/sprites/npc/exclamation.png");
+    npc->position = (Vector2){1000, 546};
 
-    npc->frameTalking = 4; // Number of frames for talking animation
-    npc->frameIdle = 4; // Number of frames for idle animation    
+    npc->textSpeech = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
-    npc->frameWidth = npc->spriteNpc.width / npc->frameIdle; // Frame width
-    npc->frameHeight = npc->spriteNpc.height; // Frame height
-    npc->currentFrame = 0; // Start at first frame
-    npc->frameCounter = 0; // Start frame counter
+    npc->frameTalking = 4; 
+    npc->frameIdle = 4;    
+
+    npc->frameWidth = npc->spriteNpc.width / npc->frameIdle; 
+    npc->frameHeight = npc->spriteNpc.height; 
+    npc->currentFrame = 0; 
+    npc->frameCounter = 0; 
      
     bool isTalking = false;
-    bool isIdle = true; // NPC starts idle
+    bool isIdle = true; 
 }
 
 void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogState, float *dialogTimer)
@@ -121,13 +124,11 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
 }
 
 
-void DrawNpc(Npc *npc, Player *player, DialogState dialogState)
+void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dialogState)
 {
     static int visibleLetters = 0;
     static float timeWriting = 0.0f;
-    float writingSpeed = 0.04f; // Seconds per letter
-
-    Font textSpeech = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
+    float writingSpeed = 0.04f; 
 
     Rectangle source = {
         npc->currentFrame * npc->frameWidth,
@@ -191,10 +192,13 @@ void DrawNpc(Npc *npc, Player *player, DialogState dialogState)
     }
     lastState = dialogState;
 
-    // Interaction button (E)
     if (checkNpcInteraction(npc, player) && dialogState == DIALOG_CLOSED)
     {
         DrawTexture(npc->btnE, npc->position.x + 5, npc->position.y - 40, WHITE);
+    }
+    else 
+    {
+        DrawTexture(npc->exclamation, npc->position.x + 15, npc->position.y - 30, WHITE);
     }
     
     if (dialogState == DIALOG_CLOSED)
@@ -205,6 +209,7 @@ void DrawNpc(Npc *npc, Player *player, DialogState dialogState)
     {
         DrawTexturePro(npc->spriteNpc, source, dest, origin, 0.0f, WHITE);
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0,0,0,160});
+        DrawInteractionNPC(npc, interaction);
 
         // Update animated writing
         if (lineIndex >= 0)
@@ -220,7 +225,7 @@ void DrawNpc(Npc *npc, Player *player, DialogState dialogState)
             if (dialogState == DIALOG_NPC_TALKING || dialogState == DIALOG_NPC_TALKING2)
             {
                 DrawTexture(npc->npcSpeech, npcSpeechX, speechY, WHITE);
-                DrawTextEx(textSpeech,
+                DrawTextEx(npc->textSpeech,
                            TextSubtext(lines[lineIndex], 0, visibleLetters),
                            (Vector2){npcSpeechX + npcSpeechTextOffsetX, speechY + npcSpeechTextOffsetY},
                            speechFontSize, textSpacing, BLACK);
@@ -231,7 +236,7 @@ void DrawNpc(Npc *npc, Player *player, DialogState dialogState)
             else
             {
                 DrawTexture(player->playerSpeech, playerSpeechX, speechY, WHITE);
-                DrawTextEx(textSpeech,
+                DrawTextEx(npc->textSpeech,
                            TextSubtext(lines[lineIndex], 0, visibleLetters),
                            (Vector2){playerSpeechX + playerSpeechTextOffsetX, speechY + playerSpeechTextOffsetY},
                            speechFontSize, textSpacing, BLACK);
@@ -245,5 +250,10 @@ void DrawNpc(Npc *npc, Player *player, DialogState dialogState)
 
 void UnloadNpc(Npc *npc)
 {
-    UnloadTexture(npc->spriteNpc); // Free NPC sprite memory
+    UnloadTexture(npc->spriteNpc);
+    UnloadTexture(npc->btnE);
+    UnloadTexture(npc->spriteNpcIdle);
+    UnloadTexture(npc->npcSpeech);
+    UnloadTexture(npc->exclamation);
+    UnloadFont(npc->textSpeech);
 }
