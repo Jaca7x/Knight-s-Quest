@@ -399,8 +399,8 @@ while (!WindowShouldClose())
             // --- Atualizações ---
             UpdateStaminaBar(&player, delta);
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
-            UpdateGhost(&ghost, &player, delta, &dialogStateGhost, &dialogoTimer);
-            UpdateInteraction(&ghost, &player, &interaction, delta); 
+            UpdateGhost(&ghost, &player, delta, &interaction, &dialogStateGhost, &dialogoTimer);
+            UpdateInteraction(&interaction, delta); 
 
             if (player.life <= 0 && player.deathAnimationDone)
             {
@@ -469,13 +469,14 @@ while (!WindowShouldClose())
             DrawHearts(hearts, delta, &player);
 
             if (MAP_NPC == currentMapIndex) {
-                DrawNpc(&npc, &player, dialogState);
+                DrawNpc(&npc, &player, &interaction, dialogState);
+                UpdateInteraction(&interaction, delta);
             }
 
             if (MAP_GHOST == currentMapIndex)
             {
                 DrawGhost(&ghost, &player, dialogStateGhost, &interaction);
-                UpdateInteraction(&ghost, &player, &interaction, delta);
+                UpdateInteraction(&interaction, delta);
             }
 
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
