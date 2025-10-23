@@ -11,6 +11,7 @@
 	"files.associations": {
 		"stdlib.h": "c",
 		"interaction.h": "c",
-		"ghost.h": "c"
+		"ghost.h": "c",
+		"player.h": "c"
 	}
 }
