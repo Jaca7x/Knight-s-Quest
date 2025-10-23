@@ -26,11 +26,16 @@ void InitGhost(Ghost *ghost)
     ghost->currentFrame = 0;
     ghost->frameCounter = 0;
 
-    ghost->textFont = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250); // <- adicione Font textFont no struct Ghost
+    ghost->textFont = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250); 
 }
 
-void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *dialogStateGhost, float *dialogoTimer)
+void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interaction, DialogStateGhost *dialogStateGhost, float *dialogoTimer)
 {
+    if (ghost->isInteraction)
+    {
+        UpdateInteraction(interaction, delta);
+    }
+    
     ghost->frameCounter++;
     if (!ghost->isInteraction)
     {
@@ -151,7 +156,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
     if (ghost->isInteraction)
     {   
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0, 0, 0, 160});
-        DrawInteraction(ghost, player, interaction);
+        DrawInteractionGhost(ghost, interaction);
     }
     else if (dialogStateGhost != DIALOG_CLOSED_GHOST)
     {   
