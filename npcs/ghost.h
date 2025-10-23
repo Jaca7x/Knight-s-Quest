@@ -5,6 +5,8 @@
 #include "player/player.h"
 #include "interaction.h"
 
+#define MAP_GHOST 1
+
 typedef struct interaction Interaction;
 
 typedef enum {
