@@ -8,7 +8,7 @@ bool InteractionWithGhost(const Ghost *ghost, Player *player)
 
 void InitGhost(Ghost *ghost)
 {
-    ghost->position = (Vector2){800, 540};
+    ghost->position = (Vector2){200, 540};
     ghost->ghostIdle = LoadTexture("resources/sprites/npc/ghost-idle.png");
     ghost->ghostBtnE = LoadTexture("resources/sprites/btns/btn-E.png");
     ghost->ghostSpeech = LoadTexture("resources/sprites/npc/ghost-speech.png");
