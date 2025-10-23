@@ -3,12 +3,14 @@
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
+#include "interaction.h"
 #include "../librays/raymath.h"
 #include <string.h>
 
 #define MAP_NPC 0
 
 typedef struct Player player;
+typedef struct interaction Interaction;
 
 
 typedef enum {
@@ -24,7 +26,10 @@ typedef struct npc {
     Texture2D btnE;     
     Texture2D spriteNpcIdle;
     Texture2D npcSpeech; 
+    Texture2D exclamation;
     Vector2 position;   
+
+    Font textSpeech;
     
     int frameTalking;
     int frameIdle;
@@ -41,7 +46,7 @@ typedef struct npc {
 
 void InitNpc(Npc *npc);
 void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogState, float *dialogoTimer);
-void DrawNpc(Npc *npc, Player *player, DialogState dialogState);
+void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dialogState);
 void UnloadNpc(Npc *npc);
 
 #endif // NPC_H
