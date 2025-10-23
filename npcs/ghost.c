@@ -34,7 +34,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *di
     ghost->frameCounter++;
     if (!ghost->isInteraction)
     {
-        if (ghost->frameCounter >= (100 / 5))
+        if (ghost->frameCounter >= (200 / 5))
         {
             ghost->frameCounter = 0;
             ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameIdle;

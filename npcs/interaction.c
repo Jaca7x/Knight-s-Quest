@@ -42,8 +42,8 @@ void DrawInteraction(Ghost *ghost, Player *player, Interaction *interaction)
     Rectangle dest = {
         ghost->position.x + 20,
         ghost->position.y - 20,
-        interaction->frameWidth * 2,
-        interaction->frameHeight * 2
+        interaction->frameWidth,
+        interaction->frameHeight
     };
 
     Vector2 origin = {0, 0};
