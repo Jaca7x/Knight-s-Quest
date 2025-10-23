@@ -3,10 +3,12 @@
 
 #include "librays/raylib.h"
 #include "player/player.h"
+#include "npc.h"
 #include "interaction.h"
 
 #define MAP_GHOST 1
 
+typedef struct npc Npc;
 typedef struct interaction Interaction;
 
 typedef enum {
@@ -40,7 +42,7 @@ typedef struct ghost {
 } Ghost;
 
 void InitGhost(Ghost *ghost);
-void UpdateGhost(Ghost *ghost, Player *player, float delta, DialogStateGhost *dialogStateGhost, float *dialogoTimer);
+void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interaction, DialogStateGhost *dialogStateGhost, float *dialogoTimer);
 void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction);
 void UnloadGhost(Ghost *ghost);
 
