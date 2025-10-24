@@ -113,26 +113,22 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale,
         }
     }
 
-    // Retângulo da textura (source) que será recortado
     Rectangle source = {
-        0,                                       // X inicial
-        frame * STAMINA_FRAME_HEIGHT,            // Y inicial baseado no frame
-        STAMINA_FRAME_WIDTH,                     // Largura do frame
-        STAMINA_FRAME_HEIGHT                     // Altura do frame
+        0,                                      
+        frame * STAMINA_FRAME_HEIGHT,            
+        STAMINA_FRAME_WIDTH,                     
+        STAMINA_FRAME_HEIGHT                     
     };
 
-    // Retângulo de destino (dest) onde será desenhado na tela
     Rectangle dest = {
-        position.x,                              // Posição X na tela
-        position.y,                              // Posição Y na tela
-        STAMINA_FRAME_WIDTH * scale,             // Largura ajustada pela escala
-        STAMINA_FRAME_HEIGHT * scale             // Altura ajustada pela escala
+        position.x,                              
+        position.y,                              
+        STAMINA_FRAME_WIDTH * scale,             
+        STAMINA_FRAME_HEIGHT * scale             
     };
 
-    // Origem no canto superior esquerdo
     Vector2 origin = {0, 0};
 
-    // Desenha na tela a barra de stamina com o frame correspondente
     DrawTexturePro(bar, source, dest, origin, 0.0f, WHITE);
 }
 
