@@ -29,6 +29,8 @@ void UpdateInteraction(Interaction *interaction, float delta)
 
 void DrawInteractionGhost(Ghost *ghost, Interaction *interaction) 
 {
+    Vector2 offset = {20, -20};
+
     Rectangle source = {
         (interaction->currentFrame % interaction->columns) * interaction->frameWidth,
         (interaction->currentFrame / interaction->columns) * interaction->frameHeight,
@@ -37,8 +39,8 @@ void DrawInteractionGhost(Ghost *ghost, Interaction *interaction)
     };
 
     Rectangle dest = {
-        ghost->position.x + 20,
-        ghost->position.y - 20,
+        ghost->position.x + offset.x,
+        ghost->position.y + offset.y,
         interaction->frameWidth,
         interaction->frameHeight
     };
@@ -50,6 +52,7 @@ void DrawInteractionGhost(Ghost *ghost, Interaction *interaction)
 
 void DrawInteractionNPC(Npc *npc, Interaction *interaction) 
 {
+    Vector2 offset = {12, -25};
     Rectangle source = {
         (interaction->currentFrame % interaction->columns) * interaction->frameWidth,
         (interaction->currentFrame / interaction->columns) * interaction->frameHeight,
@@ -58,8 +61,8 @@ void DrawInteractionNPC(Npc *npc, Interaction *interaction)
     };
 
     Rectangle dest = {
-        npc->position.x + 20,
-        npc->position.y - 20,
+        npc->position.x + offset.x,
+        npc->position.y + offset.y,
         interaction->frameWidth,
         interaction->frameHeight
     };
