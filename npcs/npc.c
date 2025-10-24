@@ -20,6 +20,8 @@ void InitNpc(Npc *npc)
     npc->frameTalking = 4; 
     npc->frameIdle = 4;    
 
+    npc->showExclamation = true;
+
     npc->frameWidth = npc->spriteNpc.width / npc->frameIdle; 
     npc->frameHeight = npc->spriteNpc.height; 
     npc->currentFrame = 0; 
@@ -36,6 +38,8 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
 
     if (*dialogState == DIALOG_CLOSED)
     {
+        npc->showExclamation = true;
+
         idleTimer += deltaTime;
         if (idleTimer >= 0.5f)
         {
@@ -45,6 +49,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
 
         if (checkNpcInteraction(npc, player) && IsKeyPressed(KEY_E))
         {
+            npc->showExclamation = false;
             *dialogState = DIALOG_NPC_TALKING;
             *dialogTimer = 0.0f;
             npc->currentFrame = 0;
@@ -52,6 +57,8 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
     }
     else if (*dialogState == DIALOG_NPC_TALKING)
     {
+        npc->showExclamation = false;
+
         talkingTimer += deltaTime;
         *dialogTimer += deltaTime;
 
@@ -65,6 +72,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
         {
             if (IsKeyPressed(KEY_SPACE))
             {
+                npc->showExclamation = false;
                 *dialogState = DIALOG_PLAYER_TALKING;
                 *dialogTimer = 0.0f;
                 npc->currentFrame = 0;
@@ -73,6 +81,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
     }
     else if (*dialogState == DIALOG_PLAYER_TALKING)
     {
+        npc->showExclamation = false;
         talkingTimer += deltaTime;
         *dialogTimer += deltaTime;
 
@@ -82,6 +91,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
         {
             if (IsKeyPressed(KEY_SPACE))
             {
+                npc->showExclamation = false;
                 *dialogState = DIALOG_NPC_TALKING2;
                 *dialogTimer = 0.0f;
                 npc->currentFrame = 0;
@@ -90,6 +100,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
     }
     else if (*dialogState == DIALOG_NPC_TALKING2)
     {
+        npc->showExclamation = false;
         talkingTimer += deltaTime;
         *dialogTimer += deltaTime;
 
@@ -99,6 +110,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
         {
             if (IsKeyPressed(KEY_SPACE))
             {
+                npc->showExclamation = false;
                 *dialogState = DIALOG_PLAYER_TALKING2;
                 *dialogTimer = 0.0f;
                 npc->currentFrame = 0;
@@ -107,6 +119,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
     }  
     else if (*dialogState == DIALOG_PLAYER_TALKING2)
     {
+        npc->showExclamation = false;
         talkingTimer += deltaTime;
         *dialogTimer += deltaTime;
 
@@ -116,6 +129,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
         {
             if (IsKeyPressed(KEY_SPACE))
             {
+                npc->showExclamation = true;
                 *dialogState = DIALOG_CLOSED;
                 *dialogTimer = 0.0f;
             }
@@ -196,7 +210,7 @@ void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dia
     {
         DrawTexture(npc->btnE, npc->position.x + 5, npc->position.y - 40, WHITE);
     }
-    else 
+    else if (npc->showExclamation)
     {
         DrawTexture(npc->exclamation, npc->position.x + 15, npc->position.y - 30, WHITE);
     }
