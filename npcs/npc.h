@@ -30,6 +30,8 @@ typedef struct npc {
     Vector2 position;   
 
     Font textSpeech;
+
+    bool showExclamation;
     
     int frameTalking;
     int frameIdle;
