@@ -473,11 +473,7 @@ while (!WindowShouldClose())
                 UpdateInteraction(&interaction, delta);
             }
 
-            if (MAP_GHOST == currentMapIndex)
-            {
-                DrawGhost(&ghost, &player, dialogStateGhost, &interaction);
-                UpdateInteraction(&interaction, delta);
-            }
+            MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
 
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
