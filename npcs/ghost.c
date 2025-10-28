@@ -6,6 +6,46 @@ bool InteractionWithGhost(const Ghost *ghost, Player *player)
     return (dx > -150.0f && dx < 10.0f);
 }
 
+const char **GetGhostDialog(int mapIndex, int *numLines)
+{
+    static const char *dialogMap1[] = {
+        "Gareth II: Ahh! Quem é você?",
+        "Cavaleiro Fantasma: Olá, eu sou um cavaleiro\nfantasma, irei te ajudar na sua jornada\naté o reino goblin!",
+        "Gareth II: Ainda bem que você apareceu!\nQuem são esses goblins?",
+        "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin.",
+        "Gareth II: Mas por que esse ataque?\nEstávamos em paz há 200 anos...",
+        "Cavaleiro Fantasma: Foque em defender o reino,\ndepois conversamos mais sobre isso."
+    };
+
+    static const char *dialogMap2[] = {
+        "Cavaleiro Fantasma: Vejo que você sobreviveu à floresta...",
+        "Gareth II: Sim... mas encontrei algo estranho lá.",
+        "Cavaleiro Fantasma: Cuidado. As sombras de Eldruin\nainda espreitam nas árvores.",
+        "Gareth II: Parece que até o vento sussurra segredos antigos..."
+    };
+
+    static const char *dialogMap3[] = {
+        "Cavaleiro Fantasma: O reino goblin está próximo.",
+        "Gareth II: Já sinto o cheiro de enxofre no ar.",
+        "Cavaleiro Fantasma: Este é o território deles...\nesteja pronto para lutar."
+    };
+
+    static const char *dialogMap4[] = {
+        "Cavaleiro Fantasma: Finalmente chegamos ao castelo de Gorzugar.",
+        "Gareth II: Então é aqui que tudo começou...",
+        "Cavaleiro Fantasma: A verdade está além dessas portas..."
+    };
+
+    switch (mapIndex)
+    {
+        case 1: *numLines = sizeof(dialogMap1) / sizeof(dialogMap1[0]); return dialogMap1;
+        case 2: *numLines = sizeof(dialogMap2) / sizeof(dialogMap2[0]); return dialogMap2;
+        case 3: *numLines = sizeof(dialogMap3) / sizeof(dialogMap3[0]); return dialogMap3;
+        case 4: *numLines = sizeof(dialogMap4) / sizeof(dialogMap4[0]); return dialogMap4;
+        default: *numLines = 0; return NULL;
+    }
+}
+
 void InitGhost(Ghost *ghost)
 {
     ghost->position = (Vector2){200, 540};
@@ -123,7 +163,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
     }
 }
 
-void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction)
+void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction, int currentMapIndex)
 {
     static int visibleLetters = 0;
     static float timeWriting = 0.0f;
@@ -193,14 +233,8 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
     int nextMsgTextNpcX = 996;
     int nextMsgTextY = 848;
 
-    const char *lines[] = {
-        "Gareth II: Ahh! Quem é você?",
-        "Cavaleiro Fantasma: Olá, eu sou um cavaleiro\n fantasma, ire te ajudar na sua jornada\n até o reino goblin!",
-        "Gareth II: Ainda, bem que você apareceu!\nQuem são esses goblins?",
-        "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin,\nlogo após o Bosque de Arvendel.",
-        "Gareth II: Mas o por que desse ataque?\n Estavamos em paz a mais de 200 anos...",  
-        "Cavaleiro Fantasma: Foque em defender o reino\nagora, depois conversamos mais sobre isso.",
-    };
+   int numLines = 0;
+   const char **lines = GetGhostDialog(currentMapIndex, &numLines);
 
     int lineIndex = -1;
     if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING) lineIndex = 0;
@@ -252,6 +286,21 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
     }
     DrawTexturePro(ghost->ghostIdle, source, dest, origin, 0.0f, WHITE);
 }
+
+void MapsGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction, float delta, int currentMapIndex)
+{
+    int mapsGhosts[4] = {1, 2, 3, 4};
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (currentMapIndex == mapsGhosts[i])
+        {
+            DrawGhost(ghost, player, dialogStateGhost, interaction, currentMapIndex);
+            UpdateInteraction(interaction, delta);
+        }
+    }
+}
+
 
 void UnloadGhost(Ghost *ghost)
 {

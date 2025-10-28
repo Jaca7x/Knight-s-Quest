@@ -6,7 +6,7 @@
 #include "npc.h"
 #include "interaction.h"
 
-#define MAP_GHOST 1
+//#define MAP_GHOST 1
 
 typedef struct npc Npc;
 typedef struct interaction Interaction;
@@ -43,7 +43,8 @@ typedef struct ghost {
 
 void InitGhost(Ghost *ghost);
 void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interaction, DialogStateGhost *dialogStateGhost, float *dialogoTimer);
-void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction);
+void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction, int currentMapIndex);
+void MapsGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction, float delta, int currentMapIndex);
 void UnloadGhost(Ghost *ghost);
 
 #endif // GHOST_H
