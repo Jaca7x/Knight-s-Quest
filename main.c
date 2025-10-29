@@ -416,6 +416,8 @@ while (!WindowShouldClose())
             dialogStateGhost = DIALOG_CLOSED_GHOST;
             ghost.isInteraction = false;
 
+            dialogState = DIALOG_CLOSED;
+
             UnloadTileMap(&map);
             map = LoadTileMap(mapFiles[currentMapIndex]);
 
