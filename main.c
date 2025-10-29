@@ -413,6 +413,8 @@ while (!WindowShouldClose())
             if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
         {
             currentMapIndex = (currentMapIndex + 1) % MAP_COUNT;
+            dialogStateGhost = DIALOG_CLOSED_GHOST;
+            ghost.isInteraction = false;
 
             UnloadTileMap(&map);
             map = LoadTileMap(mapFiles[currentMapIndex]);
