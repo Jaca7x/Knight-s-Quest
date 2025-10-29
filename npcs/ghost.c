@@ -18,22 +18,30 @@ const char **GetGhostDialog(int mapIndex, int *numLines)
     };
 
     static const char *dialogMap2[] = {
-        "Cavaleiro Fantasma: Vejo que você sobreviveu à floresta...",
-        "Gareth II: Sim... mas encontrei algo estranho lá.",
-        "Cavaleiro Fantasma: Cuidado. As sombras de Eldruin\nainda espreitam nas árvores.",
-        "Gareth II: Parece que até o vento sussurra segredos antigos..."
-    };
+        "Garath II: Oque é aquilo!?",
+        "Cavaleiro Fantasma: São lobos sombrios de Eldruin\n, eles vivem juntos com os goblins e atacam\nqualquer um que se aproxime.",
+        "Gareth II: Preciso passar por eles para chegar\naté a floresta?",
+        "Cavaleiro Fantasma: Sim!, Cuidado, eles são rápidos\ne ferozes.\nUse sua espada com sabedoria.",
+        "Gareth II: Entendido, obrigado pela dica!.",
+        "Cavaleiro Fantasma: Boa sorte, cavaleiro!."
+    }; 
 
     static const char *dialogMap3[] = {
-        "Cavaleiro Fantasma: O reino goblin está próximo.",
-        "Gareth II: Já sinto o cheiro de enxofre no ar.",
-        "Cavaleiro Fantasma: Este é o território deles...\nesteja pronto para lutar."
+        "Gareth II: Esse é o bosque de Arvendel?!",
+        "Cavaleiro Fantasma: Sim, aqui sua jornada\nrealmente começa.\nO bosque estará tomada pelos goblins.",
+        "Gareth II: Sim, terei que ser cauteloso daqui\npra frente.",
+        "Cavaleiro Fantasma: Lembre-se, cavaleiro, a\ncoragem e a sabedoria serão suas maiores armas",
+        "Gareth II: Mas espera ai aqueles monstros\nsão vermelhos!,\neles parecem diferentes...",
+        "Cavaleiro Fantasma: Sim, esses montros vermelhos\nsão mais fortes e brutos do que os outros,\ncuidado redobre sua atenção."
     };
 
     static const char *dialogMap4[] = {
-        "Cavaleiro Fantasma: Finalmente chegamos ao castelo de Gorzugar.",
-        "Gareth II: Então é aqui que tudo começou...",
-        "Cavaleiro Fantasma: A verdade está além dessas portas..."
+        "Gareth II: Ufa! Finalmente passei daqueles\nmonstros vermelhos.",
+        "Cavaleiro Fantasma: Sim, você está indo bem,\nmas a parte mais difícil ainda está por vir.",
+        "Gareth II: Oque quer dizer com isso?",
+        "Cavaleiro Fantasma: Logo a frente você irá chegar\na floresta negra, onde é o reino goblin,\no mais perigoso de todos.",
+        "Gareth II: Parece que tenho mais desafio,\num lobo branco logo a frente!",
+        "Cavaleiro Fantasma: Exatamente, esses lobos\nbrancos são os mais rápidos e inteligentes\n, eles são os guardiões da floresta goblin."
     };
 
     switch (mapIndex)
