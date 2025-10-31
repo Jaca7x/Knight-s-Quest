@@ -211,6 +211,12 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
 
 int main(void)
 {
+    InitAudioDevice();
+
+    Music menuMusic = LoadMusicStream("resources/music/menu-music.mp3");
+    PlayMusicStream(menuMusic);
+    SetMusicVolume(menuMusic, 0.5f);
+
     GameState gameState = MENU;
 
     const char *mapFiles[MAP_COUNT] = {
@@ -293,6 +299,11 @@ int main(void)
 
 while (!WindowShouldClose())
 {
+
+    UpdateMusicStream(menuMusic);
+
+    Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
+
     float delta = GetFrameTime();
 
     BeginDrawing();
@@ -308,6 +319,7 @@ while (!WindowShouldClose())
         // ========================================================
         case MENU:
         {
+            ResumeMusicStream(menuMusic);
             float x1Play = 930, y1Play = 418;  
             float x2Play = 1300, y2Play = 532;  
             float checkY1Play = 418, checkY2Play = 530;
@@ -360,6 +372,8 @@ while (!WindowShouldClose())
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
                 CheckCollisionPointRec(GetMousePosition(), rectPlay))
             {
+                PlaySound(buttonSelect);
+                WaitTime(0.5f);
                 gameState = PLAYING;
             }
 
@@ -369,6 +383,8 @@ while (!WindowShouldClose())
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
                 CheckCollisionPointRec(GetMousePosition(), rectCredits))
             {
+                PlaySound(buttonSelect);
+                WaitTime(0.5f);
                 gameState = CREDITS;
             }
 
@@ -378,6 +394,9 @@ while (!WindowShouldClose())
 
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
                 {
+                    PlaySound(buttonSelect);
+                    WaitTime(0.5f);
+
                     #if defined(_WIN32)
                         system("start https://github.com/Jaca7x/Knight-s-Quest");
                     #elif defined(__APPLE__)
@@ -396,6 +415,8 @@ while (!WindowShouldClose())
         // ========================================================
         case PLAYING:
         {
+            PauseMusicStream(menuMusic);
+
             // --- Atualizações ---
             UpdateStaminaBar(&player, delta);
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
@@ -598,7 +619,6 @@ while (!WindowShouldClose())
             DrawText("Abrindo repositório no seu navegador! Aguarde...", GetScreenWidth()/2 - 500, GetScreenHeight()/2, 40, WHITE);
         }
     }
-
     EndDrawing();
 }
 
