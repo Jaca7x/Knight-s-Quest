@@ -10,30 +10,31 @@ O desenvolvimento do jogo está avançando de forma consistente e animadora.
 ### ✅ Concluído
 - **Movimentação e animações** do jogador já implementadas e funcionando perfeitamente.  
 - **Mapas iniciais**: três mapas prontos, cada um com três fases.  
-- **Barras de saúde e estamina** praticamente finalizadas (faltando pequenos detalhes).  
-- **Menu do jogo** completo, em fase de correção de pequenos erros.  
+- **Barras de saúde e estamina**: completo
+- **Menu do jogo**: completo.  
 - **Coração de cura**: sistema de drop implementado (cura 25 pontos de vida).  
-- **Primeiro NPC** no mapa do castelo, responsável por direcionar a história.  
+- **NPCS**: npcs para auxiliar no jogo 
+- **Trilha sonora**: completa
 
 ---
 
 ### 🔧 A Fazer  
-- 🎵 **Trilha sonora**: seleção dos melhores sons para maior imersão.  
-- 🧑‍🤝‍🧑 **NPCs adicionais**: expandir interações e enriquecer a narrativa.  
-- 🎁 **Itens colecionáveis**: sistema de drops para troca ou venda.  
-- 🌍 **Tradução para o inglês (US)**: a versão original será em Português (BR).  
+- 🌍 **Tradução para o inglês (US)**: a versão original será em Português (BR). 
+- **Sons de combate**
 
 ---
 
 ## ⚔️ Inimigos  
 
 ### Finalizados  
-- 🧟‍♂️ **Goblins**: dois tipos finalizados — arqueiro e lutador com faca.  
-- 🐺 **Lobisomem Negro** (nome provisório).  
+- 🧟‍♂️ **Goblins**: dois tipos finalizados — arqueiro e lutador com faca.
+- **Goblins Vermelho**
+- 🐺 **Lobisomem Negro**
+- 🐺 **Lobisomem Sangue**
+- 🐺 **Lobisomem Branco**
 - 🐺 **Lobisomem ágil**: corre e salta para atacar o jogador.  
 
 ### Em Produção  
-- 🐺 **Lobisomem Branco & Lobisomem Sangue**: variações do lobisomem negro, mantendo a ideia base.  
 - 👑 **Rei Goblin**: será o grande chefe final da aventura (conceito em andamento).  
 
 ---
