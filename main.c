@@ -210,12 +210,12 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
 
 
 int main(void)
-{
+{   
     InitAudioDevice();
 
     Music menuMusic = LoadMusicStream("resources/music/menu-music.mp3");
     PlayMusicStream(menuMusic);
-    SetMusicVolume(menuMusic, 0.5f);
+    
 
     GameState gameState = MENU;
 
@@ -297,6 +297,13 @@ int main(void)
 
     float textTime = 0.0f;
 
+    float volume = 0.5;
+    float slideX = 300;
+    float slideY = 200;
+    float slideWidth = 200;
+    float slideHeight = 10;
+    float ballRadius = 10;
+
 while (!WindowShouldClose())
 {
 
@@ -320,6 +327,19 @@ while (!WindowShouldClose())
         case MENU:
         {
             ResumeMusicStream(menuMusic);
+
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
+            && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY, slideWidth, slideHeight}))
+            {
+                float percent = (mousePos.x - slideX) / slideWidth;
+                if (percent < 0) percent = 0;
+                if (percent > 1) percent = 1;
+
+                volume = percent;
+
+                SetMasterVolume(volume);
+            }
+
             float x1Play = 930, y1Play = 418;  
             float x2Play = 1300, y2Play = 532;  
             float checkY1Play = 418, checkY2Play = 530;
@@ -364,6 +384,12 @@ while (!WindowShouldClose())
             float radius = 59;
 
             DrawTexture(menuImage, 0, 0, WHITE);
+
+            DrawRectangle(slideX, slideY, slideWidth, slideHeight, LIGHTGRAY);
+
+            DrawRectangle(slideX, slideY, slideWidth * volume, slideHeight, SKYBLUE);
+
+            DrawCircle(slideX + slideWidth * volume, slideY + slideHeight / 2, ballRadius, DARKBLUE);
 
             if (CheckCollisionPointRec(mousePos, checkPlay)) {
                 DrawRectangleRec(rectPlay, (Color){247,173,7,75});
