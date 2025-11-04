@@ -16,8 +16,12 @@ typedef struct npc Npc;
 
 typedef struct player
 {
-    
     Vector2 position;
+
+    Sound attackLightSound;
+    Sound attackHeavySound;
+
+    bool attackSoundPlayed;
 
     float speedWalk;       
     float speedRun;       
