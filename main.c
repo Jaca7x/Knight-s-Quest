@@ -214,7 +214,10 @@ int main(void)
     InitAudioDevice();
 
     Music menuMusic = LoadMusicStream("resources/music/menu-music.mp3");
+    Music soundTrack = LoadMusicStream("resources/music/soundtrack.mp3");
+
     PlayMusicStream(menuMusic);
+    PlayMusicStream(soundTrack);
     
 
     GameState gameState = MENU;
@@ -308,8 +311,8 @@ int main(void)
 
 while (!WindowShouldClose())
 {
-
     UpdateMusicStream(menuMusic);
+    UpdateMusicStream(soundTrack);
 
     Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
     Sound death = LoadSound("resources/sounds/game-over.wav");
@@ -331,8 +334,10 @@ while (!WindowShouldClose())
         {
             ResumeMusicStream(menuMusic);
 
+            PauseMusicStream(soundTrack);
+
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
-            && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY, slideWidth, slideHeight}))
+            && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
             {
                 float percent = (mousePos.x - slideX) / slideWidth;
                 if (percent < 0) percent = 0;
@@ -445,6 +450,8 @@ while (!WindowShouldClose())
         case PLAYING:
         {
             PauseMusicStream(menuMusic);
+
+            ResumeMusicStream(soundTrack);
 
             // --- Atualizações ---
             UpdateStaminaBar(&player, delta);
