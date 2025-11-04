@@ -216,6 +216,9 @@ int main(void)
     Music menuMusic = LoadMusicStream("resources/music/menu-music.mp3");
     Music soundTrack = LoadMusicStream("resources/music/soundtrack.mp3");
 
+    Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
+    Sound death = LoadSound("resources/sounds/game-over.wav");
+
     PlayMusicStream(menuMusic);
     PlayMusicStream(soundTrack);
     
@@ -313,9 +316,6 @@ while (!WindowShouldClose())
 {
     UpdateMusicStream(menuMusic);
     UpdateMusicStream(soundTrack);
-
-    Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
-    Sound death = LoadSound("resources/sounds/game-over.wav");
 
     float delta = GetFrameTime();
 
@@ -685,7 +685,11 @@ while (!WindowShouldClose())
     UnloadFont(titleMaps);
     UnloadNpc(&npc);
     UnloadTexture(deathImage);
-
+    UnloadTexture(menuImage);
+    UnloadMusicStream(menuMusic);
+    UnloadMusicStream(soundTrack);
+    UnloadSound(death);
+    UnloadSound(buttonSelect);
 
     CloseWindow();
     return 0;
