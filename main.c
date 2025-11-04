@@ -298,11 +298,13 @@ int main(void)
     float textTime = 0.0f;
 
     float volume = 0.5;
-    float slideX = 300;
-    float slideY = 200;
+    float slideX = 25;
+    float slideY = 15;
     float slideWidth = 200;
     float slideHeight = 10;
     float ballRadius = 10;
+
+    bool deathSoundPlay = false;
 
 while (!WindowShouldClose())
 {
@@ -310,6 +312,7 @@ while (!WindowShouldClose())
     UpdateMusicStream(menuMusic);
 
     Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
+    Sound death = LoadSound("resources/sounds/game-over.wav");
 
     float delta = GetFrameTime();
 
@@ -449,9 +452,18 @@ while (!WindowShouldClose())
             UpdateGhost(&ghost, &player, delta, &interaction, &dialogStateGhost, &dialogoTimer);
             UpdateInteraction(&interaction, delta); 
 
-            if (player.life <= 0 && player.deathAnimationDone)
+            if (player.life <= 0 )
             {
-                gameState = GAME_OVER;
+                if (!deathSoundPlay)
+                {
+                    PlaySound(death);
+                    deathSoundPlay = true;
+                }
+
+                if (player.deathAnimationDone)
+                {
+                    gameState = GAME_OVER;
+                }
             }
 
             // --- Desenho ---
@@ -574,6 +586,7 @@ while (!WindowShouldClose())
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
                     gameState = MENU;
+                    PlaySound(buttonSelect);
                 }
             }
 
@@ -613,6 +626,7 @@ while (!WindowShouldClose())
             if (IsKeyPressed(KEY_ENTER))
             {
                 gameState = MENU;
+                PlaySound(buttonSelect);
                 resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &map, mapFiles);
             }
         } break;
@@ -637,6 +651,7 @@ while (!WindowShouldClose())
 
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
+                    PlaySound(buttonSelect);
                     gameState = MENU;
                 }
             }
