@@ -28,6 +28,7 @@ void InitPlayer(Player *player)
 
     player->attackSoundPlayed = false;
     player->jumpSoundPlayed   = false;
+    player->walkSoundPlaying  = false;
 
     // Carregar sprites
     player->spritePlayerRun      = LoadTexture("resources/sprites/player/RUN.png");
@@ -62,6 +63,7 @@ void InitPlayer(Player *player)
     player->gravity   = 950.0f;
     player->groundY   = 518.0f;
     player->velocityY = 0.0f;
+    player->walkTime   = 0.0f;
 
     // Direção inicial
     player->direction = 1.0f;
