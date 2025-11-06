@@ -24,8 +24,10 @@ void InitPlayer(Player *player)
     // Carregar efeitos sonoros
     player->attackLightSound = LoadSound("resources/sounds/attack-1.wav");
     player->attackHeavySound = LoadSound("resources/sounds/attack-2.wav");
+    player->jumpSound        = LoadSound("resources/sounds/jump.wav");
 
     player->attackSoundPlayed = false;
+    player->jumpSoundPlayed   = false;
 
     // Carregar sprites
     player->spritePlayerRun      = LoadTexture("resources/sprites/player/RUN.png");
@@ -472,18 +474,25 @@ void DrawPlayer(Player *player)
         frameWidth = texture.width / player->frameHurt;
     }   
     else if (player->isJumping)
-    {
+    {   
+        if (player->currentFrame == 2 && !player->jumpSoundPlayed)
+        {
+            PlaySound(player->jumpSound);
+            player->jumpSoundPlayed = true;
+        }
+        
         texture = player->spritePlayerJump;
         frameWidth = texture.width / player->frameJump;
     }
     else if (player->isAttacking)
     {
-        if (player->currentFrame == 0 && !player->attackSoundPlayed)
+        if (player->currentFrame == 5 && !player->attackSoundPlayed)
         {
             if (player->isAttackingLight)
             {
                 PlaySound(player->attackLightSound);
-                 player->attackSoundPlayed = true;
+                player->attackSoundPlayed = true;
+                player->jumpSoundPlayed = false;
             }
         }
         else if (player->currentFrame == 2 && !player->attackSoundPlayed)
@@ -492,6 +501,7 @@ void DrawPlayer(Player *player)
             {
                 PlaySound(player->attackHeavySound);
                 player->attackSoundPlayed = true;
+                player->jumpSoundPlayed = false;
             }
                 
         }
@@ -508,18 +518,21 @@ void DrawPlayer(Player *player)
         texture = player->spritePlayerIdle;
         frameWidth = texture.width / player->frameIdle;
         player->attackSoundPlayed = false;
+        player->jumpSoundPlayed = false;
     }
     else if (player->isRunning)
     {
         texture = player->spritePlayerRun;
         frameWidth = texture.width / player->frameRun;
         player->attackSoundPlayed = false;
+        player->jumpSoundPlayed = false;
     }
     else
     {
         texture = player->spritePlayerWalk;
         frameWidth = texture.width / player->frameWalk;
         player->attackSoundPlayed = false;
+        player->jumpSoundPlayed = false;
     }
 
     // Retângulo de origem
