@@ -12,6 +12,7 @@
 		"stdlib.h": "c",
 		"interaction.h": "c",
 		"ghost.h": "c",
-		"player.h": "c"
+		"player.h": "c",
+		"wolfrunning.h": "c"
 	}
 }
