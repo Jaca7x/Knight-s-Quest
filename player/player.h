@@ -20,8 +20,10 @@ typedef struct player
 
     Sound attackLightSound;
     Sound attackHeavySound;
+    Sound jumpSound;
 
     bool attackSoundPlayed;
+    bool jumpSoundPlayed;
 
     float speedWalk;       
     float speedRun;       
