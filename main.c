@@ -218,6 +218,7 @@ int main(void)
 
     Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
     Sound death = LoadSound("resources/sounds/game-over.wav");
+    Sound walkingInCastle = LoadSound("resources/sounds/walking-castle.wav");
 
     PlayMusicStream(menuMusic);
     PlayMusicStream(soundTrack);
@@ -452,6 +453,31 @@ while (!WindowShouldClose())
             PauseMusicStream(menuMusic);
 
             ResumeMusicStream(soundTrack);
+
+            if ((currentMapIndex == 0 || currentMapIndex == 1) && player.isMoving)
+            {
+                if (!player.walkSoundPlaying)
+                {
+                    PlaySound(walkingInCastle);
+                    player.walkSoundPlaying = true;
+                    player.walkTime = 0.0f;
+                }
+                player.walkTime += delta;
+
+                if (player.walkTime > 0.5f)
+                {
+                    StopSound(walkingInCastle);
+                    player.walkSoundPlaying = false;
+                }
+            }
+            else
+            {
+                if (player.walkSoundPlaying)
+                {
+                    StopSound(walkingInCastle);
+                    player.walkSoundPlaying = false;
+                }
+            }
 
             // --- Atualizações ---
             UpdateStaminaBar(&player, delta);
