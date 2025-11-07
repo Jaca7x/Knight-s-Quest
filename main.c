@@ -29,7 +29,8 @@
 #define TILESET3_FIRSTGID 73      
 #define TILESET4_FIRSTGID 109    
 #define TILESET5_FIRSTGID 145   
-#define MAP_COUNT 6            
+#define TILESET6_FIRSTGID 181 
+#define MAP_COUNT 7          
 
 
 // ============================================================================
@@ -120,7 +121,7 @@ void UnloadTileMap(TileMap *map)
 // Função de desenho do mapa com múltiplos tilesets
 // ============================================================================
 
-void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3, Texture2D tileset4, Texture2D tileset5)
+void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3, Texture2D tileset4, Texture2D tileset5, Texture2D tileset6)
 {
     for (int y = 0; y < map->height; y++)
     {
@@ -154,10 +155,15 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
                 texture = tileset4;
                 localId = gid - TILESET4_FIRSTGID;
             }
-            else if (gid >= TILESET5_FIRSTGID)
+            else if (gid >= TILESET5_FIRSTGID && gid < TILESET6_FIRSTGID)
             {
                 texture = tileset5;
                 localId = gid - TILESET5_FIRSTGID;
+            }
+            else if (gid >= TILESET6_FIRSTGID)
+            {
+                texture = tileset6;
+                localId = gid - TILESET6_FIRSTGID;
             }
             else
             {
@@ -233,7 +239,8 @@ int main(void)
         "assets/maps/castle_map3.json",
         "assets/maps/florest1.json",
         "assets/maps/florest2.json",
-        "assets/maps/florest3.json"
+        "assets/maps/florest3.json",
+        "assets/maps/goblin1.json"
     };
     
     TileMap map = LoadTileMap(mapFiles[currentMapIndex]);
@@ -292,6 +299,7 @@ int main(void)
     Texture2D tileset3 = LoadTexture("assets/maps/tiles_map/endcastle.png");
     Texture2D tileset4 = LoadTexture("assets/maps/tiles_map/floresta1.png");
     Texture2D tileset5 = LoadTexture("assets/maps/tiles_map/goblin1.png");
+    Texture2D tileset6 = LoadTexture("assets/maps/tiles_map/goblin2.png");
 
     Texture2D staminaBar = LoadTexture("resources/sprites/stamina/staminaBar.png");
 
@@ -527,7 +535,7 @@ while (!WindowShouldClose())
             }
 
             // --- Desenho ---
-            DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5);
+            DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5, tileset6);
 
             if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
         {
@@ -726,6 +734,9 @@ while (!WindowShouldClose())
     UnloadTexture(tileset1);
     UnloadTexture(tileset2);
     UnloadTexture(tileset3);
+    UnloadTexture(tileset4);
+    UnloadTexture(tileset5);
+    UnloadTexture(tileset6);
     UnloadTileMap(&map);
     UnloadPlayer(&player);
     UnloadTexture(staminaBar);
