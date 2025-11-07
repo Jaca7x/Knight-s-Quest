@@ -24,8 +24,8 @@ typedef struct player
 
     bool attackSoundPlayed;
     bool jumpSoundPlayed;
-    bool walkSoundPlaying;
-
+    bool walkSoundPlayingCastle;
+    bool walkSoundPlayingGrass;
     float speedWalk;       
     float speedRun;       
 
@@ -59,7 +59,8 @@ typedef struct player
     float attackTimer;
     float hitTimer;
     float deathAnimTimer;    
-    float walkTime;   
+    float walkTimeCastle;  
+    float walkTimeGrass; 
 
     float stamina;
     float life;
