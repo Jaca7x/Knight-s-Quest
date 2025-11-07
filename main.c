@@ -219,6 +219,7 @@ int main(void)
     Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
     Sound death = LoadSound("resources/sounds/game-over.wav");
     Sound walkingInCastle = LoadSound("resources/sounds/walking-castle.wav");
+    Sound walkingInGrass = LoadSound("resources/sounds/walking-grass.wav");
 
     PlayMusicStream(menuMusic);
     PlayMusicStream(soundTrack);
@@ -456,28 +457,54 @@ while (!WindowShouldClose())
 
             if ((currentMapIndex == 0 || currentMapIndex == 1) && player.isMoving)
             {
-                if (!player.walkSoundPlaying)
+                if (!player.walkSoundPlayingCastle)
                 {
                     PlaySound(walkingInCastle);
-                    player.walkSoundPlaying = true;
-                    player.walkTime = 0.0f;
+                    player.walkSoundPlayingCastle = true;
+                    player.walkTimeCastle = 0.0f;
                 }
-                player.walkTime += delta;
+                player.walkTimeCastle += delta;
 
-                if (player.walkTime > 0.5f)
+                if (player.walkTimeCastle > 0.5f)
                 {
                     StopSound(walkingInCastle);
-                    player.walkSoundPlaying = false;
+                    player.walkSoundPlayingCastle = false;
                 }
             }
             else
             {
-                if (player.walkSoundPlaying)
+                if (player.walkSoundPlayingCastle)
                 {
                     StopSound(walkingInCastle);
-                    player.walkSoundPlaying = false;
+                    player.walkSoundPlayingCastle = false;
                 }
             }
+
+            if (currentMapIndex >= 2 && player.isMoving)
+            {
+                if (!player.walkSoundPlayingGrass)
+                {
+                    PlaySound(walkingInGrass);
+                    player.walkSoundPlayingGrass = true;
+                    player.walkTimeGrass = 0.0f;
+                }
+                player.walkTimeGrass += delta;
+
+                if (player.walkTimeGrass > 0.5f)
+                {
+                    StopSound(walkingInGrass);
+                    player.walkSoundPlayingGrass = false;
+                }
+            }
+            else
+            {
+                if (player.walkSoundPlayingGrass)
+                {
+                    StopSound(walkingInGrass);
+                    player.walkSoundPlayingGrass = false;
+                }
+            }
+
 
             // --- Atualizações ---
             UpdateStaminaBar(&player, delta);
