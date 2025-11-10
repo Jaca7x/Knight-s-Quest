@@ -72,6 +72,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
         {
             if (IsKeyPressed(KEY_SPACE))
             {
+                PlaySound(player->playerDialogueWithNPC1);
                 npc->showExclamation = false;
                 *dialogState = DIALOG_PLAYER_TALKING;
                 *dialogTimer = 0.0f;
@@ -110,6 +111,7 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
         {
             if (IsKeyPressed(KEY_SPACE))
             {
+                PlaySound(player->playerDialogueWithNPC2);
                 npc->showExclamation = false;
                 *dialogState = DIALOG_PLAYER_TALKING2;
                 *dialogTimer = 0.0f;
@@ -180,7 +182,7 @@ void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dia
 
     int nextMsgTextPlayerX = 246;
     int nextMsgTextNpcX = 996;
-    int nextMsgTextY = 848;
+    int nextMsgTextY = 880;
 
     // Dialog lines
     const char *lines[] = {
@@ -235,7 +237,6 @@ void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dia
                 timeWriting = 0.0f;
             }
 
-            // Choose speech bubble and text position
             if (dialogState == DIALOG_NPC_TALKING || dialogState == DIALOG_NPC_TALKING2)
             {
                 DrawTexture(npc->npcSpeech, npcSpeechX, speechY, WHITE);
