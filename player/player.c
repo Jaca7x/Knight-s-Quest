@@ -26,6 +26,9 @@ void InitPlayer(Player *player)
     player->attackHeavySound = LoadSound("resources/sounds/attack-2.wav");
     player->jumpSound        = LoadSound("resources/sounds/jump.wav");
 
+    player->playerDialogueWithNPC1 = LoadSound("resources/sprites/player/voices/dialogue-npc-1.wav");
+    player->playerDialogueWithNPC2 = LoadSound("resources/sprites/player/voices/dialogue-npc-2.wav");
+
     player->attackSoundPlayed = false;
     player->jumpSoundPlayed   = false;
     player->walkSoundPlayingCastle  = false;
@@ -571,4 +574,10 @@ void UnloadPlayer(Player *player)
     UnloadTexture(player->spritePlayerAttack1);
     UnloadTexture(player->spritePlayerAttack2);
     UnloadTexture(player->spritePlayerHurt);
+    UnloadSound(player->attackLightSound);
+    UnloadSound(player->attackHeavySound);
+    UnloadSound(player->jumpSound);
+    UnloadSound(player->playerDialogueWithNPC1);
+    UnloadSound(player->playerDialogueWithNPC2);
+    
 }
