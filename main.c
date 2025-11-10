@@ -754,6 +754,8 @@ while (!WindowShouldClose())
     UnloadMusicStream(soundTrack);
     UnloadSound(death);
     UnloadSound(buttonSelect);
+    UnloadSound(walkingInCastle);
+    UnloadSound(walkingInGrass);
 
     CloseWindow();
     return 0;
