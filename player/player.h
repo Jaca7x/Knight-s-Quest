@@ -22,6 +22,9 @@ typedef struct player
     Sound attackHeavySound;
     Sound jumpSound;
 
+    Sound playerDialogueWithNPC1;
+    Sound playerDialogueWithNPC2;
+
     bool attackSoundPlayed;
     bool jumpSoundPlayed;
     bool walkSoundPlayingCastle;
