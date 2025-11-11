@@ -13,6 +13,7 @@
 		"interaction.h": "c",
 		"ghost.h": "c",
 		"player.h": "c",
-		"wolfrunning.h": "c"
+		"wolfrunning.h": "c",
+		"raylib.h": "c"
 	}
 }
