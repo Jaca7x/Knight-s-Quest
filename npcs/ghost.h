@@ -1,5 +1,7 @@
 #ifndef GHOST_H
 #define GHOST_H
+#define NUM_MAPS 4
+#define DIALOGS_PER_MAP 3
 
 #include "librays/raylib.h"
 #include "player/player.h"
@@ -21,6 +23,12 @@ typedef enum {
     DIALOG_GHOST_TALKING3
 } DialogStateGhost;
 
+typedef struct {
+    const char *text;
+    Sound sound;
+} Dialogue;
+
+
 // Ghost NPC structure
 typedef struct ghost {
     Vector2 position;
@@ -28,6 +36,8 @@ typedef struct ghost {
     Texture2D ghostIdle;
     Texture2D ghostBtnE;
     Texture2D ghostExclamation;
+
+    Dialogue dialogues[NUM_MAPS][6];
 
     int frameIdle;
 
@@ -42,7 +52,7 @@ typedef struct ghost {
 } Ghost;
 
 void InitGhost(Ghost *ghost);
-void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interaction, DialogStateGhost *dialogStateGhost, float *dialogoTimer);
+void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interaction, DialogStateGhost *dialogStateGhost, float *dialogoTimer, int currentMapIndex);
 void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction, int currentMapIndex);
 void MapsGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction, float delta, int currentMapIndex);
 void UnloadGhost(Ghost *ghost);
