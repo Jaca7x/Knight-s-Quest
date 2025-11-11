@@ -26,8 +26,8 @@ void InitPlayer(Player *player)
     player->attackHeavySound = LoadSound("resources/sounds/attack-2.wav");
     player->jumpSound        = LoadSound("resources/sounds/jump.wav");
 
-    player->playerDialogueWithNPC1 = LoadSound("resources/sprites/player/voices/dialogue-npc-1.wav");
-    player->playerDialogueWithNPC2 = LoadSound("resources/sprites/player/voices/dialogue-npc-2.wav");
+    player->playerDialogueWithNPC1 = LoadSound("resources/sounds/voices/player-dialogue-npc-1.wav");
+    player->playerDialogueWithNPC2 = LoadSound("resources/sounds/voices/player-dialogue-npc-2.wav");
 
     player->attackSoundPlayed = false;
     player->jumpSoundPlayed   = false;
