@@ -517,7 +517,7 @@ while (!WindowShouldClose())
             // --- Atualizações ---
             UpdateStaminaBar(&player, delta);
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
-            UpdateGhost(&ghost, &player, delta, &interaction, &dialogStateGhost, &dialogoTimer);
+            UpdateGhost(&ghost, &player, delta, &interaction, &dialogStateGhost, &dialogoTimer, currentMapIndex);
             UpdateInteraction(&interaction, delta); 
 
             if (player.life <= 0 )
