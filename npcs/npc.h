@@ -29,6 +29,9 @@ typedef struct npc {
     Texture2D exclamation;
     Vector2 position;   
 
+    Sound dialogueWithPlayer1;
+    Sound dialogueWithPlayer2;
+    
     Font textSpeech;
 
     bool showExclamation;
