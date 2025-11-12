@@ -31,43 +31,43 @@ void InitPlayer(Player *player)
 
     // MAPA 1
     player->dialogues[0][0].text = "Gareth II: Ahh! Quem é você?";
-
+    player->dialogues[0][0].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost1-1.wav");
 
     player->dialogues[0][1].text = "Gareth II: Ainda bem que você apareceu!\nQuem são esses goblins?";
-
+    player->dialogues[0][1].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost1-2.wav");
 
     player->dialogues[0][2].text = "Gareth II: Mas por que esse ataque?\nEstávamos em paz há 200 anos...";
-
+    player->dialogues[0][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost1-3.wav");
 
     // MAPA 2
     player->dialogues[1][0].text = "Garath II: Oque é aquilo!?";
-
+    player->dialogues[1][0].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost2-1.wav");
 
     player->dialogues[1][1].text = "Gareth II: Preciso passar por eles, para chegar\naté a floresta?";
-
+    player->dialogues[1][1].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost2-2.wav");
 
     player->dialogues[1][2].text = "Gareth II: Entendido, obrigado pela dica!.";
-
+    player->dialogues[1][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost2-3.wav");
 
     // MAPA 3
     player->dialogues[2][0].text = "Gareth II: Esse é o bosque de Arvendel?";
-
+    player->dialogues[2][0].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost3-1.wav");
 
     player->dialogues[2][1].text = "Gareth II: Sim, terei que ser cauteloso daqui\npra frente.";
-
+    player->dialogues[2][1].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost3-2.wav");
 
     player->dialogues[2][2].text = "Gareth II: Mas, espera aí aqueles monstros\nsão vermelhos!,\neles parecem diferentes...";
-
+    player->dialogues[2][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost3-3.wav");
 
     // MAPA 4
     player->dialogues[3][0].text = "Gareth II: Ufa! Finalmente passei daqueles\nmonstros vermelhos.";
-
+    player->dialogues[3][0].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost4-1.wav");
 
     player->dialogues[3][1].text = "Gareth II: O que quer dizer com isso?";
-
+    player->dialogues[3][1].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost4-2.wav");
 
     player->dialogues[3][2].text = "Gareth II: Parece que tenho mais desafios,\num lobo branco logo a frente!";
-
+    player->dialogues[3][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost4-3.wav");
 
     player->attackSoundPlayed = false;
     player->jumpSoundPlayed   = false;
