@@ -1,5 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+#define NUM_MAPS 4
+#define DIALOGS_PER_MAP 3
 
 #include "../librays/raylib.h"       
 #include "../wolf/wolf.h"            
@@ -14,6 +16,12 @@ typedef struct goblin Goblin;
 typedef struct goblinArcher GoblinArcher;
 typedef struct npc Npc;
 
+typedef struct {
+    const char *text;
+    Sound sound;
+} Dialogue;
+
+
 typedef struct player
 {
     Vector2 position;
@@ -24,6 +32,8 @@ typedef struct player
 
     Sound playerDialogueWithNPC1;
     Sound playerDialogueWithNPC2;
+
+    Dialogue dialogues[NUM_MAPS][6];
 
     bool attackSoundPlayed;
     bool jumpSoundPlayed;
@@ -86,7 +96,6 @@ typedef struct player
     float direction;
 
 } Player;
-
 
 void InitPlayer(Player *player);
 void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf,
