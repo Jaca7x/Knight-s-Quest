@@ -17,8 +17,8 @@ void InitNpc(Npc *npc)
 
     npc->textSpeech = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
-    npc->dialogueWithPlayer1 = LoadSound("resources/sounds/voices/npc-1-dialogue.wav");
-    npc->dialogueWithPlayer2 = LoadSound("resources/sounds/voices/npc-2-dialogue.wav");
+    npc->dialogueWithPlayer1 = LoadSound("resources/sounds/voices/npc/npc-1-dialogue.wav");
+    npc->dialogueWithPlayer2 = LoadSound("resources/sounds/voices/npc/npc-2-dialogue.wav");
 
 
     npc->frameTalking = 4; 
