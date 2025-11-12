@@ -26,8 +26,48 @@ void InitPlayer(Player *player)
     player->attackHeavySound = LoadSound("resources/sounds/attack-2.wav");
     player->jumpSound        = LoadSound("resources/sounds/jump.wav");
 
-    player->playerDialogueWithNPC1 = LoadSound("resources/sounds/voices/player-dialogue-npc-1.wav");
-    player->playerDialogueWithNPC2 = LoadSound("resources/sounds/voices/player-dialogue-npc-2.wav");
+    player->playerDialogueWithNPC1 = LoadSound("resources/sounds/voices/player/player-dialogue-npc-1.wav");
+    player->playerDialogueWithNPC2 = LoadSound("resources/sounds/voices/player/player-dialogue-npc-2.wav");
+
+    // MAPA 1
+    player->dialogues[0][0].text = "Gareth II: Ahh! Quem é você?";
+
+
+    player->dialogues[0][1].text = "Gareth II: Ainda bem que você apareceu!\nQuem são esses goblins?";
+
+
+    player->dialogues[0][2].text = "Gareth II: Mas por que esse ataque?\nEstávamos em paz há 200 anos...";
+
+
+    // MAPA 2
+    player->dialogues[1][0].text = "Garath II: Oque é aquilo!?";
+
+
+    player->dialogues[1][1].text = "Gareth II: Preciso passar por eles, para chegar\naté a floresta?";
+
+
+    player->dialogues[1][2].text = "Gareth II: Entendido, obrigado pela dica!.";
+
+
+    // MAPA 3
+    player->dialogues[2][0].text = "Gareth II: Esse é o bosque de Arvendel?";
+
+
+    player->dialogues[2][1].text = "Gareth II: Sim, terei que ser cauteloso daqui\npra frente.";
+
+
+    player->dialogues[2][2].text = "Gareth II: Mas, espera aí aqueles monstros\nsão vermelhos!,\neles parecem diferentes...";
+
+
+    // MAPA 4
+    player->dialogues[3][0].text = "Gareth II: Ufa! Finalmente passei daqueles\nmonstros vermelhos.";
+
+
+    player->dialogues[3][1].text = "Gareth II: O que quer dizer com isso?";
+
+
+    player->dialogues[3][2].text = "Gareth II: Parece que tenho mais desafios,\num lobo branco logo a frente!";
+
 
     player->attackSoundPlayed = false;
     player->jumpSoundPlayed   = false;
