@@ -18,6 +18,20 @@ Rectangle GetPlayerHitbox(Player *player)
     };
 }
 
+void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex)
+{
+    if (currentMapIndex >= 1 && currentMapIndex <= 4)
+    {
+        Sound s = player->dialogues[currentMapIndex - 1][dialogueIndex].sound;
+
+        if (s.frameCount > 0)  
+        {
+            StopSound(s);
+            PlaySound(s);
+        }
+    }
+}
+
 // Inicializa as variáveis do jogador e carrega os sprites.
 void InitPlayer(Player *player)
 {

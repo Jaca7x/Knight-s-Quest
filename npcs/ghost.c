@@ -158,6 +158,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
             ghost->isInteraction = true;
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING;
             *dialogoTimer = 0.0f;
+            PlayPlayerSound(player, currentMapIndex, 0);
         }
         return;
     }
@@ -182,6 +183,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING2;
             *dialogoTimer = 0.0f;
+            PlayPlayerSound(player, currentMapIndex, 1);
         }
     }
     else if (*dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING2)
@@ -203,6 +205,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING3;
             *dialogoTimer = 0.0f;
+            PlayPlayerSound(player, currentMapIndex, 2);
         }
     }
     else if (*dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING3)
