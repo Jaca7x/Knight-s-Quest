@@ -8,7 +8,9 @@
 #include "../wolf/wolfRunning.h" 
 #include "../goblin/goblin.h" 
 #include "../goblin/goblinArcher.h" 
-#include "../npcs/npc.h"    
+#include "../npcs/npc.h"   
+
+void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
 
 typedef struct wolf Wolf; 
 typedef struct wolfRun WolfRun; 
@@ -19,7 +21,7 @@ typedef struct npc Npc;
 typedef struct {
     const char *text;
     Sound sound;
-} Dialogue;
+} DialoguePlayer;
 
 
 typedef struct player
@@ -33,7 +35,7 @@ typedef struct player
     Sound playerDialogueWithNPC1;
     Sound playerDialogueWithNPC2;
 
-    Dialogue dialogues[NUM_MAPS][6];
+    DialoguePlayer dialogues[NUM_MAPS][6];
 
     bool attackSoundPlayed;
     bool jumpSoundPlayed;

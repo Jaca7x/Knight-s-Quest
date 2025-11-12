@@ -20,54 +20,65 @@ void PlayGhostSound(Ghost *ghost, int currentMapIndex, int dialogueIndex)
     }
 }
 
-
 const char **GetGhostDialog(int mapIndex, int *numLines)
 {
-    static const char *dialogMap1[] = {
-        "Gareth II: Ahh! Quem é você?",
-        "Cavaleiro Fantasma: Olá, eu sou um cavaleiro\nfantasma, irei te ajudar na sua jornada\naté o reino goblin!",
-        "Gareth II: Ainda bem que você apareceu!\nQuem são esses goblins?",
-        "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin.",
-        "Gareth II: Mas por que esse ataque?\nEstávamos em paz há 200 anos...",
-        "Cavaleiro Fantasma: Foque em defender o reino,\ndepois conversamos mais sobre isso."
+    static const char *dialogs[4][3] = {
+        {
+            "Cavaleiro Fantasma: Olá, eu sou um cavaleiro\nfantasma, irei te ajudar na sua jornada\naté o reino goblin!",
+            "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin.",
+            "Cavaleiro Fantasma: Foque em defender o reino,\ndepois conversamos mais sobre isso."
+        },
+        {
+            "Cavaleiro Fantasma: São lobos sombrios de Eldruin,\neles vivem juntos com os goblins e atacam\nqualquer um que se aproxime.",
+            "Cavaleiro Fantasma: Sim!, Cuidado, eles são rápidos\ne ferozes.\nUse sua espada com sabedoria.",
+            "Cavaleiro Fantasma: Boa sorte, cavaleiro!."
+        },
+        {
+            "Cavaleiro Fantasma: Sim, aqui sua jornada\nrealmente começa.\nO bosque estará tomado pelos goblins.",
+            "Cavaleiro Fantasma: Lembre-se, cavaleiro, a\ncoragem e a sabedoria serão suas maiores armas.",
+            "Cavaleiro Fantasma: Sim, esses monstros vermelhos\nsão mais fortes e brutos do que os outros,\ncuidado e redobre sua atenção."
+        },
+        {
+            "Cavaleiro Fantasma: Sim, você está indo bem,\nmas a parte mais difícil ainda está por vir.",
+            "Cavaleiro Fantasma: Logo à frente você irá chegar\nà floresta negra, onde é o reino goblin,\no mais perigoso de todos.",
+            "Cavaleiro Fantasma: Exatamente, esses lobos\nbrancos são os mais rápidos e inteligentes,\neles são os guardiões da floresta goblin."
+        }
     };
 
-    static const char *dialogMap2[] = {
-        "Garath II: Oque é aquilo!?",
-        "Cavaleiro Fantasma: São lobos sombrios de Eldruin\n, eles vivem juntos com os goblins e atacam\nqualquer um que se aproxime.",
-        "Gareth II: Preciso passar por eles para chegar\naté a floresta?",
-        "Cavaleiro Fantasma: Sim!, Cuidado, eles são rápidos\ne ferozes.\nUse sua espada com sabedoria.",
-        "Gareth II: Entendido, obrigado pela dica!.",
-        "Cavaleiro Fantasma: Boa sorte, cavaleiro!."
-    }; 
-
-    static const char *dialogMap3[] = {
-        "Gareth II: Esse é o bosque de Arvendel?!",
-        "Cavaleiro Fantasma: Sim, aqui sua jornada\nrealmente começa.\nO bosque estará tomado pelos goblins.",
-        "Gareth II: Sim, terei que ser cauteloso daqui\npra frente.",
-        "Cavaleiro Fantasma: Lembre-se, cavaleiro, a\ncoragem e a sabedoria serão suas maiores armas",
-        "Gareth II: Mas espera ai aqueles monstros\nsão vermelhos!,\neles parecem diferentes...",
-        "Cavaleiro Fantasma: Sim, esses montros vermelhos\nsão mais fortes e brutos do que os outros,\ncuidado e redobre sua atenção."
-    };
-
-    static const char *dialogMap4[] = {
-        "Gareth II: Ufa! Finalmente passei daqueles\nmonstros vermelhos.",
-        "Cavaleiro Fantasma: Sim, você está indo bem,\nmas a parte mais difícil ainda está por vir.",
-        "Gareth II: Oque quer dizer com isso?",
-        "Cavaleiro Fantasma: Logo a frente você irá chegar\ná floresta negra, onde é o reino goblin,\no mais perigoso de todos.",
-        "Gareth II: Parece que tenho mais desafio,\num lobo branco logo a frente!",
-        "Cavaleiro Fantasma: Exatamente, esses lobos\nbrancos são os mais rápidos e inteligentes\n, eles são os guardiões da floresta goblin."
-    };
-
-    switch (mapIndex)
-    {
-        case 1: *numLines = sizeof(dialogMap1) / sizeof(dialogMap1[0]); return dialogMap1;
-        case 2: *numLines = sizeof(dialogMap2) / sizeof(dialogMap2[0]); return dialogMap2;
-        case 3: *numLines = sizeof(dialogMap3) / sizeof(dialogMap3[0]); return dialogMap3;
-        case 4: *numLines = sizeof(dialogMap4) / sizeof(dialogMap4[0]); return dialogMap4;
-        default: *numLines = 0; return NULL;
-    }
+    *numLines = 3;
+    return dialogs[mapIndex - 1];
 }
+
+
+const char **GetPlayerDialog(int mapIndex, int *numLines)
+{
+    static const char *dialogs[4][3] = {
+        {
+            "Ahh! Quem é você?!",
+            "Ainda bem que apareceu! Quem são esses goblins?",
+            "Mas... por que esse ataque? Estávamos em paz há 200 anos!"
+        },
+        {
+            "O quê é aquilo!?",
+            "Preciso passar por eles para chegar até a floresta?",
+            "Entendido, obrigado pela dica!"
+        },
+        {
+            "Esse é o bosque de Arvendel?!",
+            "Sim, terei que ser cauteloso daqui pra frente.",
+            "Mas... espera aí, aqueles monstros são vermelhos?!"
+        },
+        {
+            "Ufa! Finalmente passei daqueles monstros vermelhos.",
+            "O que quer dizer com isso?",
+            "Parece que tenho mais desafios pela frente!"
+        }
+    };
+
+    *numLines = 3;
+    return dialogs[mapIndex - 1];
+}
+
 
 void InitGhost(Ghost *ghost)
 {
@@ -302,16 +313,32 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
     int nextMsgTextNpcX = 996;
     int nextMsgTextY = 848;
 
-   int numLines = 0;
-   const char **lines = GetGhostDialog(currentMapIndex, &numLines);
+    int numLinesGhost = 0;
+    int numLinesPlayer = 0;
+
+    const char **ghostLines = GetGhostDialog(currentMapIndex, &numLinesGhost);
+    const char **playerLines = GetPlayerDialog(currentMapIndex, &numLinesPlayer);
+
+    const char **lines = NULL;
+
+    if (dialogStateGhost == DIALOG_GHOST_TALKING || 
+    dialogStateGhost == DIALOG_GHOST_TALKING2 || 
+    dialogStateGhost == DIALOG_GHOST_TALKING3)
+    {
+        lines = ghostLines;
+    }
+    else
+    {
+        lines = playerLines;
+    }
 
     int lineIndex = -1;
     if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING) lineIndex = 0;
-    else if (dialogStateGhost == DIALOG_GHOST_TALKING) lineIndex = 1;
-    else if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING2) lineIndex = 2;
-    else if (dialogStateGhost == DIALOG_GHOST_TALKING2) lineIndex = 3;
-    else if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING3) lineIndex = 4;
-    else if (dialogStateGhost == DIALOG_GHOST_TALKING3) lineIndex = 5;
+    else if (dialogStateGhost == DIALOG_GHOST_TALKING) lineIndex = 0;
+    else if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING2) lineIndex = 1;
+    else if (dialogStateGhost == DIALOG_GHOST_TALKING2) lineIndex = 1;
+    else if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING3) lineIndex = 2;
+    else if (dialogStateGhost == DIALOG_GHOST_TALKING3) lineIndex = 2;
 
     static DialogStateGhost lastState = DIALOG_CLOSED_GHOST; 
     if (dialogStateGhost != lastState)
@@ -369,7 +396,6 @@ void MapsGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
         }
     }
 }
-
 
 void UnloadGhost(Ghost *ghost)
 {

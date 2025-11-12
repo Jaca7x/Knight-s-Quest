@@ -8,8 +8,6 @@
 #include "npc.h"
 #include "interaction.h"
 
-//#define MAP_GHOST 1
-
 typedef struct npc Npc;
 typedef struct interaction Interaction;
 
