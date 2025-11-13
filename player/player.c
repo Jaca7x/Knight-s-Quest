@@ -633,5 +633,12 @@ void UnloadPlayer(Player *player)
     UnloadSound(player->jumpSound);
     UnloadSound(player->playerDialogueWithNPC1);
     UnloadSound(player->playerDialogueWithNPC2);
-    
+
+    for (int i = 0; i < NUM_MAPS; i++)
+    {
+        for (int j = 0; j < 6; j++)
+        {
+            UnloadSound(player->dialogues[i][j].sound);
+        }
+    }
 }

@@ -404,4 +404,12 @@ void UnloadGhost(Ghost *ghost)
     UnloadTexture(ghost->ghostSpeech);
     UnloadTexture(ghost->ghostExclamation);
     UnloadFont(ghost->textFont);
+
+    for (int i = 0; i < NUM_MAPS; i++)
+    {
+        for (int j = 0; j < 6; j++)
+        {
+            UnloadSound(ghost->dialogues[i][j].sound);
+        }
+    }
 }

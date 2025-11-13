@@ -26,8 +26,6 @@ typedef struct {
     Sound sound;
 } Dialogue;
 
-
-// Ghost NPC structure
 typedef struct ghost {
     Vector2 position;
     Texture2D ghostSpeech;
