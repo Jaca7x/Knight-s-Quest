@@ -56,7 +56,7 @@ const char **GetPlayerDialog(int mapIndex, int *numLines)
         {
             "Ahh! Quem é você?!",
             "Ainda bem que apareceu! Quem são esses goblins?",
-            "Mas... por que esse ataque? Estávamos em paz há 200 anos!"
+            "Mas... por que esse ataque? Estávamos em paz\nhá 200 anos!"
         },
         {
             "O quê é aquilo!?",
@@ -71,7 +71,7 @@ const char **GetPlayerDialog(int mapIndex, int *numLines)
         {
             "Ufa! Finalmente passei daqueles monstros vermelhos.",
             "O que quer dizer com isso?",
-            "Parece que tenho mais desafios pela frente!"
+            "Parece que tenho mais desafios pela frente!\nUm lobo branco logo à frente!"
         }
     };
 
@@ -311,7 +311,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
 
     int nextMsgTextPlayerX = 246;
     int nextMsgTextNpcX = 996;
-    int nextMsgTextY = 848;
+    int nextMsgTextY = 825;
 
     int numLinesGhost = 0;
     int numLinesPlayer = 0;
