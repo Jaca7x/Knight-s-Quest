@@ -46,6 +46,12 @@ typedef enum GameState
     GITHUB
 } GameState;
 
+typedef enum InventoryState 
+{
+    INVENTORY_CLOSED,
+    INVENTORY_OPEN
+} InventoryState;
+
 // Estrutura que representa um mapa carregado do Tiled
 typedef struct
 {
@@ -232,6 +238,7 @@ int main(void)
     
 
     GameState gameState = MENU;
+    InventoryState inventory = INVENTORY_CLOSED;
 
     const char *mapFiles[MAP_COUNT] = {
         "assets/maps/castle_map.json",
@@ -464,6 +471,19 @@ while (!WindowShouldClose())
 
             ResumeMusicStream(soundTrack);
 
+            switch (inventory)
+            {   
+            case INVENTORY_CLOSED:
+                if (IsKeyPressed(KEY_I))
+                    inventory = INVENTORY_OPEN;
+                break;
+
+            case INVENTORY_OPEN:
+                if (IsKeyPressed(KEY_I))
+                    inventory = INVENTORY_CLOSED;
+                break;
+            }
+
             if ((currentMapIndex == 0 || currentMapIndex == 1) && player.isMoving)
             {
                 if (!player.walkSoundPlayingCastle)
@@ -606,7 +626,13 @@ while (!WindowShouldClose())
             }
 
             MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
-
+            
+            if (inventory == INVENTORY_OPEN)
+            {
+                DrawRectangle(100, 100, GetScreenWidth() - 200, GetScreenHeight() - 200, (Color){0, 0, 0, 200});
+                DrawText("Inventário (Pressione 'I' para fechar)", GetScreenWidth() / 2 - 150, 120, 20, WHITE);
+            }
+            
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
