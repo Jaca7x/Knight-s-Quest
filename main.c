@@ -355,7 +355,8 @@ while (!WindowShouldClose())
 
                 volume = percent;
 
-                SetMasterVolume(volume);
+                SetMusicVolume(menuMusic, volume);
+                SetMusicVolume(soundTrack, volume);
             }
 
             float x1Play = 930, y1Play = 418;  
