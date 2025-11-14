@@ -46,11 +46,11 @@ typedef enum GameState
     GITHUB
 } GameState;
 
-typedef enum InventoryState 
+typedef enum ConfigState
 {
-    INVENTORY_CLOSED,
-    INVENTORY_OPEN
-} InventoryState;
+    CONFIG_CLOSED,
+    CONFIG_OPEN
+} ConfigState;
 
 // Estrutura que representa um mapa carregado do Tiled
 typedef struct
@@ -238,7 +238,7 @@ int main(void)
     
 
     GameState gameState = MENU;
-    InventoryState inventory = INVENTORY_CLOSED;
+    ConfigState configState = CONFIG_CLOSED;
 
     const char *mapFiles[MAP_COUNT] = {
         "assets/maps/castle_map.json",
@@ -321,8 +321,8 @@ int main(void)
     float textTime = 0.0f;
 
     float volume = 0.5;
-    float slideX = 25;
-    float slideY = 15;
+    float slideX = 700;
+    float slideY = 200;
     float slideWidth = 200;
     float slideHeight = 10;
     float ballRadius = 10;
@@ -352,19 +352,6 @@ while (!WindowShouldClose())
             ResumeMusicStream(menuMusic);
 
             PauseMusicStream(soundTrack);
-
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
-            && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
-            {
-                float percent = (mousePos.x - slideX) / slideWidth;
-                if (percent < 0) percent = 0;
-                if (percent > 1) percent = 1;
-
-                volume = percent;
-
-                SetMusicVolume(menuMusic, volume);
-                SetMusicVolume(soundTrack, volume);
-            }
 
             float x1Play = 930, y1Play = 418;  
             float x2Play = 1300, y2Play = 532;  
@@ -410,12 +397,6 @@ while (!WindowShouldClose())
             float radius = 59;
 
             DrawTexture(menuImage, 0, 0, WHITE);
-
-            DrawRectangle(slideX, slideY, slideWidth, slideHeight, LIGHTGRAY);
-
-            DrawRectangle(slideX, slideY, slideWidth * volume, slideHeight, SKYBLUE);
-
-            DrawCircle(slideX + slideWidth * volume, slideY + slideHeight / 2, ballRadius, DARKBLUE);
 
             if (CheckCollisionPointRec(mousePos, checkPlay)) {
                 DrawRectangleRec(rectPlay, (Color){247,173,7,75});
@@ -471,16 +452,31 @@ while (!WindowShouldClose())
 
             ResumeMusicStream(soundTrack);
 
-            switch (inventory)
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
+            && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+            {
+                float percent = (mousePos.x - slideX) / slideWidth;
+                if (percent < 0) percent = 0;
+                if (percent > 1) percent = 1;
+
+                volume = percent;
+
+                SetMusicVolume(menuMusic, volume);
+                SetMusicVolume(soundTrack, volume);
+            }
+
+            switch (configState)
             {   
-            case INVENTORY_CLOSED:
-                if (IsKeyPressed(KEY_I))
-                    inventory = INVENTORY_OPEN;
+            case CONFIG_CLOSED:
+                if (IsKeyPressed(KEY_K))
+                    configState = CONFIG_OPEN;
                 break;
 
-            case INVENTORY_OPEN:
-                if (IsKeyPressed(KEY_I))
-                    inventory = INVENTORY_CLOSED;
+            case CONFIG_OPEN:
+                player.isAttacking = true;
+                if (IsKeyPressed(KEY_K))
+                    configState = CONFIG_CLOSED;
+                    player.isAttacking = false;
                 break;
             }
 
@@ -627,17 +623,25 @@ while (!WindowShouldClose())
 
             MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
             
-            if (inventory == INVENTORY_OPEN)
-            {
-                DrawRectangle(100, 100, GetScreenWidth() - 200, GetScreenHeight() - 200, (Color){0, 0, 0, 200});
-                DrawText("Inventário (Pressione 'I' para fechar)", GetScreenWidth() / 2 - 150, 120, 20, WHITE);
-            }
-            
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
             DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f, &player);
             DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
+
+            if (configState == CONFIG_OPEN)
+            {
+                DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
+                DrawText("Configurações (Pressione 'K' para fechar)", 450, 120, 20, WHITE);
+
+                DrawText("Volume Música:", 450, 195, 20, WHITE);
+
+                DrawRectangle(slideX, slideY, slideWidth, slideHeight, LIGHTGRAY);
+
+                DrawRectangle(slideX, slideY, slideWidth * volume, slideHeight, SKYBLUE);
+
+                DrawCircle(slideX + slideWidth * volume, slideY + slideHeight / 2, ballRadius, DARKBLUE);
+            }
 
             if (currentMapIndex == 0 && textTime < 2.0f)
             {
