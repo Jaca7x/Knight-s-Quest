@@ -321,8 +321,14 @@ int main(void)
     float textTime = 0.0f;
 
     float volume = 0.5;
+    float volumeEfects = 1.0;
+    float volumeDialogue = 1.0;
     float slideX = 700;
+    float slideXEfects = 720;
+    float slideXDialogue = 700;
     float slideY = 200;
+    float slideYEfects = 275;
+    float slideYDialogue = 350;
     float slideWidth = 200;
     float slideHeight = 10;
     float ballRadius = 10;
@@ -463,6 +469,54 @@ while (!WindowShouldClose())
 
                 SetMusicVolume(menuMusic, volume);
                 SetMusicVolume(soundTrack, volume);
+            }
+
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
+            && CheckCollisionPointRec(mousePos, (Rectangle){slideXEfects, slideYEfects - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+            {
+                float percent = (mousePos.x - slideXEfects) / slideWidth;
+                if (percent < 0) percent = 0;
+                if (percent > 1) percent = 1;
+
+                volumeEfects = percent;
+
+                SetSoundVolume(player.attackLightSound, volumeEfects);
+                SetSoundVolume(player.attackHeavySound, volumeEfects);
+                SetSoundVolume(player.jumpSound, volumeEfects);
+                SetSoundVolume(walkingInCastle, volumeEfects);
+                SetSoundVolume(walkingInGrass, volumeEfects);
+            }
+
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
+            && CheckCollisionPointRec(mousePos, (Rectangle){slideXDialogue, slideYDialogue - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+            {
+                float percent = (mousePos.x - slideXDialogue) / slideWidth;
+                if (percent < 0) percent = 0;
+                if (percent > 1) percent = 1;
+
+                volumeDialogue = percent;
+
+                SetSoundVolume(player.playerDialogueWithNPC1, volumeDialogue);
+                SetSoundVolume(player.playerDialogueWithNPC2, volumeDialogue);
+
+                SetSoundVolume(npc.dialogueWithPlayer1, volumeDialogue);
+                SetSoundVolume(npc.dialogueWithPlayer2, volumeDialogue);
+
+                for (int i = 0; i < NUM_MAPS; i++)
+                {
+                    for (int j = 0; j < DIALOGS_PER_MAP; j++)
+                    {   
+                        SetSoundVolume(ghost.dialogues[i][j].sound, volumeDialogue);
+                    }
+                }
+
+                for (int i = 0; i < NUM_MAPS; i++)
+                {
+                    for (int j = 0; j < DIALOGS_PER_MAP; j++)
+                    {   
+                        SetSoundVolume(player.dialogues[i][j].sound, volumeDialogue);
+                    }
+                }
             }
 
             switch (configState)
@@ -641,6 +695,22 @@ while (!WindowShouldClose())
                 DrawRectangle(slideX, slideY, slideWidth * volume, slideHeight, SKYBLUE);
 
                 DrawCircle(slideX + slideWidth * volume, slideY + slideHeight / 2, ballRadius, DARKBLUE);
+
+                DrawText("Volume Efeitos Sonoros:", 450, 270, 20, WHITE);
+
+                DrawRectangle(slideXEfects, slideYEfects, slideWidth, slideHeight, LIGHTGRAY);
+
+                DrawRectangle(slideXEfects, slideYEfects, slideWidth * volumeEfects, slideHeight, SKYBLUE);
+
+                DrawCircle(slideXEfects + slideWidth * volumeEfects, slideYEfects + slideHeight / 2, ballRadius, DARKBLUE);
+
+                DrawText("Volume Dialogos:", 450, 350, 20, WHITE);
+
+                DrawRectangle(slideXDialogue, slideYDialogue, slideWidth, slideHeight, LIGHTGRAY);
+
+                DrawRectangle(slideXDialogue, slideYDialogue, slideWidth * volumeDialogue, slideHeight, SKYBLUE);
+
+                DrawCircle(slideXDialogue + slideWidth * volumeDialogue, slideYDialogue + slideHeight / 2, ballRadius, DARKBLUE);
             }
 
             if (currentMapIndex == 0 && textTime < 2.0f)
