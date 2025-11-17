@@ -15,6 +15,7 @@
 		"player.h": "c",
 		"wolfrunning.h": "c",
 		"raylib.h": "c",
-		"goblinarcher.h": "c"
+		"goblinarcher.h": "c",
+		"npc.h": "c"
 	}
 }
