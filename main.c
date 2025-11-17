@@ -480,7 +480,7 @@ while (!WindowShouldClose())
                 break;
             }
 
-            if ((currentMapIndex == 0 || currentMapIndex == 1) && player.isMoving)
+            if ((currentMapIndex == 0 || currentMapIndex == 1) && player.isMoving && !player.isJumping)
             {
                 if (!player.walkSoundPlayingCastle)
                 {
@@ -505,7 +505,7 @@ while (!WindowShouldClose())
                 }
             }
 
-            if (currentMapIndex >= 2 && player.isMoving)
+            if (currentMapIndex >= 2 && player.isMoving && !player.isJumping)
             {
                 if (!player.walkSoundPlayingGrass)
                 {
