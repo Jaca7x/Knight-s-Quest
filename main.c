@@ -333,6 +333,10 @@ int main(void)
     float slideHeight = 10;
     float ballRadius = 10;
 
+    bool button_hovered = false;
+    Rectangle button_rect = {750, 435, 30, 10};
+    bool button_pressed = false;
+
     bool deathSoundPlay = false;
 
 while (!WindowShouldClose())
@@ -519,6 +523,13 @@ while (!WindowShouldClose())
                 }
             }
 
+            button_hovered = CheckCollisionPointRec(GetMousePosition(), button_rect);
+
+            if (button_hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                button_pressed = !button_pressed;
+            }
+
             switch (configState)
             {   
             case CONFIG_CLOSED:
@@ -680,7 +691,7 @@ while (!WindowShouldClose())
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
-            DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f, &player);
+            DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f, &player, button_pressed);
             DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
 
             if (configState == CONFIG_OPEN)
@@ -711,6 +722,24 @@ while (!WindowShouldClose())
                 DrawRectangle(slideXDialogue, slideYDialogue, slideWidth * volumeDialogue, slideHeight, SKYBLUE);
 
                 DrawCircle(slideXDialogue + slideWidth * volumeDialogue, slideYDialogue + slideHeight / 2, ballRadius, DARKBLUE);
+
+                DrawText("Assistência de estamina:", 450, 430, 20, WHITE);
+
+                DrawRectangle( 750, 435, 50, 10, (Color){128, 128, 128, 160});
+
+                if (button_pressed)
+                {   
+                    DrawText("OFF", 750, 435, 11, WHITE);
+                    Rectangle button_rect = {750 + 20, 435, 30, 10};
+                    DrawRectangleRec(button_rect, GREEN);
+                    
+                }
+                else
+                {
+                    DrawText("ON", 780, 435, 12, WHITE);
+                    Rectangle button_rect = {750, 435, 30, 10};
+                    DrawRectangleRec(button_rect, RED);
+                }
             }
 
             if (currentMapIndex == 0 && textTime < 2.0f)
