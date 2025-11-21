@@ -334,7 +334,7 @@ int main(void)
     float ballRadius = 10;
 
     bool button_hovered = false;
-    Rectangle button_rect = {750, 435, 30, 10};
+    Rectangle button_rect = {750, 435, 70, 20};
     bool button_pressed = false;
 
     bool deathSoundPlay = false;
@@ -725,20 +725,20 @@ while (!WindowShouldClose())
 
                 DrawText("Assistência de estamina:", 450, 430, 20, WHITE);
 
-                DrawRectangle( 750, 435, 50, 10, (Color){128, 128, 128, 160});
+                DrawRectangleRounded(button_rect, 0.30f, 0, (Color){128,128,128,160});
 
                 if (button_pressed)
                 {   
-                    DrawText("OFF", 750, 435, 11, WHITE);
-                    Rectangle button_rect = {750 + 20, 435, 30, 10};
-                    DrawRectangleRec(button_rect, GREEN);
+                    DrawText("OFF", 755, 440, 11, WHITE);
+                    Rectangle button_rect = {750 + 30, 435, 40, 20};
+                    DrawRectangleRounded(button_rect, 0.30f, 0, GREEN);
                     
                 }
                 else
                 {
-                    DrawText("ON", 780, 435, 12, WHITE);
-                    Rectangle button_rect = {750, 435, 30, 10};
-                    DrawRectangleRec(button_rect, RED);
+                    DrawText("ON", 795, 440, 12, WHITE);
+                    Rectangle button_rect = {750, 435, 40, 20};
+                    DrawRectangleRounded(button_rect, 0.30f, 0, RED);
                 }
             }
 
