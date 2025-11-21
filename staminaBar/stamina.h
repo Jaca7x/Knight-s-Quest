@@ -17,7 +17,7 @@ typedef struct staminaBar
     bool isRegenerating;
 } Stamina;
 
-void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale, Player *player);
+void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale, Player *player, bool button_pressed);
 void UpdateStaminaBar(Player *player, float delta);
 
 #endif // STAMINA_H

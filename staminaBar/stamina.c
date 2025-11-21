@@ -81,7 +81,7 @@ printf  ("Stamina: %.2f\n", player->stamina);
 }
 
 
-void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale, Player *player)
+void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale, Player *player, bool button_pressed)
 {
     int frame;
     float delta = GetFrameTime();
@@ -99,7 +99,9 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale,
         frame = (int)((1.0f - stamina / MAX_STAMINA) * (STAMINA_FRAME_COUNT - 1));
     }
     
-    if (isRegenerating)
+    if (button_pressed)
+    {
+        if (isRegenerating)
     {
         DrawText("Estamina Regenerando...", player->position.x + 20, player->position.y - 20, 20, BLACK);
         textTimer = 0.0f;
@@ -112,6 +114,9 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale,
              DrawText("Estamina cheia!", player->position.x + 20, player->position.y - 20, 20, BLACK);
         }
     }
+    }
+    
+    
 
     Rectangle source = {
         0,                                      
