@@ -31,4 +31,4 @@ void UpdateInteraction(Interaction *interaction, float delta);
 void DrawInteractionGhost(Ghost *ghost, Interaction *interaction);
 void DrawInteractionNPC(Npc *npc, Interaction *interaction);
 
-#endif
+#endif //INTERACTION_H
