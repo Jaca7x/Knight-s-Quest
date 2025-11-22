@@ -17,6 +17,7 @@
 #include "npcs/npc.h"   
 #include "npcs/ghost.h"        
 #include "npcs/interaction.h"
+#include "boss/boss.h"
 
 
 // ============================================================================
@@ -300,6 +301,9 @@ int main(void)
 
     Interaction interaction;
     InitInteraction(&interaction);
+
+    Boss boss;
+    InitBoss(&boss);
 
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
@@ -638,6 +642,10 @@ while (!WindowShouldClose())
             player.position.x = 0;
             player.position.y = 520;
         }   
+
+            DrawBoss(&boss);
+            UpdateBoss(&boss);
+
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
                 UpdateWolf(&whiteWolf, &player, delta);
