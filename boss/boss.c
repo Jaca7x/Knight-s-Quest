@@ -2,7 +2,7 @@
 
 void InitBoss(Boss *boss) 
 {
-    boss->position = (Vector2){300, 500};
+    boss->position = (Vector2){300, 340};
 
     boss->currentFrame = 0;
     boss->frameCounter = 0;
@@ -23,6 +23,10 @@ void InitBoss(Boss *boss)
     boss->frameHeight = boss->spriteIdle.height;                  
 
     boss->direction = 1.0f;
+
+    boss->isAttacking = false;
+    boss->isWalking = false;
+    boss->isIdle = true;
 }
 
 void UpdateBoss(Boss *boss) 
@@ -31,8 +35,17 @@ void UpdateBoss(Boss *boss)
 
     if (boss->frameCounter >= 30)
     {
-        boss->frameCounter = 0;
-        boss->currentFrame = (boss->currentFrame + 1) % boss->frameIdle;
+        if (boss->isIdle)
+        {
+            boss->frameCounter = 0;
+            boss->currentFrame = (boss->currentFrame + 1) % boss->frameIdle;
+        }
+        else if (boss->isWalking)
+        {
+            boss->frameCounter = 0;
+            boss->currentFrame = (boss->currentFrame + 1) % boss->frameWalk;
+        }
+        
     }
 }
 

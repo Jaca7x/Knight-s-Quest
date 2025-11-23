@@ -25,6 +25,10 @@ typedef struct boss
     int frameHeight; 
 
     float direction;
+
+    bool isWalking;
+    bool isAttacking;
+    bool isIdle;
 } Boss;
 
 void InitBoss(Boss *boss);
