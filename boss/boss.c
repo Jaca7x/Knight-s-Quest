@@ -1,5 +1,14 @@
 #include "boss.h"
 
+bool CheckCollision(float x1, float y1, float w1, float h1,
+                    float x2, float y2, float w2, float h2)
+{
+    return (x1 < x2 + w2 &&
+            x1 + w1 > x2 &&
+            y1 < y2 + h2 &&
+            y1 + h1 > y2);
+}
+
 void InitBoss(Boss *boss) 
 {
     boss->position = (Vector2){300, 340};
@@ -27,9 +36,11 @@ void InitBoss(Boss *boss)
     boss->isAttacking = false;
     boss->isWalking = false;
     boss->isIdle = true;
+
+    boss->attackRange = 100.0f;
 }
 
-void UpdateBoss(Boss *boss) 
+void UpdateBoss(Boss *boss, Player *player) 
 {
     boss->frameCounter++;
 
@@ -45,8 +56,38 @@ void UpdateBoss(Boss *boss)
             boss->frameCounter = 0;
             boss->currentFrame = (boss->currentFrame + 1) % boss->frameWalk;
         }
-        
+        else if (boss->isAttacking)
+        {
+            boss->frameCounter = 0;
+            boss->currentFrame = (boss->currentFrame + 1) % boss->frameAtk;
+
+        }
+    } 
+
+    float distance = fabs(player->position.x - boss->position.x);
+
+    if (boss->isAttacking)
+    {
+        if (distance <= boss->attackRange)
+        {
+            boss->isAttacking = true;
+        }
     }
+    
+
+
+    if (CheckCollision(player->position.x, player->position.y, player->frameWidth, player->frameHeight,
+                        boss->position.x, boss->position.y, boss->frameWidth, boss->frameHeight))
+    {
+        player->hasHit = true;
+        player->hitTimer = 0.5f;
+
+        if (player->position.x < boss->position.x)
+            player->position.x = boss->position.x - player->frameWidth;
+        else
+            player->position.x = boss->position.x + boss->frameWidth;
+    }
+    
 }
 
 void DrawBoss(Boss *boss) 
@@ -65,5 +106,16 @@ void DrawBoss(Boss *boss)
         boss->frameHeight 
     };
 
-    DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
+    if (boss->isIdle)
+    {
+        DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
+    }
+    else if (boss->isAttacking)
+    {
+        DrawTexturePro(boss->spriteAtk, source, dest, (Vector2){0,0}, 0.0f, WHITE);
+    }
+    
+    
+   
+
 }

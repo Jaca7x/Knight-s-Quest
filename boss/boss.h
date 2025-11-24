@@ -2,6 +2,7 @@
 #define BOSS_H
 
 #include "../librays/raylib.h"
+#include "../player/player.h"
 
 typedef struct boss
 {
@@ -29,10 +30,12 @@ typedef struct boss
     bool isWalking;
     bool isAttacking;
     bool isIdle;
+
+    float attackRange;
 } Boss;
 
 void InitBoss(Boss *boss);
-void UpdateBoss(Boss *boss);
+void UpdateBoss(Boss *boss, Player *player);
 void DrawBoss(Boss *boss);
 
 #endif //BOSS_H
