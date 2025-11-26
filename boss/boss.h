@@ -22,9 +22,14 @@ typedef struct boss
 
     int currentFrame;     
     int frameCounter;      
+    int frameWidthAtk;        
+    int frameHeightAtk; 
     int frameWidth;        
     int frameHeight; 
 
+    float scaleAtk;
+    float scaleIdle;
+    
     float direction;
 
     bool isWalking;
