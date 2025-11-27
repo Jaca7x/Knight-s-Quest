@@ -24,11 +24,14 @@ typedef struct boss
     int frameCounter;      
     int frameWidthAtk;        
     int frameHeightAtk; 
+    int frameWidthWalk;
+    int frameHeightWalk; 
     int frameWidth;        
     int frameHeight; 
 
     float scaleAtk;
     float scaleIdle;
+    float scaleWalk;
     
     float direction;
 
@@ -37,10 +40,14 @@ typedef struct boss
     bool isIdle;
 
     float attackRange;
+
+    float speed;
+
+    float viewPlayer;
 } Boss;
 
 void InitBoss(Boss *boss);
-void UpdateBoss(Boss *boss, Player *player);
+void UpdateBoss(Boss *boss, Player *player, float delta);
 void DrawBoss(Boss *boss);
 
 #endif //BOSS_H
