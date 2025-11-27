@@ -644,7 +644,7 @@ while (!WindowShouldClose())
         }   
 
             DrawBoss(&boss);
-            UpdateBoss(&boss, &player);
+            UpdateBoss(&boss, &player, delta);
 
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
