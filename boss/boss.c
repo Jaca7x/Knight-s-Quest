@@ -53,12 +53,16 @@ void InitBoss(Boss *boss)
 
     boss->scaleAtk = 1.5f;
     boss->scaleIdle = 1.0f;
+    boss->scaleWalk = 1.5f;
 
     boss->frameWidth  = boss->spriteIdle.width / boss->frameIdle;
     boss->frameHeight = boss->spriteIdle.height;
     
     boss->frameWidthAtk = boss->spriteAtk.width / boss->frameAtk;
-    boss->frameHeightAtk = boss->spriteAtk.height;        
+    boss->frameHeightAtk = boss->spriteAtk.height;
+
+    boss->frameWidthWalk = boss->spriteWalk.width / boss->frameWalk;
+    boss->frameHeightWalk = boss->spriteWalk.height; 
 
     boss->direction = 1.0f;
 
@@ -66,13 +70,15 @@ void InitBoss(Boss *boss)
     boss->isWalking = false;
     boss->isIdle = true;
 
-    boss->attackRange = 200.0f;
+    boss->attackRange = 100.0f;
+    boss->viewPlayer = 900.0f;
+
+    boss->speed = 10.0f;
 }
 
-void UpdateBoss(Boss *boss, Player *player) 
+void UpdateBoss(Boss *boss, Player *player, float delta) 
 {
     boss->frameCounter++;
-
 
     if (boss->isAttacking && boss->frameCounter >= 10)
     {
@@ -92,16 +98,31 @@ void UpdateBoss(Boss *boss, Player *player)
 
     float distance = fabs(player->position.x - boss->position.x);
 
+    if (distance <= boss->viewPlayer)
+    {
+        boss->direction = (player->position.x > boss->position.x) ? 1 : -1;
+
+        boss->isAttacking = false;
+        boss->isIdle = false;
+        boss->isWalking = true;
+
+
         if (distance <= boss->attackRange)
         {
             boss->isAttacking = true;
-            boss->isIdle = false;
+            boss->isWalking = false;
         }
-        else
-        {
-            boss->isAttacking = false;
-            boss->isIdle = true;
-        }
+    }
+    else
+    {
+        boss->isIdle = true;
+        boss->isWalking = false;
+    }
+    
+    if (boss->isWalking)
+    {
+        boss->position.x += boss->speed * boss->direction * delta;
+    } 
 }   
 
 Rectangle source;
@@ -122,5 +143,12 @@ void DrawBoss(Boss *boss)
         dest = GetDestValueRec(boss->position, boss->frameWidthAtk, boss->frameHeightAtk, boss->scaleAtk);
 
         DrawTexturePro(boss->spriteAtk, source, dest, (Vector2){0,0}, 0.0f, WHITE);
+    }
+    else if (boss->isWalking)
+    {
+        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthWalk, boss->direction, boss->frameHeightWalk);
+        dest = GetDestValueRec(boss->position, boss->frameWidthWalk, boss->frameHeightWalk, boss->scaleWalk);
+
+        DrawTexturePro(boss->spriteWalk, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
 }
