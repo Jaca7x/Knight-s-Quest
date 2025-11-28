@@ -80,6 +80,7 @@ void InitBoss(Boss *boss)
 
     boss->speed = 10.0f;
     
+    boss->damage = 35;
 }
 
 void UpdateBoss(Boss *boss, Player *player, float delta) 
@@ -138,7 +139,7 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
                 player->position.x, player->position.y, player->frameWidth, player->frameHeight,
                 boss->position.x, boss->position.y, boss->frameWidthAtk, boss->frameHeightAtk))
         {
-            player->life -= 35;
+            player->life -= boss->damage;
             player->hasHit = true;
             boss->hasAppliedDamage = true;
         }

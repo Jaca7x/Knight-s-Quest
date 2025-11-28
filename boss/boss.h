@@ -52,6 +52,8 @@ typedef struct boss
     float speed;
 
     float viewPlayer;
+
+    int damage;
 } Boss;
 
 void InitBoss(Boss *boss);
