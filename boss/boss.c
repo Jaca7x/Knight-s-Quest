@@ -34,7 +34,7 @@ Rectangle GetDestValueRec(Vector2 position, int frameWidth, int frameHeight, flo
 
 void InitBoss(Boss *boss) 
 {
-    boss->position = (Vector2){300, 340};
+    boss->position = (Vector2){600, 340};
 
     boss->currentFrame = 0;
     boss->frameCounter = 0;
@@ -60,6 +60,11 @@ void InitBoss(Boss *boss)
     
     boss->frameWidthAtk = boss->spriteAtk.width / boss->frameAtk;
     boss->frameHeightAtk = boss->spriteAtk.height;
+    boss->attackTime = 0.0f;
+    boss->attackCooldown = 0.0f;
+    boss->hitFrame = 4;         
+    boss->hasAppliedDamage = false;
+
 
     boss->frameWidthWalk = boss->spriteWalk.width / boss->frameWalk;
     boss->frameHeightWalk = boss->spriteWalk.height; 
@@ -74,6 +79,7 @@ void InitBoss(Boss *boss)
     boss->viewPlayer = 900.0f;
 
     boss->speed = 10.0f;
+    
 }
 
 void UpdateBoss(Boss *boss, Player *player, float delta) 
@@ -98,32 +104,69 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
 
     float distance = fabs(player->position.x - boss->position.x);
 
-    if (distance <= boss->viewPlayer)
-    {
-        boss->direction = (player->position.x > boss->position.x) ? 1 : -1;
-
-        boss->isAttacking = false;
-        boss->isIdle = false;
-        boss->isWalking = true;
-
-
-        if (distance <= boss->attackRange)
-        {
-            boss->isAttacking = true;
-            boss->isWalking = false;
-        }
-    }
-    else
+    if (distance >= boss->viewPlayer)
     {
         boss->isIdle = true;
         boss->isWalking = false;
+        boss->isAttacking = false;
+        return;
     }
+
+    boss->direction = (player->position.x > boss->position.x) ? 1 : -1;
+
+    if (boss->isAttacking)
+{
+    boss->frameCounter++;
+
+    if (boss->frameCounter >= 10)
+    {
+        boss->frameCounter = 0;
+        boss->currentFrame++;
+
+        if (boss->currentFrame >= boss->frameAtk)
+        {
+            boss->currentFrame = 0;
+            boss->isAttacking = false;
+            boss->hasAppliedDamage = false;  
+            boss->attackCooldown = 1.5f;
+        }
+    }
+
+    if (boss->currentFrame == boss->hitFrame && !boss->hasAppliedDamage)
+    {
+        if (CheckCollisionBoss(
+                player->position.x, player->position.y, player->frameWidth, player->frameHeight,
+                boss->position.x, boss->position.y, boss->frameWidthAtk, boss->frameHeightAtk))
+        {
+            player->life -= 35;
+            player->hasHit = true;
+            boss->hasAppliedDamage = true;
+        }
+    }
+    return; 
+}
+
+
+    if (distance <= boss->attackRange && boss->attackCooldown <= 0)
+{
+    boss->isAttacking = true;
+    boss->currentFrame = 0;
+    boss->frameCounter = 0;
+    boss->hasAppliedDamage = false;
+    return;
+}
+
+
+    boss->attackCooldown -= delta;
+
+    boss->isWalking = true;
+    boss->isIdle = false;
     
     if (boss->isWalking)
     {
         boss->position.x += boss->speed * boss->direction * delta;
     } 
-}   
+}
 
 Rectangle source;
 Rectangle dest;

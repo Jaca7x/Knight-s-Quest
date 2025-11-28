@@ -21,11 +21,19 @@ typedef struct boss
     int frameAtk;
 
     int currentFrame;     
-    int frameCounter;      
+    int frameCounter;    
+
     int frameWidthAtk;        
     int frameHeightAtk; 
+    float attackTime;
+    float attackCooldown;
+    int hitFrame; 
+    bool hasAppliedDamage;
+
+
     int frameWidthWalk;
     int frameHeightWalk; 
+
     int frameWidth;        
     int frameHeight; 
 
