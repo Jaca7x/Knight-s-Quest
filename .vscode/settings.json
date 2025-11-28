@@ -16,6 +16,7 @@
 		"wolfrunning.h": "c",
 		"raylib.h": "c",
 		"goblinarcher.h": "c",
-		"npc.h": "c"
+		"npc.h": "c",
+		"iterator": "c"
 	}
 }
