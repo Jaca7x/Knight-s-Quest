@@ -138,9 +138,13 @@ void DrawBoss(Boss *boss)
         DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
     else if (boss->isAttacking)
-    {
+    {   
+        float attackOffsetY = -35.0f;
+
         source = GetSourceValueRec(boss->currentFrame, boss->frameWidthAtk, boss->direction, boss->frameHeightAtk);
         dest = GetDestValueRec(boss->position, boss->frameWidthAtk, boss->frameHeightAtk, boss->scaleAtk);
+
+        dest.y += attackOffsetY;
 
         DrawTexturePro(boss->spriteAtk, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
