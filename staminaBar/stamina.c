@@ -85,17 +85,14 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale,
 {
     int frame;
     float delta = GetFrameTime();
-
-    // Define qual frame será usado de acordo com a stamina atual
+    
     if (stamina == 0)
     {
-        // Se stamina zerada, usa o penúltimo frame (índice = STAMINA_FRAME_COUNT - 2)
         frame = STAMINA_FRAME_COUNT + 5;
         DrawText("Estamina Esgotada!", player->position.x + 20, player->position.y - 20, 20, BLACK);
     }
     else 
     {
-        // Calcula o frame proporcional à stamina atual
         frame = (int)((1.0f - stamina / MAX_STAMINA) * (STAMINA_FRAME_COUNT - 1));
     }
     
