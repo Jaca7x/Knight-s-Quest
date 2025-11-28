@@ -696,6 +696,12 @@ while (!WindowShouldClose())
 
             MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
             
+            if (currentMapIndex == 0 && textTime <= 3)
+            {
+                DrawRectangle(player.position.x - 60, player.position.y, 340, 30, (Color){0,0,0,180});
+                DrawText("Aperte 'K', para abrir às configurações", player.position.x - 40, player.position.y + 7, 16, WHITE);
+            }
+    
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, &npc);
             DrawPlayer(&player);
 
