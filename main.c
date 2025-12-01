@@ -50,7 +50,9 @@ typedef enum GameState
 typedef enum ConfigState
 {
     CONFIG_CLOSED,
-    CONFIG_OPEN
+    CONFIG_OPEN,
+    CONFIG_AUDIO,
+    CONFIG
 } ConfigState;
 
 // Estrutura que representa um mapa carregado do Tiled
@@ -338,7 +340,7 @@ int main(void)
     float ballRadius = 10;
 
     bool button_hovered = false;
-    Rectangle button_rect = {750, 435, 70, 20};
+    Rectangle button_rect = {750, 195, 70, 20};
     bool button_pressed = false;
 
     bool deathSoundPlay = false;
@@ -534,18 +536,52 @@ while (!WindowShouldClose())
                 button_pressed = !button_pressed;
             }
 
+             Rectangle configAudio
+                = {
+                    520,
+                    280,
+                    280,
+                    40
+                };
+
+                Rectangle configGame
+                = {
+                    520,
+                    380,
+                    280,
+                    40
+                };
+
             switch (configState)
             {   
             case CONFIG_CLOSED:
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_OPEN;
                 break;
-
             case CONFIG_OPEN:
                 player.isAttacking = true;
+
+                if (CheckCollisionPointRec(mousePos, configAudio) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                {
+                    configState = CONFIG_AUDIO;
+                }
+
+                if (CheckCollisionPointRec(mousePos, configGame) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                {
+                    configState = CONFIG;
+                }
+                
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_CLOSED;
                     player.isAttacking = false;
+                break;
+            case CONFIG_AUDIO:
+                if (IsKeyPressed(KEY_K))
+                    configState = CONFIG_CLOSED;
+                break;
+            case CONFIG:
+                if (IsKeyPressed(KEY_K))
+                    configState = CONFIG_CLOSED;
                 break;
             }
 
@@ -696,7 +732,7 @@ while (!WindowShouldClose())
 
             MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
             
-            if (currentMapIndex == 0 && textTime <= 3)
+            if (currentMapIndex == 0 && textTime <= 2)
             {
                 DrawRectangle(player.position.x - 60, player.position.y, 340, 30, (Color){0,0,0,180});
                 DrawText("Aperte 'K', para abrir às configurações", player.position.x - 40, player.position.y + 7, 16, WHITE);
@@ -709,9 +745,34 @@ while (!WindowShouldClose())
             DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
 
             if (configState == CONFIG_OPEN)
-            {
+            {   
                 DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
                 DrawText("Configurações (Pressione 'K' para fechar)", 450, 120, 20, WHITE);
+
+                DrawRectangleLinesEx(configAudio, 1, WHITE);
+                DrawText("Configurações de Áudio", 540, 290, 20, WHITE);
+
+                if (CheckCollisionPointRec(mousePos, configAudio))
+                {
+                    DrawRectangleLinesEx(configAudio, 1, GOLD);
+                    DrawText("Configurações de Áudio", 540, 290, 20, GOLD);
+                }
+                
+                DrawRectangleLinesEx(configGame, 1, WHITE);
+                DrawText("Configurações de jogo", 540, 390, 20, WHITE);
+
+                if (CheckCollisionPointRec(mousePos, configGame))
+                {
+                    DrawRectangleLinesEx(configGame, 1, GOLD);
+                    DrawText("Configurações de jogo", 540, 390, 20, GOLD);
+                }
+            }
+
+            if (configState == CONFIG_AUDIO)
+            {
+                DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+
+                DrawText("Configurações de Áudio(Pressione 'K' para fechar)", 400, 120, 20, WHITE);
 
                 DrawText("Volume Música:", 450, 195, 20, WHITE);
 
@@ -736,25 +797,33 @@ while (!WindowShouldClose())
                 DrawRectangle(slideXDialogue, slideYDialogue, slideWidth * volumeDialogue, slideHeight, SKYBLUE);
 
                 DrawCircle(slideXDialogue + slideWidth * volumeDialogue, slideYDialogue + slideHeight / 2, ballRadius, DARKBLUE);
+            }
 
-                DrawText("Assistência de estamina:", 450, 430, 20, WHITE);
+             if (configState == CONFIG)
+            {
+                DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+
+                DrawText("Configurações de Jogo(Pressione 'K' para fechar)", 400, 120, 20, WHITE);
+
+                DrawText("Assistência de estamina:", 450, 190, 20, WHITE);
 
                 DrawRectangleRounded(button_rect, 0.30f, 0, (Color){128,128,128,160});
 
                 if (button_pressed)
                 {   
-                    DrawText("OFF", 755, 440, 11, WHITE);
-                    Rectangle button_rect = {750 + 30, 435, 40, 20};
+                    DrawText("OFF", 755, 200, 11, WHITE);
+                    Rectangle button_rect = {750 + 30, 195, 40, 20};
                     DrawRectangleRounded(button_rect, 0.30f, 0, GREEN);
                     
                 }
                 else
                 {
-                    DrawText("ON", 795, 440, 12, WHITE);
-                    Rectangle button_rect = {750, 435, 40, 20};
+                    DrawText("ON", 795, 200, 12, WHITE);
+                    Rectangle button_rect = {750, 195, 40, 20};
                     DrawRectangleRounded(button_rect, 0.30f, 0, RED);
                 }
             }
+            
 
             if (currentMapIndex == 0 && textTime < 2.0f)
             {
