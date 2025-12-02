@@ -52,7 +52,9 @@ typedef enum ConfigState
     CONFIG_CLOSED,
     CONFIG_OPEN,
     CONFIG_AUDIO,
-    CONFIG
+    CONFIG,
+    AJUDA,
+    ATALHOS
 } ConfigState;
 
 // Estrutura que representa um mapa carregado do Tiled
@@ -552,6 +554,22 @@ while (!WindowShouldClose())
                     40
                 };
 
+                Rectangle atalhos
+                = {
+                    520, 
+                    280,
+                    280,
+                    40
+                };
+
+                Rectangle ajuda 
+                = {
+                    520,
+                    380,
+                    280,
+                    40
+                };
+
             switch (configState)
             {   
             case CONFIG_CLOSED:
@@ -580,10 +598,30 @@ while (!WindowShouldClose())
                     configState = CONFIG_CLOSED;
                 break;
             case CONFIG:
+                
+                if (CheckCollisionPointRec(mousePos, atalhos) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                {
+                    configState = ATALHOS;
+                }
+
+                if (CheckCollisionPointRec(mousePos, ajuda) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                {
+                    configState = AJUDA;
+                }
+                
+                if (IsKeyPressed(KEY_K))
+                    configState = CONFIG_CLOSED;
+                break;
+            case ATALHOS:
+                if (IsKeyPressed(KEY_K))
+                    configState = CONFIG_CLOSED;
+                break;
+            case AJUDA:
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_CLOSED;
                 break;
             }
+            
 
             if ((currentMapIndex == 0 || currentMapIndex == 1) && player.isMoving && !player.isJumping)
             {
@@ -765,7 +803,7 @@ while (!WindowShouldClose())
                 {
                     DrawRectangleLinesEx(configGame, 1, GOLD);
                     DrawText("Configurações de jogo", 540, 390, 20, GOLD);
-                }
+                } 
             }
 
             if (configState == CONFIG_AUDIO)
@@ -803,9 +841,34 @@ while (!WindowShouldClose())
             {
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
-                DrawText("Configurações de Jogo(Pressione 'K' para fechar)", 400, 120, 20, WHITE);
+                DrawText("Configurações (Pressione 'K' para fechar)", 450, 120, 20, WHITE);
 
-                DrawText("Assistência de estamina:", 450, 190, 20, WHITE);
+                DrawRectangleLinesEx(atalhos, 1, WHITE);
+                DrawText("Atalhos", 620, 290, 20, WHITE );
+
+                DrawRectangleLinesEx(ajuda, 1, WHITE);  
+                DrawText("Ajuda", 630, 390, 20, WHITE );
+
+                if (CheckCollisionPointRec(mousePos, atalhos))
+                {
+                    DrawRectangleLinesEx(atalhos, 1, GOLD);
+                    DrawText("Atalhos", 620, 290, 20, GOLD);
+                }
+
+                if (CheckCollisionPointRec(mousePos, ajuda))
+                {
+                    DrawRectangleLinesEx(ajuda, 1, GOLD);  
+                    DrawText("Ajuda", 630, 390, 20, GOLD);
+                }
+            }
+            
+            if (configState == AJUDA)
+            {
+                DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+
+                DrawText("Configurações de Ajuda (Pressione 'K' para fechar)", 420, 120, 20, WHITE);
+
+                DrawText("Assistência de estamina:", 450, 195, 20, WHITE);
 
                 DrawRectangleRounded(button_rect, 0.30f, 0, (Color){128,128,128,160});
 
@@ -822,6 +885,13 @@ while (!WindowShouldClose())
                     Rectangle button_rect = {750, 195, 40, 20};
                     DrawRectangleRounded(button_rect, 0.30f, 0, RED);
                 }
+            }
+
+            if (configState == ATALHOS)
+            {
+                DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+
+                DrawText("Atalhos(Pressione 'K' para fechar)", 450, 120, 20, WHITE);
             }
             
 
