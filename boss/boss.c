@@ -116,47 +116,47 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
     boss->direction = (player->position.x > boss->position.x) ? 1 : -1;
 
     if (boss->isAttacking)
-{
-    boss->frameCounter++;
-
-    if (boss->frameCounter >= 10)
     {
-        boss->frameCounter = 0;
-        boss->currentFrame++;
+        boss->frameCounter++;
 
-        if (boss->currentFrame >= boss->frameAtk)
+        if (boss->frameCounter >= 10)
         {
-            boss->currentFrame = 0;
-            boss->isAttacking = false;
-            boss->hasAppliedDamage = false;  
-            boss->attackCooldown = 1.5f;
-        }
-    }
+            boss->frameCounter = 0;
+            boss->currentFrame++;
 
-    if (boss->currentFrame == boss->hitFrame && !boss->hasAppliedDamage)
-    {
-        if (CheckCollisionBoss(
+            if (boss->currentFrame >= boss->frameAtk)
+            {
+                boss->currentFrame = 0;
+                boss->isAttacking = false;
+                boss->hasAppliedDamage = false;  
+                boss->attackCooldown = 1.5f;
+            }
+        }
+
+        if (boss->currentFrame == boss->hitFrame && !boss->hasAppliedDamage)
+        {
+            if (CheckCollisionBoss(
                 player->position.x, player->position.y, player->frameWidth, player->frameHeight,
                 boss->position.x, boss->position.y, boss->frameWidthAtk, boss->frameHeightAtk))
-        {
-            player->life -= boss->damage;
-            player->hasHit = true;
-            boss->hasAppliedDamage = true;
+            {
+                player->life -= boss->damage;
+                player->hasHit = true;
+                player->hitTimer = 0.5f;
+                boss->hasAppliedDamage = true;
+                player->position.x -= 120;
+            }
         }
+        return; 
     }
-    return; 
-}
-
 
     if (distance <= boss->attackRange && boss->attackCooldown <= 0)
-{
-    boss->isAttacking = true;
-    boss->currentFrame = 0;
-    boss->frameCounter = 0;
-    boss->hasAppliedDamage = false;
-    return;
-}
-
+    {
+        boss->isAttacking = true;
+        boss->currentFrame = 0;
+        boss->frameCounter = 0;
+        boss->hasAppliedDamage = false;
+        return;
+    }
 
     boss->attackCooldown -= delta;
 
