@@ -17,6 +17,9 @@
 		"raylib.h": "c",
 		"goblinarcher.h": "c",
 		"npc.h": "c",
-		"iterator": "c"
+		"iterator": "c",
+		"*.m": "c",
+		"algorithm": "c",
+		"format": "c"
 	}
 }
