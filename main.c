@@ -576,6 +576,7 @@ while (!WindowShouldClose())
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_OPEN;
                 break;
+
             case CONFIG_OPEN:
                 player.isAttacking = true;
 
@@ -593,12 +594,15 @@ while (!WindowShouldClose())
                     configState = CONFIG_CLOSED;
                     player.isAttacking = false;
                 break;
+
             case CONFIG_AUDIO:
+                player.isAttacking = false;
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_CLOSED;
                 break;
+
             case CONFIG:
-                
+                player.isAttacking = false;
                 if (CheckCollisionPointRec(mousePos, atalhos) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
                     configState = ATALHOS;
@@ -608,21 +612,24 @@ while (!WindowShouldClose())
                 {
                     configState = AJUDA;
                 }
-                
+        
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_CLOSED;
                 break;
+
             case ATALHOS:
+                player.isAttacking = false;
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_CLOSED;
                 break;
+                
             case AJUDA:
+                player.isAttacking = false;
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_CLOSED;
                 break;
             }
             
-
             if ((currentMapIndex == 0 || currentMapIndex == 1) && player.isMoving && !player.isJumping)
             {
                 if (!player.walkSoundPlayingCastle)
@@ -889,9 +896,28 @@ while (!WindowShouldClose())
 
             if (configState == ATALHOS)
             {
+                Rectangle table 
+                = {
+                    460,
+                    200,
+                    400,
+                    460
+                };
+
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
-                DrawText("Atalhos(Pressione 'K' para fechar)", 450, 120, 20, WHITE);
+                DrawText("Atalhos(Pressione 'K' para fechar)", 480, 120, 20, WHITE);
+
+                DrawRectangleLinesEx(table, 1 , WHITE);
+                DrawRectangleLines(620, 200, 0, 460, WHITE);
+                for (int i = 0; i < 8; i++)
+                {
+                    int posY = 250 + (i * 50);
+
+                    DrawRectangleLines(460, posY, 400, 0, WHITE);
+                }
+                
+                DrawText("      W                  ANDAR PARA FRENTE", 505, 220, 16, WHITE);
             }
             
 
