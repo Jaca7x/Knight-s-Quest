@@ -347,6 +347,22 @@ int main(void)
 
     bool deathSoundPlay = false;
 
+    Rectangle checkX 
+            = {
+                5,
+                5,
+                120 - 5,
+                40 - 5
+            };
+
+    Rectangle checkXConfigs
+            = {
+                250,
+                100,
+                120 - 5,
+                40 - 5
+            };
+
 while (!WindowShouldClose())
 {
     UpdateMusicStream(menuMusic);
@@ -817,6 +833,21 @@ while (!WindowShouldClose())
             {
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
+                DrawRectangleLines(250, 100, 120, 40, WHITE);
+                DrawText("VOLTAR", 270, 110, 20, WHITE);
+
+                if (CheckCollisionPointRec(mousePos, checkXConfigs)) 
+                {
+                    DrawRectangleLines(250, 100, 120, 40, GOLD);
+                    DrawText("VOLTAR", 270, 110, 20, GOLD);
+
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                    {
+                        configState = CONFIG_OPEN;
+                        PlaySound(buttonSelect);
+                    }
+                }
+
                 DrawText("Configurações de Áudio(Pressione 'K' para fechar)", 400, 120, 20, WHITE);
 
                 DrawText("Volume Música:", 450, 195, 20, WHITE);
@@ -848,6 +879,21 @@ while (!WindowShouldClose())
             {
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
+                DrawRectangleLines(250, 100, 120, 40, WHITE);
+                DrawText("VOLTAR", 270, 110, 20, WHITE);
+
+                if (CheckCollisionPointRec(mousePos, checkXConfigs)) 
+                {
+                    DrawRectangleLines(250, 100, 120, 40, GOLD);
+                    DrawText("VOLTAR", 270, 110, 20, GOLD);
+
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                    {
+                        configState = CONFIG_OPEN;
+                        PlaySound(buttonSelect);
+                    }
+                }
+
                 DrawText("Configurações (Pressione 'K' para fechar)", 450, 120, 20, WHITE);
 
                 DrawRectangleLinesEx(atalhos, 1, WHITE);
@@ -872,6 +918,21 @@ while (!WindowShouldClose())
             if (configState == AJUDA)
             {
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+
+                DrawRectangleLines(250, 100, 120, 40, WHITE);
+                DrawText("VOLTAR", 270, 110, 20, WHITE);
+
+                if (CheckCollisionPointRec(mousePos, checkXConfigs)) 
+                {
+                    DrawRectangleLines(250, 100, 120, 40, GOLD);
+                    DrawText("VOLTAR", 270, 110, 20, GOLD);
+
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                    {
+                        configState = CONFIG;
+                        PlaySound(buttonSelect);
+                    }
+                }
 
                 DrawText("Configurações de Ajuda (Pressione 'K' para fechar)", 420, 120, 20, WHITE);
 
@@ -906,6 +967,21 @@ while (!WindowShouldClose())
 
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
+                DrawRectangleLines(250, 100, 120, 40, WHITE);
+                DrawText("VOLTAR", 270, 110, 20, WHITE);
+
+                if (CheckCollisionPointRec(mousePos, checkXConfigs)) 
+                {
+                    DrawRectangleLines(250, 100, 120, 40, GOLD);
+                    DrawText("VOLTAR", 270, 110, 20, GOLD);
+
+                    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                    {
+                        configState = CONFIG;
+                        PlaySound(buttonSelect);
+                    }
+                }
+
                 DrawText("Atalhos(Pressione 'K' para fechar)", 480, 120, 20, WHITE);
 
                 DrawRectangleLinesEx(table, 1 , WHITE);
@@ -932,7 +1008,6 @@ while (!WindowShouldClose())
                 DrawText("M1 & M2           ATAQUE PESADO & LEVE", 515, 620, 16, WHITE);
             }
             
-
             if (currentMapIndex == 0 && textTime < 2.0f)
             {
                 textTime += delta;
@@ -956,14 +1031,6 @@ while (!WindowShouldClose())
 
         case CREDITS:
         {
-            Rectangle checkX 
-            = {
-                5,
-                5,
-                120 - 5,
-                40 - 5
-            };
-
             DrawRectangleLines(5, 5, 120, 40, WHITE);
             DrawText("VOLTAR", 20, 15, 20, WHITE);
 
@@ -1022,14 +1089,6 @@ while (!WindowShouldClose())
 
         case GITHUB: 
         {
-            Rectangle checkX 
-            = {
-                5,
-                5,
-                120 - 5,
-                40 - 5
-            };
-
             DrawRectangleLines(5, 5, 120, 40, WHITE);
             DrawText("VOLTAR", 20, 15, 20, WHITE);
 
