@@ -234,6 +234,7 @@ int main(void)
     Music soundTrack = LoadMusicStream("resources/music/soundtrack.mp3");
 
     Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
+    Sound onOFF = LoadSound("resources/sounds/ON-OFF.wav");
     Sound death = LoadSound("resources/sounds/game-over.wav");
     Sound walkingInCastle = LoadSound("resources/sounds/walking-castle.wav");
     Sound walkingInGrass = LoadSound("resources/sounds/walking-grass.wav");
@@ -546,11 +547,12 @@ while (!WindowShouldClose())
                     }
                 }
             }
-
+            
             button_hovered = CheckCollisionPointRec(GetMousePosition(), button_rect);
-
+            
             if (button_hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
+                
                 button_pressed = !button_pressed;
             }
 
@@ -945,7 +947,6 @@ while (!WindowShouldClose())
                     DrawText("OFF", 755, 200, 11, WHITE);
                     Rectangle button_rect = {750 + 30, 195, 40, 20};
                     DrawRectangleRounded(button_rect, 0.30f, 0, GREEN);
-                    
                 }
                 else
                 {
