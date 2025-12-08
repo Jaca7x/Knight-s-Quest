@@ -918,6 +918,18 @@ while (!WindowShouldClose())
                 }
                 
                 DrawText("      W                  ANDAR PARA FRENTE", 505, 220, 16, WHITE);
+                DrawText("      A                  ANDAR PARA ESQUERDA", 505, 270, 16, WHITE);
+                DrawText("      S                  ANDAR PARA TRÁS", 505, 320, 16, WHITE);
+                DrawText("      D                  ANDAR PARA DIREITA", 505,370, 16, WHITE);
+
+                DrawText("ESPAÇO                       PULAR", 515, 420, 16, WHITE);
+                DrawText("      E                         INTERAGIR", 505, 470, 16, WHITE);
+                DrawText("      K                      CONFIGURAÇÕES", 505, 520, 16, WHITE);
+
+
+                DrawText("SHIFT                       CORRER", 520, 570, 16, WHITE);
+
+                DrawText("M1 & M2           ATAQUE PESADO & LEVE", 515, 620, 16, WHITE);
             }
             
 
