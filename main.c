@@ -889,7 +889,7 @@ while (!WindowShouldClose())
 
                 DrawRectangleRec(buttonFontSize, WHITE);
 
-                if (CheckCollisionPointRec(mousePos, buttonFontSize) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize < 38)
+                if (CheckCollisionPointRec(mousePos, buttonFontSize) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize < 34)
                 {
                     DrawRectangleRec(buttonFontSize, GOLD);
                     ghost.speechFontSize++;
