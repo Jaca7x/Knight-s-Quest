@@ -311,7 +311,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
 
     int nextMsgTextPlayerX = 246;
     int nextMsgTextNpcX = 996;
-    int nextMsgTextY = 825;
+    int nextMsgTextY = 880;
 
     int numLinesGhost = 0;
     int numLinesPlayer = 0;
