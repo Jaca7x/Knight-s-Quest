@@ -45,6 +45,8 @@ typedef struct ghost {
     int frameCounter; 
 
     Font textFont; 
+
+    int speechFontSize;
 } Ghost;
 
 void InitGhost(Ghost *ghost);

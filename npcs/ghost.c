@@ -140,6 +140,7 @@ void InitGhost(Ghost *ghost)
     ghost->frameCounter = 0;
 
     ghost->textFont = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250); 
+    ghost->speechFontSize = 30;
 }
 
 void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interaction, DialogStateGhost *dialogStateGhost, float *dialogoTimer, int currentMapIndex)
@@ -291,7 +292,6 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
         DrawTexture(ghost->ghostExclamation, ghost->position.x + 25, ghost->position.y - 25, WHITE);
     }
 
-    int speechFontSize = 30;
     int hintFontSize = 14;
     float textSpacing = 0.0f;
 
@@ -363,7 +363,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
             DrawTextEx(textSpeech,
                        TextSubtext(lines[lineIndex], 0, visibleLetters),
                        (Vector2){ghostSpeechX + npcSpeechTextOffsetX, speechY + npcSpeechTextOffsetY},
-                       speechFontSize, textSpacing, BLACK);
+                       ghost->speechFontSize, textSpacing, BLACK);
 
             if (visibleLetters >= (int)strlen(lines[lineIndex]))
                 DrawText("Pressione ESPAÇO para pular", nextMsgTextNpcX, nextMsgTextY, hintFontSize, BLACK);
@@ -374,7 +374,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
             DrawTextEx(textSpeech,
                        TextSubtext(lines[lineIndex], 0, visibleLetters),
                        (Vector2){playerSpeechX + playerSpeechTextOffsetX, speechY + playerSpeechTextOffsetY},
-                       speechFontSize, textSpacing, BLACK);
+                       ghost->speechFontSize, textSpacing, BLACK);
 
             if (visibleLetters >= (int)strlen(lines[lineIndex]))
                 DrawText("Pressione ESPAÇO para continuar", nextMsgTextPlayerX, nextMsgTextY, hintFontSize, BLACK);

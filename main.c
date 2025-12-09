@@ -587,6 +587,14 @@ while (!WindowShouldClose())
                     40
                 };
 
+                Rectangle buttonFontSize
+                = {
+                    450,
+                    420,
+                    80,
+                    30
+                };
+
             switch (configState)
             {   
             case CONFIG_CLOSED:
@@ -878,6 +886,14 @@ while (!WindowShouldClose())
                 DrawRectangle(slideXDialogue, slideYDialogue, slideWidth * volumeDialogue, slideHeight, SKYBLUE);
 
                 DrawCircle(slideXDialogue + slideWidth * volumeDialogue, slideYDialogue + slideHeight / 2, ballRadius, DARKBLUE);
+
+                DrawRectangleRec(buttonFontSize, WHITE);
+
+                if (CheckCollisionPointRec(mousePos, buttonFontSize) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+                {
+                    DrawRectangleRec(buttonFontSize, GOLD);
+                    ghost.speechFontSize++;
+                }
             }
 
              if (configState == CONFIG)
