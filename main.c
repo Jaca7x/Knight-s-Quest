@@ -552,7 +552,7 @@ while (!WindowShouldClose())
             
             if (button_hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
             {
-                
+                PlaySound(onOFF);
                 button_pressed = !button_pressed;
             }
 
