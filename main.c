@@ -600,11 +600,13 @@ while (!WindowShouldClose())
 
                 if (CheckCollisionPointRec(mousePos, configAudio) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
+                    PlaySound(buttonSelect);
                     configState = CONFIG_AUDIO;
                 }
 
                 if (CheckCollisionPointRec(mousePos, configGame) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
+                    PlaySound(buttonSelect);
                     configState = CONFIG;
                 }
                 
@@ -623,11 +625,13 @@ while (!WindowShouldClose())
                 player.isAttacking = false;
                 if (CheckCollisionPointRec(mousePos, atalhos) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
+                    PlaySound(buttonSelect);
                     configState = ATALHOS;
                 }
 
                 if (CheckCollisionPointRec(mousePos, ajuda) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
+                    PlaySound(buttonSelect);
                     configState = AJUDA;
                 }
         
