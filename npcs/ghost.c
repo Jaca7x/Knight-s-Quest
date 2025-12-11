@@ -49,7 +49,6 @@ const char **GetGhostDialog(int mapIndex, int *numLines)
     return dialogs[mapIndex - 1];
 }
 
-
 const char **GetPlayerDialog(int mapIndex, int *numLines)
 {
     static const char *dialogs[4][3] = {
