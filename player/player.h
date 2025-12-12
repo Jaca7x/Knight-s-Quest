@@ -9,6 +9,7 @@
 #include "../goblin/goblin.h" 
 #include "../goblin/goblinArcher.h" 
 #include "../npcs/npc.h"   
+#include "../boss/boss.h"
 
 void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
 
@@ -17,6 +18,7 @@ typedef struct wolfRun WolfRun;
 typedef struct goblin Goblin; 
 typedef struct goblinArcher GoblinArcher;
 typedef struct npc Npc;
+typedef struct boss Boss;
 
 typedef struct {
     const char *text;
@@ -102,7 +104,7 @@ typedef struct player
 void InitPlayer(Player *player);
 void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf,
     Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, 
-    Npc *npc);
+    Npc *npc, Boss *boss);
 void DrawPlayer(Player *player);
 void UnloadPlayer(Player *player);
 

@@ -157,7 +157,7 @@ void InitPlayer(Player *player)
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc)
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc, Boss *boss)
 {  
     // Verificar se morreu pela primeira vez
     if (player->life <= 0 && !player->isDead)
@@ -397,6 +397,32 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         else
         {
             goblinArcher->goblinHasHit = false;
+        }   
+    }
+
+    if (currentMapIndex == 0)
+    {
+        float distanceToBoss = fabs(boss->position.x - player->position.x);
+
+        if (player->isAttacking && distanceToBoss <= player->attackRange)
+        {
+            if (!boss->bossHasHit)
+            {
+                if (player->isAttackingLight)
+                {
+                    boss->life -= player->lightDamage;
+                }
+                else if (player->isAttackingHeavy)
+                {
+                    boss->life -= player->heavyDamage;
+                }
+
+                boss->bossHasHit = true;
+            }  
+        }
+        else
+        {
+            boss->bossHasHit = false;
         }   
     }
 
