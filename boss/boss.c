@@ -54,12 +54,20 @@ void InitBoss(Boss *boss)
     boss->scaleAtk = 1.5f;
     boss->scaleIdle = 1.0f;
     boss->scaleWalk = 1.5f;
+    boss->scaleHurt = 0.6f;
+
+    boss->hurtTimer = 0.0f;
+    boss->hurtDuration= 1.0f;
 
     boss->frameWidth  = boss->spriteIdle.width / boss->frameIdle;
     boss->frameHeight = boss->spriteIdle.height;
     
     boss->frameWidthAtk = boss->spriteAtk.width / boss->frameAtk;
     boss->frameHeightAtk = boss->spriteAtk.height;
+
+    boss->frameWidthHurt = boss->spriteHurt.width / boss->frameHurt;
+    boss->frameHeightHurt = boss->spriteHurt.height;
+
     boss->attackTime = 0.0f;
     boss->attackCooldown = 0.0f;
     boss->hitFrame = 4;         
@@ -71,7 +79,7 @@ void InitBoss(Boss *boss)
 
     boss->direction = 1.0f;
 
-    boss->isAttacking = false;
+    boss->isAtacking = false;
     boss->isWalking = false;
     boss->isIdle = true;
 
@@ -80,14 +88,38 @@ void InitBoss(Boss *boss)
 
     boss->speed = 10.0f;
     
+    boss->life = 300;
+    boss->bossHasHit = false;
+    
     boss->damage = 35;
 }
 
 void UpdateBoss(Boss *boss, Player *player, float delta) 
 {
-    boss->frameCounter++;
+     if (boss->bossHasHit) 
+    {
+        boss->isIdle = false;
+        boss->isWalking = false;
+        boss->isAtacking = false;
 
-    if (boss->isAttacking && boss->frameCounter >= 10)
+        boss->hurtTimer += delta;
+
+        if (boss->hurtTimer >= boss->hurtDuration) 
+        {
+            boss->bossHasHit = false;
+            boss->hurtTimer = 0.0f;
+            boss->isIdle = true;
+        }
+    }
+
+    boss->frameCounter++;
+    
+    if (boss->bossHasHit && boss->frameCounter >= 30)
+    {
+        boss->frameCounter = 0;
+        boss->currentFrame = (boss->currentFrame + 1) % boss->frameHurt;
+    }
+    else if (boss->isAtacking && boss->frameCounter >= 10)
     {
         boss->frameCounter = 0;
         boss->currentFrame = (boss->currentFrame + 1) % boss->frameAtk;
@@ -109,15 +141,14 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
     {
         boss->isIdle = true;
         boss->isWalking = false;
-        boss->isAttacking = false;
+        boss->isAtacking = false;
         return;
     }
 
     boss->direction = (player->position.x > boss->position.x) ? 1 : -1;
 
-    if (boss->isAttacking)
+    if (boss->isAtacking)
     {
-        boss->frameCounter++;
 
         if (boss->frameCounter >= 10)
         {
@@ -127,7 +158,7 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
             if (boss->currentFrame >= boss->frameAtk)
             {
                 boss->currentFrame = 0;
-                boss->isAttacking = false;
+                boss->isAtacking = false;
                 boss->hasAppliedDamage = false;  
                 boss->attackCooldown = 1.5f;
             }
@@ -151,7 +182,7 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
 
     if (distance <= boss->attackRange && boss->attackCooldown <= 0)
     {
-        boss->isAttacking = true;
+        boss->isAtacking = true;
         boss->currentFrame = 0;
         boss->frameCounter = 0;
         boss->hasAppliedDamage = false;
@@ -174,14 +205,25 @@ Rectangle dest;
 
 void DrawBoss(Boss *boss) 
 {
-    if (boss->isIdle)
+    if (boss->bossHasHit)
+    {
+        float attackOffsetY = -15.0f;
+
+        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthHurt, boss->direction, boss->frameHeightHurt);
+        dest = GetDestValueRec(boss->position, boss->frameWidthHurt, boss->frameHeightHurt, boss->scaleHurt);
+
+        dest.y += attackOffsetY;
+
+        DrawTexturePro(boss->spriteHurt, source, dest, (Vector2){0,0}, 0.0f, WHITE);
+    }
+    else if (boss->isIdle)
     {
         source = GetSourceValueRec(boss->currentFrame, boss->frameWidth, boss->direction, boss->frameHeight);
         dest = GetDestValueRec(boss->position, boss->frameWidth, boss->frameHeight, boss->scaleIdle);
 
         DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
-    else if (boss->isAttacking)
+    else if (boss->isAtacking)
     {   
         float attackOffsetY = -35.0f;
 

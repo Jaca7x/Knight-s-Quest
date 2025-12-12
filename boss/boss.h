@@ -37,19 +37,29 @@ typedef struct boss
     int frameWidth;        
     int frameHeight; 
 
+    int frameWidthHurt;
+    int frameHeightHurt;
+
     float scaleAtk;
     float scaleIdle;
     float scaleWalk;
+    float scaleHurt;
+
+    float hurtTimer;
+    float hurtDuration;
     
     float direction;
 
     bool isWalking;
-    bool isAttacking;
+    bool isAtacking;
     bool isIdle;
 
     float attackRange;
 
     float speed;
+
+    int life;
+    bool bossHasHit;
 
     float viewPlayer;
 
