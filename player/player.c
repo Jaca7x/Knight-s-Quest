@@ -432,7 +432,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
 
     if (!player->isAttackingInProgress && player->attackCooldownTimer <= 0.0f)
     {
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && player->stamina > 25)
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && player->stamina > 30)
         {
             player->isAttackingInProgress = true;
             player->isAttacking = true;
@@ -441,7 +441,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             player->attackTimer = 0.6f;
             player->attackCooldownTimer = 0.3f;
 
-            player->stamina -= 20.0f;
+            player->stamina -= 30.0f;
         }
         else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && player->stamina > 45)
         {
@@ -452,7 +452,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             player->attackTimer = 0.5f;
             player->attackCooldownTimer = 0.3f;
 
-            player->stamina -= 40.0f;
+            player->stamina -= 75.0f;
         }
     }
 
