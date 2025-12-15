@@ -9,6 +9,33 @@ bool CheckCollisionBoss(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
+void DrawBossfLifeBar(Boss *boss)
+{
+    //if (boss->isDead) return;  // não desenha se estiver morto
+
+    float barWidth = 800.0f;
+    float barHeight = 18.0f;
+    float x = (GetScreenWidth() / 2) - (barWidth / 2); 
+    float y = 20;
+
+    float maxLife = 2000.0f;
+
+    float lifePercent = boss->life / maxLife;
+    if (lifePercent < 0) lifePercent = 0;
+
+    float currentBarWidth = barWidth * lifePercent;
+
+    DrawText("Boss Life", x + barWidth / 2 - MeasureText("Boss Life", 10) / 2, y - 18 , 20, BLACK);
+    // Fundo (vermelho)
+    DrawRectangle(x, y, barWidth, barHeight, RED);
+
+    // Vida atual (verde)
+    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
+
+    // Contorno
+    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
+}
+
 Rectangle GetSourceValueRec(int frame, int frameWidth, float direction, int frameHeigth)
 {
     Rectangle r;
@@ -88,10 +115,10 @@ void InitBoss(Boss *boss)
 
     boss->speed = 10.0f;
     
-    boss->life = 300;
+    boss->life = 2000;
     boss->bossHasHit = false;
     
-    boss->damage = 35;
+    boss->damage = 40;
 }
 
 void UpdateBoss(Boss *boss, Player *player, float delta) 
@@ -149,6 +176,8 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
 
     if (boss->isAtacking)
     {
+
+        boss->frameCounter++;
 
         if (boss->frameCounter >= 10)
         {
@@ -241,4 +270,6 @@ void DrawBoss(Boss *boss)
 
         DrawTexturePro(boss->spriteWalk, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
+
+    DrawBossfLifeBar(boss);
 }
