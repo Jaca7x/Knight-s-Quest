@@ -122,7 +122,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
     }
 
     if (goblin->isDead && goblin->deathAnimationDone)
-        return; // <- aqui sim pode sair, pq ele já morreu
+        return; 
 
     // --- HURT ---
     if (goblin->goblinHasHit) 
