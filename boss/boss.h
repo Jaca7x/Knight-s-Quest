@@ -53,6 +53,7 @@ typedef struct boss
     bool isWalking;
     bool isAtacking;
     bool isIdle;
+    bool isDead;
 
     float attackRange;
 

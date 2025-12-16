@@ -11,28 +11,25 @@ bool CheckCollisionBoss(float x1, float y1, float w1, float h1,
 
 void DrawBossfLifeBar(Boss *boss)
 {
-    //if (boss->isDead) return;  // não desenha se estiver morto
+    if (boss->isDead) return;
 
     float barWidth = 800.0f;
     float barHeight = 18.0f;
     float x = (GetScreenWidth() / 2) - (barWidth / 2); 
     float y = 20;
 
-    float maxLife = 2000.0f;
-
+    float maxLife = 20.0f;
     float lifePercent = boss->life / maxLife;
     if (lifePercent < 0) lifePercent = 0;
 
     float currentBarWidth = barWidth * lifePercent;
 
     DrawText("Boss Life", x + barWidth / 2 - MeasureText("Boss Life", 10) / 2, y - 18 , 20, BLACK);
-    // Fundo (vermelho)
+
     DrawRectangle(x, y, barWidth, barHeight, RED);
 
-    // Vida atual (verde)
     DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
 
-    // Contorno
     DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
 }
 
@@ -109,13 +106,14 @@ void InitBoss(Boss *boss)
     boss->isAtacking = false;
     boss->isWalking = false;
     boss->isIdle = true;
+    boss->isDead = false;
 
     boss->attackRange = 100.0f;
     boss->viewPlayer = 900.0f;
 
     boss->speed = 10.0f;
     
-    boss->life = 2000;
+    boss->life = 20;
     boss->bossHasHit = false;
     
     boss->damage = 40;
@@ -123,6 +121,17 @@ void InitBoss(Boss *boss)
 
 void UpdateBoss(Boss *boss, Player *player, float delta) 
 {
+    if (boss->life <= 0 && !boss->isDead) 
+    {
+        boss->isDead = true;
+        boss->bossHasHit = false;
+        boss->currentFrame = 0;
+        boss->frameDead = 4;
+        boss->isWalking = false;
+        boss->isAtacking = false;
+        boss->isIdle = false;
+    }
+
      if (boss->bossHasHit) 
     {
         boss->isIdle = false;
@@ -161,6 +170,15 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
         boss->frameCounter = 0;
         boss->currentFrame = (boss->currentFrame + 1) % boss->frameWalk;
     }
+    else if (boss->isDead && boss->frameCounter >= 40)
+    {
+    boss->frameCounter = 0;
+    boss->currentFrame = (boss->currentFrame + 1);
+
+    if (boss->currentFrame >= boss->frameDead)
+        boss->currentFrame = boss->frameDead - 1; // trava no último frame
+    }
+
 
     float distance = fabs(player->position.x - boss->position.x);
 
@@ -234,30 +252,36 @@ Rectangle dest;
 
 void DrawBoss(Boss *boss) 
 {
-    if (boss->bossHasHit)
+    if (boss->isDead)
     {
-        float attackOffsetY = -15.0f;
+        source = GetSourceValueRec(boss->currentFrame, boss->frameWidth,
+                               boss->direction, boss->frameHeight);
+        dest = GetDestValueRec(boss->position, boss->frameWidth,
+                           boss->frameHeight, boss->scaleIdle);
 
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthHurt, boss->direction, boss->frameHeightHurt);
-        dest = GetDestValueRec(boss->position, boss->frameWidthHurt, boss->frameHeightHurt, boss->scaleHurt);
+        DrawTexturePro(boss->spriteDead, source, dest, (Vector2){0,0}, 0.0f, WHITE);
+    }
+    else if (boss->bossHasHit)
+    {
+        float hurtOffsetY = -15.0f;
 
-        dest.y += attackOffsetY;
+        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthHurt,
+                               boss->direction, boss->frameHeightHurt);
+        dest = GetDestValueRec(boss->position, boss->frameWidthHurt,
+                           boss->frameHeightHurt, boss->scaleHurt);
+
+        dest.y += hurtOffsetY;
 
         DrawTexturePro(boss->spriteHurt, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
-    else if (boss->isIdle)
-    {
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidth, boss->direction, boss->frameHeight);
-        dest = GetDestValueRec(boss->position, boss->frameWidth, boss->frameHeight, boss->scaleIdle);
-
-        DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
-    }
     else if (boss->isAtacking)
-    {   
+    {
         float attackOffsetY = -35.0f;
 
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthAtk, boss->direction, boss->frameHeightAtk);
-        dest = GetDestValueRec(boss->position, boss->frameWidthAtk, boss->frameHeightAtk, boss->scaleAtk);
+        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthAtk,
+                               boss->direction, boss->frameHeightAtk);
+        dest = GetDestValueRec(boss->position, boss->frameWidthAtk,
+                           boss->frameHeightAtk, boss->scaleAtk);
 
         dest.y += attackOffsetY;
 
@@ -265,10 +289,21 @@ void DrawBoss(Boss *boss)
     }
     else if (boss->isWalking)
     {
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthWalk, boss->direction, boss->frameHeightWalk);
-        dest = GetDestValueRec(boss->position, boss->frameWidthWalk, boss->frameHeightWalk, boss->scaleWalk);
+        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthWalk,
+                               boss->direction, boss->frameHeightWalk);
+        dest = GetDestValueRec(boss->position, boss->frameWidthWalk,
+                           boss->frameHeightWalk, boss->scaleWalk);
 
         DrawTexturePro(boss->spriteWalk, source, dest, (Vector2){0,0}, 0.0f, WHITE);
+    }
+    else
+    {
+        source = GetSourceValueRec(boss->currentFrame, boss->frameWidth,
+                               boss->direction, boss->frameHeight);
+        dest = GetDestValueRec(boss->position, boss->frameWidth,
+                           boss->frameHeight, boss->scaleIdle);
+
+        DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
 
     DrawBossfLifeBar(boss);
