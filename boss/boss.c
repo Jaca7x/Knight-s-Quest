@@ -92,6 +92,9 @@ void InitBoss(Boss *boss)
     boss->frameWidthHurt = boss->spriteHurt.width / boss->frameHurt;
     boss->frameHeightHurt = boss->spriteHurt.height;
 
+    boss->frameWidthDead = boss->spriteDead.width / boss->frameDead;
+    boss->frameHeightDead = boss->spriteDead.height;
+
     boss->attackTime = 0.0f;
     boss->attackCooldown = 0.0f;
     boss->hitFrame = 4;         
@@ -121,6 +124,24 @@ void InitBoss(Boss *boss)
 
 void UpdateBoss(Boss *boss, Player *player, float delta) 
 {
+
+    if (boss->isDead)
+    {
+    boss->frameCounter++;
+
+    if (boss->frameCounter >= 40)
+    {
+        boss->frameCounter = 0;
+        boss->currentFrame++;
+
+        if (boss->currentFrame >= boss->frameDead)
+            boss->currentFrame = boss->frameDead - 1; 
+    }
+
+    return;
+}
+
+
     if (boss->life <= 0 && !boss->isDead) 
     {
         boss->isDead = true;
@@ -254,10 +275,10 @@ void DrawBoss(Boss *boss)
 {
     if (boss->isDead)
     {
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidth,
-                               boss->direction, boss->frameHeight);
-        dest = GetDestValueRec(boss->position, boss->frameWidth,
-                           boss->frameHeight, boss->scaleIdle);
+        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthDead,
+                               boss->direction, boss->frameHeightDead);
+        dest = GetDestValueRec(boss->position, boss->frameWidthDead,
+                           boss->frameHeightDead, boss->scaleIdle);
 
         DrawTexturePro(boss->spriteDead, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }

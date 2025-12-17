@@ -40,6 +40,9 @@ typedef struct boss
     int frameWidthHurt;
     int frameHeightHurt;
 
+    int frameHeightDead;
+    int frameWidthDead;
+
     float scaleAtk;
     float scaleIdle;
     float scaleWalk;
