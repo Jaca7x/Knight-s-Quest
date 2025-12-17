@@ -197,7 +197,7 @@ void UpdateBoss(Boss *boss, Player *player, float delta)
     boss->currentFrame = (boss->currentFrame + 1);
 
     if (boss->currentFrame >= boss->frameDead)
-        boss->currentFrame = boss->frameDead - 1; // trava no último frame
+        boss->currentFrame = boss->frameDead - 1;
     }
 
 
@@ -278,7 +278,7 @@ void DrawBoss(Boss *boss)
         source = GetSourceValueRec(boss->currentFrame, boss->frameWidthDead,
                                boss->direction, boss->frameHeightDead);
         dest = GetDestValueRec(boss->position, boss->frameWidthDead,
-                           boss->frameHeightDead, boss->scaleIdle);
+                           boss->frameHeightDead, boss->scaleWalk);
 
         DrawTexturePro(boss->spriteDead, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
