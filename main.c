@@ -599,7 +599,7 @@ while (!WindowShouldClose())
                 = {
                     450,
                     420,
-                    80,
+                    290,
                     30
                 };
 
@@ -895,11 +895,13 @@ while (!WindowShouldClose())
 
                 DrawCircle(slideXDialogue + slideWidth * volumeDialogue, slideYDialogue + slideHeight / 2, ballRadius, DARKBLUE);
 
-                DrawRectangleRec(buttonFontSize, WHITE);
+                DrawRectangleLinesEx(buttonFontSize, 1, WHITE);
+                DrawText(TextFormat("Tamanho Fonte Diálogo: %d", ghost.speechFontSize), 455, 425, 20, WHITE);
 
                 if (CheckCollisionPointRec(mousePos, buttonFontSize) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize < 34)
                 {
-                    DrawRectangleRec(buttonFontSize, GOLD);
+                    DrawRectangleLinesEx(buttonFontSize, 1, GOLD);
+                    DrawText(TextFormat("Tamanho Fonte Diálogo: %d", ghost.speechFontSize), 455, 425, 20, GOLD);
                     ghost.speechFontSize++;
                 }
             }
