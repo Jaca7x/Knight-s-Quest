@@ -275,10 +275,14 @@ void DrawBoss(Boss *boss)
 {
     if (boss->isDead)
     {
+        float hurtOffsetY = 45.0f;
+
         source = GetSourceValueRec(boss->currentFrame, boss->frameWidthDead,
                                boss->direction, boss->frameHeightDead);
         dest = GetDestValueRec(boss->position, boss->frameWidthDead,
                            boss->frameHeightDead, boss->scaleWalk);
+
+        dest.y += hurtOffsetY;
 
         DrawTexturePro(boss->spriteDead, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
