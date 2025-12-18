@@ -31,7 +31,8 @@
 #define TILESET4_FIRSTGID 109    
 #define TILESET5_FIRSTGID 145   
 #define TILESET6_FIRSTGID 181 
-#define MAP_COUNT 7          
+#define TILESET7_FIRSTGID 217
+#define MAP_COUNT 8          
 
 
 // ============================================================================
@@ -131,7 +132,7 @@ void UnloadTileMap(TileMap *map)
 // Função de desenho do mapa com múltiplos tilesets
 // ============================================================================
 
-void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3, Texture2D tileset4, Texture2D tileset5, Texture2D tileset6)
+void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3, Texture2D tileset4, Texture2D tileset5, Texture2D tileset6, Texture2D tileset7)
 {
     for (int y = 0; y < map->height; y++)
     {
@@ -170,10 +171,15 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
                 texture = tileset5;
                 localId = gid - TILESET5_FIRSTGID;
             }
-            else if (gid >= TILESET6_FIRSTGID)
+            else if (gid >= TILESET6_FIRSTGID && gid < TILESET7_FIRSTGID)
             {
                 texture = tileset6;
                 localId = gid - TILESET6_FIRSTGID;
+            }
+            else if (gid >= TILESET7_FIRSTGID)
+            {
+                texture = tileset7;
+                localId = gid - TILESET7_FIRSTGID;
             }
             else
             {
@@ -252,7 +258,8 @@ int main(void)
         "assets/maps/florest1.json",
         "assets/maps/florest2.json",
         "assets/maps/florest3.json",
-        "assets/maps/goblin1.json"
+        "assets/maps/goblin1.json",
+        "assets/maps/goblin2.json"
     };
     
     TileMap map = LoadTileMap(mapFiles[currentMapIndex]);
@@ -315,6 +322,7 @@ int main(void)
     Texture2D tileset4 = LoadTexture("assets/maps/tiles_map/floresta1.png");
     Texture2D tileset5 = LoadTexture("assets/maps/tiles_map/goblin1.png");
     Texture2D tileset6 = LoadTexture("assets/maps/tiles_map/goblin2.png");
+    Texture2D tileset7 = LoadTexture("assets/maps/tiles_map/goblin3.png");
 
     Texture2D staminaBar = LoadTexture("resources/sprites/stamina/staminaBar.png");
 
@@ -731,7 +739,7 @@ while (!WindowShouldClose())
             }
 
             // --- Desenho ---
-            DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5, tileset6);
+            DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7);
 
             if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
         {
