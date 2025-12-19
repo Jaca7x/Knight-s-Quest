@@ -976,13 +976,13 @@ while (!WindowShouldClose())
                     ghost.speechFontSize--;
                 }
 
-                if (CheckCollisionPointCircle(GetMousePosition(), centerIncrese, radius) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize < 34)
+                if (CheckCollisionPointCircle(GetMousePosition(), centerIncrese, radius) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize < 33)
                 {
                     DrawCircleLines(850, 295, 12, GOLD);
                     DrawText("+", 846, 285, 20, GOLD);
                     ghost.speechFontSize++;
                 }
-                
+
                 DrawText(TextFormat("%d", ghost.speechFontSize), 780, 285, 20, WHITE);
 
                 DrawText("Configurações de Ajuda (Pressione 'K' para fechar)", 420, 120, 20, WHITE);
