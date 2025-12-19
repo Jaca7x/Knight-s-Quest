@@ -301,7 +301,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
     int playerSpeechTextOffsetX = 210;
     int playerSpeechTextOffsetY = 80;
 
-    int npcSpeechTextOffsetX = 100;
+    int npcSpeechTextOffsetX = 30;
     int npcSpeechTextOffsetY = 80;
 
     int speechY = GetScreenHeight() - ghost->ghostSpeech.height - speechMarginBottom;
