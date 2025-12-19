@@ -18,7 +18,7 @@ void DrawBossfLifeBar(Boss *boss)
     float x = (GetScreenWidth() / 2) - (barWidth / 2); 
     float y = 20;
 
-    float maxLife = 2000.0f;
+    float maxLife = 20.0f;
     float lifePercent = boss->life / maxLife;
     if (lifePercent < 0) lifePercent = 0;
 
@@ -116,7 +116,7 @@ void InitBoss(Boss *boss)
 
     boss->speed = 10.0f;
     
-    boss->life = 2000;
+    boss->life = 20;
     boss->bossHasHit = false;
     
     boss->damage = 40;
