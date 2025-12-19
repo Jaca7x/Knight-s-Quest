@@ -597,9 +597,9 @@ while (!WindowShouldClose())
 
                 Rectangle buttonFontSize
                 = {
-                    450,
-                    420,
-                    290,
+                    750,
+                    280,
+                    80,
                     30
                 };
 
@@ -894,16 +894,6 @@ while (!WindowShouldClose())
                 DrawRectangle(slideXDialogue, slideYDialogue, slideWidth * volumeDialogue, slideHeight, SKYBLUE);
 
                 DrawCircle(slideXDialogue + slideWidth * volumeDialogue, slideYDialogue + slideHeight / 2, ballRadius, DARKBLUE);
-
-                DrawRectangleLinesEx(buttonFontSize, 1, WHITE);
-                DrawText(TextFormat("Tamanho Fonte Diálogo: %d", ghost.speechFontSize), 455, 425, 20, WHITE);
-
-                if (CheckCollisionPointRec(mousePos, buttonFontSize) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize < 34)
-                {
-                    DrawRectangleLinesEx(buttonFontSize, 1, GOLD);
-                    DrawText(TextFormat("Tamanho Fonte Diálogo: %d", ghost.speechFontSize), 455, 425, 20, GOLD);
-                    ghost.speechFontSize++;
-                }
             }
 
              if (configState == CONFIG)
@@ -964,6 +954,36 @@ while (!WindowShouldClose())
                         PlaySound(buttonSelect);
                     }
                 }
+
+                DrawRectangleLinesEx(buttonFontSize, 1, WHITE);
+                DrawText("Tamanho Fonte Diálogo:", 455, 285, 20, WHITE);
+
+                Vector2 centerIncrese = {850, 295};
+                Vector2 centerDecrease = {730, 295};
+
+                float radius = 12;
+
+                DrawCircleLines(730, 295, 12, WHITE);
+                DrawText("-", 726, 285, 20, WHITE);
+
+                DrawCircleLines(850, 295, 12, WHITE);
+                DrawText("+", 846, 285, 20, WHITE);
+
+                if (CheckCollisionPointCircle(GetMousePosition(), centerDecrease, radius) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize > 28)
+                {
+                    DrawCircleLines(730, 295, 12, GOLD);
+                    DrawText("-", 726, 285, 20, GOLD);
+                    ghost.speechFontSize--;
+                }
+
+                if (CheckCollisionPointCircle(GetMousePosition(), centerIncrese, radius) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize < 34)
+                {
+                    DrawCircleLines(850, 295, 12, GOLD);
+                    DrawText("+", 846, 285, 20, GOLD);
+                    ghost.speechFontSize++;
+                }
+                
+                DrawText(TextFormat("%d", ghost.speechFontSize), 780, 285, 20, WHITE);
 
                 DrawText("Configurações de Ajuda (Pressione 'K' para fechar)", 420, 120, 20, WHITE);
 
