@@ -365,7 +365,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
                        ghost->speechFontSize, textSpacing, BLACK);
 
             if (visibleLetters >= (int)strlen(lines[lineIndex]))
-                DrawText("Pressione ESPAÇO para pular", nextMsgTextNpcX, nextMsgTextY, hintFontSize, BLACK);
+                DrawText("Pressione ESPAÇO para continuar", nextMsgTextNpcX, nextMsgTextY, hintFontSize, BLACK);
         }
         else
         {
@@ -379,6 +379,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
                 DrawText("Pressione ESPAÇO para continuar", nextMsgTextPlayerX, nextMsgTextY, hintFontSize, BLACK);
         }
     }
+
     DrawTexturePro(ghost->ghostIdle, source, dest, origin, 0.0f, WHITE);
 }
 
