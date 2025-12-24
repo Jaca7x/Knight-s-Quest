@@ -32,7 +32,7 @@
 #define TILESET5_FIRSTGID 145   
 #define TILESET6_FIRSTGID 181 
 #define TILESET7_FIRSTGID 217
-#define MAP_COUNT 8          
+#define MAP_COUNT 9        
 
 
 // ============================================================================
@@ -259,7 +259,8 @@ int main(void)
         "assets/maps/florest2.json",
         "assets/maps/florest3.json",
         "assets/maps/goblin1.json",
-        "assets/maps/goblin2.json"
+        "assets/maps/goblin2.json",
+        "assets/maps/goblin3.json"
     };
     
     TileMap map = LoadTileMap(mapFiles[currentMapIndex]);
@@ -761,9 +762,13 @@ while (!WindowShouldClose())
             player.position.y = 520;
         }   
 
-            DrawBoss(&boss);
-            UpdateBoss(&boss, &player, delta);
 
+            if (currentMapIndex == BOSS_MAP)
+            {
+                DrawBoss(&boss);
+                UpdateBoss(&boss, &player, delta);
+            }
+        
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
                 UpdateWolf(&whiteWolf, &player, delta);
@@ -1032,7 +1037,7 @@ while (!WindowShouldClose())
                     }
                 }
 
-                DrawText("Atalhos(Pressione 'K' para fechar)", 480, 120, 20, WHITE);
+                DrawText("Atalhos (Pressione 'K' para fechar)", 480, 120, 20, WHITE);
 
                 DrawRectangleLinesEx(table, 1 , WHITE);
                 DrawRectangleLines(620, 200, 0, 460, WHITE);
