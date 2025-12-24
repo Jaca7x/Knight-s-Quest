@@ -252,7 +252,7 @@ void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dia
                            speechFontSize, textSpacing, BLACK);
 
                 if (visibleLetters >= strlen(lines[lineIndex]))
-                    DrawText("Pressione ESPAÇO para pular", nextMsgTextNpcX, nextMsgTextY, hintFontSize, BLACK);
+                    DrawText("Pressione ESPAÇO para continuar", nextMsgTextNpcX, nextMsgTextY, hintFontSize, BLACK);
             }
             else
             {
