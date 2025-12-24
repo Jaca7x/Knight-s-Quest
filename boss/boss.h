@@ -4,6 +4,8 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 
+#define BOSS_MAP 8
+
 typedef struct boss
 {
     Vector2 position;
