@@ -2,13 +2,15 @@
 #define INTERACTION_H
 
 #include "../librays/raylib.h"
-#include "npcs/ghost.h"
+#include "ghost.h"
 #include "npc.h"
-#include "player/player.h"
+#include "peasant.h"
+#include "../player/player.h"
 
 typedef struct ghost Ghost;
 typedef struct player Player;
 typedef struct npc Npc;
+typedef struct peasant Peasant;
 
 typedef struct interaction 
 {
@@ -29,6 +31,7 @@ typedef struct interaction
 void InitInteraction(Interaction *interaction);
 void UpdateInteraction(Interaction *interaction, float delta);
 void DrawInteractionGhost(Ghost *ghost, Interaction *interaction);
+void DrawInteractionPeasant(Peasant *peasant, Interaction *interaction);
 void DrawInteractionNPC(Npc *npc, Interaction *interaction);
 
 #endif //INTERACTION_H

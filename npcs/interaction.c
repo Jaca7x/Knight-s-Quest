@@ -50,6 +50,29 @@ void DrawInteractionGhost(Ghost *ghost, Interaction *interaction)
     DrawTexturePro(interaction->interactionTexture, source, dest, origin, 0.0f, WHITE);
 }
 
+void DrawInteractionPeasant(Peasant *peasant, Interaction *interaction) 
+{
+    Vector2 offset = {20, -20};
+
+    Rectangle source = {
+        (interaction->currentFrame % interaction->columns) * interaction->frameWidth,
+        (interaction->currentFrame / interaction->columns) * interaction->frameHeight,
+        interaction->frameWidth,
+        interaction->frameHeight
+    };
+
+    Rectangle dest = {
+        peasant->position.x + offset.x,
+        peasant->position.y + offset.y,
+        interaction->frameWidth,
+        interaction->frameHeight
+    };
+
+    Vector2 origin = {0, 0};
+
+    DrawTexturePro(interaction->interactionTexture, source, dest, origin, 0.0f, WHITE);
+}
+
 void DrawInteractionNPC(Npc *npc, Interaction *interaction) 
 {
     Vector2 offset = {12, -25};
