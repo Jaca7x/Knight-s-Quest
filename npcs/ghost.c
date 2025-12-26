@@ -165,7 +165,6 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         
         if (InteractionWithGhost(ghost, player) && IsKeyPressed(KEY_E))
         {
-
             ghost->isInteraction = true;
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING;
             *dialogoTimer = 0.0f;
