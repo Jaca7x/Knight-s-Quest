@@ -18,6 +18,7 @@
 #include "npcs/ghost.h"        
 #include "npcs/interaction.h"
 #include "boss/boss.h"
+#include "npcs/peasant.h"
 
 
 // ============================================================================
@@ -276,7 +277,10 @@ int main(void)
 
     DialogState dialogState = DIALOG_CLOSED;
     DialogStateGhost dialogStateGhost = DIALOG_CLOSED_GHOST;
+
+    DialogStatePeasant dialogStatePeasant = DIALOG_CLOSED_PEASANT;
     float dialogoTimer = 0.0f;  
+    float dialogoTimerPeasant = 0.0f;
 
     Player player;
     InitPlayer(&player);
@@ -316,6 +320,9 @@ int main(void)
 
     Boss boss;
     InitBoss(&boss);
+
+    Peasant peasant;
+    InitPeasant(&peasant);
 
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
@@ -723,6 +730,7 @@ while (!WindowShouldClose())
             UpdateStaminaBar(&player, delta);
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
             UpdateGhost(&ghost, &player, delta, &interaction, &dialogStateGhost, &dialogoTimer, currentMapIndex);
+            UpdatePeasant(&peasant, &player, delta, &interaction, &dialogStatePeasant, &dialogoTimerPeasant, currentMapIndex);
             UpdateInteraction(&interaction, delta); 
 
             if (player.life <= 0 )
@@ -818,6 +826,7 @@ while (!WindowShouldClose())
             }
 
             MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
+            DrawMapsPeasant(&peasant, &interaction, currentMapIndex, delta);
             
             if (currentMapIndex == 0 && textTime <= 2)
             {
