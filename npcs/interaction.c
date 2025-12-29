@@ -52,7 +52,7 @@ void DrawInteractionGhost(Ghost *ghost, Interaction *interaction)
 
 void DrawInteractionPeasant(Peasant *peasant, Interaction *interaction) 
 {
-    Vector2 offset = {20, -20};
+    Vector2 offset = {18, -22};
 
     Rectangle source = {
         (interaction->currentFrame % interaction->columns) * interaction->frameWidth,

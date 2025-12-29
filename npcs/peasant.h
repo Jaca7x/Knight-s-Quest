@@ -11,7 +11,11 @@ typedef struct interaction Interaction;
 typedef enum {
     DIALOG_CLOSED_PEASANT,
     DIALOG_PLAYER_PEASANT_TALKING,
-    DIALOG_PEASANT_TALKING
+    DIALOG_PEASANT_TALKING, 
+    DIALOG_PLAYER_PEASANT_TALKING2,
+    DIALOG_PEASANT_TALKING2,
+    DIALOG_PLAYER_PEASANT_TALKING3,
+    DIALOG_PEASANT_TALKING3
 } DialogStatePeasant;
 
 typedef struct {
@@ -25,6 +29,7 @@ typedef struct peasant {
     Texture2D peasantIdle;
     Texture2D peasantBtnE;
     Texture2D peasantExclamation;
+    
     DialoguePeasant dialogues[NUM_MAPS_PEASANT][3];
 
     int frameIdle;
@@ -43,8 +48,8 @@ typedef struct peasant {
 
 void InitPeasant(Peasant *peasant);
 void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interaction *interaction, DialogStatePeasant *dialogStatePeasant, float *dialogoTimerPeasant, int currentMapIndex);
-void DrawPeasant(Peasant *peasant, Interaction *interaction);
-void DrawMapsPeasant(Peasant *peasant, Interaction *interaction, int currentMapIndex, float delta);
+void DrawPeasant(Peasant *peasant, Player *player, Interaction *interaction, int currentMapIndex, DialogStatePeasant *dialogStatePeasant);
+void DrawMapsPeasant(Peasant *peasant, Player *player, Interaction *interaction, int currentMapIndex, float delta, DialogStatePeasant *dialogStatePeasant);
 void UnloadPeasant(Peasant *peasant);
 
 #endif // PEASANT_H
