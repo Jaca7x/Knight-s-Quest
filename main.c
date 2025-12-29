@@ -826,7 +826,7 @@ while (!WindowShouldClose())
             }
 
             MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
-            DrawMapsPeasant(&peasant, &interaction, currentMapIndex, delta);
+            DrawMapsPeasant(&peasant, &player, &interaction, currentMapIndex, delta, &dialogStatePeasant);
             
             if (currentMapIndex == 0 && textTime <= 2)
             {
@@ -988,6 +988,7 @@ while (!WindowShouldClose())
                     DrawCircleLines(730, 295, 12, GOLD);
                     DrawText("-", 726, 285, 20, GOLD);
                     ghost.speechFontSize--;
+                    peasant.speechFontSize--;
                 }
 
                 if (CheckCollisionPointCircle(GetMousePosition(), centerIncrese, radius) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && ghost.speechFontSize < 33)
@@ -995,6 +996,7 @@ while (!WindowShouldClose())
                     DrawCircleLines(850, 295, 12, GOLD);
                     DrawText("+", 846, 285, 20, GOLD);
                     ghost.speechFontSize++;
+                    peasant.speechFontSize++;
                 }
 
                 DrawText(TextFormat("%d", ghost.speechFontSize), 780, 285, 20, WHITE);
