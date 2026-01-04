@@ -400,7 +400,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         }   
     }
 
-    if (currentMapIndex == 0)
+    if (currentMapIndex == BOSS_MAP)
     {
         float distanceToBoss = fabs(boss->position.x - player->position.x);
 
