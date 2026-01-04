@@ -26,13 +26,13 @@ const char **GetPlayerDialogPeasant(int mapIndex, int *numLines)
             "Gareth II: Você veio sozinho?! Volte para\na vila agora antes que seja tarde demais!"
         },
         {
-            "Gareth II: Vamos rápido, antes que os goblins nos vejam!",
-            "Gareth II: Você está louco? Você é apenas um fazendeiro, está indo para a morte!",
-            "Gareth II: Certo, vamos mais rápido. Não podemos perder mais tempo aqui!" 
+            "Gareth II: Vamos rápido, antes que os goblins\nnos vejam!",
+            "Gareth II: Você está louco? Você é apenas um\nfazendeiro, está indo para a morte!",
+            "Gareth II: Certo, vamos mais rápido.\nNão podemos perder mais tempo aqui!" 
         },
         {
-            "Gareth II: Mas… que estranho, há tão poucos goblins por aqui…",
-            "Gareth II: Sim, algo não está certo. Sinto que estamos sendo observados…",
+            "Gareth II: Mas… que estranho, há tão poucos\ngoblins por aqui…",
+            "Gareth II: Sim, algo não está certo. Sinto que estamos\nsendo observados…",
             "Gareth II: CUIDADO!!"
         },
      };
@@ -47,18 +47,18 @@ const char **GetPeasantDialog(int mapIndex, int *numLines)
         {
             "Fazendeiro: Shhh! Fale baixo… essas pragas têm\nouvidos melhores do que parecem.",
             "Fazendeiro: Eu sei... mas minhas cabras fugiram\npra cá. Sem elas, minha família passa fome.",
-            "Fazendeiro: Acho que os goblins as levaram até seu\ncovil mais adiante na floresta, me ajude a encontra-las!"
+            "Fazendeiro: Acho que os goblins as levaram até seu\ncovil mais adiante na floresta, me ajude a\nencontra-las!"
         },
         {
-            "Fazendeiro: Fique alerta agora, há cabanas de goblins por toda parte. Estamos chegando perto do reino.",
-            "Fazendeiro: Não estou vendo minhas cabras ainda… acho que estão ainda mais à frente?",
-            "Fazendeiro: Prefiro não pensar nisso agora…"
+            "Fazendeiro: Fique alerta agora, há cabanas de\ngoblins por toda parte.\nEstamos chegando perto do reino.",
+            "Fazendeiro: Não estou vendo minhas cabras ainda...\nacho que estão ainda mais à frente?",
+            "Fazendeiro: Prefiro não pensar nisso agora..."
 
         },
         {
-            "Fazendeiro: Minha nossa, este deve ser o centro do reino goblin…",
-            "Fazendeiro: Sim, é melhor ficarmos longe daqui e voltarmos para a vila.",
-            "Fazendeiro: O QUE É AQUILO CAINDO DAS ÁRVORES?!"
+            "Fazendeiro: Minha nossa, este deve ser o centro\ndo reino goblin…",
+            "Fazendeiro: Sim, é melhor ficarmos longe daqui e\nvoltarmos para a vila.",
+            "Fazendeiro: O QUE É AQUILO CAINDO DAS\nÁRVORES?!"
         },
     };
 
@@ -68,7 +68,7 @@ const char **GetPeasantDialog(int mapIndex, int *numLines)
 
 void InitPeasant(Peasant *peasant)
 {
-    peasant->position = (Vector2){600.0f, 528.0f };
+    peasant->position = (Vector2){50.0f, 526.0f };
 
     peasant->peasantSpeech = LoadTexture("resources/sprites/npc/peasant-speech.png");
     peasant->peasantIdle = LoadTexture("resources/sprites/npc/peasant.png");
@@ -265,7 +265,17 @@ void DrawPeasant(Peasant *peasant, Player *player, Interaction *interaction, int
     int playerSpeechTextOffsetX = 210;
     int playerSpeechTextOffsetY = 80;
 
-    int npcSpeechTextOffsetX = 30;
+    int npcSpeechTextOffsetX;
+
+    if (peasant->speechFontSize >= 30)
+    {
+        npcSpeechTextOffsetX = 30;
+    }
+    else
+    {
+        npcSpeechTextOffsetX = 100;
+    }
+    
     int npcSpeechTextOffsetY = 80;
 
     int speechY = GetScreenHeight() - peasant->peasantSpeech.height - speechMarginBottom;
