@@ -122,6 +122,8 @@ void InitBoss(Boss *boss)
     boss->bossHasHit = false;
     
     boss->damage = 40;
+
+    boss->bossMusic = LoadMusicStream("resources/music/boss-soundtrack.mp3");
 }
 
 void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered) 

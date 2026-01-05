@@ -70,6 +70,8 @@ typedef struct boss
     float viewPlayer;
 
     int damage;
+
+    Music bossMusic;
 } Boss;
 
 void InitBoss(Boss *boss);
