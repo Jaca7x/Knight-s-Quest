@@ -116,7 +116,7 @@ void InitPeasant(Peasant *peasant)
     peasant->speechFontSize = 30;
 }
 
-void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interaction *interaction, DialogStatePeasant *dialogStatePeasant, float *dialogoTimerPeasant, int currentMapIndex)
+void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interaction *interaction, DialogStatePeasant *dialogStatePeasant, float *dialogoTimerPeasant, int currentMapIndex, bool *bossTriggered)
 {
     if (peasant->isInteraction)
     {
@@ -212,6 +212,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
             *dialogStatePeasant = DIALOG_CLOSED_PEASANT;
             *dialogoTimerPeasant = 0.0f;
             peasant->isInteraction = false;
+            *bossTriggered = true;
         }
     }
 }

@@ -282,6 +282,8 @@ int main(void)
     float dialogoTimer = 0.0f;  
     float dialogoTimerPeasant = 0.0f;
 
+    bool bossTriggered = false;
+
     Player player;
     InitPlayer(&player);
 
@@ -730,7 +732,7 @@ while (!WindowShouldClose())
             UpdateStaminaBar(&player, delta);
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
             UpdateGhost(&ghost, &player, delta, &interaction, &dialogStateGhost, &dialogoTimer, currentMapIndex);
-            UpdatePeasant(&peasant, &player, delta, &interaction, &dialogStatePeasant, &dialogoTimerPeasant, currentMapIndex);
+            UpdatePeasant(&peasant, &player, delta, &interaction, &dialogStatePeasant, &dialogoTimerPeasant, currentMapIndex, &bossTriggered);
             UpdateInteraction(&interaction, delta); 
 
             if (player.life <= 0 )
@@ -774,7 +776,7 @@ while (!WindowShouldClose())
             if (currentMapIndex == BOSS_MAP)
             {
                 DrawBoss(&boss);
-                UpdateBoss(&boss, &player, delta);
+                UpdateBoss(&boss, &player, delta, &bossTriggered);
             }
         
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)

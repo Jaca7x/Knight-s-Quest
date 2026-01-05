@@ -56,9 +56,11 @@ Rectangle GetDestValueRec(Vector2 position, int frameWidth, int frameHeight, flo
     return r;
 }
 
+float targetY = 340;
+
 void InitBoss(Boss *boss) 
 {
-    boss->position = (Vector2){600, 340};
+    boss->position = (Vector2){600, -320};
 
     boss->currentFrame = 0;
     boss->frameCounter = 0;
@@ -112,7 +114,7 @@ void InitBoss(Boss *boss)
     boss->isDead = false;
 
     boss->attackRange = 100.0f;
-    boss->viewPlayer = 900.0f;
+    boss->viewPlayer = 300.0f;
 
     boss->speed = 10.0f;
     
@@ -122,8 +124,22 @@ void InitBoss(Boss *boss)
     boss->damage = 40;
 }
 
-void UpdateBoss(Boss *boss, Player *player, float delta) 
+void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered) 
 {
+    float speedY = 250.0f;
+
+    if (boss->position.y < targetY && *bossTriggered)
+    {
+        boss->position.y += speedY * delta;
+        boss->isIdle = false;
+        boss->isWalking = false;
+        boss->isAtacking = false;
+
+        if (boss->position.y > targetY)
+        {
+            boss->position.y = targetY;
+        }
+    }
 
     if (boss->isDead)
     {
@@ -331,5 +347,10 @@ void DrawBoss(Boss *boss)
         DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
 
-    DrawBossfLifeBar(boss);
+    if (boss->position.y == targetY)
+    {
+        DrawBossfLifeBar(boss);
+    }
+    
+   
 }

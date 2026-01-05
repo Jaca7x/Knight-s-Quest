@@ -73,7 +73,7 @@ typedef struct boss
 } Boss;
 
 void InitBoss(Boss *boss);
-void UpdateBoss(Boss *boss, Player *player, float delta);
+void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered);
 void DrawBoss(Boss *boss);
 
 #endif //BOSS_H
