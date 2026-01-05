@@ -234,6 +234,8 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
 
 int main(void)
 {   
+    bool bossTriggered = false;
+
     InitAudioDevice();
 
     Music menuMusic = LoadMusicStream("resources/music/menu-music.mp3");
@@ -248,7 +250,6 @@ int main(void)
     PlayMusicStream(menuMusic);
     PlayMusicStream(soundTrack);
     
-
     GameState gameState = MENU;
     ConfigState configState = CONFIG_CLOSED;
 
@@ -281,8 +282,6 @@ int main(void)
     DialogStatePeasant dialogStatePeasant = DIALOG_CLOSED_PEASANT;
     float dialogoTimer = 0.0f;  
     float dialogoTimerPeasant = 0.0f;
-
-    bool bossTriggered = false;
 
     Player player;
     InitPlayer(&player);
@@ -325,6 +324,8 @@ int main(void)
 
     Peasant peasant;
     InitPeasant(&peasant);
+
+    PlayMusicStream(boss.bossMusic);
 
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
@@ -385,12 +386,13 @@ while (!WindowShouldClose())
 {
     UpdateMusicStream(menuMusic);
     UpdateMusicStream(soundTrack);
+    UpdateMusicStream(boss.bossMusic);
 
     float delta = GetFrameTime();
 
     BeginDrawing();
     ClearBackground(RAYWHITE);
-
+    
     Vector2 mousePos = GetMousePosition();
     printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
 
@@ -404,6 +406,7 @@ while (!WindowShouldClose())
             ResumeMusicStream(menuMusic);
 
             PauseMusicStream(soundTrack);
+            PauseMusicStream(boss.bossMusic);
 
             float x1Play = 930, y1Play = 418;  
             float x2Play = 1300, y2Play = 532;  
@@ -501,6 +504,7 @@ while (!WindowShouldClose())
         case PLAYING:
         {
             PauseMusicStream(menuMusic);
+            PauseMusicStream(boss.bossMusic);
 
             ResumeMusicStream(soundTrack);
 
@@ -777,7 +781,13 @@ while (!WindowShouldClose())
             {
                 DrawBoss(&boss);
                 UpdateBoss(&boss, &player, delta, &bossTriggered);
+                if (bossTriggered)
+                {
+                    ResumeMusicStream(boss.bossMusic);
+                    PauseMusicStream(soundTrack);
+                }
             }
+
         
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
