@@ -731,6 +731,12 @@ while (!WindowShouldClose())
                 }
             }
 
+            if (currentMapIndex == 8 &&
+                peasant.dialogueFinished &&
+                !bossTriggered)
+            {
+                bossTriggered = true;
+            }
 
             // --- Atualizações ---
             UpdateStaminaBar(&player, delta);
@@ -757,37 +763,33 @@ while (!WindowShouldClose())
             DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7);
 
             if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
-        {
-            currentMapIndex = (currentMapIndex + 1) % MAP_COUNT;
-            dialogStateGhost = DIALOG_CLOSED_GHOST;
-            ghost.isInteraction = false;
-
-            dialogState = DIALOG_CLOSED;
-
-            UnloadTileMap(&map);
-            map = LoadTileMap(mapFiles[currentMapIndex]);
-
-            SetWindowSize(
-                map.width * map.tileWidth,
-                map.height * map.tileHeight
-            );
-
-            player.position.x = 0;
-            player.position.y = 520;
-        }   
-
-
-            if (currentMapIndex == BOSS_MAP)
             {
+                currentMapIndex = (currentMapIndex + 1) % MAP_COUNT;
+                dialogStateGhost = DIALOG_CLOSED_GHOST;
+                ghost.isInteraction = false;
+
+                dialogState = DIALOG_CLOSED;
+
+                UnloadTileMap(&map);
+                map = LoadTileMap(mapFiles[currentMapIndex]);
+
+                SetWindowSize(
+                    map.width * map.tileWidth,
+                    map.height * map.tileHeight
+                );
+
+                player.position.x = 0;
+                player.position.y = 520;
+            }   
+
+            if (bossTriggered)
+            {
+                PauseMusicStream(soundTrack);
+                ResumeMusicStream(boss.bossMusic);
+                
                 DrawBoss(&boss);
                 UpdateBoss(&boss, &player, delta, &bossTriggered);
-                if (bossTriggered)
-                {
-                    ResumeMusicStream(boss.bossMusic);
-                    PauseMusicStream(soundTrack);
-                }
             }
-
         
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
