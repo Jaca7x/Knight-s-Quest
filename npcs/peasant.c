@@ -51,7 +51,7 @@ const char **GetPeasantDialog(int mapIndex, int *numLines)
         },
         {
             "Fazendeiro: Fique alerta agora, há cabanas de\ngoblins por toda parte.\nEstamos chegando perto do reino.",
-            "Fazendeiro: Não estou vendo minhas cabras ainda...\nacho que estão ainda mais à frente?",
+            "Fazendeiro: Não estou vendo minhas cabras ainda...\nacho que estão ainda mais à frente!",
             "Fazendeiro: Prefiro não pensar nisso agora..."
 
         },
