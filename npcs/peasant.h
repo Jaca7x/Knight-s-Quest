@@ -44,8 +44,11 @@ typedef struct peasant {
     Font textFont; 
 
     int speechFontSize;
+
+    bool dialogueFinished;
 } Peasant;
 
+void PlayPeasantSound(Peasant *peasant, int currentMapIndex, int dialogueIndex);
 void InitPeasant(Peasant *peasant);
 void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interaction *interaction, DialogStatePeasant *dialogStatePeasant, float *dialogoTimerPeasant, int currentMapIndex, bool *bossTriggered);
 void DrawPeasant(Peasant *peasant, Player *player, Interaction *interaction, int currentMapIndex, DialogStatePeasant *dialogStatePeasant);

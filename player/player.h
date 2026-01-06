@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #define NUM_MAPS 4
+#define NUM_MAPS_WITH_PEASANT 3
 #define DIALOGS_PER_MAP 3
 
 #include "../librays/raylib.h"       
@@ -12,6 +13,7 @@
 #include "../boss/boss.h"
 
 void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
+void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogueIndex);
 
 typedef struct wolf Wolf; 
 typedef struct wolfRun WolfRun; 
@@ -25,6 +27,10 @@ typedef struct {
     Sound sound;
 } DialoguePlayer;
 
+typedef struct {
+    const char *text;
+    Sound sound;
+} DialoguePlayerWithPeasant;
 
 typedef struct player
 {
@@ -38,6 +44,7 @@ typedef struct player
     Sound playerDialogueWithNPC2;
 
     DialoguePlayer dialogues[NUM_MAPS][6];
+    DialoguePlayerWithPeasant dialoguesWithPeasant[NUM_MAPS_WITH_PEASANT][3];
 
     bool attackSoundPlayed;
     bool jumpSoundPlayed;

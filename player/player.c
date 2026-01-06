@@ -32,6 +32,19 @@ void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex)
     }
 }
 
+void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogueIndex)
+{
+    if (currentMapIndex >= 6 && currentMapIndex <= 8)
+    {
+        Sound s = player->dialoguesWithPeasant[currentMapIndex - 6][dialogueIndex].sound;
+        if (s.frameCount > 0)  
+        {
+            StopSound(s);
+            PlaySound(s);
+        }
+    }
+}
+
 // Inicializa as variáveis do jogador e carrega os sprites.
 void InitPlayer(Player *player)
 {
@@ -83,6 +96,34 @@ void InitPlayer(Player *player)
     player->dialogues[3][2].text = "Gareth II: Parece que tenho mais desafios,\num lobo branco logo a frente!";
     player->dialogues[3][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost4-3.wav");
 
+    //PEASANT DIALOGUES
+    player->dialoguesWithPeasant[0][0].text = "Gareth II: Ei! Você aí! O que está fazendo\n no meio dessa floresta infestada de goblins?!";
+    player->dialoguesWithPeasant[0][0].sound = LoadSound("resources/sounds/voices/player/player-peasant1-0.wav");
+
+    player->dialoguesWithPeasant[0][1].text = "Gareth II: Você enlouqueceu? Eles vão te matar!";
+    player->dialoguesWithPeasant[0][1].sound = LoadSound("resources/sounds/voices/player/player-peasant1-1.wav");
+
+    player->dialoguesWithPeasant[0][2].text = "Gareth II: Você veio sozinho?! Volte para\na vila agora antes que seja tarde demais!";
+    player->dialoguesWithPeasant[0][2].sound = LoadSound("resources/sounds/voices/player/player-peasant1-2.wav");
+
+    player->dialoguesWithPeasant[1][0].text = "Gareth II: Vamos rápido, antes que os goblins\nnos vejam!";
+    player->dialoguesWithPeasant[1][0].sound = LoadSound("resources/sounds/voices/player/player-peasant2-0.wav");
+
+    player->dialoguesWithPeasant[1][1].text = "Gareth II: Você está louco? Você é apenas um\nfazendeiro, está indo para a morte!";
+    player->dialoguesWithPeasant[1][1].sound = LoadSound("resources/sounds/voices/player/player-peasant2-1.wav");
+
+    player->dialoguesWithPeasant[1][2].text = "Gareth II: Certo, vamos mais rápido.\nNão podemos perder mais tempo aqui!";
+    player->dialoguesWithPeasant[1][2].sound = LoadSound("resources/sounds/voices/player/player-peasant2-2.wav");
+
+    player->dialoguesWithPeasant[2][0].text = "Gareth II: Mas… que estranho, há tão poucos\ngoblins por aqui...";
+    player->dialoguesWithPeasant[2][0].sound = LoadSound("resources/sounds/voices/player/player-peasant3-0.wav");
+
+    player->dialoguesWithPeasant[2][1].text = "Gareth II: Sim, algo não está certo. Sinto que estamos\nsendo observados...";
+    player->dialoguesWithPeasant[2][1].sound = LoadSound("resources/sounds/voices/player/player-peasant3-1.wav");
+
+    player->dialoguesWithPeasant[2][2].text = "Gareth II: ESCONDA-SE!";
+    player->dialoguesWithPeasant[2][2].sound = LoadSound("resources/sounds/voices/player/player-peasant3-2.wav");
+
     player->attackSoundPlayed = false;
     player->jumpSoundPlayed   = false;
     player->walkSoundPlayingCastle  = false;
@@ -117,7 +158,7 @@ void InitPlayer(Player *player)
 
     // Física
     player->speedWalk = 200.0f;
-    player->speedRun  = 280.0f;
+    player->speedRun  = 10000.0f;
     player->gravity   = 950.0f;
     player->groundY   = 518.0f;
     player->velocityY = 0.0f;
@@ -659,12 +700,28 @@ void UnloadPlayer(Player *player)
     UnloadSound(player->jumpSound);
     UnloadSound(player->playerDialogueWithNPC1);
     UnloadSound(player->playerDialogueWithNPC2);
+    UnloadTexture(player->playerSpeech);
+    UnloadTexture(player->spritePlayerDead);
 
-    for (int i = 0; i < NUM_MAPS; i++)
+    for (int map = 0; map < NUM_MAPS; map++)
     {
-        for (int j = 0; j < 6; j++)
+        for (int i = 0; i < 6; i++)
         {
-            UnloadSound(player->dialogues[i][j].sound);
+            if (player->dialogues[map][i].sound.frameCount > 0)
+            {
+                UnloadSound(player->dialogues[map][i].sound);
+            }
+        }
+    }
+
+    for (int map = 0; map < NUM_MAPS_WITH_PEASANT; map++)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (player->dialoguesWithPeasant[map][i].sound.frameCount > 0)
+            {
+                UnloadSound(player->dialoguesWithPeasant[map][i].sound);
+            }
         }
     }
 }

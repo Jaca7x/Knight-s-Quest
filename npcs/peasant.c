@@ -17,6 +17,19 @@ int GetPeasantDialogIndexByMap(int currentMapIndex)
     }
 }
 
+void PlayPeasantSound(Peasant *peasant, int currentMapIndex, int dialogueIndex)
+{
+    if (currentMapIndex >= 6 && currentMapIndex <= 8)
+    {
+        Sound s = peasant->dialogues[currentMapIndex - 6][dialogueIndex].sound;
+        if (s.frameCount > 0)  
+        {
+            StopSound(s);
+            PlaySound(s);
+        }
+    }
+}
+
 const char **GetPlayerDialogPeasant(int mapIndex, int *numLines)
 {
     static const char *dialogs[3][3] = {
@@ -31,9 +44,9 @@ const char **GetPlayerDialogPeasant(int mapIndex, int *numLines)
             "Gareth II: Certo, vamos mais rápido.\nNão podemos perder mais tempo aqui!" 
         },
         {
-            "Gareth II: Mas… que estranho, há tão poucos\ngoblins por aqui…",
-            "Gareth II: Sim, algo não está certo. Sinto que estamos\nsendo observados…",
-            "Gareth II: CUIDADO!!"
+            "Gareth II: Mas… que estranho, há tão poucos\ngoblins por aqui...",
+            "Gareth II: Sim, algo não está certo. Sinto que estamos\nsendo observados...",
+            "Gareth II: ESCONDA-SE!"
         },
      };
 
@@ -77,30 +90,39 @@ void InitPeasant(Peasant *peasant)
 
     peasant->dialogues[0][0].text =
     "Shhh! Fale baixo… essas pragas têm ouvidos melhores do que parecem.";
+    peasant->dialogues[0][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-0.wav");
 
     peasant->dialogues[0][1].text =
     "Eu sei… mas minhas cabras fugiram pra cá. Sem elas, minha família passa fome.";
+    peasant->dialogues[0][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-1.wav");
 
     peasant->dialogues[0][2].text =
     "Acho que os goblins as levaram até seu covil mais adiante na floresta, me ajude a encontra-las!";
+    peasant->dialogues[0][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-2.wav");
     
     peasant->dialogues[1][0].text =
     "Fique alerta agora, há cabanas de goblins por toda parte. Estamos chegando perto do reino.";
+    peasant->dialogues[1][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-0.wav");
 
     peasant->dialogues[1][1].text =
     "Não estou vendo minhas cabras ainda… acho que estão ainda mais à frente?";
+    peasant->dialogues[1][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-1.wav");
 
     peasant->dialogues[1][2].text =
     "Prefiro não pensar nisso agora…";
+    peasant->dialogues[1][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-2.wav");
 
     peasant->dialogues[2][0].text =
     "Minha nossa, este deve ser o centro do reino goblin…";
+    peasant->dialogues[2][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-0.wav");
 
     peasant->dialogues[2][1].text =
     "Sim, é melhor ficarmos longe daqui e voltarmos para a vila.";
+    peasant->dialogues[2][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-1.wav");
 
     peasant->dialogues[2][2].text =
     "O QUE É AQUILO CAINDO DAS ÁRVORES?!";
+    peasant->dialogues[2][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-2.wav");
 
     peasant->frameIdle = 2;
 
@@ -114,6 +136,8 @@ void InitPeasant(Peasant *peasant)
     peasant->textFont = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
     peasant->speechFontSize = 30;
+
+    peasant->dialogueFinished = false;
 }
 
 void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interaction *interaction, DialogStatePeasant *dialogStatePeasant, float *dialogoTimerPeasant, int currentMapIndex, bool *bossTriggered)
@@ -142,7 +166,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
             peasant->isInteraction = true;
             *dialogStatePeasant = DIALOG_PLAYER_PEASANT_TALKING;
             *dialogoTimerPeasant = 0.0f;
-            //PlayPlayerSound(player, currentMapIndex, 0);
+            PlayPlayerSoundWithPeasant(player, currentMapIndex, 0);
         }
         return;
     }
@@ -156,7 +180,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
         {
             *dialogStatePeasant = DIALOG_PEASANT_TALKING;
             *dialogoTimerPeasant = 0.0f;
-            //PlayPeasantSound(peasant, currentMapIndex, 0);
+            PlayPeasantSound(peasant, currentMapIndex, 0);
         }
     }
     else if (*dialogStatePeasant == DIALOG_PEASANT_TALKING)
@@ -167,7 +191,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
         {
             *dialogStatePeasant = DIALOG_PLAYER_PEASANT_TALKING2;
             *dialogoTimerPeasant = 0.0f;
-           // PlayPlayerSound(player, currentMapIndex, 1);
+            PlayPlayerSoundWithPeasant(player, currentMapIndex, 1);
         }
     }
     else if (*dialogStatePeasant == DIALOG_PLAYER_PEASANT_TALKING2)
@@ -178,7 +202,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
         {
             *dialogStatePeasant = DIALOG_PEASANT_TALKING2;
             *dialogoTimerPeasant = 0.0f;
-            //PlayPeasantSound(peasant, currentMapIndex, 1);
+            PlayPeasantSound(peasant, currentMapIndex, 1);
         }
     }
     else if (*dialogStatePeasant == DIALOG_PEASANT_TALKING2)
@@ -189,7 +213,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
         {
             *dialogStatePeasant = DIALOG_PLAYER_PEASANT_TALKING3;
             *dialogoTimerPeasant = 0.0f;
-            //PlayPlayerSound(player, currentMapIndex, 2);
+            PlayPlayerSoundWithPeasant(player, currentMapIndex, 2);
         }
     }
     else if (*dialogStatePeasant == DIALOG_PLAYER_PEASANT_TALKING3)
@@ -200,7 +224,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
         {
             *dialogStatePeasant = DIALOG_PEASANT_TALKING3;
             *dialogoTimerPeasant = 0.0f;
-            //PlayPeasantSound(peasant, currentMapIndex, 2);
+            PlayPeasantSound(peasant, currentMapIndex, 2);
         }
     }
     else if (*dialogStatePeasant == DIALOG_PEASANT_TALKING3)
@@ -212,7 +236,11 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
             *dialogStatePeasant = DIALOG_CLOSED_PEASANT;
             *dialogoTimerPeasant = 0.0f;
             peasant->isInteraction = false;
-            *bossTriggered = true;
+
+            if (currentMapIndex == 8)
+            {
+                peasant->dialogueFinished = true;
+            }
         }
     }
 }
@@ -381,14 +409,21 @@ void UnloadPeasant(Peasant *peasant)
     UnloadTexture(peasant->peasantSpeech);
     UnloadTexture(peasant->peasantIdle);
     UnloadTexture(peasant->peasantBtnE);
+    UnloadTexture(peasant->peasantExclamation);
 
-    for (int i = 0; i < NUM_MAPS; i++)
+    
+
+    UnloadFont(peasant->textFont);
+
+    for (int map = 0; map < NUM_MAPS; map++)
     {
-        for (int j = 0; j < 3; j++)
+        for (int i = 0; i < 3; i++)
         {
-            UnloadSound(peasant->dialogues[i][j].sound);
+            if (peasant->dialogues[map][i].sound.frameCount > 0)
+            {
+                UnloadSound(peasant->dialogues[map][i].sound);
+            }
         }
     }
 
-    UnloadFont(peasant->textFont);
 }
