@@ -404,11 +404,14 @@ void UnloadGhost(Ghost *ghost)
     UnloadTexture(ghost->ghostExclamation);
     UnloadFont(ghost->textFont);
 
-    for (int i = 0; i < NUM_MAPS; i++)
+    for (int map = 0; map < NUM_MAPS; map++)
     {
-        for (int j = 0; j < 6; j++)
+        for (int i = 0; i < 6; i++)
         {
-            UnloadSound(ghost->dialogues[i][j].sound);
+            if (ghost->dialogues[map][i].sound.frameCount > 0)
+            {
+                UnloadSound(ghost->dialogues[map][i].sound);
+            }
         }
     }
 }
