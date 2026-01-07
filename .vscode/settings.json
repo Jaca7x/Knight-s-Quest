@@ -21,5 +21,6 @@
 		"*.m": "c",
 		"algorithm": "c",
 		"format": "c"
-	}
+	},
+	"C_Cpp.errorSquiggles": "enabled"
 }
