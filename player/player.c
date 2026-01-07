@@ -118,7 +118,7 @@ void InitPlayer(Player *player)
     player->dialoguesWithPeasant[2][0].text = "Gareth II: Mas… que estranho, há tão poucos\ngoblins por aqui...";
     player->dialoguesWithPeasant[2][0].sound = LoadSound("resources/sounds/voices/player/player-peasant3-0.wav");
 
-    player->dialoguesWithPeasant[2][1].text = "Gareth II: Sim, algo não está certo. Sinto que estamos\nsendo observados...";
+    player->dialoguesWithPeasant[2][1].text = "Gareth II: Sim, algo não está certo. Sinto que\nestamos sendo observados...";
     player->dialoguesWithPeasant[2][1].sound = LoadSound("resources/sounds/voices/player/player-peasant3-1.wav");
 
     player->dialoguesWithPeasant[2][2].text = "Gareth II: ESCONDA-SE!";

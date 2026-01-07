@@ -45,7 +45,7 @@ const char **GetPlayerDialogPeasant(int mapIndex, int *numLines)
         },
         {
             "Gareth II: Mas… que estranho, há tão poucos\ngoblins por aqui...",
-            "Gareth II: Sim, algo não está certo. Sinto que estamos\nsendo observados...",
+            "Gareth II: Sim, algo não está certo. Sinto\nque estamos sendo observados...",
             "Gareth II: ESCONDA-SE!"
         },
      };
