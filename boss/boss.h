@@ -72,6 +72,8 @@ typedef struct boss
     int damage;
 
     Music bossMusic;
+
+    bool musicStarted;  
 } Boss;
 
 void InitBoss(Boss *boss);
