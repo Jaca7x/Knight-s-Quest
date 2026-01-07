@@ -59,6 +59,13 @@ typedef enum ConfigState
     ATALHOS
 } ConfigState;
 
+typedef enum {
+    MUSIC_MENU,
+    MUSIC_GAMEPLAY,
+    MUSIC_BOSS
+} MusicState;
+
+
 // Estrutura que representa um mapa carregado do Tiled
 typedef struct
 {
@@ -233,7 +240,7 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
 
 
 int main(void)
-{   
+{
     bool bossTriggered = false;
 
     InitAudioDevice();
@@ -246,12 +253,12 @@ int main(void)
     Sound death = LoadSound("resources/sounds/game-over.wav");
     Sound walkingInCastle = LoadSound("resources/sounds/walking-castle.wav");
     Sound walkingInGrass = LoadSound("resources/sounds/walking-grass.wav");
-
-    PlayMusicStream(menuMusic);
-    PlayMusicStream(soundTrack);
     
     GameState gameState = MENU;
+    static MusicState currentMusic = MUSIC_MENU;
     ConfigState configState = CONFIG_CLOSED;
+
+    PlayMusicStream(menuMusic);
 
     const char *mapFiles[MAP_COUNT] = {
         "assets/maps/castle_map.json",
@@ -325,8 +332,6 @@ int main(void)
     Peasant peasant;
     InitPeasant(&peasant);
 
-    PlayMusicStream(boss.bossMusic);
-
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
     Texture2D tileset3 = LoadTexture("assets/maps/tiles_map/endcastle.png");
@@ -396,6 +401,43 @@ while (!WindowShouldClose())
     Vector2 mousePos = GetMousePosition();
     printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
 
+    MusicState desiredMusic;
+
+    if (gameState == MENU)
+    {
+        desiredMusic = MUSIC_MENU;
+    }
+    else if (bossTriggered)
+    {
+        desiredMusic = MUSIC_BOSS;
+    }
+    else
+    {
+        desiredMusic = MUSIC_GAMEPLAY;
+    }
+
+    if (desiredMusic != currentMusic)
+    {
+        StopMusicStream(menuMusic);
+        StopMusicStream(soundTrack);
+        StopMusicStream(boss.bossMusic);
+
+        switch (desiredMusic)
+        {
+            case MUSIC_MENU:
+                PlayMusicStream(menuMusic);
+                break;
+            case MUSIC_GAMEPLAY:
+                PlayMusicStream(soundTrack);
+                break;
+            case MUSIC_BOSS:
+                PlayMusicStream(boss.bossMusic);
+                break;
+        }
+
+        currentMusic = desiredMusic;
+    }
+
     switch (gameState)
     {
         // ========================================================
@@ -403,10 +445,8 @@ while (!WindowShouldClose())
         // ========================================================
         case MENU:
         {
-            ResumeMusicStream(menuMusic);
 
-            PauseMusicStream(soundTrack);
-            PauseMusicStream(boss.bossMusic);
+            bossTriggered = false;
 
             float x1Play = 930, y1Play = 418;  
             float x2Play = 1300, y2Play = 532;  
@@ -503,11 +543,6 @@ while (!WindowShouldClose())
         // ========================================================
         case PLAYING:
         {
-            PauseMusicStream(menuMusic);
-            PauseMusicStream(boss.bossMusic);
-
-            ResumeMusicStream(soundTrack);
-
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
             && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
             {
@@ -784,12 +819,10 @@ while (!WindowShouldClose())
 
             if (bossTriggered)
             {
-                PauseMusicStream(soundTrack);
-                ResumeMusicStream(boss.bossMusic);
-                
                 DrawBoss(&boss);
                 UpdateBoss(&boss, &player, delta, &bossTriggered);
             }
+
         
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
