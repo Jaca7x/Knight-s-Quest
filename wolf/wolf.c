@@ -89,6 +89,7 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
 
     wolf->wolfHitSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit.wav");
     wolf->wolfHitSoundHeavy = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-heavy.wav");
+    wolf->wolfDeathSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-death.wav");
 }
 
 void InitWhiteWolf(Wolf *wolf, Vector2 pos) 
@@ -132,6 +133,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta)
 {
 if (wolf->life <= 0 && !wolf->isDead)
     {
+        PlaySound(wolf->wolfDeathSound);
         wolf->isDead = true;
         wolf->isMoving = false;
         wolf->hasHitPlayer = false;
@@ -327,4 +329,7 @@ void UnloadWolf(Wolf *wolf)
     UnloadTexture(wolf->spriteIdleWolf);
     UnloadTexture(wolf->spriteDeadWolf);
     UnloadTexture(wolf->spriteHurtWolf);
+    UnloadSound(wolf->wolfHitSound);
+    UnloadSound(wolf->wolfHitSoundHeavy);
+    UnloadSound(wolf->wolfDeathSound);
 }

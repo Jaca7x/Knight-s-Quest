@@ -273,7 +273,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         }
     }
 
-    if (currentMapIndex == MAP_WOLF_RED_AREA)
+    if (currentMapIndex == MAP_WOLF_RED_AREA && !redWolf->isDead)
     {
         float distanceToRedWolf = fabs(redWolf->position.x - player->position.x);
 
@@ -282,9 +282,15 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             if (!redWolf->wolfHasHit)
             {
                 if (player->isAttackingLight)
+                {
                     redWolf->life -= player->lightDamage;
+                    PlaySound(redWolf->wolfHitSound);
+                }
                 else if (player->isAttackingHeavy)
+                {
                     redWolf->life -= player->heavyDamage;
+                    PlaySound(redWolf->wolfHitSoundHeavy);
+                }
 
                 redWolf->wolfHasHit = true;
             }
@@ -295,7 +301,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         }   
     }
 
-    if (currentMapIndex == MAP_WOLF_WHITE_AREA)
+    if (currentMapIndex == MAP_WOLF_WHITE_AREA && !whiteWolf->isDead)
     {
         float distanceToWhiteWolf = fabs(whiteWolf->position.x - player->position.x);
 
@@ -303,10 +309,16 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         {   
             if (!whiteWolf->wolfHasHit)
             {
-                if (player->isAttackingLight)
+                if (player->isAttackingLight) 
+                {
                     whiteWolf->life -= player->lightDamage;
+                    PlaySound(whiteWolf->wolfHitSound);
+                }
                 else if (player->isAttackingHeavy)
+                {
                     whiteWolf->life -= player->heavyDamage;
+                    PlaySound(whiteWolf->wolfHitSoundHeavy);
+                }
 
                 whiteWolf->wolfHasHit = true;
             }
@@ -318,7 +330,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     }
     
     // Lógica de dano nos lobos (apenas se estiver no mapa certo)
-    if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
+    if (currentMapIndex == MAP_WOLF_RUNNING_AREA && !wolf->isDead)
     {
         float distanceToWolf = fabs(wolf->position.x - player->position.x);
 
@@ -327,9 +339,15 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             if (!wolf->wolfHasHit)
             {
                 if (player->isAttackingLight)
+                {
+                    PlaySound(wolf->wolfHitSound);
                     wolf->life -= player->lightDamage;
+                }
                 else if (player->isAttackingHeavy)
+                {
+                    PlaySound(wolf->wolfHitSoundHeavy);
                     wolf->life -= player->heavyDamage;
+                }
 
                 wolf->wolfHasHit = true;
             }
@@ -340,7 +358,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         }   
     }
 
-    if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
+    if (currentMapIndex == MAP_WOLF_RUNNING_AREA && !wolfRun->isDead)
     {
         float distanceToRunningWolf = fabs(wolfRun->position.x - player->position.x);
 
@@ -349,9 +367,15 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             if (!wolfRun->wolfHasHit)
             {
                 if (player->isAttackingLight)
+                {   
+                    PlaySound(wolfRun->wolfHitSound);
                     wolfRun->life -= player->lightDamage;
+                }
                 else if (player->isAttackingHeavy)
+                {
+                    PlaySound(wolfRun->wolfHitSoundHeavy);
                     wolfRun->life -= player->heavyDamage;
+                }
 
                 wolfRun->wolfHasHit = true;
             }
