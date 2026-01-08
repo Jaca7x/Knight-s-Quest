@@ -127,6 +127,10 @@ void InitRedWolf(Wolf *wolf, Vector2 pos)
     wolf->spriteWalkWolf = LoadTexture("resources/sprites/redWolf/Walk.png");
     
     wolf->frameAtk   = 5;
+
+    wolf->wolfHitSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-deep.wav");
+    wolf->wolfHitSoundHeavy = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-heavy-deep.wav");
+    wolf->wolfDeathSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-death-deep.wav");
 }
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta)
