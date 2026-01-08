@@ -49,9 +49,9 @@ void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogu
 void InitPlayer(Player *player)
 {
     // Carregar efeitos sonoros
-    player->attackLightSound = LoadSound("resources/sounds/attack-1.wav");
-    player->attackHeavySound = LoadSound("resources/sounds/attack-2.wav");
-    player->jumpSound        = LoadSound("resources/sounds/jump.wav");
+    player->attackLightSound = LoadSound("resources/sounds/sound_effects/player/attack-1.wav");
+    player->attackHeavySound = LoadSound("resources/sounds/sound_effects/player/attack-2.wav");
+    player->jumpSound        = LoadSound("resources/sounds/sound_effects/player/jump.wav");
 
     player->playerDialogueWithNPC1 = LoadSound("resources/sounds/voices/player/player-dialogue-npc-1.wav");
     player->playerDialogueWithNPC2 = LoadSound("resources/sounds/voices/player/player-dialogue-npc-2.wav");

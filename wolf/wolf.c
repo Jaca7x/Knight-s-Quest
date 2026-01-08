@@ -86,6 +86,9 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
     wolf->damage = 20;
 
     wolf->droppedHeart = false;
+
+    wolf->wolfHitSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit.wav");
+    wolf->wolfHitSoundHeavy = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-heavy.wav");
 }
 
 void InitWhiteWolf(Wolf *wolf, Vector2 pos) 

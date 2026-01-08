@@ -248,11 +248,11 @@ int main(void)
     Music menuMusic = LoadMusicStream("resources/music/menu-music.mp3");
     Music soundTrack = LoadMusicStream("resources/music/soundtrack.mp3");
 
-    Sound buttonSelect = LoadSound("resources/sounds/menu-select-button.wav");
-    Sound onOFF = LoadSound("resources/sounds/ON-OFF.wav");
-    Sound death = LoadSound("resources/sounds/game-over.wav");
-    Sound walkingInCastle = LoadSound("resources/sounds/walking-castle.wav");
-    Sound walkingInGrass = LoadSound("resources/sounds/walking-grass.wav");
+    Sound buttonSelect = LoadSound("resources/sounds/sound_effects/buttons/menu-select-button.wav");
+    Sound onOFF = LoadSound("resources/sounds/sound_effects/buttons/ON-OFF.wav");
+    Sound death = LoadSound("resources/sounds/sound_effects/player/game-over.wav");
+    Sound walkingInCastle = LoadSound("resources/sounds/sound_effects/player/walking-castle.wav");
+    Sound walkingInGrass = LoadSound("resources/sounds/sound_effects/player/walking-grass.wav");
     
     GameState gameState = MENU;
     static MusicState currentMusic = MUSIC_MENU;

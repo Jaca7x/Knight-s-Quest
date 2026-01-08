@@ -61,6 +61,8 @@ typedef struct wolf
 
     bool droppedHeart; 
 
+    Sound wolfHitSound;
+    Sound wolfHitSoundHeavy;
 } Wolf;
 
 void InitWolfBase(Wolf *wolf, Vector2 pos);
