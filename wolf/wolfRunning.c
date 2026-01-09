@@ -83,6 +83,7 @@ void InitRunningWolf(WolfRun *wolfRun)
     wolfRun->wolfHitSoundHeavy = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-heavy.wav");
     wolfRun->wolfDeathSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-death.wav");
     wolfRun->wolfScratch = LoadSound("resources/sounds/sound_effects/wolf/wolf-scratch.wav");
+    wolfRun->wolfGrowl = LoadSound("resources/sounds/sound_effects/wolf/wolf-growl2.wav");
 }
 
 void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
@@ -305,6 +306,7 @@ void DrawRunningWolf(WolfRun *wolfRun)
     }
     else
     {
+        PlaySound(wolfRun->wolfGrowl);
         currentSprite = wolfRun->spriteIdleWolf;
     }
 

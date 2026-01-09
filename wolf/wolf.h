@@ -65,6 +65,10 @@ typedef struct wolf
     Sound wolfHitSoundHeavy;
     Sound wolfDeathSound;
     Sound wolfScratch;
+
+    Sound wolfGrowl;
+    bool growlPlayed;
+    float timeSinceLastGrowl;
     
 } Wolf;
 

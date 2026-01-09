@@ -65,7 +65,8 @@ typedef struct wolfRun
     Sound wolfHitSoundHeavy;
     Sound wolfDeathSound;
     Sound wolfScratch;
-    
+    Sound wolfGrowl;
+
 } WolfRun;
 
 void InitRunningWolf(WolfRun *wolfRun);

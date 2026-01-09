@@ -91,6 +91,11 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
     wolf->wolfHitSoundHeavy = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-heavy.wav");
     wolf->wolfDeathSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-death.wav");
     wolf->wolfScratch = LoadSound("resources/sounds/sound_effects/wolf/wolf-scratch.wav");
+
+
+    wolf->wolfGrowl = LoadSound("resources/sounds/sound_effects/wolf/wolf-growl.wav");
+    wolf->growlPlayed = true;
+    wolf->timeSinceLastGrowl = 0.0f;
 }
 
 void InitWhiteWolf(Wolf *wolf, Vector2 pos) 
@@ -159,9 +164,24 @@ if (wolf->life <= 0 && !wolf->isDead)
 
     // ====== PATRULHA ======
 if (wolf->isPatrolling)
-{
+{   
     if (wolf->isMoving)
     {
+        if (wolf->growlPlayed)
+        {
+            PlaySound(wolf->wolfGrowl);
+            wolf->growlPlayed = false;
+            wolf->timeSinceLastGrowl = 8.0f;
+        }
+        else
+        {
+            wolf->timeSinceLastGrowl += delta;
+            if (wolf->timeSinceLastGrowl <= 0.0f)
+            {
+                wolf->growlPlayed = true;
+            }
+        }
+    
         wolf->position.x += wolf->speed * wolf->direction * delta;
 
         if (wolf->position.x <= wolf->start.x)
