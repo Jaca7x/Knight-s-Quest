@@ -64,6 +64,7 @@ typedef struct wolf
     Sound wolfHitSound;
     Sound wolfHitSoundHeavy;
     Sound wolfDeathSound;
+    Sound wolfScratch;
     
 } Wolf;
 
