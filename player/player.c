@@ -195,6 +195,9 @@ void InitPlayer(Player *player)
     player->attackRange = 115.0f;
     player->lightDamage = 50;
     player->heavyDamage = 70;
+
+    player->walkingInCastle = LoadSound("resources/sounds/sound_effects/player/walking-castle.wav");
+    player->walkingInGrass = LoadSound("resources/sounds/sound_effects/player/walking-grass.wav");
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
@@ -726,6 +729,8 @@ void UnloadPlayer(Player *player)
     UnloadSound(player->playerDialogueWithNPC2);
     UnloadTexture(player->playerSpeech);
     UnloadTexture(player->spritePlayerDead);
+    UnloadSound(player->walkingInCastle);
+    UnloadSound(player->walkingInGrass);
 
     for (int map = 0; map < NUM_MAPS; map++)
     {

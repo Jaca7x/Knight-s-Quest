@@ -251,8 +251,7 @@ int main(void)
     Sound buttonSelect = LoadSound("resources/sounds/sound_effects/buttons/menu-select-button.wav");
     Sound onOFF = LoadSound("resources/sounds/sound_effects/buttons/ON-OFF.wav");
     Sound death = LoadSound("resources/sounds/sound_effects/player/game-over.wav");
-    Sound walkingInCastle = LoadSound("resources/sounds/sound_effects/player/walking-castle.wav");
-    Sound walkingInGrass = LoadSound("resources/sounds/sound_effects/player/walking-grass.wav");
+   
     
     GameState gameState = MENU;
     static MusicState currentMusic = MUSIC_MENU;
@@ -568,8 +567,8 @@ while (!WindowShouldClose())
                 SetSoundVolume(player.attackLightSound, volumeEfects);
                 SetSoundVolume(player.attackHeavySound, volumeEfects);
                 SetSoundVolume(player.jumpSound, volumeEfects);
-                SetSoundVolume(walkingInCastle, volumeEfects);
-                SetSoundVolume(walkingInGrass, volumeEfects);
+                SetSoundVolume(player.walkingInCastle, volumeEfects);
+                SetSoundVolume(player.walkingInGrass, volumeEfects);
             }
 
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
@@ -720,7 +719,7 @@ while (!WindowShouldClose())
             {
                 if (!player.walkSoundPlayingCastle)
                 {
-                    PlaySound(walkingInCastle);
+                    PlaySound(player.walkingInCastle);
                     player.walkSoundPlayingCastle = true;
                     player.walkTimeCastle = 0.0f;
                 }
@@ -728,7 +727,7 @@ while (!WindowShouldClose())
 
                 if (player.walkTimeCastle > 0.5f)
                 {
-                    StopSound(walkingInCastle);
+                    StopSound(player.walkingInCastle);
                     player.walkSoundPlayingCastle = false;
                 }
             }
@@ -736,7 +735,7 @@ while (!WindowShouldClose())
             {
                 if (player.walkSoundPlayingCastle)
                 {
-                    StopSound(walkingInCastle);
+                    StopSound(player.walkingInCastle);
                     player.walkSoundPlayingCastle = false;
                 }
             }
@@ -745,7 +744,7 @@ while (!WindowShouldClose())
             {
                 if (!player.walkSoundPlayingGrass)
                 {
-                    PlaySound(walkingInGrass);
+                    PlaySound(player.walkingInGrass);
                     player.walkSoundPlayingGrass = true;
                     player.walkTimeGrass = 0.0f;
                 }
@@ -753,7 +752,7 @@ while (!WindowShouldClose())
 
                 if (player.walkTimeGrass > 0.5f)
                 {
-                    StopSound(walkingInGrass);
+                    StopSound(player.walkingInGrass);
                     player.walkSoundPlayingGrass = false;
                 }
             }
@@ -761,7 +760,7 @@ while (!WindowShouldClose())
             {
                 if (player.walkSoundPlayingGrass)
                 {
-                    StopSound(walkingInGrass);
+                    StopSound(player.walkingInGrass);
                     player.walkSoundPlayingGrass = false;
                 }
             }
@@ -1247,9 +1246,6 @@ while (!WindowShouldClose())
     UnloadMusicStream(soundTrack);
     UnloadSound(death);
     UnloadSound(buttonSelect);
-    UnloadSound(walkingInCastle);
-    UnloadSound(walkingInGrass);
-
     CloseWindow();
     return 0;
 }   
