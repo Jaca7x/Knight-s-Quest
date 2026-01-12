@@ -78,7 +78,7 @@ void InitWhiteWolf(Wolf *wolf, Vector2 pos);
 
 void InitRedWolf(Wolf *wolf, Vector2 pos);
 
-void UpdateWolf(Wolf *wolf, Player *player, float delta);
+void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex);
 void DrawWolf(Wolf *wolf);
 void UnloadWolf(Wolf *wolf);
 

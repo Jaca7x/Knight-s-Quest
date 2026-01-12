@@ -142,10 +142,11 @@ void InitRedWolf(Wolf *wolf, Vector2 pos)
     wolf->wolfScratch = LoadSound("resources/sounds/sound_effects/wolf/red-wolf-scratch.wav");
 }
 
-void UpdateWolf(Wolf *wolf, Player *player, float delta)
+void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
 {
 if (wolf->life <= 0 && !wolf->isDead)
     {
+        StopSound(wolf->wolfGrowl);
         PlaySound(wolf->wolfDeathSound);
         wolf->isDead = true;
         wolf->isMoving = false;
