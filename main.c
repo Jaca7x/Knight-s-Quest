@@ -589,6 +589,15 @@ while (!WindowShouldClose())
                 SetSoundVolume(whiteWolf.wolfHitSound, volumeEfects);
                 SetSoundVolume(whiteWolf.wolfHitSoundHeavy, volumeEfects);
                 SetSoundVolume(whiteWolf.wolfDeathSound, volumeEfects);
+                SetSoundVolume(goblin.goblinCutSound, volumeEfects);
+                SetSoundVolume(goblin.goblinDeathSound, volumeEfects);
+                SetSoundVolume(redGoblin.RedGoblinHitSound, volumeEfects);
+                SetSoundVolume(redGoblin.goblinDeathSound, volumeEfects);
+                SetSoundVolume(redGoblin.goblinCutSound, volumeEfects);
+                SetSoundVolume(goblinArcher.arrowHitSound, volumeEfects);
+                SetSoundVolume(goblinArcher.goblinArcherDeathSound, volumeEfects);
+                SetSoundVolume(goblinArcher.goblinArcherLoadingSound, volumeEfects);
+                
             }
 
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
@@ -845,13 +854,13 @@ while (!WindowShouldClose())
         
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
-                UpdateWolf(&whiteWolf, &player, delta);
+                UpdateWolf(&whiteWolf, &player, delta, currentMapIndex);
                 DrawWolf(&whiteWolf);
             }
 
             if (currentMapIndex == MAP_WOLF_RED_AREA)
             {
-                UpdateWolf(&redWolf, &player, delta);
+                UpdateWolf(&redWolf, &player, delta, currentMapIndex);
                 DrawWolf(&redWolf);
             }
             
@@ -872,8 +881,8 @@ while (!WindowShouldClose())
             {
                 UpdateRunningWolf(&wolfRun, &player, delta);
                 DrawRunningWolf(&wolfRun);
-                
-                UpdateWolf(&wolf, &player, delta);
+
+                UpdateWolf(&wolf, &player, delta, currentMapIndex);
                 DrawWolf(&wolf);
             }
 
