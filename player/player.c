@@ -426,10 +426,12 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             {
                 if (player->isAttackingLight)
                 {
+                    PlaySound(redGoblin->RedGoblinHitSound);
                     redGoblin->life -= player->lightDamage;
                 }
                 else if (player->isAttackingHeavy)
                 {
+                    PlaySound(redGoblin->RedGoblinHitSound);
                     redGoblin->life -= player->heavyDamage;
                 }
 

@@ -91,12 +91,13 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
 
     if (wolfRun->life <= 0 && !wolfRun->isDead)
     {
+        StopSound(wolfRun->wolfGrowl);
         PlaySound(wolfRun->wolfDeathSound);
         wolfRun->isDead = true;
         wolfRun->isRunning = false;
         wolfRun->isWalking = false;
         wolfRun->hasHitPlayer = false;
-        wolfRun->wolfHasHit = false;
+        wolfRun->wolfHasHit = false;        
         wolfRun->frameDead = 1;
         wolfRun->deathAnimTimer = 0.0f;
         wolfRun->deathAnimationDone = false;

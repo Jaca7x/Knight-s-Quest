@@ -87,7 +87,9 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
     goblin->droppedHeart = false; // Inicializa como falso
 
     goblin->goblinDeathSound = LoadSound("resources/sounds/sound_effects/goblin/goblin-death.wav");
-    goblin->goblinCutSound = LoadSound("resources/sounds/sound_effects/goblin/goblin-cut.wav");
+    goblin->goblinCutSound = LoadSound("resources/sounds/sound_effects/goblin/goblin-cut.wav");  
+
+    goblin->RedGoblinHitSound = LoadSound("resources/sounds/sound_effects/goblin/red-goblin-hit.wav");
 }
 
 void InitRedGoblin(Goblin *goblin, Vector2 pos) 
@@ -106,7 +108,7 @@ void InitRedGoblin(Goblin *goblin, Vector2 pos)
     goblin->goblinSpriteIdle = LoadTexture("resources/sprites/redGoblin/Idle.png");
     goblin->goblinSpriteAtk = LoadTexture("resources/sprites/redGoblin/Attack.png");
 
-    goblin->RedGoblinDeathSound = LoadSound("resources/sounds/sound_effects/goblin/red-goblin-death.wav");
+    goblin->goblinDeathSound = LoadSound("resources/sounds/sound_effects/goblin/red-goblin-death.wav");
     goblin->RedGoblinHitSound = LoadSound("resources/sounds/sound_effects/goblin/red-goblin-hit.wav");
 }
 
