@@ -569,6 +569,26 @@ while (!WindowShouldClose())
                 SetSoundVolume(player.jumpSound, volumeEfects);
                 SetSoundVolume(player.walkingInCastle, volumeEfects);
                 SetSoundVolume(player.walkingInGrass, volumeEfects);
+                SetSoundVolume(wolf.wolfHitSound, volumeEfects);
+                SetSoundVolume(wolf.wolfHitSoundHeavy, volumeEfects);
+                SetSoundVolume(wolf.wolfDeathSound, volumeEfects);
+                SetSoundVolume(wolf.wolfScratch, volumeEfects);
+                SetSoundVolume(wolf.wolfGrowl, volumeEfects);
+                SetSoundVolume(wolfRun.wolfHitSound, volumeEfects);
+                SetSoundVolume(wolfRun.wolfHitSoundHeavy, volumeEfects);
+                SetSoundVolume(wolfRun.wolfDeathSound, volumeEfects);
+                SetSoundVolume(wolfRun.wolfScratch, volumeEfects);
+                SetSoundVolume(wolfRun.wolfGrowl, volumeEfects);
+                SetSoundVolume(redWolf.wolfHitSound, volumeEfects);
+                SetSoundVolume(redWolf.wolfHitSoundHeavy, volumeEfects);
+                SetSoundVolume(redWolf.wolfDeathSound, volumeEfects);
+                SetSoundVolume(redWolf.wolfScratch, volumeEfects);
+                SetSoundVolume(redWolf.wolfGrowl, volumeEfects);
+                SetSoundVolume(whiteWolf.wolfScratch, volumeEfects);
+                SetSoundVolume(whiteWolf.wolfGrowl, volumeEfects);
+                SetSoundVolume(whiteWolf.wolfHitSound, volumeEfects);
+                SetSoundVolume(whiteWolf.wolfHitSoundHeavy, volumeEfects);
+                SetSoundVolume(whiteWolf.wolfDeathSound, volumeEfects);
             }
 
             if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
