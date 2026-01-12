@@ -85,6 +85,9 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
     goblin->damage = 20;
 
     goblin->droppedHeart = false; // Inicializa como falso
+
+    goblin->goblinDeathSound = LoadSound("resources/sounds/sound_effects/goblin/goblin-death.wav");
+    goblin->goblinCutSound = LoadSound("resources/sounds/sound_effects/goblin/goblin-cut.wav");
 }
 
 void InitRedGoblin(Goblin *goblin, Vector2 pos) 
@@ -102,6 +105,9 @@ void InitRedGoblin(Goblin *goblin, Vector2 pos)
     goblin->goblinSpriteDead = LoadTexture("resources/sprites/redGoblin/Dead.png");
     goblin->goblinSpriteIdle = LoadTexture("resources/sprites/redGoblin/Idle.png");
     goblin->goblinSpriteAtk = LoadTexture("resources/sprites/redGoblin/Attack.png");
+
+    goblin->RedGoblinDeathSound = LoadSound("resources/sounds/sound_effects/goblin/red-goblin-death.wav");
+    goblin->RedGoblinHitSound = LoadSound("resources/sounds/sound_effects/goblin/red-goblin-hit.wav");
 }
 
 void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta)
@@ -109,6 +115,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
     // --- MORTE ---
     if (goblin->life <= 0 && !goblin->isDead) 
     {
+        PlaySound(goblin->goblinDeathSound);
         goblin->isDead = true;
         goblin->goblinHasHit = false;
         goblin->currentFrame = 0;
@@ -168,6 +175,10 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         }
         else if (goblin->isAtacking) 
         {
+            if (goblin->currentFrame == 1)
+            {
+                PlaySound(goblin->goblinCutSound);
+            }   
             goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameAtk;
         }
         else if (goblin->isWalking) 

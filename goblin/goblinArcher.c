@@ -81,6 +81,10 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->attackAnimTimer = 0.0f;
 
     goblinArcher->droppedHeart = false; // Inicializa como falso
+
+    goblinArcher->goblinArcherDeathSound = LoadSound("resources/sounds/sound_effects/goblin/goblin-death.wav");
+    goblinArcher->goblinArcherLoadingSound = LoadSound("resources/sounds/sound_effects/goblin/bow-loading.wav");
+    goblinArcher->arrowHitSound = LoadSound("resources/sounds/sound_effects/goblin/arrow-hit.wav");
 }
 
 
@@ -88,6 +92,7 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 {
     if (goblinArcher->life <= 0 && !goblinArcher->isDead)
     {
+        PlaySound(goblinArcher->goblinArcherDeathSound);
         goblinArcher->isDead = true;
         goblinArcher->currentFrame = 0;
         goblinArcher->hasHitPlayer = false;  
@@ -138,6 +143,10 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         }
         else if (goblinArcher->isAtacking)
         {
+            if (goblinArcher->currentFrame == 5)
+            {
+               PlaySound(goblinArcher->goblinArcherLoadingSound);
+            }
             goblinArcher->currentFrame = (goblinArcher->currentFrame + 1) % goblinArcher->frameAtk;
         }
         else if (goblinArcher->isWalking || goblinArcher->isRunning)
@@ -238,6 +247,7 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
             hitbox.width,
             hitbox.height))
         {
+            PlaySound(goblinArcher->arrowHitSound);
             player->life -= goblinArcher->arrowDamage;
             goblinArcher->arrow.active = false;
             player->hitTimer = 0.4f;   

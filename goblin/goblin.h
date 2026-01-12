@@ -63,6 +63,11 @@ typedef struct goblin {
 
     bool droppedHeart; 
 
+    Sound goblinDeathSound;
+    Sound goblinCutSound;
+    Sound RedGoblinDeathSound;
+    Sound RedGoblinHitSound;
+
 } Goblin;
 
 

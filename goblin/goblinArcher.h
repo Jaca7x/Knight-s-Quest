@@ -76,6 +76,10 @@ typedef struct goblinArcher
 
     bool droppedHeart; 
 
+    Sound goblinArcherDeathSound;
+    Sound goblinArcherLoadingSound;
+    Sound arrowHitSound;
+
 } GoblinArcher;
 
 void InitGoblinArcher(GoblinArcher *goblinArcher);
