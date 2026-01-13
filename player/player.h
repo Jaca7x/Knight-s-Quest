@@ -108,6 +108,7 @@ typedef struct player
 
     Sound walkingInCastle;
     Sound walkingInGrass;
+    Sound playerHurtSound;
 } Player;
 
 void InitPlayer(Player *player);

@@ -455,6 +455,7 @@ int main(void)
     player.jumpSound,
     player.walkingInCastle,
     player.walkingInGrass,
+    player.playerHurtSound,
 
     wolf.wolfHitSound,
     wolf.wolfHitSoundHeavy,

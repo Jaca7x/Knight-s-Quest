@@ -198,6 +198,8 @@ void InitPlayer(Player *player)
 
     player->walkingInCastle = LoadSound("resources/sounds/sound_effects/player/walking-castle.wav");
     player->walkingInGrass = LoadSound("resources/sounds/sound_effects/player/walking-grass.wav");
+
+    player->playerHurtSound = LoadSound("resources/sounds/sound_effects/player/player-hurt.wav");
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
@@ -544,6 +546,11 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         if (player->hasHit) 
         {
             player->currentFrame = (player->currentFrame + 1) % player->frameHurt;
+
+            if (player->currentFrame == 2)
+            {
+                PlaySound(player->playerHurtSound);
+            }
         }
         else if (player->isJumping)
         {
@@ -733,6 +740,7 @@ void UnloadPlayer(Player *player)
     UnloadTexture(player->spritePlayerDead);
     UnloadSound(player->walkingInCastle);
     UnloadSound(player->walkingInGrass);
+    UnloadSound(player->playerHurtSound);
 
     for (int map = 0; map < NUM_MAPS; map++)
     {
