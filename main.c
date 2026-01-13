@@ -284,6 +284,25 @@ void drawTitleMaps(const char* titulo, Font titleMaps, float delta, int currentM
     }
 }
 
+bool drawHoverButton(Rectangle button, Vector2 mousePos, const char *text)
+{
+    DrawRectangleLinesEx(button, 1, WHITE);
+    DrawText(text, button.x + 20, button.y + 10, 20, WHITE);   
+
+    if (CheckCollisionPointRec(mousePos, button)) 
+    {
+        DrawRectangleLinesEx(button, 1, GOLD);
+        DrawText(text, button.x + 20, button.y + 10, 20, GOLD);     
+        
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            return true;;
+        }
+    }
+
+    return false;
+}
+
 int main(void)
 {
     bool bossTriggered = false;
@@ -296,7 +315,7 @@ int main(void)
     Sound buttonSelect = LoadSound("resources/sounds/sound_effects/buttons/menu-select-button.wav");
     Sound onOFF = LoadSound("resources/sounds/sound_effects/buttons/ON-OFF.wav");
     Sound death = LoadSound("resources/sounds/sound_effects/player/game-over.wav");
-   
+    
     float textTime = 0.0f;
 
     GameState gameState = MENU;
@@ -911,23 +930,9 @@ while (!WindowShouldClose())
                 DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
                 DrawText("Configurações (Pressione 'K' para fechar)", 450, 120, 20, WHITE);
 
-                DrawRectangleLinesEx(configAudio, 1, WHITE);
-                DrawText("Configurações de Áudio", 540, 290, 20, WHITE);
+                drawHoverButton(configAudio, mousePos, "Configurações de Áudio");
 
-                if (CheckCollisionPointRec(mousePos, configAudio))
-                {
-                    DrawRectangleLinesEx(configAudio, 1, GOLD);
-                    DrawText("Configurações de Áudio", 540, 290, 20, GOLD);
-                }
-                
-                DrawRectangleLinesEx(configGame, 1, WHITE);
-                DrawText("Configurações de jogo", 540, 390, 20, WHITE);
-
-                if (CheckCollisionPointRec(mousePos, configGame))
-                {
-                    DrawRectangleLinesEx(configGame, 1, GOLD);
-                    DrawText("Configurações de jogo", 540, 390, 20, GOLD);
-                } 
+                drawHoverButton(configGame, mousePos, "Configurações de jogo");
             }
 
             if (configState == CONFIG_AUDIO)
@@ -999,14 +1004,8 @@ while (!WindowShouldClose())
 
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
-                DrawRectangleLines(250, 100, 120, 40, WHITE);
-                DrawText("VOLTAR", 270, 110, 20, WHITE);
-
-                if (CheckCollisionPointRec(mousePos, checkXConfigs)) 
+                if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
                 {
-                    DrawRectangleLines(250, 100, 120, 40, GOLD);
-                    DrawText("VOLTAR", 270, 110, 20, GOLD);
-
                     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                     {
                         configState = CONFIG_OPEN;
@@ -1045,14 +1044,8 @@ while (!WindowShouldClose())
             {
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
-                DrawRectangleLines(250, 100, 120, 40, WHITE);
-                DrawText("VOLTAR", 270, 110, 20, WHITE);
-
-                if (CheckCollisionPointRec(mousePos, checkXConfigs)) 
+                if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
                 {
-                    DrawRectangleLines(250, 100, 120, 40, GOLD);
-                    DrawText("VOLTAR", 270, 110, 20, GOLD);
-
                     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                     {
                         configState = CONFIG_OPEN;
@@ -1062,23 +1055,8 @@ while (!WindowShouldClose())
 
                 DrawText("Configurações (Pressione 'K' para fechar)", 450, 120, 20, WHITE);
 
-                DrawRectangleLinesEx(atalhos, 1, WHITE);
-                DrawText("Atalhos", 620, 290, 20, WHITE );
-
-                DrawRectangleLinesEx(ajuda, 1, WHITE);  
-                DrawText("Ajuda", 630, 390, 20, WHITE );
-
-                if (CheckCollisionPointRec(mousePos, atalhos))
-                {
-                    DrawRectangleLinesEx(atalhos, 1, GOLD);
-                    DrawText("Atalhos", 620, 290, 20, GOLD);
-                }
-
-                if (CheckCollisionPointRec(mousePos, ajuda))
-                {
-                    DrawRectangleLinesEx(ajuda, 1, GOLD);  
-                    DrawText("Ajuda", 630, 390, 20, GOLD);
-                }
+                drawHoverButton(atalhos, mousePos, "Atalhos");
+                drawHoverButton(ajuda, mousePos, "Ajuda");      
             }
             
             if (configState == AJUDA)
@@ -1093,17 +1071,11 @@ while (!WindowShouldClose())
 
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
-                DrawRectangleLines(250, 100, 120, 40, WHITE);
-                DrawText("VOLTAR", 270, 110, 20, WHITE);
-
-                if (CheckCollisionPointRec(mousePos, checkXConfigs)) 
+                if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
                 {
-                    DrawRectangleLines(250, 100, 120, 40, GOLD);
-                    DrawText("VOLTAR", 270, 110, 20, GOLD);
-
                     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                     {
-                        configState = CONFIG;
+                        configState = CONFIG_OPEN;
                         PlaySound(buttonSelect);
                     }
                 }
@@ -1172,17 +1144,11 @@ while (!WindowShouldClose())
 
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
-                DrawRectangleLines(250, 100, 120, 40, WHITE);
-                DrawText("VOLTAR", 270, 110, 20, WHITE);
-
-                if (CheckCollisionPointRec(mousePos, checkXConfigs)) 
+                if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
                 {
-                    DrawRectangleLines(250, 100, 120, 40, GOLD);
-                    DrawText("VOLTAR", 270, 110, 20, GOLD);
-
                     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                     {
-                        configState = CONFIG;
+                        configState = CONFIG_OPEN;
                         PlaySound(buttonSelect);
                     }
                 }
@@ -1237,18 +1203,12 @@ while (!WindowShouldClose())
 
         case CREDITS:
         {
-            DrawRectangleLines(5, 5, 120, 40, WHITE);
-            DrawText("VOLTAR", 20, 15, 20, WHITE);
-
-            if (CheckCollisionPointRec(mousePos, checkX)) 
+            if (drawHoverButton(checkX, mousePos, "VOLTAR"))
             {
-                DrawRectangleLines(5, 5, 120, 40, GOLD);
-                DrawText("VOLTAR", 20, 15, 20, GOLD);
-
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
-                    gameState = MENU;
                     PlaySound(buttonSelect);
+                    gameState = MENU;
                 }
             }
 
@@ -1295,14 +1255,8 @@ while (!WindowShouldClose())
 
         case GITHUB: 
         {
-            DrawRectangleLines(5, 5, 120, 40, WHITE);
-            DrawText("VOLTAR", 20, 15, 20, WHITE);
-
-            if (CheckCollisionPointRec(mousePos, checkX)) 
+            if (drawHoverButton(checkX, mousePos, "VOLTAR"))
             {
-                DrawRectangleLines(5, 5, 120, 40, GOLD);
-                DrawText("VOLTAR", 20, 15, 20, GOLD);
-
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
                     PlaySound(buttonSelect);
