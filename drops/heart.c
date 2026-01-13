@@ -39,6 +39,9 @@
             hearts[i].texture = LoadTexture("resources/sprites/life/heartDrop.png");
             hearts[i].isActive = false;
             hearts[i].healthValue = 25;
+
+            hearts[i].collectSound = LoadSound("resources/sounds/sound_effects/drops/heart-collect.wav");
+            hearts[i].spawnSound = LoadSound("resources/sounds/sound_effects/drops/heart-spawn.wav");
         }
     }
 
@@ -51,6 +54,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
         if (chanceGoblin < 70)
         {
             hearts[0].isActive = true; 
+            PlaySound(hearts[0].spawnSound);
             hearts[0].position = goblin->position;
         } 
             goblin->droppedHeart = true;
@@ -63,6 +67,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
         if (chanceWolf < 50)
         {
             hearts[1].isActive = true; 
+            PlaySound(hearts[1].spawnSound);    
             hearts[1].position.x = wolf->position.x + 50; 
             hearts[1].position.y = wolf->position.y + 100;
         }
@@ -76,6 +81,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
         if (chanceGoblinArcher < 70) 
         {
             hearts[2].isActive = true; 
+            PlaySound(hearts[2].spawnSound);
             hearts[2].position = goblinArcher->position;
         }
         goblinArcher->droppedHeart = true; 
@@ -88,6 +94,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
         if (chanceWolfRun < 60)
         {
             hearts[3].isActive = true; 
+            PlaySound(hearts[3].spawnSound);
             hearts[3].position.x = wolfRun->position.x + 50; 
             hearts[3].position.y = wolfRun->position.y + 100; 
         }
@@ -101,6 +108,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
         if (chanceRedWolf < 60) 
         {
             hearts[4].isActive = true; 
+            PlaySound(hearts[4].spawnSound);
             hearts[4].position.x = redWolf->position.x + 50; 
             hearts[4].position.y = redWolf->position.y + 100; 
         }
@@ -114,6 +122,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
         if (chanceWhiteWolf < 60) 
         {
             hearts[5].isActive = true; 
+            PlaySound(hearts[5].spawnSound);
             hearts[5].position.x = whiteWolf->position.x + 50;
             hearts[5].position.y = whiteWolf->position.y + 100; 
         }
@@ -127,14 +136,17 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
         if (chanceRedGoblin < 60) 
         {
             hearts[6].isActive = true; 
+            PlaySound(hearts[6].spawnSound);
             hearts[6].position.x = redGoblin->position.x; 
             hearts[6].position.y = redGoblin->position.y; 
         }
         redGoblin->droppedHeart = true; 
+
     }
 
     for (int i = 0; i < MAX_HEARTS; i++) {
-        if (hearts[i].isActive) {
+        if (hearts[i].isActive) 
+        {
             Rectangle heartRect = {
                 hearts[i].position.x,   
                 hearts[i].position.y,
@@ -151,6 +163,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
 
             if (CheckCollisionRecs(heartRect, playerRect)) 
             {
+                PlaySound(hearts[i].collectSound);
                 player->life += hearts[i].healthValue;
                 if (player->life > 100) player->life = 100; 
                 hearts[i].isActive = false;
@@ -160,8 +173,10 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
     }
 }
     void DrawHearts(const Heart hearts[], float delta, Player *player) {
-        for (int i = 0; i < MAX_HEARTS; i++) {
-            if (hearts[i].isActive) {
+        for (int i = 0; i < MAX_HEARTS; i++) 
+        {
+            if (hearts[i].isActive) 
+            {
                 Vector2 origin = {hearts[i].texture.width / 2.0f, hearts[i].texture.height / 2.0f};
                 Rectangle source = {0, 0, hearts[i].texture.width, hearts[i].texture.height};
                 Rectangle dest = {hearts[i].position.x + 30, hearts[i].position.y + 30, hearts[i].texture.width * 2, hearts[i].texture.height * 2};
@@ -174,5 +189,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
     void UnloadHearts(Heart hearts[]) {
         for (int i = 0; i < MAX_HEARTS; i++) {
             UnloadTexture(hearts[i].texture);
+            UnloadSound(hearts[i].collectSound);
+            UnloadSound(hearts[i].spawnSound);
         }
     }

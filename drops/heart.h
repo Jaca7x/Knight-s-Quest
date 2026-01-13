@@ -22,7 +22,11 @@ typedef struct heart
     Vector2 position;      
     Texture2D texture;     
     bool isActive;        
-    int healthValue;       
+    int healthValue;     
+    
+    Sound collectSound;
+    Sound spawnSound;
+    
 } Heart;
 
 void InitHearts(Heart hearts[]);

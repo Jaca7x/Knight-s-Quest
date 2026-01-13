@@ -448,7 +448,7 @@ int main(void)
                 120 - 5,
                 40 - 5
             };
-
+    
     Sound effectSounds[] = {
     player.attackLightSound,
     player.attackHeavySound,
@@ -483,13 +483,14 @@ int main(void)
     goblin.goblinCutSound,
     goblin.goblinDeathSound,
 
-    redGoblin.RedGoblinHitSound,
+    redGoblin.RedGoblinHitSound,    
     redGoblin.goblinDeathSound,
     redGoblin.goblinCutSound,
 
     goblinArcher.arrowHitSound,
     goblinArcher.goblinArcherDeathSound,
-    goblinArcher.goblinArcherLoadingSound
+    goblinArcher.goblinArcherLoadingSound,
+
 };
 
 int effectSoundCount = sizeof(effectSounds) / sizeof(effectSounds[0]);
@@ -965,6 +966,11 @@ while (!WindowShouldClose())
                             SetSoundVolume(effectSounds[i], volumeEfects);
                         }
 
+                        for (int i = 0; i < MAX_HEARTS; i++)
+                        {
+                            SetSoundVolume(hearts[i].collectSound, volumeEfects);
+                            SetSoundVolume(hearts[i].spawnSound, volumeEfects);
+                        }
                     }
 
                 if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
