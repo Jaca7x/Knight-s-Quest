@@ -238,6 +238,51 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
     *map = LoadTileMap(mapFiles[currentMapIndex]);
 }
 
+void drawTitleMaps(const char* titulo, Font titleMaps, float delta, int currentMapIndex)
+{
+    static float textTime = 0.0f;
+    static int lastMapIndex = -1;
+
+    if (currentMapIndex != lastMapIndex)
+    {
+        textTime = 0.0f;
+        lastMapIndex = currentMapIndex;
+    }
+
+    textTime += delta;
+
+    float fontSize = 60.0f;
+    float spacing = 1.0f;
+
+    Vector2 textSize = MeasureTextEx(titleMaps, titulo, fontSize, spacing);
+    Vector2 textPosition =
+    {
+        GetScreenWidth() / 2 - textSize.x / 2,
+        GetScreenHeight() / 2 - 220
+    };
+
+    if (textTime <= 2.0f)
+    {
+        DrawRectangle(
+            (int)(textPosition.x - 20),
+            (int)(textPosition.y - 10),
+            (int)(textSize.x + 40),
+            (int)(textSize.y + 20),
+            (Color){ 0, 0, 0, 160 }
+        );
+
+        DrawTextPro(
+            titleMaps,
+            titulo,
+            textPosition,
+            (Vector2){ 0, 0 },
+            0.0f,
+            fontSize,
+            spacing,
+            GOLD
+        );
+    }
+}
 
 int main(void)
 {
@@ -252,7 +297,8 @@ int main(void)
     Sound onOFF = LoadSound("resources/sounds/sound_effects/buttons/ON-OFF.wav");
     Sound death = LoadSound("resources/sounds/sound_effects/player/game-over.wav");
    
-    
+    float textTime = 0.0f;
+
     GameState gameState = MENU;
     static MusicState currentMusic = MUSIC_MENU;
     ConfigState configState = CONFIG_CLOSED;
@@ -349,8 +395,6 @@ int main(void)
 
     Font titleMaps = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
-    float textTime = 0.0f;
-
     float volume = 0.5;
     float volumeEfects = 1.0;
     float volumeDialogue = 1.0;
@@ -385,6 +429,51 @@ int main(void)
                 120 - 5,
                 40 - 5
             };
+
+    Sound effectSounds[] = {
+    player.attackLightSound,
+    player.attackHeavySound,
+    player.jumpSound,
+    player.walkingInCastle,
+    player.walkingInGrass,
+
+    wolf.wolfHitSound,
+    wolf.wolfHitSoundHeavy,
+    wolf.wolfDeathSound,
+    wolf.wolfScratch,
+    wolf.wolfGrowl,
+
+    wolfRun.wolfHitSound,
+    wolfRun.wolfHitSoundHeavy,
+    wolfRun.wolfDeathSound,
+    wolfRun.wolfScratch,
+    wolfRun.wolfGrowl,
+
+    redWolf.wolfHitSound,
+    redWolf.wolfHitSoundHeavy,
+    redWolf.wolfDeathSound,
+    redWolf.wolfScratch,
+    redWolf.wolfGrowl,
+
+    whiteWolf.wolfScratch,
+    whiteWolf.wolfGrowl,
+    whiteWolf.wolfHitSound,
+    whiteWolf.wolfHitSoundHeavy,
+    whiteWolf.wolfDeathSound,
+
+    goblin.goblinCutSound,
+    goblin.goblinDeathSound,
+
+    redGoblin.RedGoblinHitSound,
+    redGoblin.goblinDeathSound,
+    redGoblin.goblinCutSound,
+
+    goblinArcher.arrowHitSound,
+    goblinArcher.goblinArcherDeathSound,
+    goblinArcher.goblinArcherLoadingSound
+};
+
+int effectSoundCount = sizeof(effectSounds) / sizeof(effectSounds[0]);
 
 while (!WindowShouldClose())
 {
@@ -542,104 +631,6 @@ while (!WindowShouldClose())
         // ========================================================
         case PLAYING:
         {
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
-            && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
-            {
-                float percent = (mousePos.x - slideX) / slideWidth;
-                if (percent < 0) percent = 0;
-                if (percent > 1) percent = 1;
-
-                volume = percent;
-
-                SetMusicVolume(menuMusic, volume);
-                SetMusicVolume(soundTrack, volume);
-            }
-
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
-            && CheckCollisionPointRec(mousePos, (Rectangle){slideXEfects, slideYEfects - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
-            {
-                float percent = (mousePos.x - slideXEfects) / slideWidth;
-                if (percent < 0) percent = 0;
-                if (percent > 1) percent = 1;
-
-                volumeEfects = percent;
-
-                SetSoundVolume(player.attackLightSound, volumeEfects);
-                SetSoundVolume(player.attackHeavySound, volumeEfects);
-                SetSoundVolume(player.jumpSound, volumeEfects);
-                SetSoundVolume(player.walkingInCastle, volumeEfects);
-                SetSoundVolume(player.walkingInGrass, volumeEfects);
-                SetSoundVolume(wolf.wolfHitSound, volumeEfects);
-                SetSoundVolume(wolf.wolfHitSoundHeavy, volumeEfects);
-                SetSoundVolume(wolf.wolfDeathSound, volumeEfects);
-                SetSoundVolume(wolf.wolfScratch, volumeEfects);
-                SetSoundVolume(wolf.wolfGrowl, volumeEfects);
-                SetSoundVolume(wolfRun.wolfHitSound, volumeEfects);
-                SetSoundVolume(wolfRun.wolfHitSoundHeavy, volumeEfects);
-                SetSoundVolume(wolfRun.wolfDeathSound, volumeEfects);
-                SetSoundVolume(wolfRun.wolfScratch, volumeEfects);
-                SetSoundVolume(wolfRun.wolfGrowl, volumeEfects);
-                SetSoundVolume(redWolf.wolfHitSound, volumeEfects);
-                SetSoundVolume(redWolf.wolfHitSoundHeavy, volumeEfects);
-                SetSoundVolume(redWolf.wolfDeathSound, volumeEfects);
-                SetSoundVolume(redWolf.wolfScratch, volumeEfects);
-                SetSoundVolume(redWolf.wolfGrowl, volumeEfects);
-                SetSoundVolume(whiteWolf.wolfScratch, volumeEfects);
-                SetSoundVolume(whiteWolf.wolfGrowl, volumeEfects);
-                SetSoundVolume(whiteWolf.wolfHitSound, volumeEfects);
-                SetSoundVolume(whiteWolf.wolfHitSoundHeavy, volumeEfects);
-                SetSoundVolume(whiteWolf.wolfDeathSound, volumeEfects);
-                SetSoundVolume(goblin.goblinCutSound, volumeEfects);
-                SetSoundVolume(goblin.goblinDeathSound, volumeEfects);
-                SetSoundVolume(redGoblin.RedGoblinHitSound, volumeEfects);
-                SetSoundVolume(redGoblin.goblinDeathSound, volumeEfects);
-                SetSoundVolume(redGoblin.goblinCutSound, volumeEfects);
-                SetSoundVolume(goblinArcher.arrowHitSound, volumeEfects);
-                SetSoundVolume(goblinArcher.goblinArcherDeathSound, volumeEfects);
-                SetSoundVolume(goblinArcher.goblinArcherLoadingSound, volumeEfects);
-                
-            }
-
-            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
-            && CheckCollisionPointRec(mousePos, (Rectangle){slideXDialogue, slideYDialogue - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
-            {
-                float percent = (mousePos.x - slideXDialogue) / slideWidth;
-                if (percent < 0) percent = 0;
-                if (percent > 1) percent = 1;
-
-                volumeDialogue = percent;
-
-                SetSoundVolume(player.playerDialogueWithNPC1, volumeDialogue);
-                SetSoundVolume(player.playerDialogueWithNPC2, volumeDialogue);
-
-                SetSoundVolume(npc.dialogueWithPlayer1, volumeDialogue);
-                SetSoundVolume(npc.dialogueWithPlayer2, volumeDialogue);
-
-                for (int i = 0; i < NUM_MAPS; i++)
-                {
-                    for (int j = 0; j < DIALOGS_PER_MAP; j++)
-                    {   
-                        SetSoundVolume(ghost.dialogues[i][j].sound, volumeDialogue);
-                    }
-                }
-
-                for (int i = 0; i < NUM_MAPS; i++)
-                {
-                    for (int j = 0; j < DIALOGS_PER_MAP; j++)
-                    {   
-                        SetSoundVolume(player.dialogues[i][j].sound, volumeDialogue);
-                    }
-                }
-            }
-            
-            button_hovered = CheckCollisionPointRec(GetMousePosition(), button_rect);
-            
-            if (button_hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-            {
-                PlaySound(onOFF);
-                button_pressed = !button_pressed;
-            }
-
              Rectangle configAudio
                 = {
                     520,
@@ -941,6 +932,71 @@ while (!WindowShouldClose())
 
             if (configState == CONFIG_AUDIO)
             {
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
+                && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                    {
+                        float percent = (mousePos.x - slideX) / slideWidth;
+                        if (percent < 0) percent = 0;
+                        if (percent > 1) percent = 1;
+
+                        volume = percent;
+
+                        SetMusicVolume(menuMusic, volume);
+                        SetMusicVolume(soundTrack, volume);
+                        SetMusicVolume(boss.bossMusic, volume);
+                    }
+
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
+                && CheckCollisionPointRec(mousePos, (Rectangle){slideXEfects, slideYEfects - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                    {
+                        float percent = (mousePos.x - slideXEfects) / slideWidth;
+                        if (percent < 0) percent = 0;
+                        if (percent > 1) percent = 1;
+
+                        volumeEfects = percent;
+
+                        for (int i = 0; i < effectSoundCount; i++)
+                        {
+                            SetSoundVolume(effectSounds[i], volumeEfects);
+                        }
+
+                    }
+
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
+                && CheckCollisionPointRec(mousePos, (Rectangle){slideXDialogue, slideYDialogue - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                    {
+                        float percent = (mousePos.x - slideXDialogue) / slideWidth;
+                        if (percent < 0) percent = 0;
+                        if (percent > 1) percent = 1;
+
+                        volumeDialogue = percent;
+
+                        SetSoundVolume(player.playerDialogueWithNPC1, volumeDialogue);
+                        SetSoundVolume(player.playerDialogueWithNPC2, volumeDialogue);
+
+                        SetSoundVolume(npc.dialogueWithPlayer1, volumeDialogue);
+                        SetSoundVolume(npc.dialogueWithPlayer2, volumeDialogue);
+
+                        for (int i = 0; i < NUM_MAPS; i++)
+                        {
+                            for (int j = 0; j < DIALOGS_PER_MAP; j++)
+                            {   
+                                SetSoundVolume(player.dialogues[i][j].sound, volumeDialogue);
+                                SetSoundVolume(ghost.dialogues[i][j].sound, volumeDialogue);
+                            }
+                        }
+
+                        for (int i = 0; i < NUM_MAPS_PEASANT; i++)
+                        {
+                            for (int j = 0; j < 3; j++)
+                            {
+                                SetSoundVolume(peasant.dialogues[i][j].sound, volumeDialogue);
+                                SetSoundVolume(player.dialoguesWithPeasant[i][j].sound, volumeDialogue);
+                            }
+                        }
+
+                    }
+
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
                 DrawRectangleLines(250, 100, 120, 40, WHITE);
@@ -1027,6 +1083,14 @@ while (!WindowShouldClose())
             
             if (configState == AJUDA)
             {
+                button_hovered = CheckCollisionPointRec(GetMousePosition(), button_rect);
+
+                if (button_hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                    {
+                        PlaySound(onOFF);
+                        button_pressed = !button_pressed;
+                    }
+
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
                 DrawRectangleLines(250, 100, 120, 40, WHITE);
@@ -1148,26 +1212,27 @@ while (!WindowShouldClose())
 
                 DrawText("M1 & M2           ATAQUE PESADO & LEVE", 515, 620, 16, WHITE);
             }
-            
-            if (currentMapIndex == 0 && textTime < 2.0f)
-            {
-                textTime += delta;
-                const char* titulo = "Castelo Bastion de Eldur";
-                float fontSize = 60.0f;
-                float spacing = 1.0f;
 
-                Vector2 textSize = MeasureTextEx(titleMaps, titulo, fontSize, spacing);
-                Vector2 textPosition = {
-                    GetScreenWidth() / 2 - textSize.x / 2,
-                    GetScreenHeight() / 2 - 220
-                };
+        const char* titulo = NULL;
 
-                DrawRectangle((int)(textPosition.x - 20), (int)(textPosition.y - 10),
-                            (int)(textSize.x + 40), (int)(textSize.y + 20),
-                            (Color){0, 0, 0, 160});
+        if (currentMapIndex == 0)
+        {
+            titulo = "Castelo Bastion de Eldurin";
+        }
+        else if (currentMapIndex == 3)
+        {
+            titulo = "Bosque de Arvendel";
+        }
+        else if (currentMapIndex == 6)
+        {
+            titulo = "Floresta Negra de Eldruin";
+        }
 
-                DrawTextPro(titleMaps, titulo, textPosition, (Vector2){0, 0}, 0.0f, fontSize, spacing, GOLD);
-            }
+        if (titulo != NULL)
+        {
+            drawTitleMaps(titulo, titleMaps, GetFrameTime(), currentMapIndex);
+        }
+           
         } break;
 
         case CREDITS:
