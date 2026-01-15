@@ -19,6 +19,7 @@
 #include "npcs/interaction.h"
 #include "boss/boss.h"
 #include "npcs/peasant.h"
+#include "goblin/goblinTank.h"
 
 
 // ============================================================================
@@ -217,7 +218,8 @@ int currentMapIndex = 0;
 
 void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfRun *wolfRun, 
                 Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, Heart hearts[],
-                Npc *npc, Ghost *ghost, Interaction *interaction, TileMap *map, const char *mapFiles[])
+                Npc *npc, Ghost *ghost, Interaction *interaction, Boss *boss, GoblinTank *goblinTank, 
+                Peasant *peasant, TileMap *map, const char *mapFiles[])
 {
     InitPlayer(player);
     InitWolfBase(wolf, (Vector2){500, 450});
@@ -231,6 +233,9 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
     InitNpc(npc);
     InitGhost(ghost);
     InitInteraction(interaction);
+    InitBoss(boss);
+    InitGoblinTank(goblinTank);
+    InitPeasant(peasant);
 
     currentMapIndex = 0;
 
@@ -395,6 +400,9 @@ int main(void)
 
     Peasant peasant;
     InitPeasant(&peasant);
+
+    GoblinTank goblinTank;
+    InitGoblinTank(&goblinTank);
 
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
@@ -888,6 +896,11 @@ while (!WindowShouldClose())
                 UpdateGoblin(&redGoblin, &player, currentMapIndex, delta);
             }
             
+            if (currentMapIndex == GOBLIN_TANK_MAP)
+            {
+                DrawGoblinTank(&goblinTank);
+                UpdateGoblinTank(&goblinTank, delta, &player);
+            }
             
             if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
             {
@@ -1256,7 +1269,7 @@ while (!WindowShouldClose())
             {
                 gameState = MENU;
                 PlaySound(buttonSelect);
-                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &map, mapFiles);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &map, mapFiles);
             }
         } break;
 

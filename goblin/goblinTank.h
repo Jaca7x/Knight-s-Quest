@@ -2,10 +2,17 @@
 #define GOBLIN_TANK_H
 
 #include "../librays/raylib.h"
+#include "../player/player.h"
+
+#define GOBLIN_TANK_MAP 0
+
+typedef struct Player player;
 
 typedef struct goblinTank
 {
     Vector2 position;
+
+    float speed;
 
     Texture2D goblinTankSpriteWalk;
     Texture2D goblinTankSpriteHurt;
@@ -21,22 +28,44 @@ typedef struct goblinTank
 
     int currentFrame;      
     int frameCounter;      
-    int frameWidth;       
-    int frameHeight;       
-    float frameFactor;     
     
+    int frameWidthWalk;       
+    int frameHeightWalk;     
+
+    int frameWidthIdle;       
+    int frameHeightIdle;     
+    
+    int frameWidthAttack;       
+    int frameHeightAttack;     
+
+    int frameWidthDead;       
+    int frameHeightDead;   
+
+    int frameWidthHurt;       
+    int frameHeightHurt;     
+
     bool isIdle;
     bool isWalking;
     bool isAtacking;
     bool isDead;
+    bool goblinTankHasHurt;
     bool goblinTankHasHit;
     bool deathAnimationDone;
+
+    float deathAnimTimer;
+
+    int direction;
+    float goblinTankAttackRange;
+    float life;
+
+    float attackTime;
+    float attackCooldown;
 
 } GoblinTank;
 
 
 void InitGoblinTank(GoblinTank *goblinTank);
-void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime);
+void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player);
 void DrawGoblinTank(GoblinTank *goblinTank);
 void UnloadGoblinTank(GoblinTank *goblinTank);
 
