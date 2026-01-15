@@ -54,12 +54,18 @@ typedef struct goblinTank
 
     float deathAnimTimer;
 
+    float viewPlayer;
+
     int direction;
     float goblinTankAttackRange;
+    float goblinTankAttackRangeLeft;
     float life;
 
     float attackTime;
     float attackCooldown;
+    float attackCooldownTimer;   
+
+    float attackAnimTimer;     
 
 } GoblinTank;
 
