@@ -65,7 +65,9 @@ typedef struct goblinTank
     float attackCooldown;
     float attackCooldownTimer;   
 
-    float attackAnimTimer;     
+    float attackAnimTimer;  
+    
+    bool hitApplied;
 
 } GoblinTank;
 

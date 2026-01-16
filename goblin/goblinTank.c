@@ -54,6 +54,7 @@ void InitGoblinTank(GoblinTank *goblinTank)
     goblinTank->goblinTankHasHit = false;
     goblinTank->deathAnimationDone = false;
 
+    goblinTank->hitApplied = false;
 
     goblinTank->deathAnimTimer = 0.0f;
 
@@ -65,7 +66,7 @@ void InitGoblinTank(GoblinTank *goblinTank)
     goblinTank->life = 100.0f;
 
     goblinTank->attackTime = 0.0f;
-    goblinTank->attackCooldown = 4.0f;
+    goblinTank->attackCooldown = 2.0f;
 
     goblinTank->attackCooldownTimer = 0.0f;
 
@@ -74,6 +75,19 @@ void InitGoblinTank(GoblinTank *goblinTank)
 
 void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
 {
+    if (goblinTank->attackCooldownTimer > 0.0f)
+            goblinTank->attackCooldownTimer -= deltaTime;
+
+        if (goblinTank->attackAnimTimer > 0.0f)
+        {
+            goblinTank->attackAnimTimer -= deltaTime;
+            goblinTank->isAtacking = true;
+        }
+        else
+        {
+            goblinTank->isAtacking = false;
+        }
+        
     goblinTank->frameCounter++;
 
         if (goblinTank->goblinTankHasHurt && !goblinTank->isDead && goblinTank->frameCounter >= 30)
@@ -119,39 +133,36 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
     float distanceToViewPlayer = fabs(player->position.x - goblinTank->position.x);
     goblinTank->direction = (player->position.x > goblinTank->position.x) ? 1 : -1;
 
-        
-        if (goblinTank->attackCooldownTimer > 0.0f)
-            goblinTank->attackCooldownTimer -= deltaTime;
-
-        if (goblinTank->attackAnimTimer > 0.0f)
-        {
-            goblinTank->attackAnimTimer -= deltaTime;
-            goblinTank->isAtacking = true;
-        }
-        else
-        {
-            goblinTank->isAtacking = false;
-        }
-
         if (!goblinTank->isDead && !goblinTank->goblinTankHasHurt && distanceToViewPlayer <= goblinTank->viewPlayer) 
         {
             goblinTank->isWalking = true;
             goblinTank->isIdle = false;
-
+        
             goblinTank->position.x += goblinTank->speed * goblinTank->direction * deltaTime;
 
             if (distanceToViewPlayer <= goblinTank->goblinTankAttackRange && goblinTank->direction == -1 && goblinTank->attackCooldownTimer <= 0.0f)
             {
-                
-                goblinTank->goblinTankHasHit = true;
-                player->life -= 15; 
-                player->hasHit = true;
-                player->hitTimer = 0.4f;
-
-                player->position.x += (player->position.x < goblinTank->position.x) ? -push : push;
-
-                goblinTank->attackCooldownTimer = goblinTank->attackCooldown;
                 goblinTank->attackAnimTimer = 1.0f;
+
+                if (goblinTank->isAtacking && !goblinTank->hitApplied && goblinTank->currentFrame == 8)
+                {
+                    goblinTank->goblinTankHasHit = true;
+                    player->life -= 15; 
+                    player->hasHit = true;
+                    player->hitTimer = 0.4f;
+
+                    player->position.x += (player->position.x < goblinTank->position.x) ? -push : push;
+
+                    goblinTank->hitApplied = true;
+                }
+                
+                
+                if (goblinTank->attackAnimTimer <= 0)
+                {
+                    goblinTank->attackCooldownTimer = goblinTank->attackCooldown;
+
+                    goblinTank->hitApplied = false;
+                }
             }
             else if (distanceToViewPlayer <= goblinTank->goblinTankAttackRangeLeft && goblinTank->direction == 1 && goblinTank->attackCooldownTimer <= 0.0f)
             {
@@ -204,21 +215,33 @@ void DrawGoblinTank(GoblinTank *goblinTank)
     }
     else if (goblinTank->isAtacking)
     {
+        float hurtOfSetY = -55;
+
         currentTexture = goblinTank->goblinTankSpriteAtk;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthAttack, 0, goblinTank->frameWidthAttack * goblinTank->direction, goblinTank->frameHeightAttack};
         dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 4, source.height / 4};
+
+        dest.y += hurtOfSetY;
     }
     else if (goblinTank->isWalking)
     {
+        float hurtOfSetY = -10;
+
         currentTexture = goblinTank->goblinTankSpriteWalk;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthWalk, 0, goblinTank->frameWidthWalk * goblinTank->direction, goblinTank->frameHeightWalk};
         dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 4, source.height / 4};
-    }
+
+        dest.y += hurtOfSetY;
+    }   
     else if (goblinTank->isIdle)
     {
+        float hurtOfSetY = -15;
+
         currentTexture = goblinTank->goblinTankSpriteIdle;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthIdle, 0, goblinTank->frameWidthIdle * goblinTank->direction, goblinTank->frameHeightIdle};
         dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 5, source.height / 5};
+
+        dest.y += hurtOfSetY;
     }
     
     Vector2 origin = {0, 0};
