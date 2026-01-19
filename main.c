@@ -921,6 +921,8 @@ while (!WindowShouldClose())
             MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
             DrawMapsPeasant(&peasant, &player, &interaction, currentMapIndex, delta, &dialogStatePeasant);
             
+            textTime += delta;
+            
             if (currentMapIndex == 0 && textTime <= 2)
             {
                 DrawRectangle(player.position.x - 60, player.position.y, 340, 30, (Color){0,0,0,180});
