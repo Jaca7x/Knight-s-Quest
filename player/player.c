@@ -200,6 +200,7 @@ void InitPlayer(Player *player)
     player->walkingInGrass = LoadSound("resources/sounds/sound_effects/player/walking-grass.wav");
 
     player->playerHurtSound = LoadSound("resources/sounds/sound_effects/player/player-hurt.wav");
+    player->death = LoadSound("resources/sounds/sound_effects/player/game-over.wav");
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
@@ -208,6 +209,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     // Verificar se morreu pela primeira vez
     if (player->life <= 0 && !player->isDead)
     {
+        PlaySound(player->death);
         player->isDead = true;
         player->isMoving = false;
         player->isRunning = false;
@@ -741,6 +743,7 @@ void UnloadPlayer(Player *player)
     UnloadSound(player->walkingInCastle);
     UnloadSound(player->walkingInGrass);
     UnloadSound(player->playerHurtSound);
+    UnloadSound(player->death);
 
     for (int map = 0; map < NUM_MAPS; map++)
     {

@@ -319,7 +319,6 @@ int main(void)
 
     Sound buttonSelect = LoadSound("resources/sounds/sound_effects/buttons/menu-select-button.wav");
     Sound onOFF = LoadSound("resources/sounds/sound_effects/buttons/ON-OFF.wav");
-    Sound death = LoadSound("resources/sounds/sound_effects/player/game-over.wav");
     
     float textTime = 0.0f;
 
@@ -830,12 +829,6 @@ while (!WindowShouldClose())
 
             if (player.life <= 0 )
             {
-                if (!deathSoundPlay)
-                {
-                    PlaySound(death);
-                    deathSoundPlay = true;
-                }
-
                 if (player.deathAnimationDone)
                 {
                     gameState = GAME_OVER;
@@ -1312,7 +1305,6 @@ while (!WindowShouldClose())
     UnloadTexture(menuImage);
     UnloadMusicStream(menuMusic);
     UnloadMusicStream(soundTrack);
-    UnloadSound(death);
     UnloadSound(buttonSelect);
     CloseWindow();
     return 0;
