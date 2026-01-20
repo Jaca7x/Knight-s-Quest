@@ -44,6 +44,8 @@ typedef struct goblinTank
     int frameWidthHurt;       
     int frameHeightHurt;     
 
+    int damage;
+
     bool isIdle;
     bool isWalking;
     bool isAtacking;
