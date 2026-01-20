@@ -204,7 +204,8 @@ void InitPlayer(Player *player)
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc, Boss *boss)
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, Goblin *redGoblin, 
+    GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc, Boss *boss, GoblinTank *goblinTank)
 {  
     // Verificar se morreu pela primeira vez
     if (player->life <= 0 && !player->isDead)
@@ -224,19 +225,18 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         player->deathAnimationDone = false;
     }
 
-    // Se morreu, toca a animação de morte e para o resto
     if (player->isDead && !player->deathAnimationDone)
     {
         player->deathAnimTimer += delta;
 
-        if (player->deathAnimTimer >= 0.15f) // ajusta a velocidade do frame
+        if (player->deathAnimTimer >= 0.15f) 
         {
             player->deathAnimTimer = 0.0f;
             player->currentFrame++;
 
             if (player->currentFrame >= player->frameDead)
             {
-                player->currentFrame = player->frameDead - 1; // para no último frame
+                player->currentFrame = player->frameDead - 1; 
                 player->deathAnimationDone = true;
             }
         }
@@ -336,7 +336,6 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         }   
     }
     
-    // Lógica de dano nos lobos (apenas se estiver no mapa certo)
     if (currentMapIndex == MAP_WOLF_RUNNING_AREA && !wolf->isDead)
     {
         float distanceToWolf = fabs(wolf->position.x - player->position.x);
@@ -474,6 +473,32 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         }   
     }
 
+    if (currentMapIndex == GOBLIN_TANK_MAP)
+    {
+        float distanceToGoblinTank = fabs(goblinTank->position.x - player->position.x);
+
+        if (player->isAttacking && distanceToGoblinTank <= player->attackRange)
+        {
+            if (!goblinTank->goblinTankHasHurt)
+            {
+                if (player->isAttackingLight)
+                {
+                    goblinTank->life -= player->lightDamage;
+                }
+                else if (player->isAttackingHeavy)
+                {
+                    goblinTank->life -= player->heavyDamage;
+                }
+
+                goblinTank->goblinTankHasHurt = true;
+            } 
+        }
+        else
+        {
+            goblinTank->goblinTankHasHurt = false;
+        }
+    }
+    
     if (currentMapIndex == BOSS_MAP)
     {
         float distanceToBoss = fabs(boss->position.x - player->position.x);

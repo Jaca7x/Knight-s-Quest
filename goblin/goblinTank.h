@@ -13,6 +13,8 @@ typedef struct goblinTank
     Vector2 position;
 
     float speed;
+    float life;
+    float maxLife;
 
     Texture2D goblinTankSpriteWalk;
     Texture2D goblinTankSpriteHurt;
@@ -61,7 +63,6 @@ typedef struct goblinTank
     int direction;
     float goblinTankAttackRange;
     float goblinTankAttackRangeLeft;
-    float life;
 
     float attackTime;
     float attackCooldown;
