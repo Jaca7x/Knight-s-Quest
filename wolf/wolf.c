@@ -12,8 +12,8 @@ bool CheckCollisionAABB(float x1, float y1, float w1, float h1,
 
 void DrawWolfLifeBar(Wolf *wolf)
 {
-    if (wolf->isDead) return;  // não desenha se estiver morto
-
+    if (wolf->isDead) return; 
+    
     float barWidth = 60.0f;
     float barHeight = 8.0f;
     float x = wolf->position.x + 20;  // ajuste horizontal
@@ -36,8 +36,6 @@ void DrawWolfLifeBar(Wolf *wolf)
     // Contorno
     DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
 }
-
-
 
 void InitWolfBase(Wolf *wolf, Vector2 pos)
 {
