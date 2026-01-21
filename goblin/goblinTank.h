@@ -4,7 +4,7 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 
-#define GOBLIN_TANK_MAP 0
+#define GOBLIN_TANK_MAP 5
 
 typedef struct Player player;
 
@@ -55,6 +55,7 @@ typedef struct goblinTank
     bool goblinTankHasHurt;
     bool goblinTankHasHit;
     bool deathAnimationDone;
+    bool growlSoundPlay;
 
     float deathAnimTimer;
 
@@ -71,6 +72,11 @@ typedef struct goblinTank
     float attackAnimTimer;  
     
     bool hitApplied;
+
+    Sound soundAttackGoblinTank;
+    Sound soundGrowlGoblinTank;
+    Sound soundHurtGoblinTank;
+    Sound soundDeathGolbinTank;
 
 } GoblinTank;
 

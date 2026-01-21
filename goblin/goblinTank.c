@@ -84,6 +84,8 @@ void InitGoblinTank(GoblinTank *goblinTank)
 
     goblinTank->hitApplied = false;
 
+    goblinTank->growlSoundPlay = false;
+
     goblinTank->deathAnimTimer = 0.0f;
 
     goblinTank->viewPlayer = 400.0f;
@@ -98,12 +100,19 @@ void InitGoblinTank(GoblinTank *goblinTank)
     goblinTank->attackCooldownTimer = 0.0f;
 
     goblinTank->attackAnimTimer = 0.0f;
+
+    goblinTank->soundAttackGoblinTank = LoadSound("resources/sounds/sound_effects/goblin/attack-goblinTank.wav");
+    goblinTank->soundGrowlGoblinTank = LoadSound("resources/sounds/sound_effects/goblin/idle-goblinTank.wav");
+    goblinTank->soundHurtGoblinTank = LoadSound("resources/sounds/sound_effects/goblin/hurt-goblinTank.wav");
+    goblinTank->soundDeathGolbinTank = LoadSound("resources/sounds/sound_effects/goblin/death-goblinTank.wav");
 }
 
 void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
 {
     if (goblinTank->life <= 0 && !goblinTank->isDead)
     {
+        StopSound(goblinTank->soundGrowlGoblinTank);
+        PlaySound(goblinTank->soundDeathGolbinTank);
         goblinTank->isDead = true;
         goblinTank->isWalking = false;
         goblinTank->isIdle = false;
@@ -135,6 +144,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
 
         if (goblinTank->goblinTankHasHurt && !goblinTank->isDead && goblinTank->frameCounter >= 30)
         {
+            PlaySound(goblinTank->soundHurtGoblinTank);
             goblinTank->frameCounter = 0;
             goblinTank->currentFrame = (goblinTank->currentFrame + 1) % goblinTank->frameHurt;
         }
@@ -156,16 +166,28 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
         }
         else if (goblinTank->isAtacking && goblinTank->frameCounter >= 10)
         {
+            if (goblinTank->currentFrame == 5)
+            {
+                PlaySound(goblinTank->soundAttackGoblinTank);
+            }
+            
             goblinTank->frameCounter = 0;
             goblinTank->currentFrame = (goblinTank->currentFrame + 1) % goblinTank->frameAtk;
         }
         else if (goblinTank->isWalking && goblinTank->frameCounter >= 30)
         {
+            PlaySound(player->walkingInGrass);
             goblinTank->frameCounter = 0;
             goblinTank->currentFrame = (goblinTank->currentFrame + 1) % goblinTank->frameWalk;
         }
         else if (goblinTank->isIdle && goblinTank->frameCounter >= 30)
         {
+            if (!goblinTank->growlSoundPlay)
+            {
+                PlaySound(goblinTank->soundGrowlGoblinTank);
+                goblinTank->growlSoundPlay = true;
+            }
+            
             goblinTank->frameCounter = 0;
             goblinTank->currentFrame = (goblinTank->currentFrame + 1) % goblinTank->frameIdle;
         }
@@ -246,15 +268,22 @@ void DrawGoblinTank(GoblinTank *goblinTank)
 
     if (goblinTank->goblinTankHasHurt && !goblinTank->isDead)
     {
+        float hurtOfSetY = -15;
         currentTexture = goblinTank->goblinTankSpriteHurt;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthHurt, 0, goblinTank->frameWidthHurt * goblinTank->direction, goblinTank->frameHeightHurt};
         dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 4, source.height / 4};
+
+        dest.y += hurtOfSetY;
     }
     else if (goblinTank->isDead)
     {
+        float hurtOfSetY = -5;
+
         currentTexture = goblinTank->goblinTankSpriteDead;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthDead, 0, goblinTank->frameWidthDead * goblinTank->direction, goblinTank->frameHeightDead};
         dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 4, source.height / 4};
+
+        dest.y += hurtOfSetY;
     }
     else if (goblinTank->isAtacking)
     {
@@ -303,4 +332,8 @@ void UnloadGoblinTank(GoblinTank *goblinTank)
     UnloadTexture(goblinTank->goblinTankSpriteDead);
     UnloadTexture(goblinTank->goblinTankSpriteIdle);
     UnloadTexture(goblinTank->goblinTankSpriteAtk);
+    UnloadSound(goblinTank->soundAttackGoblinTank);
+    UnloadSound(goblinTank->soundGrowlGoblinTank);
+    UnloadSound(goblinTank->soundHurtGoblinTank);
+    UnloadSound(goblinTank->soundDeathGolbinTank);
 }
