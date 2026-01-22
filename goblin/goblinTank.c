@@ -86,6 +86,8 @@ void InitGoblinTank(GoblinTank *goblinTank)
 
     goblinTank->growlSoundPlay = false;
 
+    goblinTank->droppedHeart = false;
+
     goblinTank->deathAnimTimer = 0.0f;
 
     goblinTank->viewPlayer = 400.0f;

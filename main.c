@@ -499,6 +499,10 @@ int main(void)
     goblinArcher.goblinArcherDeathSound,
     goblinArcher.goblinArcherLoadingSound,
 
+    goblinTank.soundAttackGoblinTank,
+    goblinTank.soundDeathGolbinTank,
+    goblinTank.soundGrowlGoblinTank,
+    goblinTank.soundHurtGoblinTank
 };
 
 int effectSoundCount = sizeof(effectSounds) / sizeof(effectSounds[0]);
@@ -910,7 +914,8 @@ while (!WindowShouldClose())
                 UpdateGoblinArcher(&goblinArcher, &player, delta);
             }
 
-            UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, &wolfRun);
+            UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &redGoblin, 
+                &goblinArcher, &wolfRun, &goblinTank);
             DrawHearts(hearts, delta, &player);
 
             if (MAP_NPC == currentMapIndex) {

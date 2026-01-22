@@ -56,6 +56,7 @@ typedef struct goblinTank
     bool goblinTankHasHit;
     bool deathAnimationDone;
     bool growlSoundPlay;
+    bool droppedHeart;
 
     float deathAnimTimer;
 
