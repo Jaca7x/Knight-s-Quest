@@ -76,6 +76,40 @@ typedef struct
 } TileMap;
 
 
+//Estrutura das telas de tutoriais
+typedef struct MonsterTutorial
+{
+    const char *title1;
+    const char *title2;
+    const char *info1;
+    const char *info2;
+
+    Texture2D tex1;
+    Texture2D tex2;
+
+    int frames1;
+    int current1;
+    float time1;
+    float timer1;
+    int frameW1;
+    int frameH1;
+
+    int frames2;
+    int current2;
+    float time2;
+    float timer2;
+    int frameW2;
+    int frameH2;
+
+    float scale1;
+    float scale2;
+
+    Rectangle dest1;
+    Rectangle dest2;
+
+} MonsterTutorial;
+
+
 // ============================================================================
 // Funções auxiliares para mapas
 // ============================================================================
@@ -308,6 +342,79 @@ bool drawHoverButton(Rectangle button, Vector2 mousePos, const char *text)
     return false;
 }
 
+void UpdateMonsterTutorial(MonsterTutorial *t, float delta)
+{
+    // -------- Sprite 1 --------
+    t->timer1 += delta;
+    if (t->timer1 >= t->time1)
+    {
+        t->timer1 = 0.0f;
+        t->current1++;
+
+        if (t->current1 >= t->frames1)
+            t->current1 = 0;
+    }
+
+    // -------- Sprite 2 --------
+    t->timer2 += delta;
+    if (t->timer2 >= t->time2)
+    {
+        t->timer2 = 0.0f;
+        t->current2++;
+
+        if (t->current2 >= t->frames2)
+            t->current2 = 0;
+    }
+}
+
+void DrawMonsterTutorial(MonsterTutorial *t)
+{
+    Rectangle panel = {250, 100, 1000, 600};
+
+    DrawRectangleRec(panel, Fade(BLACK, 0.85f));
+    DrawRectangleLinesEx(panel, 2, WHITE);
+
+    DrawText(t->title1, panel.x + 150, panel.y + 100, 26, GREEN);
+    DrawText(t->title2, panel.x + 650, panel.y + 100, 26, GREEN);
+
+    DrawText(t->info1, panel.x + 50,  panel.y + 380, 18, WHITE);
+    DrawText(t->info2, panel.x + 600, panel.y + 380, 18, WHITE);
+
+    // -------- SPRITE 1 --------
+    Rectangle source1 = {
+        t->frameW1 * t->current1,
+        0,
+        t->frameW1,
+        t->frameH1
+    };
+
+    Rectangle dest1 = t->dest1;
+    dest1.width  = t->frameW1 * t->scale1;
+    dest1.height = t->frameH1 * t->scale1;
+
+    // -------- SPRITE 2 --------
+    Rectangle source2 = {
+        t->frameW2 * t->current2,
+        0,
+        t->frameW2,
+        t->frameH2
+    };
+
+    Rectangle dest2 = t->dest2;
+    dest2.width  = t->frameW2 * t->scale2;
+    dest2.height = t->frameH2 * t->scale2;
+
+    DrawTexturePro(t->tex1, source1, dest1, (Vector2){0, 0}, 0.0f, WHITE);
+    DrawTexturePro(t->tex2, source2, dest2, (Vector2){0, 0}, 0.0f, WHITE);
+
+    DrawText("Pressione [ESPACO] para fechar",
+             panel.x + 20,
+             panel.y + panel.height - 25,
+             14,
+             GRAY);
+}
+
+
 int main(void)
 {
     bool bossTriggered = false;
@@ -351,6 +458,176 @@ int main(void)
 
     SetTargetFPS(60);
 
+    MonsterTutorial tutorials[5];
+
+    tutorials[0] = (MonsterTutorial)
+    {
+        "GOBLIN",
+        "GOBLIN ARQUEIRO",
+        "Um pequeno inimigo, mas feroz\ncuidado com suas rápidas facadas.",
+        "Cuidado com suas flechas, se estiver na\nmira quasesempre um disparo certeiro.",
+
+        LoadTexture("resources/sprites/goblin/goblin-atk.png"),
+        LoadTexture("resources/sprites/goblinArcher/goblinArcher-atk.png"),
+
+        6, 0, 0.15f, 0.0f, 0, 0,   
+        6, 0, 0.15f, 0.0f, 0, 0,
+        
+        0.3f,
+        0.3f,
+
+        (Rectangle){360, 300, 0, 0},
+        (Rectangle){900, 300, 0, 0}
+    };
+
+    tutorials[0].frameW1 = tutorials[0].tex1.width / tutorials[0].frames1;
+    tutorials[0].frameH1 = tutorials[0].tex1.height;
+
+    tutorials[0].frameW2 = tutorials[0].tex1.width / tutorials[0].frames2;
+    tutorials[0].frameH2 = tutorials[0].tex1.height;
+
+    tutorials[1] = (MonsterTutorial)
+    {
+        "LOBO SENTINELA",
+        "LOBO PERSEGUIDOR",
+        "O lobo sentinela dificilmente ira atrás de você,\nele apenas ataca se entrar na área dele.",
+        "O lobo perseguidor, logo após de ver sua\npresa, ira correr furiosamente atrás\nde sua presa.",
+
+        LoadTexture("resources/sprites/wolf/Attack_1.png"),
+        LoadTexture("resources/sprites/wolf/Run.png"),
+
+        6,       
+        0,       
+        0.15f,    
+        0.0f,
+        0,
+        0,
+
+        9,       
+        0,       
+        0.15f,    
+        0.0f,
+        0,
+        0,
+
+        2.0f,
+        2.0f,
+
+        (Rectangle){360, 200, 0, 0 },
+        (Rectangle){900, 200, 0, 0}
+    };
+
+    tutorials[1].frameW1 = tutorials[1].tex1.width / tutorials[1].frames1;
+    tutorials[1].frameH1 = tutorials[1].tex1.height;
+
+    tutorials[1].frameW2 = tutorials[1].tex2.width / tutorials[1].frames2;
+    tutorials[1].frameH2 = tutorials[1].tex2.height;
+
+    tutorials[2] = (MonsterTutorial)
+    {
+        "GOBLIN VERMELHO", 
+        "LOBO DE SANGUE", 
+        "O goblin vermelho, praticamente igual a seus irmãos verdes\nmas sua faca possui mais sangue em sua laminâ.", 
+        "O lobo de sangue, e o variação mais feroz\ndos lobos seus ataques são\nmuito poderosos.",
+
+        LoadTexture("resources/sprites/redGoblin/Attack.png"),
+        LoadTexture("resources/sprites/redWolf/Idle.png"),
+
+        6, 0, 0.15f, 0.0f, 0, 0,
+
+        8, 0, 0.15f, 0.0f, 0, 0,
+
+        0.3f,
+        2.0f,
+
+        (Rectangle){420, 270, 0, 0},
+        (Rectangle){900, 170, 0, 0}
+    };
+
+    tutorials[2].frameW1 = tutorials[2].tex1.width / tutorials[2].frames1;
+    tutorials[2].frameH1 = tutorials[2].tex1.height;
+
+    tutorials[2].frameW2 = tutorials[2].tex2.width / tutorials[2].frames2;
+    tutorials[2].frameH2 = tutorials[2].tex2.height;
+
+
+    tutorials[3] = (MonsterTutorial)
+    {
+        "LOBO ALBINO",
+        "VELOCIDADE",
+        "O lobo albino é o mais rápido\nde todos os lobos, cuidado",
+        "A velocidade dele e surreal, ele pode estar\natás de você enquanto acha que ele está\na sua frente.",
+
+        LoadTexture("resources/sprites/whiteWolf/Attack.png"),
+        LoadTexture("resources/sprites/whiteWolf/Walk.png"),
+
+        4,       
+        0,       
+        0.15f,    
+        0.0f,
+        0,
+        0,
+
+        11,       
+        0,       
+        0.15f,    
+        0.0f,
+        0,
+        0,
+
+        2.0f,
+        2.0f,
+
+        (Rectangle){360, 200, 0, 0},
+        (Rectangle){860, 200, 0, 0}
+    };
+
+    tutorials[3].frameW1 = tutorials[3].tex1.width / tutorials[3].frames1;
+    tutorials[3].frameH1 = tutorials[3].tex1.height;
+
+    tutorials[3].frameW2 = tutorials[3].tex2.width / tutorials[3].frames2;
+    tutorials[3].frameH2 = tutorials[3].tex2.height;
+
+    tutorials[4] = (MonsterTutorial)
+    {
+        "GOBLIN PESADO",
+        "SEU MARTELO",
+        "O goblin pesado, e muito poderoso\nseus ataques fazem toda a floresta tremer.",
+        "O martelo dele e feito de metal puro\nentão tome cuidado.",
+
+        LoadTexture("resources/sprites/goblinTank/goblinTank-idle.png"),
+        LoadTexture("resources/sprites/goblinTank/goblinTank-attack.png"),
+
+        8,       
+        0,       
+        0.15f,    
+        0.0f,
+        0,
+        0,
+
+        10,       
+        0,       
+        0.15f,    
+        0.0f, 
+        0,
+        0,
+
+        0.25f,
+        0.3f,
+
+        (Rectangle){360, 240, 0, 0},
+        (Rectangle){900, 200, 0, 0}
+    };
+
+    tutorials[4].frameW1 = tutorials[4].tex1.width / tutorials[4].frames1;
+    tutorials[4].frameH1 = tutorials[4].tex1.height;
+
+    tutorials[4].frameW2 = tutorials[4].tex2.width / tutorials[4].frames2;
+    tutorials[4].frameH2 = tutorials[4].tex2.height;
+
+    bool showTutorial = false;
+    int currentTutorial = -1;
+    
     DialogState dialogState = DIALOG_CLOSED;
     DialogStateGhost dialogStateGhost = DIALOG_CLOSED_GHOST;
 
@@ -663,6 +940,50 @@ while (!WindowShouldClose())
         // ========================================================
         case PLAYING:
         {
+            static int lastMapIndex = -1;
+
+            if (currentMapIndex != lastMapIndex)
+            {
+                lastMapIndex = currentMapIndex;
+
+            if (currentMapIndex == 1)
+            {
+                currentTutorial = 0;
+                showTutorial = true;
+            }
+            else if (currentMapIndex == 2)
+            {
+                currentTutorial = 1;
+                showTutorial = true;
+            }
+            else if (currentMapIndex == 3)
+            {
+                currentTutorial = 2;
+                showTutorial = true;
+            }
+            else if (currentMapIndex == 4)
+            {
+                currentTutorial = 3;
+                showTutorial = true;
+            }
+            else if (currentMapIndex == 5)
+            {
+                currentTutorial = 4;
+                showTutorial = true;
+            }
+            }
+
+            if (showTutorial && currentTutorial != -1)
+            {           
+                UpdateMonsterTutorial(&tutorials[currentTutorial], delta);
+
+                if (IsKeyPressed(KEY_SPACE))
+                {
+                    showTutorial = false;
+                    currentTutorial = -1;
+                }
+            }
+
              Rectangle configAudio
                 = {
                     520,
@@ -1213,6 +1534,11 @@ while (!WindowShouldClose())
         else if (currentMapIndex == 6)
         {
             titulo = "Floresta Negra de Eldruin";
+        }
+        
+        if (showTutorial && currentTutorial != -1)
+        {
+            DrawMonsterTutorial(&tutorials[currentTutorial]);
         }
 
         if (titulo != NULL)
