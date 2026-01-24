@@ -344,7 +344,6 @@ bool drawHoverButton(Rectangle button, Vector2 mousePos, const char *text)
 
 void UpdateMonsterTutorial(MonsterTutorial *t, float delta)
 {
-    // -------- Sprite 1 --------
     t->timer1 += delta;
     if (t->timer1 >= t->time1)
     {
@@ -355,7 +354,6 @@ void UpdateMonsterTutorial(MonsterTutorial *t, float delta)
             t->current1 = 0;
     }
 
-    // -------- Sprite 2 --------
     t->timer2 += delta;
     if (t->timer2 >= t->time2)
     {
@@ -367,20 +365,21 @@ void UpdateMonsterTutorial(MonsterTutorial *t, float delta)
     }
 }
 
+float tutorialAlpha = 0.85f;
+
 void DrawMonsterTutorial(MonsterTutorial *t)
 {
     Rectangle panel = {250, 100, 1000, 600};
 
-    DrawRectangleRec(panel, Fade(BLACK, 0.85f));
-    DrawRectangleLinesEx(panel, 2, WHITE);
+    DrawRectangleRec(panel, Fade(BLACK, tutorialAlpha));
+    DrawRectangleLinesEx(panel, 2, Fade(WHITE, tutorialAlpha));
 
-    DrawText(t->title1, panel.x + 150, panel.y + 100, 26, GREEN);
-    DrawText(t->title2, panel.x + 650, panel.y + 100, 26, GREEN);
+    DrawText(t->title1, panel.x + 150, panel.y + 100, 26, Fade(GREEN, tutorialAlpha));
+    DrawText(t->title2, panel.x + 650, panel.y + 100, 26, Fade(GREEN, tutorialAlpha));
 
-    DrawText(t->info1, panel.x + 50,  panel.y + 380, 18, WHITE);
-    DrawText(t->info2, panel.x + 600, panel.y + 380, 18, WHITE);
+    DrawText(t->info1, panel.x + 50,  panel.y + 380, 18, Fade(WHITE, tutorialAlpha));
+    DrawText(t->info2, panel.x + 600, panel.y + 380, 18, Fade(WHITE, tutorialAlpha));
 
-    // -------- SPRITE 1 --------
     Rectangle source1 = {
         t->frameW1 * t->current1,
         0,
@@ -392,7 +391,6 @@ void DrawMonsterTutorial(MonsterTutorial *t)
     dest1.width  = t->frameW1 * t->scale1;
     dest1.height = t->frameH1 * t->scale1;
 
-    // -------- SPRITE 2 --------
     Rectangle source2 = {
         t->frameW2 * t->current2,
         0,
@@ -404,20 +402,21 @@ void DrawMonsterTutorial(MonsterTutorial *t)
     dest2.width  = t->frameW2 * t->scale2;
     dest2.height = t->frameH2 * t->scale2;
 
-    DrawTexturePro(t->tex1, source1, dest1, (Vector2){0, 0}, 0.0f, WHITE);
-    DrawTexturePro(t->tex2, source2, dest2, (Vector2){0, 0}, 0.0f, WHITE);
+    DrawTexturePro(t->tex1, source1, dest1, (Vector2){0, 0}, 0.0f, Fade(WHITE, tutorialAlpha));
+    DrawTexturePro(t->tex2, source2, dest2, (Vector2){0, 0}, 0.0f, Fade(WHITE, tutorialAlpha));
 
     DrawText("Pressione [ESPACO] para fechar",
              panel.x + 20,
              panel.y + panel.height - 25,
              14,
-             GRAY);
+             Fade(WHITE, tutorialAlpha));
 }
-
 
 int main(void)
 {
     bool bossTriggered = false;
+    float timeForTutorial = 0.0f;
+    bool tutorialStarted = false;
 
     InitAudioDevice();
 
@@ -458,7 +457,7 @@ int main(void)
 
     SetTargetFPS(60);
 
-    MonsterTutorial tutorials[5];
+    MonsterTutorial tutorials[6];
 
     tutorials[0] = (MonsterTutorial)
     {
@@ -625,7 +624,45 @@ int main(void)
     tutorials[4].frameW2 = tutorials[4].tex2.width / tutorials[4].frames2;
     tutorials[4].frameH2 = tutorials[4].tex2.height;
 
+    tutorials[5] = (MonsterTutorial)
+    {
+        "BRAKKOR",
+        "O DOURADO",
+        "Brakkor é o grande rei dos goblins\ndizem que ele chegou ao trono após\nderrotar seus outros irmãos.",
+        "O dourado se refere a sua armadura\nsegundo lendas ela foi forjada com os\ntesouros que Brakkor roubou dos outros\nreinos.",
+
+        LoadTexture("resources/sprites/boss/boss_attack.png"),
+        LoadTexture("resources/sprites/boss/boss_idle.png"),
+
+        9,       
+        0,       
+        0.15f,    
+        0.0f,
+        0,
+        0,
+        
+        4,       
+        0,       
+        0.15f,    
+        0.0f, 
+        0,
+        0,
+
+        1.3f,
+        0.9f,
+
+        (Rectangle){360, 180, 0, 0},
+        (Rectangle){900, 200, 0, 0}
+    };
+
+    tutorials[5].frameW1 = tutorials[5].tex1.width / tutorials[5].frames1;
+    tutorials[5].frameH1 = tutorials[5].tex1.height;
+
+    tutorials[5].frameW2 = tutorials[5].tex2.width / tutorials[5].frames2;
+    tutorials[5].frameH2 = tutorials[5].tex2.height;
+
     bool showTutorial = false;
+    bool tutorialIsColsing = false;
     int currentTutorial = -1;
     
     DialogState dialogState = DIALOG_CLOSED;
@@ -972,16 +1009,26 @@ while (!WindowShouldClose())
                 showTutorial = true;
             }
             }
-
             if (showTutorial && currentTutorial != -1)
             {           
                 UpdateMonsterTutorial(&tutorials[currentTutorial], delta);
 
                 if (IsKeyPressed(KEY_SPACE))
                 {
-                    showTutorial = false;
-                    currentTutorial = -1;
+                    tutorialIsColsing = true;
                 }
+            }
+
+            if (tutorialIsColsing) //Fade-In :0
+            {
+                tutorialAlpha -= delta * 2.0f;
+
+                if (tutorialAlpha <= 0.0f)
+                    {
+                        tutorialAlpha = 0.85f;
+                        showTutorial = false;
+                        tutorialIsColsing = false;
+                    }
             }
 
              Rectangle configAudio
@@ -1143,9 +1190,21 @@ while (!WindowShouldClose())
                 !bossTriggered)
             {
                 bossTriggered = true;
+                timeForTutorial = 0.0f;
             }
 
-            // --- Atualizações ---
+            if (bossTriggered && !tutorialStarted)
+            {
+                timeForTutorial += delta;
+
+                if (timeForTutorial >= 3.0f)
+                {
+                    currentTutorial = 5;
+                    showTutorial = true;
+                    tutorialStarted = true;
+                }
+            }
+
             UpdateStaminaBar(&player, delta);
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
             UpdateGhost(&ghost, &player, delta, &interaction, &dialogStateGhost, &dialogoTimer, currentMapIndex);

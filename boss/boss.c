@@ -24,7 +24,7 @@ void DrawBossfLifeBar(Boss *boss)
 
     float currentBarWidth = barWidth * lifePercent;
 
-    DrawText("Boss Life", x + barWidth / 2 - MeasureText("Boss Life", 10) / 2, y - 18 , 20, BLACK);
+    DrawText("Brakkor, o Dourado", x + barWidth / 2 - MeasureText("Brakkor, o Dourado", 10) / 2, y - 18 , 20, BLACK);
 
     DrawRectangle(x, y, barWidth, barHeight, RED);
 
@@ -355,6 +355,4 @@ void DrawBoss(Boss *boss)
     {
         DrawBossfLifeBar(boss);
     }
-    
-   
 }
