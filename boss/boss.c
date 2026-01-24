@@ -126,6 +126,10 @@ void InitBoss(Boss *boss)
     boss->bossMusic = LoadMusicStream("resources/music/boss-soundtrack.mp3");
 
     boss->musicStarted = false;
+
+    boss->bossGrounImpact = LoadSound("resources/sounds/sound_effects/boss/boss-impact.wav");
+    boss->bossWalkSound = LoadSound("resources/sounds/sound_effects/boss/boss-walk.wav");
+    boss->bossHurtSound = LoadSound("resources/sounds/sound_effects/boss/boss-hurt.wav");
 }
 
 void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered) 
@@ -141,6 +145,7 @@ void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered)
 
         if (boss->position.y > targetY)
         {
+            PlaySound(boss->bossGrounImpact);
             boss->position.y = targetY;
         }
     }
@@ -193,6 +198,7 @@ void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered)
     
     if (boss->bossHasHit && boss->frameCounter >= 30)
     {
+        PlaySound(boss->bossHurtSound);
         boss->frameCounter = 0;
         boss->currentFrame = (boss->currentFrame + 1) % boss->frameHurt;
     }
@@ -208,6 +214,7 @@ void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered)
     }
     else if (boss->isWalking && boss->frameCounter >= 40)
     {
+        PlaySound(boss->bossWalkSound);
         boss->frameCounter = 0;
         boss->currentFrame = (boss->currentFrame + 1) % boss->frameWalk;
     }

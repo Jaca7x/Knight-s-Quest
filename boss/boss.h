@@ -74,6 +74,11 @@ typedef struct boss
     Music bossMusic;
 
     bool musicStarted;  
+
+    Sound bossGrounImpact;
+
+    Sound bossWalkSound;
+    Sound bossHurtSound;
 } Boss;
 
 void InitBoss(Boss *boss);
