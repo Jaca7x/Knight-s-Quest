@@ -79,10 +79,13 @@ typedef struct boss
 
     Sound bossWalkSound;
     Sound bossHurtSound;
+    Sound bossDeathSound;
+    Sound bossAttackSound;
 } Boss;
 
 void InitBoss(Boss *boss);
 void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered);
 void DrawBoss(Boss *boss);
+void UnloadBoss(Boss *boss);
 
 #endif //BOSS_H

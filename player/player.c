@@ -158,7 +158,7 @@ void InitPlayer(Player *player)
 
     // Física
     player->speedWalk = 200.0f;
-    player->speedRun  = 10000.0f;
+    player->speedRun  = 300.0f;
     player->gravity   = 950.0f;
     player->groundY   = 518.0f;
     player->velocityY = 0.0f;

@@ -130,6 +130,8 @@ void InitBoss(Boss *boss)
     boss->bossGrounImpact = LoadSound("resources/sounds/sound_effects/boss/boss-impact.wav");
     boss->bossWalkSound = LoadSound("resources/sounds/sound_effects/boss/boss-walk.wav");
     boss->bossHurtSound = LoadSound("resources/sounds/sound_effects/boss/boss-hurt.wav");
+    boss->bossDeathSound = LoadSound("resources/sounds/sound_effects/boss/boss-death.wav");
+    boss->bossAttackSound = LoadSound("resources/sounds/sound_effects/boss/boss-attack.wav");
 }
 
 void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered) 
@@ -152,23 +154,24 @@ void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered)
 
     if (boss->isDead)
     {
-    boss->frameCounter++;
+        boss->frameCounter++;
 
-    if (boss->frameCounter >= 40)
-    {
-        boss->frameCounter = 0;
-        boss->currentFrame++;
+        if (boss->frameCounter >= 40)
+        {
+            boss->frameCounter = 0;
+            boss->currentFrame++;
 
-        if (boss->currentFrame >= boss->frameDead)
-            boss->currentFrame = boss->frameDead - 1; 
+            if (boss->currentFrame >= boss->frameDead)
+                boss->currentFrame = boss->frameDead - 1; 
+        }   
+
+        return;
     }
-
-    return;
-}
 
 
     if (boss->life <= 0 && !boss->isDead) 
     {
+        PlaySound(boss->bossDeathSound);
         boss->isDead = true;
         boss->bossHasHit = false;
         boss->currentFrame = 0;
@@ -242,7 +245,7 @@ void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered)
 
     if (boss->isAtacking)
     {
-
+        PlaySound(boss->bossAttackSound);
         boss->frameCounter++;
 
         if (boss->frameCounter >= 10)
@@ -362,4 +365,21 @@ void DrawBoss(Boss *boss)
     {
         DrawBossfLifeBar(boss);
     }
+}
+
+void UnloadBoss(Boss *boss)
+{
+    UnloadTexture(boss->spriteAtk);
+    UnloadTexture(boss->spriteDead);
+    UnloadTexture(boss->spriteHurt);
+    UnloadTexture(boss->spriteIdle);
+    UnloadTexture(boss->spriteWalk);
+
+    UnloadMusicStream(boss->bossMusic);
+
+    UnloadSound(boss->bossHurtSound);
+    UnloadSound(boss->bossWalkSound);
+    UnloadSound(boss->bossDeathSound);
+    UnloadSound(boss->bossAttackSound);
+    UnloadSound(boss->bossGrounImpact);
 }

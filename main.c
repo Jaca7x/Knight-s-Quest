@@ -816,7 +816,13 @@ int main(void)
     goblinTank.soundAttackGoblinTank,
     goblinTank.soundDeathGolbinTank,
     goblinTank.soundGrowlGoblinTank,
-    goblinTank.soundHurtGoblinTank
+    goblinTank.soundHurtGoblinTank,
+
+    boss.bossAttackSound,
+    boss.bossDeathSound,
+    boss.bossGrounImpact,
+    boss.bossWalkSound,
+    boss.bossHurtSound
 };
 
 int effectSoundCount = sizeof(effectSounds) / sizeof(effectSounds[0]);
@@ -1015,6 +1021,7 @@ while (!WindowShouldClose())
 
                 if (IsKeyPressed(KEY_SPACE))
                 {
+                    PlaySound(buttonSelect);
                     tutorialIsColsing = true;
                 }
             }
@@ -1699,6 +1706,7 @@ while (!WindowShouldClose())
     UnloadMusicStream(menuMusic);
     UnloadMusicStream(soundTrack);
     UnloadSound(buttonSelect);
+    UnloadBoss(&boss);
     CloseWindow();
     return 0;
 }   
