@@ -16,14 +16,6 @@ O desenvolvimento do jogo está avançando de forma consistente e animadora.
 - **NPCS**: npcs para auxiliar no jogo 
 - **Trilha sonora**: completa
 
----
-
-### 🔧 A Fazer  
-- 🌍 **Tradução para o inglês (US)**: a versão original será em Português (BR). 
-- **Sons de combate**
-
----
-
 ## ⚔️ Inimigos  
 
 ### Finalizados  
