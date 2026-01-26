@@ -52,13 +52,47 @@ O desenvolvimento do jogo está avançando de forma consistente e animadora.
 <img src="readme/atk.png" alt="Attack" width="500"/>  
 
 
-Próximos vazamentos em breve...
+
 ---
+## Requisitos
 
-## 🌍 Idiomas | Languages  
-- 🇧🇷 **Português - BR**  
-- 🇺🇸 **English - US**  
+### Windows
+- MinGW (gcc)<br>
 
+Link do MinGW e Tutorial<br>
+https://www.msys2.org<br>
+
+Link site oficial do raylib<br>
+https://www.raylib.com
+
+#### ATENÇÃO RAYLIB PRECISA ESTAR INSTALADO NO SEU PC
+
+## Rodando
+Clonando o repositório:
+```
+git clone https://github.com/Jaca7x/Knight-s-Quest.git
+```
+```
+cd Knight-s-Quest
+```
+Depois de clonar e entrar no repositório:
+```
+make // para rodar o makefile
+```
+## Execução Windows
+
+- PowerShell<br>
+```
+./game
+```
+- MSYS2<br>
+```
+./game
+```
+- CMD<br>
+```
+game.exe
+```
 ---
 
 ## ⚖️ Copyright  
