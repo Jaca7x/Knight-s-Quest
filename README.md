@@ -148,7 +148,17 @@ CMD<br>
 game.exe
 ```
 ---
+## ✍Referências
+- Site oficial do raylib para instalação do mesmo<br>
+https://www.raylib.com
 
+- Site oficial do MSYS2 para instalação<br>
+https://www.msys2.org
+
+- Vídeo que utilizei para a resolução dos problemas de instalação e compilação do MSYS2<br>
+https://www.youtube.com/watch?v=MfDY4pH0p3k
+
+---
 ## ⚖️ Copyright  
 © 2025 **Jaca7x**  
 Todos os direitos reservados.  
