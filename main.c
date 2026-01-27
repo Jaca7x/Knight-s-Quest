@@ -455,6 +455,10 @@ int main(void)
         "Knights`s Quest the Goblin Saga"
     );
 
+    Image icon = LoadImage("icon/icon.png"); // PNG, não ICO
+    SetWindowIcon(icon);
+    UnloadImage(icon);
+
     SetTargetFPS(60);
 
     MonsterTutorial tutorials[6];
