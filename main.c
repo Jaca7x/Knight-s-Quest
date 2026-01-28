@@ -20,6 +20,7 @@
 #include "boss/boss.h"
 #include "npcs/peasant.h"
 #include "goblin/goblinTank.h"
+#include "goblin/goblinBomb.h"
 
 
 // ============================================================================
@@ -47,6 +48,7 @@ typedef enum GameState
     CREDITS,
     PLAYING,
     GAME_OVER,
+    GAME_COMPLETE,
     GITHUB
 } GameState;
 
@@ -253,7 +255,7 @@ int currentMapIndex = 0;
 void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfRun *wolfRun, 
                 Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, Heart hearts[],
                 Npc *npc, Ghost *ghost, Interaction *interaction, Boss *boss, GoblinTank *goblinTank, 
-                Peasant *peasant, TileMap *map, const char *mapFiles[])
+                Peasant *peasant, GoblinBomb *goblinBomb, TileMap *map, const char *mapFiles[])
 {
     InitPlayer(player);
     InitWolfBase(wolf, (Vector2){500, 450});
@@ -270,6 +272,7 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
     InitBoss(boss);
     InitGoblinTank(goblinTank);
     InitPeasant(peasant);
+    InitGoblinBomb(goblinBomb);
 
     currentMapIndex = 0;
 
@@ -412,11 +415,14 @@ void DrawMonsterTutorial(MonsterTutorial *t)
              Fade(WHITE, tutorialAlpha));
 }
 
-int main(void)
+   int main(void)
 {
     bool bossTriggered = false;
     float timeForTutorial = 0.0f;
     bool tutorialStarted = false;
+
+    float timeForComplete = 0.0f;
+    bool gameComplete = false;
 
     InitAudioDevice();
 
@@ -721,6 +727,9 @@ int main(void)
     GoblinTank goblinTank;
     InitGoblinTank(&goblinTank);
 
+    GoblinBomb goblinBomb;
+    InitGoblinBomb(&goblinBomb);
+
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
     Texture2D tileset3 = LoadTexture("assets/maps/tiles_map/endcastle.png");
@@ -734,6 +743,7 @@ int main(void)
     Texture2D barLifeSprite = LoadTexture("resources/sprites/life/life.png");
 
     Texture2D deathImage = LoadTexture("resources/img/deathImage.png");
+    Texture2D completGame = LoadTexture("resources/img/youWin.png");
 
     Texture2D menuImage = LoadTexture("resources/img/menu.png");
 
@@ -1230,6 +1240,18 @@ while (!WindowShouldClose())
                 }
             }
 
+            if (boss.life <= 0 && !gameComplete)
+            {
+                timeForComplete += delta;
+
+                if (timeForComplete >= 3.0f)
+                {
+                    gameComplete = true;
+                    timeForComplete = 0.0f;
+                    gameState = GAME_COMPLETE;
+                }
+            }
+            
             // --- Desenho ---
             DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7);
 
@@ -1253,13 +1275,15 @@ while (!WindowShouldClose())
                 player.position.y = 520;
             }   
 
+            DrawGoblinBomb(&goblinBomb);
+            UpdateGoblinBomb(&goblinBomb, delta, &player);
+
             if (bossTriggered)
             {
                 DrawBoss(&boss);
                 UpdateBoss(&boss, &player, delta, &bossTriggered);
             }
-
-        
+            
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
                 UpdateWolf(&whiteWolf, &player, delta, currentMapIndex);
@@ -1666,7 +1690,26 @@ while (!WindowShouldClose())
             {
                 gameState = MENU;
                 PlaySound(buttonSelect);
-                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &map, mapFiles);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &goblinBomb, &map, mapFiles);
+            }
+        } break;
+
+        case GAME_COMPLETE:
+        {
+            StopMusicStream(boss.bossMusic);
+            DrawTexture(completGame, 
+                        (GetScreenWidth() - completGame.width) / 2, 
+                        (GetScreenHeight() - completGame .height) / 2, 
+                        WHITE);
+
+            DrawText("Pressione ENTER para voltar ao menu",
+                     GetScreenWidth()/2 - 200, GetScreenHeight() - 100, 20, RAYWHITE);
+
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                gameState = MENU;
+                PlaySound(buttonSelect);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &goblinBomb, &map, mapFiles);
             }
         } break;
 

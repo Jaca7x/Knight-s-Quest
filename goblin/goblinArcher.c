@@ -106,7 +106,6 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         goblinArcher->isIdle = false;
         goblinArcher->arrow.active = false;
         goblinArcher->attackAnimTimer = 0.0f;
-        goblinArcher->arrow.active = false;
         goblinArcher->arrowDamage = 0.0f;
     }
 
