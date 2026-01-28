@@ -15,6 +15,12 @@ typedef struct bomb
     bool isActive;
 
     int frameBomb;
+
+    int frameWidthBomb;
+    int frameHeightBomb;
+
+    int currentFrameBomb;
+    int frameCounterBomb;
 } Bomb;
 
 typedef struct goblinBomb
@@ -37,6 +43,8 @@ typedef struct goblinBomb
 
     bool isIdle;
     bool isAttackBomb;
+    bool bombExplode;
+    bool hasThrownBomb;
 
     Texture2D spriteBomb;
 
@@ -46,6 +54,8 @@ typedef struct goblinBomb
     float radiusToDamage;
     float bombRange;
 
+    float timerAttackBomb;
+    bool animAttackBombEnd;
 } GoblinBomb;
 
 
