@@ -176,7 +176,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
     {
         peasant->isInteraction = true;
         *dialogoTimerPeasant += deltaTime;
-        if (*dialogoTimerPeasant >= 1.5f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimerPeasant >= 4.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStatePeasant = DIALOG_PEASANT_TALKING;
             *dialogoTimerPeasant = 0.0f;
@@ -198,7 +198,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
     {
         peasant->isInteraction = true;
         *dialogoTimerPeasant += deltaTime;
-        if (*dialogoTimerPeasant >= 3.5f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimerPeasant >= 4.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStatePeasant = DIALOG_PEASANT_TALKING2;
             *dialogoTimerPeasant = 0.0f;
@@ -209,7 +209,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
     {
         peasant->isInteraction = true;
         *dialogoTimerPeasant += deltaTime;
-        if (*dialogoTimerPeasant >= 6.5f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimerPeasant >= 5.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStatePeasant = DIALOG_PLAYER_PEASANT_TALKING3;
             *dialogoTimerPeasant = 0.0f;
@@ -220,7 +220,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
     {
         peasant->isInteraction = true;
         *dialogoTimerPeasant += deltaTime;
-        if (*dialogoTimerPeasant >= 3.5f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimerPeasant >= 3.0f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStatePeasant = DIALOG_PEASANT_TALKING3;
             *dialogoTimerPeasant = 0.0f;
@@ -231,7 +231,7 @@ void UpdatePeasant(Peasant *peasant, Player *player, float deltaTime, Interactio
     {
         peasant->isInteraction = true;
         *dialogoTimerPeasant += deltaTime;
-        if (*dialogoTimerPeasant >= 4.5f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimerPeasant >= 4.0f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStatePeasant = DIALOG_CLOSED_PEASANT;
             *dialogoTimerPeasant = 0.0f;
