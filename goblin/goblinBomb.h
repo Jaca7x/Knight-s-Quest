@@ -67,6 +67,7 @@ typedef struct goblinBomb
 
     int direction;
 
+    float animAttackTimer;
 } GoblinBomb;
 
 
@@ -74,6 +75,6 @@ typedef struct goblinBomb
 
 void InitGoblinBomb(GoblinBomb *goblinBomb);
 void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player);
-void DrawGoblinBomb(GoblinBomb *goblinBomb);
+void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player);
 
 #endif // GOBLINBOMB_H

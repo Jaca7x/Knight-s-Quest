@@ -38,7 +38,7 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->timerForExplosion = 0.0f;
     goblinBomb->radiusToDamage = 50.0f;
     goblinBomb->bombRange = 200.0f;
-    goblinBomb->attackRange = 100.0f;
+    goblinBomb->attackRange = 70.0f;
 
     goblinBomb->bomb.frameBomb = 19;
     goblinBomb->bomb.frameWidthBomb = goblinBomb->spriteBomb.width / goblinBomb->bomb.frameBomb;
@@ -53,6 +53,8 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->bomb.playerIsDamage = false;
 
     goblinBomb->direction = 1;
+
+    goblinBomb->animAttackTimer = 0.0f;
 }
 
 
@@ -160,16 +162,23 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
             goblinBomb->isIdle = true;
             goblinBomb->isAttack = false;
         }
-
         goblinBomb->isAttackBomb = false;
     }
 
     Rectangle playerRec = 
     {
-        player->position.x,
-        player->position.y,
+        player->position.x + 50,
+        player->position.y + 40,
         player->frameWidth,
         player->frameHeight
+    };
+    
+    Rectangle goblinRec =
+    {
+        goblinBomb->position.x + 110,
+        goblinBomb->position.y + 130,
+        goblinBomb->frameWidthAttack / 2,
+        goblinBomb->frameHeightAttack / 2
     };
 
     Vector2 centerCircle =
@@ -213,12 +222,42 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
             goblinBomb->bomb.playerIsDamage = false;
         }
     }
+
+    goblinBomb->animAttackTimer -= delta;       
+
+    if (goblinBomb->isAttack && goblinBomb->currentFrame == 7 && goblinBomb->animAttackTimer <= 0.0)
+    {
+        if (CheckCollisionRecs(playerRec, goblinRec))
+        {
+            player->life -= 15;
+            player->hasHit = true;
+            player->hitTimer = 0.4f;
+
+            goblinBomb->animAttackTimer = 1.0f;
+        }   
+    }
 }
 
-void DrawGoblinBomb(GoblinBomb *goblinBomb )
+void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
 {
     Rectangle source;
     Rectangle dest;
+
+    Rectangle goblinRec =
+    {
+        goblinBomb->position.x + 110,
+        goblinBomb->position.y + 130,
+        goblinBomb->frameWidthAttack / 2,
+        goblinBomb->frameHeightAttack / 2
+    };
+
+    Rectangle playerRec = 
+    {
+        player->position.x + 50,
+        player->position.y + 40,
+        player->frameWidth,
+        player->frameHeight
+    };
 
     if (goblinBomb->isIdle)
     {
@@ -249,4 +288,7 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb )
 
         DrawTexturePro(goblinBomb->spriteBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
+
+    DrawRectangleLinesEx(goblinRec, 1, GREEN);
+    DrawRectangleLinesEx(playerRec, 1, RED);
 }

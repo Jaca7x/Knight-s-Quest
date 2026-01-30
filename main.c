@@ -1275,7 +1275,7 @@ while (!WindowShouldClose())
                 player.position.y = 520;
             }   
 
-            DrawGoblinBomb(&goblinBomb);
+            DrawGoblinBomb(&goblinBomb, &player);
             UpdateGoblinBomb(&goblinBomb, delta, &player);
 
             if (bossTriggered)
