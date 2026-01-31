@@ -1275,9 +1275,12 @@ while (!WindowShouldClose())
                 player.position.y = 520;
             }   
 
-            DrawGoblinBomb(&goblinBomb, &player);
-            UpdateGoblinBomb(&goblinBomb, delta, &player);
-
+            if (currentMapIndex == MAP_GOBLIN_BOMB)
+            {
+                DrawGoblinBomb(&goblinBomb, &player);
+                UpdateGoblinBomb(&goblinBomb, delta, &player);
+            }
+            
             if (bossTriggered)
             {
                 DrawBoss(&boss);
@@ -1350,7 +1353,7 @@ while (!WindowShouldClose())
             }
     
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, 
-                &npc, &boss, &goblinTank);
+                &npc, &boss, &goblinTank, &goblinBomb);
             DrawPlayer(&player);
 
             DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f, &player, button_pressed);
@@ -1754,6 +1757,7 @@ while (!WindowShouldClose())
     UnloadMusicStream(soundTrack);
     UnloadSound(buttonSelect);
     UnloadBoss(&boss);
+    UnloadGoblinBomb(&goblinBomb);
     CloseWindow();
     return 0;
 }   

@@ -201,7 +201,6 @@ void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered)
     
     if (boss->bossHasHit && boss->frameCounter >= 30)
     {
-        PlaySound(boss->bossHurtSound);
         boss->frameCounter = 0;
         boss->currentFrame = (boss->currentFrame + 1) % boss->frameHurt;
     }

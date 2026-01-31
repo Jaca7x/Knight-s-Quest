@@ -4,6 +4,7 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 
+#define MAP_GOBLIN_BOMB 0
 
 typedef struct player Player;
 
@@ -76,5 +77,6 @@ typedef struct goblinBomb
 void InitGoblinBomb(GoblinBomb *goblinBomb);
 void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player);
 void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player);
+void UnloadGoblinBomb(GoblinBomb *goblinBomb);
 
 #endif // GOBLINBOMB_H

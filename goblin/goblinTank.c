@@ -146,7 +146,6 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
 
         if (goblinTank->goblinTankHasHurt && !goblinTank->isDead && goblinTank->frameCounter >= 30)
         {
-            PlaySound(goblinTank->soundHurtGoblinTank);
             goblinTank->frameCounter = 0;
             goblinTank->currentFrame = (goblinTank->currentFrame + 1) % goblinTank->frameHurt;
         }

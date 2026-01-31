@@ -45,6 +45,36 @@ void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogu
     }
 }
 
+void AttackMonsters(int currentMapIndex, int map, bool *isDead, int positionMonster, bool *monsterHasHit, int *monsterLife, 
+    Sound *monsterSoundLight, Sound *monsterSoundHeavy, Player *player)
+{
+    if (currentMapIndex == map && !*isDead)
+    {
+        float distance = fabs(positionMonster - player->position.x);
+        if (player->isAttacking && distance <= player->attackRange)
+        {   
+            if (!*monsterHasHit)
+            {
+                if (player->isAttackingLight)
+                {
+                    *monsterLife -= player->lightDamage;
+                    PlaySound(*monsterSoundLight);
+                }
+                else if (player->isAttackingHeavy)
+                {
+                    *monsterLife -= player->heavyDamage;
+                    PlaySound(*monsterSoundHeavy);
+                }
+                *monsterHasHit = true;
+            }
+        } 
+        else 
+        {
+            *monsterHasHit = false;
+        }   
+    }
+}
+
 // Inicializa as variáveis do jogador e carrega os sprites.
 void InitPlayer(Player *player)
 {
@@ -205,7 +235,7 @@ void InitPlayer(Player *player)
 
 // Atualiza o estado do jogador (movimento, física e animação).
 void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, Goblin *redGoblin, 
-    GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc, Boss *boss, GoblinTank *goblinTank)
+    GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc, Boss *boss, GoblinTank *goblinTank, GoblinBomb *goblinBomb)
 {  
     // Verificar se morreu pela primeira vez
     if (player->life <= 0 && !player->isDead)
@@ -280,250 +310,20 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         }
     }
 
-    if (currentMapIndex == MAP_WOLF_RED_AREA && !redWolf->isDead)
-    {
-        float distanceToRedWolf = fabs(redWolf->position.x - player->position.x);
+    //WOLFS
+    AttackMonsters(currentMapIndex, MAP_WOLF_RED_AREA, &redWolf->isDead, redWolf->position.x, &redWolf->wolfHasHit, &redWolf->life, &redWolf->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, MAP_WOLF_WHITE_AREA, &whiteWolf->isDead, whiteWolf->position.x, &whiteWolf->wolfHasHit, &whiteWolf->life, &whiteWolf->wolfHitSound, &whiteWolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolf->isDead, wolf->position.x, &wolf->wolfHasHit, &wolf->life, &wolf->wolfHitSound, &wolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, MAP_WOLF_RED_AREA, &wolfRun->isDead, wolfRun->position.x, &wolfRun->wolfHasHit, &wolfRun->life, &wolfRun->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
 
-        if (player->isAttacking && distanceToRedWolf <= player->attackRange)
-        {   
-            if (!redWolf->wolfHasHit)
-            {
-                if (player->isAttackingLight)
-                {
-                    redWolf->life -= player->lightDamage;
-                    PlaySound(redWolf->wolfHitSound);
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    redWolf->life -= player->heavyDamage;
-                    PlaySound(redWolf->wolfHitSoundHeavy);
-                }
-
-                redWolf->wolfHasHit = true;
-            }
-        } 
-        else 
-        {
-            redWolf->wolfHasHit = false;
-        }   
-    }
-
-    if (currentMapIndex == MAP_WOLF_WHITE_AREA && !whiteWolf->isDead)
-    {
-        float distanceToWhiteWolf = fabs(whiteWolf->position.x - player->position.x);
-
-        if (player->isAttacking && distanceToWhiteWolf <= player->attackRange)
-        {   
-            if (!whiteWolf->wolfHasHit)
-            {
-                if (player->isAttackingLight) 
-                {
-                    whiteWolf->life -= player->lightDamage;
-                    PlaySound(whiteWolf->wolfHitSound);
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    whiteWolf->life -= player->heavyDamage;
-                    PlaySound(whiteWolf->wolfHitSoundHeavy);
-                }
-
-                whiteWolf->wolfHasHit = true;
-            }
-        } 
-        else 
-        {
-            whiteWolf->wolfHasHit = false;
-        }   
-    }
+    //GOBLINS
+    AttackMonsters(currentMapIndex, GOBLIN_MAP, &goblin->isDead, goblin->position.x, &goblin->goblinHasHit, &goblin->life, NULL, NULL, player);
+    AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redGoblin->isDead, redGoblin->position.x, &redGoblin->goblinHasHit, &redGoblin->life, &redGoblin->RedGoblinHitSound, &redGoblin->RedGoblinHitSound, player);
+    AttackMonsters(currentMapIndex, MAP_GOBLIN_ARCHER_AREA, &goblinArcher->isDead, goblinArcher->position.x, &goblinArcher->goblinHasHit, &goblinArcher->life, NULL, NULL, player);
+    AttackMonsters(currentMapIndex, GOBLIN_TANK_MAP, &goblinTank->isDead, goblinTank->position.x, &goblinTank->goblinTankHasHit, &goblinTank->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
     
-    if (currentMapIndex == MAP_WOLF_RUNNING_AREA && !wolf->isDead)
-    {
-        float distanceToWolf = fabs(wolf->position.x - player->position.x);
-
-        if (player->isAttacking && distanceToWolf <= player->attackRange)
-        {   
-            if (!wolf->wolfHasHit)
-            {
-                if (player->isAttackingLight)
-                {
-                    PlaySound(wolf->wolfHitSound);
-                    wolf->life -= player->lightDamage;
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    PlaySound(wolf->wolfHitSoundHeavy);
-                    wolf->life -= player->heavyDamage;
-                }
-
-                wolf->wolfHasHit = true;
-            }
-        } 
-        else 
-        {
-            wolf->wolfHasHit = false;
-        }   
-    }
-
-    if (currentMapIndex == MAP_WOLF_RUNNING_AREA && !wolfRun->isDead)
-    {
-        float distanceToRunningWolf = fabs(wolfRun->position.x - player->position.x);
-
-        if (player->isAttacking && distanceToRunningWolf <= player->attackRange)
-        {   
-            if (!wolfRun->wolfHasHit)
-            {
-                if (player->isAttackingLight)
-                {   
-                    PlaySound(wolfRun->wolfHitSound);
-                    wolfRun->life -= player->lightDamage;
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    PlaySound(wolfRun->wolfHitSoundHeavy);
-                    wolfRun->life -= player->heavyDamage;
-                }
-
-                wolfRun->wolfHasHit = true;
-            }
-        } 
-        else 
-        {
-            wolfRun->wolfHasHit = false;
-        }
-    }
-    
-
-    if (currentMapIndex == GOBLIN_MAP)
-    {
-        float distanceToGoblin = fabs(goblin->position.x - player->position.x);
-
-        if (player->isAttacking && distanceToGoblin <= player->attackRange)
-        {
-            if (!goblin->goblinHasHit)
-            {
-                if (player->isAttackingLight)
-                {
-                    goblin->life -= player->lightDamage;
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    goblin->life -= player->heavyDamage;
-                }
-
-                goblin->goblinHasHit = true;
-            }  
-        }
-        else
-        {
-            goblin->goblinHasHit = false;
-        }   
-    }
-
-    if (currentMapIndex == RED_GOBLIN_MAP)
-    {
-        float distanceToRedGoblin = fabs(redGoblin->position.x - player->position.x);
-
-        if (player->isAttacking && distanceToRedGoblin <= player->attackRange)
-        {
-            if (!redGoblin->goblinHasHit)
-            {
-                if (player->isAttackingLight)
-                {
-                    PlaySound(redGoblin->RedGoblinHitSound);
-                    redGoblin->life -= player->lightDamage;
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    PlaySound(redGoblin->RedGoblinHitSound);
-                    redGoblin->life -= player->heavyDamage;
-                }
-
-                redGoblin->goblinHasHit = true;
-            }  
-        }
-        else
-        {
-            redGoblin->goblinHasHit = false;
-        }   
-    }
-
-    if (currentMapIndex == MAP_GOBLIN_ARCHER_AREA)
-    {
-        float distanceToGoblinArcher = fabs(goblinArcher->position.x - player->position.x);
-
-        if (player->isAttacking && distanceToGoblinArcher <= player->attackRange)
-        {
-            if (!goblinArcher->goblinHasHit)
-            {
-                if (player->isAttackingLight)
-                {
-                    goblinArcher->life -= player->lightDamage;
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    goblinArcher->life -= player->heavyDamage;
-                }
-
-                goblinArcher->goblinHasHit = true;
-            }  
-        }
-        else
-        {
-            goblinArcher->goblinHasHit = false;
-        }   
-    }
-
-    if (currentMapIndex == GOBLIN_TANK_MAP)
-    {
-        float distanceToGoblinTank = fabs(goblinTank->position.x - player->position.x);
-
-        if (player->isAttacking && distanceToGoblinTank <= player->attackRange)
-        {
-            if (!goblinTank->goblinTankHasHurt)
-            {
-                if (player->isAttackingLight)
-                {
-                    goblinTank->life -= player->lightDamage;
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    goblinTank->life -= player->heavyDamage;
-                }
-
-                goblinTank->goblinTankHasHurt = true;
-            } 
-        }
-        else
-        {
-            goblinTank->goblinTankHasHurt = false;
-        }
-    }
-    
-    if (currentMapIndex == BOSS_MAP)
-    {
-        float distanceToBoss = fabs(boss->position.x - player->position.x);
-
-        if (player->isAttacking && distanceToBoss <= player->attackRange)
-        {
-            if (!boss->bossHasHit)
-            {
-                if (player->isAttackingLight)
-                {
-                    boss->life -= player->lightDamage;
-                }
-                else if (player->isAttackingHeavy)
-                {
-                    boss->life -= player->heavyDamage;
-                }
-
-                boss->bossHasHit = true;
-            }  
-        }
-        else
-        {
-            boss->bossHasHit = false;
-        }   
-    }
+    //BOSS
+    AttackMonsters(currentMapIndex, BOSS_MAP, &boss->isDead, boss->position.x, &boss->bossHasHit, &boss->life, &boss->bossHurtSound, &boss->bossHurtSound, player);
 
     // Ataque com cooldown
     player->attackCooldownTimer -= delta;

@@ -1,6 +1,5 @@
 #include "goblinBomb.h"
 
-
 void InitGoblinBomb(GoblinBomb *goblinBomb)
 {
     goblinBomb->spriteIdle = LoadTexture("resources/sprites/goblinBomb/Idle.png");
@@ -291,4 +290,12 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
 
     DrawRectangleLinesEx(goblinRec, 1, GREEN);
     DrawRectangleLinesEx(playerRec, 1, RED);
+}
+
+void UnloadGoblinBomb(GoblinBomb *goblinBomb)
+{
+    UnloadTexture(goblinBomb->spriteAttack);
+    UnloadTexture(goblinBomb->spriteAttackBomb);
+    UnloadTexture(goblinBomb->spriteBomb);
+    UnloadTexture(goblinBomb->spriteIdle);
 }
