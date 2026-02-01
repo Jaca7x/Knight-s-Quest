@@ -31,16 +31,21 @@ typedef struct goblinBomb
     Texture2D spriteAttackBomb;
     Texture2D spriteAttack;
     Texture2D spriteHurt;
+    Texture2D spriteDeath;
+    Texture2D spriteRun;
 
     Vector2 position;
 
     float maxLife;
     int life;
+    float speed;
 
     int frameIdle;
     int frameAttackBomb;
     int frameAttack;
     int frameHurt;
+    int frameDeath;
+    int frameRun;
 
     int frameWidthIdle;
     int frameHeightIdle;
@@ -54,6 +59,12 @@ typedef struct goblinBomb
     int frameWidthHurt;
     int frameHeightHurt;
 
+    int frameWidthDeath;
+    int frameHeightDeath;
+
+    int frameWidthRun;
+    int frameHeightRun;
+
     int frameCounter;
     int currentFrame;
 
@@ -62,6 +73,7 @@ typedef struct goblinBomb
     bool bombExplode;
     bool hasThrownBomb;
     bool isAttack;
+    bool isWalking;
 
     Texture2D spriteBomb;
 
@@ -84,6 +96,8 @@ typedef struct goblinBomb
 
     float hurtDuration;
     float hurtTimer;
+
+    float viewPlayer;
 } GoblinBomb;
 
 

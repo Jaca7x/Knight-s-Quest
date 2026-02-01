@@ -29,17 +29,22 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->spriteAttackBomb = LoadTexture("resources/sprites/goblinBomb/Attack3.png");
     goblinBomb->spriteAttack = LoadTexture("resources/sprites/goblinBomb/Attack1.png");
     goblinBomb->spriteHurt = LoadTexture("resources/sprites/goblinBomb/Hurt.png");
+    goblinBomb->spriteDeath = LoadTexture("resources/sprites/goblinBomb/Death.png");
+    goblinBomb->spriteRun = LoadTexture("resources/sprites/goblinBomb/Run.png");
 
     goblinBomb->position = (Vector2){800, 440};
     goblinBomb->bomb.pos = (Vector2){800, 440};
 
     goblinBomb->maxLife = 70.0f;
     goblinBomb->life = goblinBomb->maxLife;
+    goblinBomb->speed = 30.0f;
 
     goblinBomb->frameIdle = 4;
     goblinBomb->frameAttackBomb = 12;
     goblinBomb->frameAttack = 8;
     goblinBomb->frameHurt = 4;
+    goblinBomb->frameDeath = 4;
+    goblinBomb->frameRun = 8;
 
     goblinBomb->frameWidthIdle = goblinBomb->spriteIdle.width / goblinBomb->frameIdle;
     goblinBomb->frameHeightIdle = goblinBomb->spriteIdle.height;
@@ -53,11 +58,18 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->frameWidthHurt = goblinBomb->spriteHurt.width / goblinBomb->frameHurt;
     goblinBomb->frameHeightHurt = goblinBomb->spriteHurt.height;
 
+    goblinBomb->frameWidthDeath = goblinBomb->spriteDeath.width / goblinBomb->frameDeath;
+    goblinBomb->frameHeightDeath = goblinBomb->spriteDeath.height;
+
+    goblinBomb->frameWidthRun = goblinBomb->spriteRun.width / goblinBomb->frameRun;
+    goblinBomb->frameHeightRun = goblinBomb->spriteRun.height;
+
     goblinBomb->currentFrame = 0;
     goblinBomb->frameCounter = 0;
 
     goblinBomb->isIdle = true;
     goblinBomb->isAttackBomb = false;
+    goblinBomb->isWalking = false;
 
     goblinBomb->bomb.isActive = false;
     goblinBomb->bombExplode = false;
@@ -69,7 +81,8 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->timerForExplosion = 0.0f;
     goblinBomb->radiusToDamage = 50.0f;
     goblinBomb->bombRange = 200.0f;
-    goblinBomb->attackRange = 50.0f;
+    goblinBomb->attackRange = 35.0f;
+    goblinBomb->viewPlayer = 150.0f;
 
     goblinBomb->bomb.frameBomb = 19;
     goblinBomb->bomb.frameWidthBomb = goblinBomb->spriteBomb.width / goblinBomb->bomb.frameBomb;
@@ -99,11 +112,22 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     goblinBomb->frameCounter++;
     goblinBomb->bomb.frameCounterBomb++;
 
-    if (goblinBomb->goblinHasHit) 
+    if (goblinBomb->life <= 0 && !goblinBomb->isDead)
+    {
+        goblinBomb->isDead = true;
+        goblinBomb->isIdle = false;
+        goblinBomb->isAttackBomb = false;
+        goblinBomb->isWalking = false;
+        goblinBomb->isAttack = false;
+        goblinBomb->currentFrame = 0;
+    }
+    
+    if (goblinBomb->goblinHasHit && !goblinBomb->isDead) 
     {
         goblinBomb->isIdle = false;
         goblinBomb->isAttackBomb = false;
         goblinBomb->isAttack = false;
+        goblinBomb->isWalking = false;
 
         goblinBomb->hurtTimer += delta;
 
@@ -114,11 +138,24 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
             goblinBomb->isIdle = true;
         }
     }
-    
-    if (goblinBomb->frameCounter >= 10)
+
+    if (goblinBomb->isDead)
+    {  
+        if (goblinBomb->frameCounter >= 10)
+        {
+            goblinBomb->frameCounter = 0;
+            goblinBomb->currentFrame++;
+
+            if (goblinBomb->currentFrame >= goblinBomb->frameDeath)
+                goblinBomb->currentFrame = goblinBomb->frameDeath - 1;
+        }
+
+        return; 
+    }
+    else if (goblinBomb->frameCounter >= 10)
     {
         goblinBomb->frameCounter = 0;
-
+        
         if (goblinBomb->isIdle)
         {
             goblinBomb->currentFrame++;
@@ -151,7 +188,14 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
                 goblinBomb->currentFrame = 0;
             }
         }
-        
+        else if (goblinBomb->isWalking)
+        {
+            goblinBomb->currentFrame++;
+            if (goblinBomb->currentFrame >= goblinBomb->frameRun)
+            {
+                goblinBomb->currentFrame = 0;
+            }
+        }
     }
 
         if (goblinBomb->bomb.frameCounterBomb >= 10)
@@ -172,6 +216,30 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     float disatanceToAttack = fabs(player->position.x - goblinBomb->position.x);
 
     goblinBomb->direction = (player->position.x - 60 > goblinBomb->position.x) ? 1 : -1;
+
+    if (disatanceToAttack <= goblinBomb->viewPlayer && goblinBomb->hasThrownBomb)
+    {
+        if (disatanceToAttack > goblinBomb->attackRange)
+        {
+            goblinBomb->isWalking = true;
+            goblinBomb->isIdle = false;
+            goblinBomb->isAttack = false;
+
+            goblinBomb->position.x += goblinBomb->speed * goblinBomb->direction * delta;
+        }
+        else
+        {
+            goblinBomb->isWalking = false;
+            goblinBomb->isAttack = true;
+            goblinBomb->isIdle = false;
+        }
+    }
+    else
+    {
+        goblinBomb->isWalking = false;
+        goblinBomb->isAttack = false;
+        goblinBomb->isIdle = true;
+    }
 
     if (!goblinBomb->hasThrownBomb)
     {
@@ -217,12 +285,17 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         {
             goblinBomb->isAttack = true;
             goblinBomb->isIdle = false;
+            goblinBomb->isWalking = false;
         }
         else
         {
-            goblinBomb->isIdle = true;
+            goblinBomb->isWalking = true;
+            goblinBomb->isIdle = false;
             goblinBomb->isAttack = false;
+
+            goblinBomb->position.x += goblinBomb->speed * goblinBomb->direction * delta;
         }
+
         goblinBomb->isAttackBomb = false;
     }
 
@@ -320,7 +393,14 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
         player->frameHeight
     };
 
-    if (goblinBomb->goblinHasHit)
+    if (goblinBomb->isDead)
+    {
+        source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthDeath, 0, goblinBomb->frameWidthDeath * goblinBomb->direction, goblinBomb->frameHeightDeath};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthDeath * 2.0f, goblinBomb->frameHeightDeath * 2.0f};
+
+        DrawTexturePro(goblinBomb->spriteDeath, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
+    }
+    else if (goblinBomb->goblinHasHit)
     {
         source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthHurt, 0, goblinBomb->frameWidthHurt * goblinBomb->direction, goblinBomb->frameHeightHurt};
         dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthHurt * 2.0f, goblinBomb->frameHeightHurt * 2.0f};
@@ -348,6 +428,13 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
 
         DrawTexturePro(goblinBomb->spriteAttack, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
+    else if (goblinBomb->isWalking)
+    {
+        source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthRun, 0, goblinBomb->frameWidthRun * goblinBomb->direction, goblinBomb->frameHeightRun};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthRun * 2.0f, goblinBomb->frameHeightRun * 2.0f};
+
+        DrawTexturePro(goblinBomb->spriteRun, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
+    }
     
     if (goblinBomb->bomb.isActive)
     {
@@ -358,9 +445,6 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
     }
 
     DrawGoblinBombLifeBar(goblinBomb);
-
-    DrawRectangleLinesEx(goblinRec, 1, GREEN);
-    DrawRectangleLinesEx(playerRec, 1, RED);
 }
 
 void UnloadGoblinBomb(GoblinBomb *goblinBomb)
@@ -369,4 +453,7 @@ void UnloadGoblinBomb(GoblinBomb *goblinBomb)
     UnloadTexture(goblinBomb->spriteAttackBomb);
     UnloadTexture(goblinBomb->spriteBomb);
     UnloadTexture(goblinBomb->spriteIdle);
+    UnloadTexture(goblinBomb->spriteDeath);
+    UnloadTexture(goblinBomb->spriteHurt);
+    UnloadTexture(goblinBomb->spriteRun);
 }
