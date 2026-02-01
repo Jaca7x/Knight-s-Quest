@@ -9,7 +9,6 @@
 
 #define MAP_WOLF_RUNNING_AREA 2
 #define MAP_WOLF_WHITE_AREA 4
-#define MAP_WOLF_RED_AREA 3
 
 typedef struct player Player;
 

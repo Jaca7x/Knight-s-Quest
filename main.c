@@ -1293,7 +1293,7 @@ while (!WindowShouldClose())
                 DrawWolf(&whiteWolf);
             }
 
-            if (currentMapIndex == MAP_WOLF_RED_AREA)
+            if (currentMapIndex == RED_GOBLIN_MAP)
             {
                 UpdateWolf(&redWolf, &player, delta, currentMapIndex);
                 DrawWolf(&redWolf);

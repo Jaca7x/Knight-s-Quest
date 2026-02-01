@@ -1,16 +1,45 @@
 #include "goblinBomb.h"
 
+void DrawGoblinBombLifeBar(GoblinBomb *goblinBomb)
+{
+    if(goblinBomb->isDead) return;
+
+    float barWidth = 60.0f;
+    float barHeight = 8.0f;
+    float x = goblinBomb->position.x + 120; 
+    float y = goblinBomb->position.y + 80;
+
+    float lifePercent = goblinBomb->life / goblinBomb->maxLife;
+
+    if (lifePercent < 0) lifePercent = 0;
+    if (lifePercent > 1) lifePercent = 1;
+
+    float currentBarWidth = barWidth * lifePercent;
+
+    DrawRectangle(x, y, barWidth, barHeight, RED);
+
+    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
+
+    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
+}
+
 void InitGoblinBomb(GoblinBomb *goblinBomb)
 {
     goblinBomb->spriteIdle = LoadTexture("resources/sprites/goblinBomb/Idle.png");
     goblinBomb->spriteAttackBomb = LoadTexture("resources/sprites/goblinBomb/Attack3.png");
     goblinBomb->spriteAttack = LoadTexture("resources/sprites/goblinBomb/Attack1.png");
+    goblinBomb->spriteHurt = LoadTexture("resources/sprites/goblinBomb/Hurt.png");
 
     goblinBomb->position = (Vector2){800, 440};
     goblinBomb->bomb.pos = (Vector2){800, 440};
+
+    goblinBomb->maxLife = 70.0f;
+    goblinBomb->life = goblinBomb->maxLife;
+
     goblinBomb->frameIdle = 4;
     goblinBomb->frameAttackBomb = 12;
     goblinBomb->frameAttack = 8;
+    goblinBomb->frameHurt = 4;
 
     goblinBomb->frameWidthIdle = goblinBomb->spriteIdle.width / goblinBomb->frameIdle;
     goblinBomb->frameHeightIdle = goblinBomb->spriteIdle.height;
@@ -20,6 +49,9 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
 
     goblinBomb->frameWidthAttack = goblinBomb->spriteAttack.width / goblinBomb->frameAttack;
     goblinBomb->frameHeightAttack = goblinBomb->spriteAttack.height;
+
+    goblinBomb->frameWidthHurt = goblinBomb->spriteHurt.width / goblinBomb->frameHurt;
+    goblinBomb->frameHeightHurt = goblinBomb->spriteHurt.height;
 
     goblinBomb->currentFrame = 0;
     goblinBomb->frameCounter = 0;
@@ -37,7 +69,7 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->timerForExplosion = 0.0f;
     goblinBomb->radiusToDamage = 50.0f;
     goblinBomb->bombRange = 200.0f;
-    goblinBomb->attackRange = 70.0f;
+    goblinBomb->attackRange = 50.0f;
 
     goblinBomb->bomb.frameBomb = 19;
     goblinBomb->bomb.frameWidthBomb = goblinBomb->spriteBomb.width / goblinBomb->bomb.frameBomb;
@@ -54,14 +86,35 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->direction = 1;
 
     goblinBomb->animAttackTimer = 0.0f;
-}
 
+    goblinBomb->goblinHasHit = false;
+    goblinBomb->isDead = false;
+
+    goblinBomb->hurtDuration = 2.0f;
+    goblinBomb->hurtTimer = 0.0f;
+}
 
 void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
 {
     goblinBomb->frameCounter++;
     goblinBomb->bomb.frameCounterBomb++;
 
+    if (goblinBomb->goblinHasHit) 
+    {
+        goblinBomb->isIdle = false;
+        goblinBomb->isAttackBomb = false;
+        goblinBomb->isAttack = false;
+
+        goblinBomb->hurtTimer += delta;
+
+        if (goblinBomb->hurtTimer >= goblinBomb->hurtDuration) 
+        {
+            goblinBomb->goblinHasHit = false;
+            goblinBomb->hurtTimer = 0.0f;
+            goblinBomb->isIdle = true;
+        }
+    }
+    
     if (goblinBomb->frameCounter >= 10)
     {
         goblinBomb->frameCounter = 0;
@@ -90,6 +143,15 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
                 goblinBomb->currentFrame = 0;
             }
         }
+        else if (goblinBomb->goblinHasHit)
+        {
+            goblinBomb->currentFrame++;
+            if (goblinBomb->currentFrame >= goblinBomb->frameHurt)
+            {
+                goblinBomb->currentFrame = 0;
+            }
+        }
+        
     }
 
         if (goblinBomb->bomb.frameCounterBomb >= 10)
@@ -258,7 +320,14 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
         player->frameHeight
     };
 
-    if (goblinBomb->isIdle)
+    if (goblinBomb->goblinHasHit)
+    {
+        source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthHurt, 0, goblinBomb->frameWidthHurt * goblinBomb->direction, goblinBomb->frameHeightHurt};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthHurt * 2.0f, goblinBomb->frameHeightHurt * 2.0f};
+
+        DrawTexturePro(goblinBomb->spriteHurt, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
+    }
+    else if (goblinBomb->isIdle)
     {
         source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthIdle, 0, goblinBomb->frameWidthIdle * goblinBomb->direction, goblinBomb->frameHeightIdle};
         dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthIdle * 2.0f, goblinBomb->frameHeightIdle * 2.0f};
@@ -287,6 +356,8 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
 
         DrawTexturePro(goblinBomb->spriteBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
+
+    DrawGoblinBombLifeBar(goblinBomb);
 
     DrawRectangleLinesEx(goblinRec, 1, GREEN);
     DrawRectangleLinesEx(playerRec, 1, RED);

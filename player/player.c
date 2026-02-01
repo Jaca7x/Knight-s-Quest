@@ -270,10 +270,8 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
                 player->deathAnimationDone = true;
             }
         }
-        return; // não processa mais nada enquanto toca animação de morte
+        return; 
     }
-
-    // Se chegou aqui, ainda está vivo: resto do seu código original
 
     // Verificar entradas de movimento
     bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
@@ -311,16 +309,17 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     }
 
     //WOLFS
-    AttackMonsters(currentMapIndex, MAP_WOLF_RED_AREA, &redWolf->isDead, redWolf->position.x, &redWolf->wolfHasHit, &redWolf->life, &redWolf->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redWolf->isDead, redWolf->position.x, &redWolf->wolfHasHit, &redWolf->life, &redWolf->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
     AttackMonsters(currentMapIndex, MAP_WOLF_WHITE_AREA, &whiteWolf->isDead, whiteWolf->position.x, &whiteWolf->wolfHasHit, &whiteWolf->life, &whiteWolf->wolfHitSound, &whiteWolf->wolfHitSoundHeavy, player);
     AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolf->isDead, wolf->position.x, &wolf->wolfHasHit, &wolf->life, &wolf->wolfHitSound, &wolf->wolfHitSoundHeavy, player);
-    AttackMonsters(currentMapIndex, MAP_WOLF_RED_AREA, &wolfRun->isDead, wolfRun->position.x, &wolfRun->wolfHasHit, &wolfRun->life, &wolfRun->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolfRun->isDead, wolfRun->position.x, &wolfRun->wolfHasHit, &wolfRun->life, &wolfRun->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
 
     //GOBLINS
-    AttackMonsters(currentMapIndex, GOBLIN_MAP, &goblin->isDead, goblin->position.x, &goblin->goblinHasHit, &goblin->life, NULL, NULL, player);
+    AttackMonsters(currentMapIndex, GOBLIN_MAP, &goblin->isDead, goblin->position.x, &goblin->goblinHasHit, &goblin->life, &goblin->goblinDeathSound, &goblin->goblinDeathSound, player);
     AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redGoblin->isDead, redGoblin->position.x, &redGoblin->goblinHasHit, &redGoblin->life, &redGoblin->RedGoblinHitSound, &redGoblin->RedGoblinHitSound, player);
-    AttackMonsters(currentMapIndex, MAP_GOBLIN_ARCHER_AREA, &goblinArcher->isDead, goblinArcher->position.x, &goblinArcher->goblinHasHit, &goblinArcher->life, NULL, NULL, player);
+    AttackMonsters(currentMapIndex, MAP_GOBLIN_ARCHER_AREA, &goblinArcher->isDead, goblinArcher->position.x, &goblinArcher->goblinHasHit, &goblinArcher->life, &goblinArcher->goblinArcherDeathSound, &goblinArcher->goblinArcherDeathSound, player);
     AttackMonsters(currentMapIndex, GOBLIN_TANK_MAP, &goblinTank->isDead, goblinTank->position.x, &goblinTank->goblinTankHasHit, &goblinTank->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
+    AttackMonsters(currentMapIndex, MAP_GOBLIN_BOMB, &goblinBomb->isDead, goblinBomb->position.x + 85, &goblinBomb->goblinHasHit, &goblinBomb->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
     
     //BOSS
     AttackMonsters(currentMapIndex, BOSS_MAP, &boss->isDead, boss->position.x, &boss->bossHasHit, &boss->life, &boss->bossHurtSound, &boss->bossHurtSound, player);
