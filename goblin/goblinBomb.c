@@ -47,6 +47,7 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->maxLife = 70.0f;
     goblinBomb->life = goblinBomb->maxLife;
     goblinBomb->speed = 30.0f;
+    goblinBomb->damage = 50;
 
     goblinBomb->frameIdle = 4;
     goblinBomb->frameAttackBomb = 12;
@@ -54,6 +55,7 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->frameHurt = 4;
     goblinBomb->frameDeath = 4;
     goblinBomb->frameRun = 8;
+    goblinBomb->frameScale = 2.0f;
 
     goblinBomb->frameWidthIdle = goblinBomb->spriteIdle.width / goblinBomb->frameIdle;
     goblinBomb->frameHeightIdle = goblinBomb->spriteIdle.height;
@@ -86,7 +88,7 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->isAttack = false;
     
     goblinBomb->spriteBomb = LoadTexture("resources/sprites/goblinBomb/Bomb_sprite.png");
-    goblinBomb->damageBomb = 30;
+    goblinBomb->damageBomb = 20;
     goblinBomb->timerForExplosion = 0.0f;
     goblinBomb->radiusToDamage = 50.0f;
     goblinBomb->bombRange = 200.0f;
@@ -224,7 +226,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     
     float disatanceToAttack = fabs(player->position.x - goblinBomb->position.x);
 
-    goblinBomb->direction = (player->position.x - 60 > goblinBomb->position.x) ? 1 : -1;
+    goblinBomb->direction = (player->position.x - PLAYER_DIRECTION_OFFSET_X > goblinBomb->position.x) ? 1 : -1;
 
     if (disatanceToAttack <= goblinBomb->viewPlayer && goblinBomb->hasThrownBomb)
     {
@@ -308,33 +310,39 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         goblinBomb->isAttackBomb = false;
     }
 
-    Rectangle playerRec = 
+    Rectangle playerRec =
     {
-        player->position.x + 50,
-        player->position.y + 40,
+        player->position.x + PLAYER_HITBOX_OFFSET_X,
+        player->position.y + PLAYER_HITBOX_OFFSET_Y,
         player->frameWidth,
         player->frameHeight
     };
+
     
     Rectangle goblinRec =
     {
-        goblinBomb->position.x + 110,
-        goblinBomb->position.y + 130,
-        goblinBomb->frameWidthAttack / 2,
-        goblinBomb->frameHeightAttack / 2
+        goblinBomb->position.x + GOBLIN_HITBOX_OFFSET_X,
+        goblinBomb->position.y + GOBLIN_HITBOX_OFFSET_Y,
+        goblinBomb->frameWidthAttack / GOBLIN_HITBOX_SCALE,
+        goblinBomb->frameHeightAttack / GOBLIN_HITBOX_SCALE
     };
 
     Vector2 centerCircle =
     {
-        goblinBomb->bomb.pos.x + (goblinBomb->bomb.frameWidthBomb * 1.2f) / 1.2f + 5,
-        goblinBomb->bomb.pos.y + (goblinBomb->bomb.frameHeightBomb * 1.2f) / 1.2f + 50
+        goblinBomb->bomb.pos.x +
+        goblinBomb->bomb.frameWidthBomb / BOMB_CENTER_SCALE +
+        BOMB_CENTER_OFFSET_X,
+
+        goblinBomb->bomb.pos.y +
+        goblinBomb->bomb.frameHeightBomb / BOMB_CENTER_SCALE +
+        BOMB_CENTER_OFFSET_Y
     };
 
     if (goblinBomb->bomb.isActive)
     {
         goblinBomb->timerForExplosion += delta;
 
-        if (goblinBomb->timerForExplosion < 3.140f)
+        if (goblinBomb->timerForExplosion < BOMB_EXPLOSION_DELAY)
         {
             if (goblinBomb->direction == 1)
             {
@@ -347,7 +355,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
                        
             if (!goblinBomb->bomb.playerIsDamage && CheckCollisionCircleRec(centerCircle, goblinBomb->radiusToDamage, playerRec) && goblinBomb->bomb.currentFrameBomb == 14)
             {
-                player->life -= 50;
+                player->life -= goblinBomb->damage;
                 goblinBomb->bomb.playerIsDamage = true;
                 player->hasHit = true;
                 player->hitTimer = 0.4f;
@@ -372,7 +380,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     {
         if (CheckCollisionRecs(playerRec, goblinRec))
         {
-            player->life -= 15;
+            player->life -= goblinBomb->damageBomb;
             player->hasHit = true;
             player->hitTimer = 0.4f;
 
@@ -380,8 +388,8 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         }   
     }
 
-    if (!goblinBomb->isDead && CheckColisionGoblinBomb(player->position.x + 50, player->position.y + 35, player->frameWidth / 1.06f, player->frameHeight,
-                                goblinBomb->position.x + 110, goblinBomb->position.y + 120, goblinBomb->frameWidthHurt / 1.98f, goblinBomb->frameHeightHurt / 1.87f))
+    if (!goblinBomb->isDead && CheckColisionGoblinBomb(player->position.x + PLAYER_HITBOX_OFFSET_X, player->position.y + PLAYER_HITBOX_OFFSET_Y, player->frameWidth / PLAYER_SACLE_WIDTH, player->frameHeight,
+                                goblinBomb->position.x + GOBLIN_HITBOX_OFFSET_X, goblinBomb->position.y + GOBLIN_HITBOX_CHECK_OFFSET_Y, goblinBomb->frameWidthHurt / GOBLIN_SCALE_WIDTH, goblinBomb->frameHeightHurt / GOBLIN_SCALE_HEIGHT))
     {
         player->position.x += (player->position.x < goblinBomb->position.x) ? -50 : 50;
     }
@@ -392,61 +400,45 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
     Rectangle source;
     Rectangle dest;
 
-    Rectangle goblinRec =
-    {
-        goblinBomb->position.x + 110,
-        goblinBomb->position.y + 130,
-        goblinBomb->frameWidthAttack / 2,
-        goblinBomb->frameHeightAttack / 2
-    };
-
-    Rectangle playerRec = 
-    {
-        player->position.x + 50,
-        player->position.y + 40,
-        player->frameWidth,
-        player->frameHeight
-    };
-
     if (goblinBomb->isDead)
     {
         source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthDeath, 0, goblinBomb->frameWidthDeath * goblinBomb->direction, goblinBomb->frameHeightDeath};
-        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthDeath * 2.0f, goblinBomb->frameHeightDeath * 2.0f};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthDeath * goblinBomb->frameScale, goblinBomb->frameHeightDeath * goblinBomb->frameScale};
 
         DrawTexturePro(goblinBomb->spriteDeath, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
     else if (goblinBomb->goblinHasHit)
     {
         source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthHurt, 0, goblinBomb->frameWidthHurt * goblinBomb->direction, goblinBomb->frameHeightHurt};
-        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthHurt * 2.0f, goblinBomb->frameHeightHurt * 2.0f};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthHurt * goblinBomb->frameScale, goblinBomb->frameHeightHurt * goblinBomb->frameScale};
 
         DrawTexturePro(goblinBomb->spriteHurt, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
     else if (goblinBomb->isIdle)
     {
         source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthIdle, 0, goblinBomb->frameWidthIdle * goblinBomb->direction, goblinBomb->frameHeightIdle};
-        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthIdle * 2.0f, goblinBomb->frameHeightIdle * 2.0f};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthIdle * goblinBomb->frameScale, goblinBomb->frameHeightIdle * goblinBomb->frameScale};
 
         DrawTexturePro(goblinBomb->spriteIdle, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
     else if (goblinBomb->isAttackBomb)
     {
         source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthAttackBomb, 0, goblinBomb->frameWidthAttackBomb * goblinBomb->direction, goblinBomb->frameHeightAttackBomb};
-        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthAttackBomb * 2.0f, goblinBomb->frameHeightAttackBomb * 2.0f};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthAttackBomb * goblinBomb->frameScale, goblinBomb->frameHeightAttackBomb * goblinBomb->frameScale};
 
         DrawTexturePro(goblinBomb->spriteAttackBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
     else if (goblinBomb->isAttack)
     {
         source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthAttack, 0, goblinBomb->frameWidthAttack * goblinBomb->direction, goblinBomb->frameHeightAttack};
-        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthAttack * 2.0f, goblinBomb->frameHeightAttack * 2.0f};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthAttack * goblinBomb->frameScale, goblinBomb->frameHeightAttack * goblinBomb->frameScale};
 
         DrawTexturePro(goblinBomb->spriteAttack, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
     else if (goblinBomb->isWalking)
     {
         source = (Rectangle){goblinBomb->currentFrame * goblinBomb->frameWidthRun, 0, goblinBomb->frameWidthRun * goblinBomb->direction, goblinBomb->frameHeightRun};
-        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthRun * 2.0f, goblinBomb->frameHeightRun * 2.0f};
+        dest = (Rectangle){goblinBomb->position.x, goblinBomb->position.y, goblinBomb->frameWidthRun * goblinBomb->frameScale, goblinBomb->frameHeightRun * goblinBomb->frameScale};
 
         DrawTexturePro(goblinBomb->spriteRun, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
@@ -454,7 +446,7 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
     if (goblinBomb->bomb.isActive)
     {
         source = (Rectangle){goblinBomb->bomb.currentFrameBomb * goblinBomb->bomb.frameWidthBomb, 0, goblinBomb->bomb.frameWidthBomb * goblinBomb->direction, goblinBomb->bomb.frameHeightBomb};
-        dest = (Rectangle){goblinBomb->bomb.pos.x, goblinBomb->bomb.pos.y + 50, goblinBomb->bomb.frameWidthBomb * 2.0f, goblinBomb->bomb.frameHeightBomb * 2.0f};
+        dest = (Rectangle){goblinBomb->bomb.pos.x, goblinBomb->bomb.pos.y + BOMB_CENTER_OFFSET_Y, goblinBomb->bomb.frameWidthBomb * goblinBomb->frameScale, goblinBomb->bomb.frameHeightBomb * goblinBomb->frameScale};
 
         DrawTexturePro(goblinBomb->spriteBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
