@@ -160,5 +160,5 @@ https://www.youtube.com/watch?v=MfDY4pH0p3k
 
 ---
 ## ⚖️ Copyright  
-© 2025 **Jaca7x**  
+© 2026 **Jaca7x**  
 Todos os direitos reservados.  
