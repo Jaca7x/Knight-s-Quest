@@ -1,5 +1,14 @@
 #include "goblinBomb.h"
 
+bool CheckColisionGoblinBomb(float x1, float y1, float w1, float h1, 
+                            float x2, float y2, float w2, float h2)
+{
+   return (x1 < x2 + w2 &&
+           x1 + w1 > x2 &&
+           y1 < y2 + h2 &&
+           y1 + h1 > y2);
+}
+
 void DrawGoblinBombLifeBar(GoblinBomb *goblinBomb)
 {
     if(goblinBomb->isDead) return;
@@ -369,6 +378,12 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
 
             goblinBomb->animAttackTimer = 1.0f;
         }   
+    }
+
+    if (!goblinBomb->isDead && CheckColisionGoblinBomb(player->position.x + 50, player->position.y + 35, player->frameWidth / 1.06f, player->frameHeight,
+                                goblinBomb->position.x + 110, goblinBomb->position.y + 120, goblinBomb->frameWidthHurt / 1.98f, goblinBomb->frameHeightHurt / 1.87f))
+    {
+        player->position.x += (player->position.x < goblinBomb->position.x) ? -50 : 50;
     }
 }
 
