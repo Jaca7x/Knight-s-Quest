@@ -45,6 +45,7 @@ typedef struct bomb
     int frameCounterBomb;
 
     Sound explosion;
+    Sound timer;
 } Bomb;
 
 typedef struct goblinBomb

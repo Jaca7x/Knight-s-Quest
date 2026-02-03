@@ -122,6 +122,7 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
 
     goblinBomb->soundWalk = LoadSound("resouces/sounds/sound_effects/player/walking-grass.wav");
     goblinBomb->bomb.explosion = LoadSound("resources/sounds/sound_effects/bomb/explosion.wav");
+    goblinBomb->bomb.timer = LoadSound("resources/sounds/sound_effects/bomb/timer.wav");
 }
 
 void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
@@ -222,6 +223,12 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         if (goblinBomb->bomb.isActive)
         {
             goblinBomb->bomb.currentFrameBomb++;
+
+            if (goblinBomb->bomb.currentFrameBomb == 14)
+            {
+                PlaySound(goblinBomb->bomb.explosion);
+            }
+            
             if (goblinBomb->bomb.currentFrameBomb >= goblinBomb->bomb.frameBomb)
             {
                 goblinBomb->bomb.currentFrameBomb = 0;
@@ -293,6 +300,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
                 goblinBomb->isIdle = true;
 
                 goblinBomb->bomb.isActive = true;
+                PlaySound(goblinBomb->bomb.timer);
                 goblinBomb->timerAttackBomb = 0.0f;
             }
         }
@@ -359,7 +367,6 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
 
             if (!goblinBomb->bomb.playerIsDamage && CheckCollisionCircleRec(centerCircle, goblinBomb->radiusToDamage, playerRec) && goblinBomb->bomb.currentFrameBomb == 14)
             {
-                PlaySound(goblinBomb->bomb.explosion);
                 player->life -= goblinBomb->damageBomb;
                 goblinBomb->bomb.playerIsDamage = true;
                 player->hasHit = true;
@@ -398,8 +405,6 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     {
         player->position.x += (player->position.x < goblinBomb->position.x) ? -50 : 50;
     }
-
-    printf("F: %.2f", disatanceToAttack);
 }
 
 void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
@@ -459,11 +464,6 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
     }
 
     DrawGoblinBombLifeBar(goblinBomb);
-
-    DrawText(TextFormat("D: %d", goblinBomb->direction), 10, 120, 20, BLACK);
-
-    DrawRectangleLines(player->position.x + PLAYER_HITBOX_OFFSET_X, player->position.y + PLAYER_HITBOX_OFFSET_Y, player->frameWidth / PLAYER_SACLE_WIDTH, player->frameHeight, RED);
-    DrawRectangleLines(goblinBomb->position.x + GOBLIN_HITBOX_OFFSET_X, goblinBomb->position.y + GOBLIN_HITBOX_CHECK_OFFSET_Y, goblinBomb->frameWidthHurt / GOBLIN_SCALE_WIDTH, goblinBomb->frameHeightHurt / GOBLIN_SCALE_HEIGHT, BLUE);
 }
 
 void UnloadGoblinBomb(GoblinBomb *goblinBomb)
