@@ -4,7 +4,7 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 
-#define MAP_GOBLIN_BOMB 0
+#define MAP_GOBLIN_BOMB 7
 
 // Player hitbox offsets
 #define PLAYER_HITBOX_OFFSET_X 50
@@ -43,6 +43,8 @@ typedef struct bomb
 
     int currentFrameBomb;
     int frameCounterBomb;
+
+    Sound explosion;
 } Bomb;
 
 typedef struct goblinBomb
@@ -97,6 +99,7 @@ typedef struct goblinBomb
     bool isAttack;
     bool isWalking;
 
+    bool droppedHeart;
     Texture2D spriteBomb;
 
     Bomb bomb;
@@ -120,6 +123,8 @@ typedef struct goblinBomb
     float hurtTimer;
 
     float viewPlayer;
+    
+    Sound soundWalk;
 } GoblinBomb;
 
 
