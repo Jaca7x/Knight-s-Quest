@@ -8,8 +8,9 @@
 #include "../goblin/goblinArcher.h" 
 #include "../wolf/wolfRunning.h" 
 #include "../goblin/goblinTank.h"
+#include "../goblin/goblinBomb.h"
 
-#define MAX_HEARTS 8
+#define MAX_HEARTS 9
 
 typedef struct player Player;
 typedef struct wolf Wolf;
@@ -17,7 +18,7 @@ typedef struct goblin Goblin;
 typedef struct goblinArcher GoblinArcher;
 typedef struct wolfRun WolfRun;
 typedef struct goblinTank GoblinTank;
-
+typedef struct goblinBomb GoblinBomb;
 
 typedef struct heart
 {
@@ -35,7 +36,7 @@ void InitHearts(Heart hearts[]);
 void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, 
                     Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, 
                     Goblin *redGoblin, GoblinArcher *goblinArcher, 
-                    WolfRun *wolfRun, GoblinTank *goblinTank) ;
+                    WolfRun *wolfRun, GoblinTank *goblinTank, GoblinBomb *goblinBomb) ;
 void DrawHearts(const Heart hearts[], float delta, Player *player);
 void UnloadHearts(Heart hearts[]);
 

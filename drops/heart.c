@@ -46,7 +46,8 @@
     }
 
 void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, 
-    Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, WolfRun *wolfRun, GoblinTank *goblinTank) 
+    Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, WolfRun *wolfRun, GoblinTank *goblinTank,
+    GoblinBomb *goblinBomb) 
 {
     // Goblin
     if (goblin->isDead && !goblin->droppedHeart) 
@@ -158,6 +159,22 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
         }
         
         goblinTank->droppedHeart = true;
+    }
+
+    // GoblinBomb
+    if (goblinBomb->isDead && !goblinBomb->droppedHeart)
+    {
+        int chanceGoblinBomb = GetRandomValue(0, 100);
+
+        if (chanceGoblinBomb > 50)
+        {
+            hearts[8].isActive = true; 
+            PlaySound(hearts[8].spawnSound);
+            hearts[8].position.x = goblinBomb->position.x + GOBLIN_HITBOX_OFFSET_X; 
+            hearts[8].position.y =  goblinBomb->position.y + GOBLIN_HITBOX_OFFSET_Y; 
+        }
+        
+        goblinBomb->droppedHeart = true;
     }
     
     for (int i = 0; i < MAX_HEARTS; i++) {
