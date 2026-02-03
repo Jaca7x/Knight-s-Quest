@@ -319,7 +319,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redGoblin->isDead, redGoblin->position.x, &redGoblin->goblinHasHit, &redGoblin->life, &redGoblin->RedGoblinHitSound, &redGoblin->RedGoblinHitSound, player);
     AttackMonsters(currentMapIndex, MAP_GOBLIN_ARCHER_AREA, &goblinArcher->isDead, goblinArcher->position.x, &goblinArcher->goblinHasHit, &goblinArcher->life, &goblinArcher->goblinArcherDeathSound, &goblinArcher->goblinArcherDeathSound, player);
     AttackMonsters(currentMapIndex, GOBLIN_TANK_MAP, &goblinTank->isDead, goblinTank->position.x, &goblinTank->goblinTankHasHit, &goblinTank->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
-    AttackMonsters(currentMapIndex, MAP_GOBLIN_BOMB, &goblinBomb->isDead, goblinBomb->position.x + 45, &goblinBomb->goblinHasHit, &goblinBomb->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
+    AttackMonsters(currentMapIndex, MAP_GOBLIN_BOMB, &goblinBomb->isDead, goblinBomb->position.x + PLAYER_HITBOX_OFFSET_X, &goblinBomb->goblinHasHit, &goblinBomb->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
     
     //BOSS
     AttackMonsters(currentMapIndex, BOSS_MAP, &boss->isDead, boss->position.x, &boss->bossHasHit, &boss->life, &boss->bossHurtSound, &boss->bossHurtSound, player);
@@ -543,8 +543,6 @@ void DrawPlayer(Player *player)
 
     // Desenhar
     DrawTexturePro(texture, source, dest, origin, 0.0f, WHITE);
-
-    Rectangle hitbox = GetPlayerHitbox(player);
 }
 
 // Libera as texturas do jogador da memória

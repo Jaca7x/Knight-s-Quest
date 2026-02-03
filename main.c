@@ -766,8 +766,6 @@ void DrawMonsterTutorial(MonsterTutorial *t)
     Rectangle button_rect = {750, 195, 70, 20};
     bool button_pressed = false;
 
-    bool deathSoundPlay = false;
-
     Rectangle checkX 
             = {
                 5,
@@ -1093,14 +1091,14 @@ while (!WindowShouldClose())
                 };
 
             switch (configState)
-            {   
+            { 
             case CONFIG_CLOSED:
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_OPEN;
                 break;
 
             case CONFIG_OPEN:
-                player.isAttacking = true;
+                player.isAttacking = false;
 
                 if (CheckCollisionPointRec(mousePos, configAudio) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
@@ -1115,18 +1113,23 @@ while (!WindowShouldClose())
                 }
                 
                 if (IsKeyPressed(KEY_K))
+                {
                     configState = CONFIG_CLOSED;
-                    player.isAttacking = false;
+                }
                 break;
 
             case CONFIG_AUDIO:
                 player.isAttacking = false;
+
                 if (IsKeyPressed(KEY_K))
+                {
                     configState = CONFIG_CLOSED;
+                }
                 break;
 
             case CONFIG:
                 player.isAttacking = false;
+
                 if (CheckCollisionPointRec(mousePos, atalhos) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
                     PlaySound(buttonSelect);
@@ -1140,19 +1143,27 @@ while (!WindowShouldClose())
                 }
         
                 if (IsKeyPressed(KEY_K))
+                {
                     configState = CONFIG_CLOSED;
+                }
                 break;
 
             case ATALHOS:
                 player.isAttacking = false;
+
                 if (IsKeyPressed(KEY_K))
+                {
                     configState = CONFIG_CLOSED;
+                }
                 break;
                 
             case AJUDA:
                 player.isAttacking = false;
+
                 if (IsKeyPressed(KEY_K))
+                {
                     configState = CONFIG_CLOSED;
+                }
                 break;
             }
             
@@ -1333,7 +1344,7 @@ while (!WindowShouldClose())
             }
 
             UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &redGoblin, 
-                &goblinArcher, &wolfRun, &goblinTank);
+                &goblinArcher, &wolfRun, &goblinTank, &goblinBomb);
             DrawHearts(hearts, delta, &player);
 
             if (MAP_NPC == currentMapIndex) {

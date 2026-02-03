@@ -32,8 +32,3 @@ void DrawLifeBar(Texture2D barLifeSprite, float life, Vector2 position, float sc
 
     DrawTexturePro(barLifeSprite, source, dest, origin, 0.0f, WHITE);
 }
-
-void UpdateLifeBar(Player *player, Wolf *wolf, float delta) 
-{
-
-}

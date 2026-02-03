@@ -21,5 +21,5 @@ typedef struct life
 } Life;
 
 void DrawLifeBar(Texture2D barLifeSprite, float life, Vector2 position, float scale);
-void UpdateLifeBar(Player *player, Wolf *wolf, float delta);
+
 #endif //LIFE_H
