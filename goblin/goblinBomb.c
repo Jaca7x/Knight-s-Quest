@@ -116,17 +116,25 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
 
     goblinBomb->goblinHasHit = false;
     goblinBomb->isDead = false;
+    goblinBomb->wasWalking = false;
+    goblinBomb->attackSoundPlayed = false;
 
     goblinBomb->hurtDuration = 2.0f;
     goblinBomb->hurtTimer = 0.0f;
 
-    goblinBomb->soundWalk = LoadSound("resouces/sounds/sound_effects/player/walking-grass.wav");
     goblinBomb->bomb.explosion = LoadSound("resources/sounds/sound_effects/bomb/explosion.wav");
     goblinBomb->bomb.timer = LoadSound("resources/sounds/sound_effects/bomb/timer.wav");
+    goblinBomb->soundAttack = LoadSound("resources/sounds/sound_effects/wolf/red-wolf-scratch.wav");
+    goblinBomb->soundBagGoblin = LoadSound("resources/sounds/sound_effects/goblin/bag.wav");
 }
 
 void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
 {
+    if (goblinBomb->isWalking)
+    {
+        goblinBomb->position.x += goblinBomb->speed * goblinBomb->direction * delta;
+    }
+    
     goblinBomb->frameCounter++;
     goblinBomb->bomb.frameCounterBomb++;
 
@@ -185,6 +193,13 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         else if (goblinBomb->isAttackBomb)
         {
             goblinBomb->currentFrame++;
+
+            if (goblinBomb->currentFrame == 2 && !goblinBomb->soundBagPlayed)
+            {
+                PlaySound(goblinBomb->soundBagGoblin);
+                goblinBomb->soundBagPlayed = true;
+            }
+            
             if (goblinBomb->currentFrame >= goblinBomb->frameAttackBomb)
             {
                 goblinBomb->currentFrame = 0;
@@ -193,6 +208,13 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         else if (goblinBomb->isAttack)
         {
             goblinBomb->currentFrame++;
+            
+            if (goblinBomb->currentFrame == 6 && !goblinBomb->attackSoundPlayed)
+            {
+                PlaySound(goblinBomb->soundAttack);
+                goblinBomb->attackSoundPlayed = true;
+            }
+            
             if (goblinBomb->currentFrame >= goblinBomb->frameAttack)
             {
                 goblinBomb->currentFrame = 0;
@@ -209,6 +231,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         else if (goblinBomb->isWalking)
         {
             goblinBomb->currentFrame++;
+        
             if (goblinBomb->currentFrame >= goblinBomb->frameRun)
             {
                 goblinBomb->currentFrame = 0;
@@ -245,15 +268,13 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     {
         if (disatanceToAttack > goblinBomb->attackRange)
         {
-            PlaySound(goblinBomb->soundWalk);
             goblinBomb->isWalking = true;
             goblinBomb->isIdle = false;
             goblinBomb->isAttack = false;
-
-            goblinBomb->position.x += goblinBomb->speed * goblinBomb->direction * delta;
         }
         else
-        {
+        {  
+            goblinBomb->attackSoundPlayed = false;
             goblinBomb->isWalking = false;
             goblinBomb->isAttack = true;
             goblinBomb->isIdle = false;
@@ -266,6 +287,8 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         goblinBomb->isIdle = true;
     }
 
+    static bool wasAttacking = false;
+
     if (!goblinBomb->hasThrownBomb)
     {
         if (goblinBomb->bombRange > disatanceToAttack)
@@ -275,10 +298,17 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
                 goblinBomb->isAttack = true;
                 goblinBomb->isAttackBomb = false;
                 goblinBomb->isIdle = false;
+
+                if (!wasAttacking)
+                {
+                    PlaySound(goblinBomb->soundAttack);
+                    goblinBomb->currentFrame = 0; 
+                }
             }
             else
             {
                 goblinBomb->isAttackBomb = true;
+                goblinBomb->soundBagPlayed = false;
                 goblinBomb->isAttack = false;
                 goblinBomb->isIdle = false;
             }
@@ -320,18 +350,10 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
             goblinBomb->isIdle = false;
             goblinBomb->isWalking = false;
         }
-        else
-        {
-            PlaySound(goblinBomb->soundWalk);
-            goblinBomb->isWalking = true;
-            goblinBomb->isIdle = false;
-            goblinBomb->isAttack = false;
-
-            goblinBomb->position.x += goblinBomb->speed * goblinBomb->direction * delta;
-        }
-
         goblinBomb->isAttackBomb = false;
     }
+
+    wasAttacking = goblinBomb->isAttack;
 
     Rectangle playerRec =
         {
@@ -476,6 +498,6 @@ void UnloadGoblinBomb(GoblinBomb *goblinBomb)
     UnloadTexture(goblinBomb->spriteHurt);
     UnloadTexture(goblinBomb->spriteRun);
 
-    UnloadSound(goblinBomb->soundWalk);
+    UnloadSound(goblinBomb->soundAttack);
     UnloadSound(goblinBomb->bomb.explosion);
 }

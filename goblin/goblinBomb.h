@@ -119,13 +119,17 @@ typedef struct goblinBomb
 
     bool goblinHasHit;
     bool isDead;
+    bool wasWalking;
+    bool attackSoundPlayed;
+    bool soundBagPlayed;
 
     float hurtDuration;
     float hurtTimer;
 
     float viewPlayer;
     
-    Sound soundWalk;
+    Sound soundAttack;
+    Sound soundBagGoblin;
 } GoblinBomb;
 
 

@@ -187,7 +187,7 @@ void InitPlayer(Player *player)
     player->position = (Vector2){ 120, 518 };
 
     // Física
-    player->speedWalk = 200.0f;
+    player->speedWalk = 2000.0f;
     player->speedRun  = 300.0f;
     player->gravity   = 950.0f;
     player->groundY   = 518.0f;
@@ -223,7 +223,7 @@ void InitPlayer(Player *player)
 
     player->hitTimer = 0.0f;
     player->attackRange = 115.0f;
-    player->lightDamage = 50;
+    player->lightDamage = 500;
     player->heavyDamage = 70;
 
     player->walkingInCastle = LoadSound("resources/sounds/sound_effects/player/walking-castle.wav");

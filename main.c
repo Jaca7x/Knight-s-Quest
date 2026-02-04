@@ -834,7 +834,12 @@ void DrawMonsterTutorial(MonsterTutorial *t)
     boss.bossDeathSound,
     boss.bossGrounImpact,
     boss.bossWalkSound,
-    boss.bossHurtSound
+    boss.bossHurtSound,
+
+    goblinBomb.bomb.explosion,
+    goblinBomb.bomb.timer,
+    goblinBomb.soundAttack,
+    goblinBomb.soundBagGoblin
 };
 
 int effectSoundCount = sizeof(effectSounds) / sizeof(effectSounds[0]);
