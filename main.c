@@ -368,6 +368,58 @@ void UpdateMonsterTutorial(MonsterTutorial *t, float delta)
     }
 }
 
+void ShowTutorial(MonsterTutorial *tutorials, int *currentTutorial, int currentMap, bool *show, float delta, bool *close, float *alpha, Sound sound)
+{
+	static int lastMapIndex = -1;
+
+    bool foundMap = false;
+    
+    int maps[7] = {1, 2, 3, 4, 5, 7, 8};
+
+    if (currentMap != lastMapIndex)
+    {
+        lastMapIndex = currentMap;
+        foundMap = false;
+        *show = false;
+        *close = false;
+        *currentTutorial = -1;
+
+        for (int i = 0; i < 7; i++)
+        {
+            if (currentMap == maps[i])
+            {
+                *show = true;
+                foundMap = true;
+                *currentTutorial = i;
+                break;
+            }
+        }
+    }
+    
+    if (*show && *currentTutorial >= 0)
+    {
+        UpdateMonsterTutorial(&tutorials[*currentTutorial], delta);
+
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            PlaySound(sound);
+            *close = true;
+        }
+    }
+
+    if (*close)
+    {
+        *alpha -= delta * 2.0f;
+
+        if (*alpha <= 0.0f)
+        {
+            *alpha = 0.85f;
+            *show = false;
+            *close = false;
+        }
+    }
+}
+
 float tutorialAlpha = 0.85f;
 
 void DrawMonsterTutorial(MonsterTutorial *t)
@@ -415,7 +467,7 @@ void DrawMonsterTutorial(MonsterTutorial *t)
              Fade(WHITE, tutorialAlpha));
 }
 
-   int main(void)
+int main(void)
 {
     bool bossTriggered = false;
     float timeForTutorial = 0.0f;
@@ -467,7 +519,7 @@ void DrawMonsterTutorial(MonsterTutorial *t)
 
     SetTargetFPS(60);
 
-    MonsterTutorial tutorials[6];
+    MonsterTutorial tutorials[7];
 
     tutorials[0] = (MonsterTutorial)
     {
@@ -634,7 +686,44 @@ void DrawMonsterTutorial(MonsterTutorial *t)
     tutorials[4].frameW2 = tutorials[4].tex2.width / tutorials[4].frames2;
     tutorials[4].frameH2 = tutorials[4].tex2.height;
 
-    tutorials[5] = (MonsterTutorial)
+     tutorials[5] = (MonsterTutorial)
+    {
+        "GOBLIN BOMBA",
+        "EXPLOSÃO",
+        "O Goblin Bomba é um dos tipos mais difíceis de se encontrar, pois muitas vezes eles acabam se explodindo antes mesmo de serem vistos.",
+        "Cuidado: dependendo de como você se aproxima, ele pode arremessar uma bomba nada carinhosa.",
+
+        LoadTexture("resources/sprites/goblinBomb/Idle.png"),
+        LoadTexture("resources/sprites/goblinBomb/Bomb_sprite.png"),
+
+        4,       
+        0,       
+        0.15f,    
+        0.0f,
+        0,
+        0,
+        
+        18,       
+        0,       
+        0.15f,    
+        0.0f, 
+        0,
+        0,
+
+        1.3f,
+        0.9f,
+
+        (Rectangle){360, 180, 0, 0},
+        (Rectangle){900, 200, 0, 0}
+    };
+
+    tutorials[5].frameW1 = tutorials[5].tex1.width / tutorials[5].frames1;
+    tutorials[5].frameH1 = tutorials[5].tex1.height;
+
+    tutorials[5].frameW2 = tutorials[5].tex2.width / tutorials[5].frames2;
+    tutorials[5].frameH2 = tutorials[5].tex2.height;
+
+    tutorials[6] = (MonsterTutorial)
     {
         "BRAKKOR",
         "O DOURADO",
@@ -665,11 +754,13 @@ void DrawMonsterTutorial(MonsterTutorial *t)
         (Rectangle){900, 200, 0, 0}
     };
 
-    tutorials[5].frameW1 = tutorials[5].tex1.width / tutorials[5].frames1;
-    tutorials[5].frameH1 = tutorials[5].tex1.height;
+    tutorials[6].frameW1 = tutorials[6].tex1.width / tutorials[6].frames1;
+    tutorials[6].frameH1 = tutorials[6].tex1.height;
 
-    tutorials[5].frameW2 = tutorials[5].tex2.width / tutorials[5].frames2;
-    tutorials[5].frameH2 = tutorials[5].tex2.height;
+    tutorials[6].frameW2 = tutorials[6].tex2.width / tutorials[6].frames2;
+    tutorials[6].frameH2 = tutorials[6].tex2.height;
+
+   
 
     bool showTutorial = false;
     bool tutorialIsColsing = false;
@@ -1000,60 +1091,8 @@ while (!WindowShouldClose())
         // ========================================================
         case PLAYING:
         {
-            static int lastMapIndex = -1;
-
-            if (currentMapIndex != lastMapIndex)
-            {
-                lastMapIndex = currentMapIndex;
-
-            if (currentMapIndex == 1)
-            {
-                currentTutorial = 0;
-                showTutorial = true;
-            }
-            else if (currentMapIndex == 2)
-            {
-                currentTutorial = 1;
-                showTutorial = true;
-            }
-            else if (currentMapIndex == 3)
-            {
-                currentTutorial = 2;
-                showTutorial = true;
-            }
-            else if (currentMapIndex == 4)
-            {
-                currentTutorial = 3;
-                showTutorial = true;
-            }
-            else if (currentMapIndex == 5)
-            {
-                currentTutorial = 4;
-                showTutorial = true;
-            }
-            }
-            if (showTutorial && currentTutorial != -1)
-            {           
-                UpdateMonsterTutorial(&tutorials[currentTutorial], delta);
-
-                if (IsKeyPressed(KEY_SPACE))
-                {
-                    PlaySound(buttonSelect);
-                    tutorialIsColsing = true;
-                }
-            }
-
-            if (tutorialIsColsing) //Fade-In :0
-            {
-                tutorialAlpha -= delta * 2.0f;
-
-                if (tutorialAlpha <= 0.0f)
-                    {
-                        tutorialAlpha = 0.85f;
-                        showTutorial = false;
-                        tutorialIsColsing = false;
-                    }
-            }
+            ShowTutorial(tutorials, &currentTutorial, currentMapIndex, &showTutorial, delta,
+                        &tutorialIsColsing, &tutorialAlpha, buttonSelect);
 
              Rectangle configAudio
                 = {
