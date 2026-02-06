@@ -374,7 +374,7 @@ void ShowTutorial(MonsterTutorial *tutorials, int *currentTutorial, int currentM
 
     bool foundMap = false;
     
-    int maps[7] = {1, 2, 3, 4, 5, 7, 8};
+    int maps[6] = {1, 2, 3, 4, 5, 7};
 
     if (currentMap != lastMapIndex)
     {
@@ -384,7 +384,7 @@ void ShowTutorial(MonsterTutorial *tutorials, int *currentTutorial, int currentM
         *close = false;
         *currentTutorial = -1;
 
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 6; i++)
         {
             if (currentMap == maps[i])
             {
@@ -433,7 +433,7 @@ void DrawMonsterTutorial(MonsterTutorial *t)
     DrawText(t->title2, panel.x + 650, panel.y + 100, 26, Fade(GREEN, tutorialAlpha));
 
     DrawText(t->info1, panel.x + 50,  panel.y + 380, 18, Fade(WHITE, tutorialAlpha));
-    DrawText(t->info2, panel.x + 600, panel.y + 380, 18, Fade(WHITE, tutorialAlpha));
+    DrawText(t->info2, panel.x + 580, panel.y + 380, 18, Fade(WHITE, tutorialAlpha));
 
     Rectangle source1 = {
         t->frameW1 * t->current1,
@@ -588,8 +588,8 @@ int main(void)
     {
         "GOBLIN VERMELHO", 
         "LOBO DE SANGUE", 
-        "O goblin vermelho, praticamente igual a seus irmãos verdes\nmas sua faca possui mais sangue em sua laminâ.", 
-        "O lobo de sangue, e o variação mais feroz\ndos lobos seus ataques são\nmuito poderosos.",
+        "O goblin vermelho é quase idêntico aos seus\nirmãos verdes, exceto por sua faca, sempre\nmanchada pelo sangue de suas últimas vítimas.", 
+        "O lobo de sangue, e o variação mais feroz\ndos lobos seus ataques são muito poderosos.",
 
         LoadTexture("resources/sprites/redGoblin/Attack.png"),
         LoadTexture("resources/sprites/redWolf/Idle.png"),
@@ -616,7 +616,7 @@ int main(void)
     {
         "LOBO ALBINO",
         "VELOCIDADE",
-        "O lobo albino é o mais rápido\nde todos os lobos, cuidado",
+        "O lobo albino é o mais rápido de todos os lobos, cuidado",
         "A velocidade dele e surreal, ele pode estar\natás de você enquanto acha que ele está\na sua frente.",
 
         LoadTexture("resources/sprites/whiteWolf/Attack.png"),
@@ -653,7 +653,7 @@ int main(void)
     {
         "GOBLIN PESADO",
         "SEU MARTELO",
-        "O goblin pesado, e muito poderoso\nseus ataques fazem toda a floresta tremer.",
+        "O goblin pesado, e muito poderoso\nseus ataques fazem toda a floresta\ntremer.",
         "O martelo dele e feito de metal puro\nentão tome cuidado.",
 
         LoadTexture("resources/sprites/goblinTank/goblinTank-idle.png"),
@@ -690,8 +690,8 @@ int main(void)
     {
         "GOBLIN BOMBA",
         "EXPLOSÃO",
-        "O Goblin Bomba é um dos tipos mais difíceis de se encontrar, pois muitas vezes eles acabam se explodindo antes mesmo de serem vistos.",
-        "Cuidado: dependendo de como você se aproxima, ele pode arremessar uma bomba nada carinhosa.",
+        "O Goblin Bomba é um dos tipos mais difíceis\nde se encontrar, pois muitas vezes eles acabam\nse explodindo antes mesmo de serem vistos.",
+        "Cuidado: dependendo de como você\nse aproxima, ele pode arremessar\numa bomba nada carinhosa.",
 
         LoadTexture("resources/sprites/goblinBomb/Idle.png"),
         LoadTexture("resources/sprites/goblinBomb/Bomb_sprite.png"),
@@ -710,8 +710,8 @@ int main(void)
         0,
         0,
 
-        1.3f,
-        0.9f,
+        2.0f,
+        2.0f,
 
         (Rectangle){360, 180, 0, 0},
         (Rectangle){900, 200, 0, 0}
@@ -750,7 +750,7 @@ int main(void)
         1.3f,
         0.9f,
 
-        (Rectangle){360, 180, 0, 0},
+        (Rectangle){360, 160, 0, 0},
         (Rectangle){900, 200, 0, 0}
     };
 
@@ -1275,7 +1275,7 @@ while (!WindowShouldClose())
 
                 if (timeForTutorial >= 3.0f)
                 {
-                    currentTutorial = 5;
+                    currentTutorial = 6;
                     showTutorial = true;
                     tutorialStarted = true;
                 }
