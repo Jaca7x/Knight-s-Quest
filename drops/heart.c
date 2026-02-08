@@ -9,31 +9,55 @@
     }
 
     void drawMassage(float delta, Player *player) {
-    if (showMessage) 
-    {
-        messageTimer += delta;
+        if (showMessage) 
+        {
+            messageTimer += delta;
 
-        if (messageTimer < 1.0f) 
-        {
-            Font medieval = LoadFontEx("resources/fonts/Goudy-Mediaeval-DemiBold.ttf", 32, 0, 250);
-            DrawTextPro(
-                medieval,
-                "Coração coletado! +25 de vida!", 
-                (Vector2){player->position.x - 50, player->position.y}, 
-                (Vector2){0, 0}, 
-                0.0f, 
-                30.0f, 
-                1.0f, 
-                (Color){255, 0, 0, 255}
-            );
-        } else 
-        {
-            showMessage = false;
+            if (messageTimer < 1.0f) 
+            {
+                Font medieval = LoadFontEx("resources/fonts/Goudy-Mediaeval-DemiBold.ttf", 32, 0, 250);
+                DrawTextPro(
+                    medieval,
+                    "Coração coletado! +25 de vida!", 
+                    (Vector2){player->position.x - 50, player->position.y}, 
+                    (Vector2){0, 0}, 
+                    0.0f, 
+                    30.0f, 
+                    1.0f, 
+                    (Color){255, 0, 0, 255}
+                );
+            } else 
+            {
+                showMessage = false;
+            }
         }
     }
-}
 
-    void InitHearts(Heart hearts[]) {
+    void ChanceSpawnDrop(Heart hearts[], bool isDead, bool *isDrop, int max, int min, int chanceDrop, int posX, int posY, Sound sound)
+    {
+        if (isDead && !(*isDrop))
+        {
+            int chance = GetRandomValue(min, max);
+
+            if (chance < chanceDrop)
+            {
+                for (int i = 0; i < MAX_HEARTS; i++)
+                {
+                    if (!hearts[i].isActive)
+                    {
+                        hearts[i].isActive = true;
+                        PlaySound(sound);
+                        hearts[i].position.x = posX;
+                        hearts[i].position.y = posY;
+                    }
+                }
+            }
+            *isDrop = true;
+        }
+    }
+
+    void InitHearts(Heart hearts[]) 
+    {
         for (int i = 0; i < MAX_HEARTS; i++) {
             hearts[i].position = (Vector2){0, 0};
             hearts[i].texture = LoadTexture("resources/sprites/life/heartDrop.png");
@@ -49,134 +73,17 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
     Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, WolfRun *wolfRun, GoblinTank *goblinTank,
     GoblinBomb *goblinBomb) 
 {
-    // Goblin
-    if (goblin->isDead && !goblin->droppedHeart) 
-    {
-        int chanceGoblin = GetRandomValue(0, 100); 
-        if (chanceGoblin < 70)
-        {
-            hearts[0].isActive = true; 
-            PlaySound(hearts[0].spawnSound);
-            hearts[0].position = goblin->position;
-        } 
-            goblin->droppedHeart = true;
-    }
+    ChanceSpawnDrop(hearts, goblin->isDead, &goblin->droppedHeart, 100, 0, 70, goblin->position.x, goblin->position.y, hearts[0].spawnSound);
+    ChanceSpawnDrop(hearts, goblinArcher->isDead, &goblinArcher->droppedHeart, 100, 0, 70, goblinArcher->position.x, goblinArcher->position.y, hearts[1].spawnSound);
+    ChanceSpawnDrop(hearts, redGoblin->isDead, &redGoblin->droppedHeart, 100, 0, 50, redGoblin->position.x, redGoblin->position.y, hearts[4].spawnSound);
+    ChanceSpawnDrop(hearts, goblinTank->isDead, &goblinTank->droppedHeart, 100, 0, 70, goblinTank->position.x + 130, goblinTank->position.y + 60, hearts[7].spawnSound);
+    ChanceSpawnDrop(hearts, goblinBomb->isDead, &goblinBomb->droppedHeart, 100, 0, 60, goblinBomb->position.x + 80, goblinBomb->position.y + 130, hearts[0].spawnSound);
 
-    //Wolf
-    if (wolf->isDead && !wolf->droppedHeart) 
-    { 
-        int chanceWolf = GetRandomValue(0, 100); 
-        if (chanceWolf < 50)
-        {
-            hearts[1].isActive = true; 
-            PlaySound(hearts[1].spawnSound);    
-            hearts[1].position.x = wolf->position.x + 50; 
-            hearts[1].position.y = wolf->position.y + 100;
-        }
-        wolf->droppedHeart = true;
-    }
-  
-    // GoblinArcher
-    if (goblinArcher->isDead && !goblinArcher->droppedHeart) 
-    {
-        int chanceGoblinArcher = GetRandomValue(0, 100); 
-        if (chanceGoblinArcher < 70) 
-        {
-            hearts[2].isActive = true; 
-            PlaySound(hearts[2].spawnSound);
-            hearts[2].position = goblinArcher->position;
-        }
-        goblinArcher->droppedHeart = true; 
-    }    
+    ChanceSpawnDrop(hearts, wolf->isDead, &wolf->droppedHeart, 100, 0, 60, wolf->position.x + 50, wolf->position.y + 100, hearts[2].spawnSound);
+    ChanceSpawnDrop(hearts, wolfRun->isDead, &wolfRun->droppedHeart, 100, 0, 60, wolfRun->position.x + 50, wolfRun->position.y + 100, hearts[3].spawnSound);
+    ChanceSpawnDrop(hearts, redWolf->isDead, &redWolf->droppedHeart, 100, 0, 60, redWolf->position.x + 50, redWolf->position.y + 100, hearts[5].spawnSound);
+    ChanceSpawnDrop(hearts, whiteWolf->isDead, &whiteWolf->droppedHeart, 100, 0, 60, whiteWolf->position.x + 50, whiteWolf->position.y + 100, hearts[6].spawnSound);
 
-    // WolfRun 
-    if (wolfRun->isDead && !wolfRun->droppedHeart) 
-    {
-        int chanceWolfRun = GetRandomValue(0, 100); 
-        if (chanceWolfRun < 60)
-        {
-            hearts[3].isActive = true; 
-            PlaySound(hearts[3].spawnSound);
-            hearts[3].position.x = wolfRun->position.x + 50; 
-            hearts[3].position.y = wolfRun->position.y + 100; 
-        }
-        wolfRun->droppedHeart = true; 
-    }
-
-    // RedWolf
-    if (redWolf->isDead && !redWolf->droppedHeart) 
-    {
-        int chanceRedWolf = GetRandomValue(0, 100);
-        if (chanceRedWolf < 60) 
-        {
-            hearts[4].isActive = true; 
-            PlaySound(hearts[4].spawnSound);
-            hearts[4].position.x = redWolf->position.x + 50; 
-            hearts[4].position.y = redWolf->position.y + 100; 
-        }
-        redWolf->droppedHeart = true;
-    }
-
-    // WhiteWolf
-    if (whiteWolf->isDead && !whiteWolf->droppedHeart) 
-    {
-        int chanceWhiteWolf = GetRandomValue(0, 100); 
-        if (chanceWhiteWolf < 60) 
-        {
-            hearts[5].isActive = true; 
-            PlaySound(hearts[5].spawnSound);
-            hearts[5].position.x = whiteWolf->position.x + 50;
-            hearts[5].position.y = whiteWolf->position.y + 100; 
-        }
-        whiteWolf->droppedHeart = true; 
-    }
-
-    // RedGoblin
-    if (redGoblin->isDead && !redGoblin->droppedHeart) 
-    {
-        int chanceRedGoblin = GetRandomValue(0, 100); 
-        if (chanceRedGoblin < 60) 
-        {
-            hearts[6].isActive = true; 
-            PlaySound(hearts[6].spawnSound);
-            hearts[6].position.x = redGoblin->position.x; 
-            hearts[6].position.y = redGoblin->position.y; 
-        }
-        redGoblin->droppedHeart = true; 
-    }
-
-    // GoblinTank
-    if (goblinTank->isDead && !goblinTank->droppedHeart)
-    {
-        int chanceGoblinTank = GetRandomValue(0, 100);
-
-        if (chanceGoblinTank > 60)
-        {
-            hearts[7].isActive = true; 
-            PlaySound(hearts[7].spawnSound);
-            hearts[7].position.x = goblinTank->position.x; 
-            hearts[7].position.y =  goblinTank->position.y; 
-        }
-        
-        goblinTank->droppedHeart = true;
-    }
-
-    // GoblinBomb
-    if (goblinBomb->isDead && !goblinBomb->droppedHeart)
-    {
-        int chanceGoblinBomb = GetRandomValue(0, 100);
-
-        if (chanceGoblinBomb > 50)
-        {
-            hearts[8].isActive = true; 
-            PlaySound(hearts[8].spawnSound);
-            hearts[8].position.x = goblinBomb->position.x + GOBLIN_HITBOX_OFFSET_X; 
-            hearts[8].position.y =  goblinBomb->position.y + GOBLIN_HITBOX_OFFSET_Y; 
-        }
-        
-        goblinBomb->droppedHeart = true;
-    }
-    
     for (int i = 0; i < MAX_HEARTS; i++) {
         if (hearts[i].isActive) 
         {
@@ -194,11 +101,14 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
                 player->frameHeight
             };
 
-            if (CheckCollisionRecs(heartRect, playerRect)) 
+            if (hearts[i].isActive && CheckCollisionRecs(heartRect, playerRect)) 
             {
                 PlaySound(hearts[i].collectSound);
+                SetSoundVolume(hearts[i].collectSound, 0.25f);
+
                 player->life += hearts[i].healthValue;
                 if (player->life > 100) player->life = 100; 
+
                 hearts[i].isActive = false;
                 triggerMassage(); 
             }

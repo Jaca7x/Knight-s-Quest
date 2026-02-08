@@ -146,6 +146,10 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         goblinBomb->isWalking = false;
         goblinBomb->isAttack = false;
         goblinBomb->currentFrame = 0;
+        
+        goblinBomb->bomb.isActive = false;
+        
+        return;
     }
 
     if (goblinBomb->goblinHasHit && !goblinBomb->isDead)

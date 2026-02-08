@@ -84,7 +84,7 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
 
     goblin->damage = 20;
 
-    goblin->droppedHeart = false; // Inicializa como falso
+    goblin->droppedHeart = false;
 
     goblin->goblinDeathSound = LoadSound("resources/sounds/sound_effects/goblin/goblin-death.wav");
     goblin->goblinCutSound = LoadSound("resources/sounds/sound_effects/goblin/goblin-cut.wav");  
