@@ -22,7 +22,6 @@ typedef enum {
 } DialogStateGhost;
 
 typedef struct {
-    const char *text;
     Sound sound;
 } Dialogue;
 
