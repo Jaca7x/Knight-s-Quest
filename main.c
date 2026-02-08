@@ -1416,6 +1416,8 @@ while (!WindowShouldClose())
 
             if (configState == CONFIG_OPEN)
             {   
+                player.stamina = MAX_STAMINA;
+
                 DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
                 DrawText("Configurações (Pressione 'K' para fechar)", 450, 120, 20, WHITE);
 
@@ -1426,6 +1428,8 @@ while (!WindowShouldClose())
 
             if (configState == CONFIG_AUDIO)
             {
+                player.stamina = MAX_STAMINA;
+
                 if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
                 && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
                     {
@@ -1536,6 +1540,8 @@ while (!WindowShouldClose())
 
              if (configState == CONFIG)
             {
+                player.stamina = MAX_STAMINA;
+
                 DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
 
                 if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
@@ -1555,6 +1561,8 @@ while (!WindowShouldClose())
             
             if (configState == AJUDA)
             {
+                player.stamina = MAX_STAMINA;
+
                 button_hovered = CheckCollisionPointRec(GetMousePosition(), button_rect);
 
                 if (button_hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
@@ -1628,6 +1636,8 @@ while (!WindowShouldClose())
 
             if (configState == ATALHOS)
             {
+                player.stamina = MAX_STAMINA;
+                
                 Rectangle table 
                 = {
                     460,
