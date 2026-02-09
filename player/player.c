@@ -398,10 +398,15 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             jumpForce = -400.0f;
             jumpCost = 35.0f;
         }  
-        else
+        else if (player->stamina >= 20)
         {
             jumpForce = -300.0f;
             jumpCost = 20.0f;
+        }
+        else
+        {
+            jumpForce = 0.0f;
+            jumpCost = 0.0f;
         }
 
         if (jumpForce != 0.0f)

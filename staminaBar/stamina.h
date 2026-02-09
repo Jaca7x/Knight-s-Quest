@@ -9,7 +9,7 @@
 #define STAMINA_FRAME_WIDTH 32
 #define STAMINA_FRAME_HEIGHT 32
 
-#define STAMINA_FRAME_COUNT 8
+#define STAMINA_FRAME_COUNT 7
 
 typedef struct staminaBar
 {

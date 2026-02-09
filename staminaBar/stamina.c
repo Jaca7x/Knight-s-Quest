@@ -44,8 +44,6 @@ else
         if (player->stamina > MAX_STAMINA) player->stamina = MAX_STAMINA;  
     }
 }
-
-printf  ("Stamina: %.2f\n", player->stamina);
 }
 
 
@@ -56,7 +54,7 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale,
     
     if (stamina == 0)
     {
-        frame = STAMINA_FRAME_COUNT + 5;
+        frame = STAMINA_FRAME_COUNT - 1;
         DrawText("Estamina Esgotada!", player->position.x + 20, player->position.y - 20, 20, BLACK);
     }
     else 
