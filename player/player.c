@@ -388,36 +388,29 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         player->hasHit = false;
     }
     
-    if (player->stamina >= 40.0f)
-    {
-        if (IsKeyDown(KEY_SPACE) && !player->isJumping)
-        {
-            {
-                player->velocityY = -400.0f;
-                player->isJumping = true;
-                player->stamina -= 35.0f;
+    float jumpForce = 0.0f;
+    float jumpCost = 0.0f;
 
-                if (player->stamina <= 0)
-                {
-                    player->velocityY = 0.0f;
-                }
-            }
+    if (IsKeyPressed(KEY_SPACE) && !player->isJumping)
+    {
+        if (player->stamina >= 40.0f)
+        {
+            jumpForce = -400.0f;
+            jumpCost = 35.0f;
+        }  
+        else
+        {
+            jumpForce = -300.0f;
+            jumpCost = 20.0f;
         }
-    }
-    else
-    {
-        if (IsKeyDown(KEY_SPACE) && !player->isJumping)
-        {
-            {
-                player->velocityY = -300.0f;
-                player->isJumping = true;
-                player->stamina -= 20.0f;
 
-                if (player->stamina <= 0)
-                {
-                    player->velocityY = 0.0f;
-                }
-            }
+        if (jumpForce != 0.0f)
+        {
+            player->velocityY = jumpForce;
+            player->isJumping = true;
+
+            player->stamina -= jumpCost;
+            if (player->stamina < 0) player->stamina = 0;
         }
     }
 
