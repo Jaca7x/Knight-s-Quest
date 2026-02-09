@@ -88,40 +88,16 @@ void InitPeasant(Peasant *peasant)
     peasant->peasantBtnE = LoadTexture("resources/sprites/btns/btn-E.png");
     peasant->peasantExclamation = LoadTexture("resources/sprites/npc/exclamation.png");
 
-    peasant->dialogues[0][0].text =
-    "Shhh! Fale baixo… essas pragas têm ouvidos melhores do que parecem.";
     peasant->dialogues[0][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-0.wav");
-
-    peasant->dialogues[0][1].text =
-    "Eu sei… mas minhas cabras fugiram pra cá. Sem elas, minha família passa fome.";
     peasant->dialogues[0][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-1.wav");
-
-    peasant->dialogues[0][2].text =
-    "Acho que os goblins as levaram até seu covil mais adiante na floresta, me ajude a encontra-las!";
     peasant->dialogues[0][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-2.wav");
-    
-    peasant->dialogues[1][0].text =
-    "Fique alerta agora, há cabanas de goblins por toda parte. Estamos chegando perto do reino.";
+
     peasant->dialogues[1][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-0.wav");
-
-    peasant->dialogues[1][1].text =
-    "Não estou vendo minhas cabras ainda… acho que estão ainda mais à frente?";
     peasant->dialogues[1][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-1.wav");
-
-    peasant->dialogues[1][2].text =
-    "Prefiro não pensar nisso agora…";
     peasant->dialogues[1][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-2.wav");
 
-    peasant->dialogues[2][0].text =
-    "Minha nossa, este deve ser o centro do reino goblin…";
     peasant->dialogues[2][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-0.wav");
-
-    peasant->dialogues[2][1].text =
-    "Sim, é melhor ficarmos longe daqui e voltarmos para a vila.";
     peasant->dialogues[2][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-1.wav");
-
-    peasant->dialogues[2][2].text =
-    "O QUE É AQUILO CAINDO DAS ÁRVORES?!";
     peasant->dialogues[2][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-2.wav");
 
     peasant->frameIdle = 2;

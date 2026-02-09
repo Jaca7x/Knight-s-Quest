@@ -19,7 +19,6 @@ typedef enum {
 } DialogStatePeasant;
 
 typedef struct {
-    const char *text;
     Sound sound;
 } DialoguePeasant;
 
