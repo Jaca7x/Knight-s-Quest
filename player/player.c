@@ -389,15 +389,21 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     }
 
 
-    // Pulo
-    if (IsKeyDown(KEY_SPACE) && !player->isJumping)
+    
+    if (player->stamina >= 50.0f)
     {
-        player->velocityY = -400.0f;
-        player->isJumping = true;
-
-        if (player->stamina <= 0)
+        if (IsKeyDown(KEY_SPACE) && !player->isJumping)
         {
-            player->velocityY = 0.0f;
+            {
+                player->velocityY = -400.0f;
+                player->isJumping = true;
+                player->stamina -= 35.0f;
+
+                if (player->stamina <= 0)
+                {
+                    player->velocityY = 0.0f;
+                }
+            }
         }
     }
 
@@ -422,8 +428,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
 // Desenha o jogador na tela
 void DrawPlayer(Player *player)
 {
-    DrawText(TextFormat("Player X: %.2f", player->position.x), 10, 10, 20, BLACK);
-    DrawText(TextFormat("Player Y: %.2f", player->position.y), 10, 30, 20, BLACK);
+    DrawText(TextFormat("stamina: %.2f", player->stamina), 10, 10, 20, BLACK);
 
     Rectangle source;
     Rectangle dest;

@@ -17,38 +17,6 @@ else
     player->isRunning = false;
 }
 
-// -------- Pulo correndo --------
-if (player->isRunning && IsKeyDown(KEY_SPACE) && (IsKeyDown(KEY_A) || IsKeyDown(KEY_D)))
-{
-    if (player->stamina > 50)
-    {
-        player->stamina -= 35.0f * delta;
-        if (player->stamina < 0) player->stamina = 0;
-    } 
-    else 
-    {
-        player->position.y = player->groundY;
-        player->velocityY = 0.0f;
-        player->isJumping = false;
-    }
-}
-
-// -------- Pulo normal --------
-else if (IsKeyDown(KEY_SPACE))
-{
-    if (player->stamina > 50)
-    {
-        player->stamina -= 35.0f * delta;
-        if (player->stamina < 0) player->stamina = 0;
-    } 
-    else 
-    {
-        player->position.y = player->groundY;
-        player->velocityY = 0.0f;
-        player->isJumping = false;
-    }
-}
-
 // -------- Regeneração --------
 float regenTimer = 0.0f;
 
