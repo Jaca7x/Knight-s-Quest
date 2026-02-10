@@ -46,7 +46,6 @@ else
 }
 }
 
-
 void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale, Player *player, bool button_pressed)
 {
     int frame;
@@ -78,8 +77,6 @@ void DrawStaminaBar(Texture2D bar, float stamina, Vector2 position, float scale,
         }
     }
     }
-    
-    
 
     Rectangle source = {
         0,                                      
