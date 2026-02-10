@@ -1368,7 +1368,7 @@ while (!WindowShouldClose())
             
             if (currentMapIndex == GOBLIN_TANK_MAP)
             {
-                DrawGoblinTank(&goblinTank);
+                DrawGoblinTank(&goblinTank, &player);
                 UpdateGoblinTank(&goblinTank, delta, &player);
             }
             
