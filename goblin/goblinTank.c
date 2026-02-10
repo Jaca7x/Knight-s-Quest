@@ -48,6 +48,9 @@ void InitGoblinTank(GoblinTank *goblinTank)
     goblinTank->goblinTankSpriteIdle = LoadTexture("resources/sprites/goblinTank/goblinTank-idle.png");
     goblinTank->goblinTankSpriteAtk = LoadTexture("resources/sprites/goblinTank/goblinTank-attack.png");
 
+    goblinTank->scale = 4;
+    goblinTank->scaleIdle = 5;
+
     goblinTank->frameWalk = 6;
     goblinTank->frameHurt = 4;
     goblinTank->frameDead = 9;
@@ -142,7 +145,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
             goblinTank->isAttacking = false;
         }
         
-    goblinTank->frameCounter++;
+     goblinTank->frameCounter++;
 
         if (goblinTank->goblinTankHasHurt && !goblinTank->isDead && goblinTank->frameCounter >= 30)
         {
@@ -193,6 +196,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
         }
    
     float push = 80.0f;
+
     float distanceToViewPlayer = fabs(player->position.x - goblinTank->position.x);
 
     float turnOffset = 100.0f;
@@ -258,15 +262,15 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
             {
                 if (goblinTank->currentFrame >= 3)
                 {
-                    attackOffsetX = 190;
+                    attackOffsetX = GOBLIN_ATTACK_LEFT_STRIKE;
                 }
                 else
                 {
-                    attackOffsetX = 125;
+                    attackOffsetX = GOBLIN_ATTACK_LEFT_IDLE;
                 }
             }
             else
-            attackOffsetX = 125;
+            attackOffsetX = GOBLIN_ATTACK_LEFT_IDLE;
         }
         else
         {
@@ -274,31 +278,31 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player)
             {
                 if (goblinTank->currentFrame >= 3)
                 {
-                    attackOffsetX = 0;
+                    attackOffsetX = GOBLIN_ATTACK_RIGHT_STRIKE;
                 }
                 else
                 {
-                    attackOffsetX = 65;
+                    attackOffsetX = GOBLIN_ATTACK_RIGHT_IDLE;
                 }
             }
             else
-            attackOffsetX = 65;
+            attackOffsetX = GOBLIN_ATTACK_RIGHT_IDLE;
         }
 
         if (!goblinTank->isDead &&
         CheckColisionGoblinTank(
-        player->position.x + 60,
-        player->position.y + 40,
-        player->frameWidth / 1.5f,
+        player->position.x + PLAYER_HITBOX_OFFSET_X,
+        player->position.y + PLAYER_HITBOX_OFFSET_Y,
+        player->frameWidth / PLAYER_HITBOX_WIDTH_DIV,
         player->frameHeight,
 
         goblinTank->position.x + attackOffsetX,
-        goblinTank->position.y + 10,
-        goblinTank->frameWidthAttack / 11,
-        goblinTank->frameHeightAttack / 6
+        goblinTank->position.y + GOBLIN_TANK_OFFSET_Y,
+        goblinTank->frameWidthAttack / GOBLIN_TANK_HITBOX_WITH_DIV,
+        goblinTank->frameHeightAttack / GOBLIN_TANK_HITBOX_HEIGHT_DIV
         ))
         {
-            player->position.x += (goblinTank->direction == -1 ? -80 : 80);
+            player->position.x += (goblinTank->direction == -1 ? -push : push);
         }       
 }
         
@@ -313,7 +317,7 @@ void DrawGoblinTank(GoblinTank *goblinTank, Player *player)
         float hurtOfSetY = -15;
         currentTexture = goblinTank->goblinTankSpriteHurt;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthHurt, 0, goblinTank->frameWidthHurt * goblinTank->direction, goblinTank->frameHeightHurt};
-        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 4, source.height / 4};
+        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / goblinTank->scale, source.height / goblinTank->scale};
 
         dest.y += hurtOfSetY;
     }
@@ -323,7 +327,7 @@ void DrawGoblinTank(GoblinTank *goblinTank, Player *player)
 
         currentTexture = goblinTank->goblinTankSpriteDead;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthDead, 0, goblinTank->frameWidthDead * goblinTank->direction, goblinTank->frameHeightDead};
-        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 4, source.height / 4};
+        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / goblinTank->scale, source.height / goblinTank->scale};
 
         dest.y += hurtOfSetY;
     }
@@ -333,7 +337,7 @@ void DrawGoblinTank(GoblinTank *goblinTank, Player *player)
 
         currentTexture = goblinTank->goblinTankSpriteAtk;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthAttack, 0, goblinTank->frameWidthAttack * goblinTank->direction, goblinTank->frameHeightAttack};
-        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 4, source.height / 4};
+        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / goblinTank->scale, source.height / goblinTank->scale};
 
         dest.y += hurtOfSetY;
     }
@@ -343,7 +347,7 @@ void DrawGoblinTank(GoblinTank *goblinTank, Player *player)
 
         currentTexture = goblinTank->goblinTankSpriteWalk;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthWalk, 0, goblinTank->frameWidthWalk * goblinTank->direction, goblinTank->frameHeightWalk};
-        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 4, source.height / 4};
+        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / goblinTank->scale, source.height / goblinTank->scale};
 
         dest.y += hurtOfSetY;
     }   
@@ -353,7 +357,7 @@ void DrawGoblinTank(GoblinTank *goblinTank, Player *player)
 
         currentTexture = goblinTank->goblinTankSpriteIdle;
         source = (Rectangle){goblinTank->currentFrame * goblinTank->frameWidthIdle, 0, goblinTank->frameWidthIdle * goblinTank->direction, goblinTank->frameHeightIdle};
-        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / 5, source.height / 5};
+        dest = (Rectangle){goblinTank->position.x, goblinTank->position.y, source.width / goblinTank->scaleIdle , source.height / goblinTank->scaleIdle};
 
         dest.y += hurtOfSetY;
     }

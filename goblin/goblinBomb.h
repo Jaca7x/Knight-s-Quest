@@ -6,21 +6,12 @@
 
 #define MAP_GOBLIN_BOMB 7
 
-// Player hitbox offsets
-#define PLAYER_HITBOX_OFFSET_X 50
-#define PLAYER_HITBOX_OFFSET_Y 35
-#define PLAYER_DIRECTION_OFFSET_X 60
-#define PLAYER_SACLE_WIDTH 1.06f
-
-// Goblin hitbox offsets
 #define GOBLIN_HITBOX_OFFSET_X 110
 #define GOBLIN_HITBOX_OFFSET_Y 130
-#define GOBLIN_HITBOX_CHECK_OFFSET_Y 120
 #define GOBLIN_HITBOX_SCALE    0.5f
 #define GOBLIN_SCALE_WIDTH 1.98f
 #define GOBLIN_SCALE_HEIGHT 1.87f
 
-// Bomb explosion offsets
 #define BOMB_CENTER_OFFSET_X 5
 #define BOMB_CENTER_OFFSET_Y 50
 #define BOMB_CENTER_SCALE    1.2f

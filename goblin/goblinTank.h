@@ -6,6 +6,20 @@
 
 #define GOBLIN_TANK_MAP 0
 
+#define GOBLIN_TANK_OFFSET_Y 10
+#define GOBLIN_TANK_HITBOX_WITH_DIV 11
+#define GOBLIN_TANK_HITBOX_HEIGHT_DIV 6
+
+#define GOBLIN_TANK_HURTBOX_OFFSET_X  115
+
+// Goblin attack offsets - LEFT
+#define GOBLIN_ATTACK_LEFT_IDLE       125
+#define GOBLIN_ATTACK_LEFT_STRIKE     190
+
+// Goblin attack offsets - RIGHT
+#define GOBLIN_ATTACK_RIGHT_IDLE      65
+#define GOBLIN_ATTACK_RIGHT_STRIKE    0
+
 typedef struct Player player;
 
 typedef struct goblinTank
@@ -21,6 +35,9 @@ typedef struct goblinTank
     Texture2D goblinTankSpriteDead;
     Texture2D goblinTankSpriteIdle;
     Texture2D goblinTankSpriteAtk;
+
+    int scale;
+    int scaleIdle;
 
     int frameWalk;
     int frameHurt;

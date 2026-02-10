@@ -342,6 +342,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     else
     {
         float right = 200.0f;
+        
         if (goblinBomb->attackRange > disatanceToAttack && goblinBomb->direction == -1)
         {
             goblinBomb->isAttack = true;
@@ -391,7 +392,8 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         {
             goblinBomb->bomb.pos.x += goblinBomb->bomb.speed * goblinBomb->direction * delta;
 
-            if (!goblinBomb->bomb.playerIsDamage && CheckCollisionCircleRec(centerCircle, goblinBomb->radiusToDamage, playerRec) && goblinBomb->bomb.currentFrameBomb == 14)
+            if (!goblinBomb->bomb.playerIsDamage && CheckCollisionCircleRec(centerCircle, goblinBomb->radiusToDamage, playerRec) 
+            && goblinBomb->bomb.currentFrameBomb == 14)
             {
                 player->life -= goblinBomb->damageBomb;
                 goblinBomb->bomb.playerIsDamage = true;
@@ -426,10 +428,21 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         }
     }
 
-    if (!goblinBomb->isDead && CheckColisionGoblinBomb(player->position.x + PLAYER_HITBOX_OFFSET_X, player->position.y + PLAYER_HITBOX_OFFSET_Y, player->frameWidth / PLAYER_SACLE_WIDTH, player->frameHeight,
-                                                       goblinBomb->position.x + GOBLIN_HITBOX_OFFSET_X, goblinBomb->position.y + GOBLIN_HITBOX_CHECK_OFFSET_Y, goblinBomb->frameWidthHurt / GOBLIN_SCALE_WIDTH, goblinBomb->frameHeightHurt / GOBLIN_SCALE_HEIGHT))
+    int push = 50;
+
+    if (!goblinBomb->isDead && CheckColisionGoblinBomb(
+        player->position.x + PLAYER_HITBOX_OFFSET_X, 
+        player->position.y + PLAYER_HITBOX_OFFSET_Y, 
+        player->frameWidth / PLAYER_HITBOX_WIDTH_DIV, 
+        player->frameHeight,
+
+        goblinBomb->position.x + GOBLIN_HITBOX_OFFSET_X, 
+        goblinBomb->position.y + GOBLIN_HITBOX_OFFSET_Y, 
+        goblinBomb->frameWidthHurt / GOBLIN_SCALE_WIDTH, 
+        goblinBomb->frameHeightHurt / GOBLIN_SCALE_HEIGHT
+        ))
     {
-        player->position.x += (player->position.x < goblinBomb->position.x) ? -50 : 50;
+        player->position.x += (player->position.x < goblinBomb->position.x) ? -push : push;
     }
 }
 

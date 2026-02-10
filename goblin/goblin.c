@@ -203,8 +203,8 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
     }
     else
     {
-        // --- MOVIMENTO ---
         float push = 50.0f;
+
         float distanceToPlayer = fabs(player->position.x - goblin->position.x);
 
         if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer && !goblin->goblinHasHit)
@@ -217,7 +217,6 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
 
             goblin->position.x += goblin->speed * goblin->direction * delta;
 
-            // Range de ataque
             if (distanceToPlayer <= goblin->goblinAttackRangeRight && goblin->direction == -1)
             {
                 goblin->isAtacking = true;
@@ -227,7 +226,6 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
                 player->hasHit = true;
                 player->hitTimer = 0.4f;
 
-                // Knockback
                 player->position.x += (player->position.x < goblin->position.x) ? -push : push;
             }
             else if (distanceToPlayer <= goblin->goblinAttackRangeLeft && goblin->direction == 1)
@@ -239,7 +237,6 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
                 player->hasHit = true;
                 player->hitTimer = 0.4f;
 
-                // Knockback
                 player->position.x += (player->position.x < goblin->position.x) ? -push : push;
             }
         }
@@ -251,7 +248,6 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
             goblin->goblinHasHitPlayer = false;
         }
 
-        // Colisão simples com o jogador
         if (!goblin->isDead && CheckCollisionGoblin(
                 player->position.x, player->position.y, player->frameWidth , player->frameHeight,
                 goblin->position.x, goblin->position.y, goblin->frameWidth * goblin->scale, goblin->frameHeight * goblin->scale ))

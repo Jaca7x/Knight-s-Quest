@@ -266,8 +266,6 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
     }
 }
 
-
-
 void DrawGoblinArcher(GoblinArcher *goblinArcher)
 {
     Rectangle source = {
