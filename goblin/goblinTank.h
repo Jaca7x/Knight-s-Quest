@@ -4,7 +4,7 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 
-#define GOBLIN_TANK_MAP 5
+#define GOBLIN_TANK_MAP 0
 
 typedef struct Player player;
 
@@ -50,7 +50,7 @@ typedef struct goblinTank
 
     bool isIdle;
     bool isWalking;
-    bool isAtacking;
+    bool isAttacking;
     bool isDead;
     bool goblinTankHasHurt;
     bool goblinTankHasHit;
@@ -64,7 +64,7 @@ typedef struct goblinTank
 
     int direction;
     float goblinTankAttackRange;
-    float goblinTankAttackRangeLeft;
+    float goblinTankAttackRangeRight;
 
     float attackTime;
     float attackCooldown;
@@ -84,7 +84,7 @@ typedef struct goblinTank
 
 void InitGoblinTank(GoblinTank *goblinTank);
 void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player);
-void DrawGoblinTank(GoblinTank *goblinTank);
+void DrawGoblinTank(GoblinTank *goblinTank, Player *player);
 void UnloadGoblinTank(GoblinTank *goblinTank);
 
 #endif // GOBLIN_TANK_H
