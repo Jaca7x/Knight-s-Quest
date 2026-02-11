@@ -10,33 +10,6 @@ bool CheckCollisionAABB(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
-void DrawWolfLifeBar(Wolf *wolf)
-{
-    if (wolf->isDead) return; 
-    
-    float barWidth = 60.0f;
-    float barHeight = 8.0f;
-    float x = wolf->position.x + 20;  // ajuste horizontal
-    float y = wolf->position.y + 30;  // acima do sprite
-
-    // Define vida máxima do lobo
-    float maxLife = (wolf->life > 100) ? 200.0f : 100.0f;
-
-    float lifePercent = wolf->life / maxLife;
-    if (lifePercent < 0) lifePercent = 0;
-
-    float currentBarWidth = barWidth * lifePercent;
-
-    // Fundo (vermelho)
-    DrawRectangle(x, y, barWidth, barHeight, RED);
-
-    // Vida atual (verde)
-    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
-
-    // Contorno
-    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
-}
-
 void InitWolfBase(Wolf *wolf, Vector2 pos)
 {
     wolf->position = pos;
@@ -314,6 +287,14 @@ if (wolf->isPatrolling)
 
 void DrawWolf(Wolf *wolf)
 {
+    wolf->entity.isDead = wolf->isDead;
+    wolf->entity.life = wolf->life;
+    wolf->entity.maxLife = wolf->maxLife;
+    wolf->entity.position.x = wolf->position.x;
+    wolf->entity.position.y = wolf->position.y;
+
+    DrawBar(&wolf->entity, 20, -30);
+
     Rectangle source = {
         wolf->currentFrame * wolf->frameWidth,
         0,
@@ -346,8 +327,6 @@ void DrawWolf(Wolf *wolf)
     {
         DrawTexturePro(wolf->spriteWalkWolf, source, dest, origin, 0.0f, WHITE);
     }
-
-    DrawWolfLifeBar(wolf);
 }
 
 void UnloadWolf(Wolf *wolf)

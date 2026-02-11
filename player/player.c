@@ -536,8 +536,8 @@ void DrawPlayer(Player *player)
         player->frameHeight * player->scale
     };
 
-    // Desenhar
     DrawTexturePro(texture, source, dest, origin, 0.0f, WHITE);
+    DrawText(TextFormat("vida: %.2f", player->life), 10, 80, 20, BLACK);
 }
 
 // Libera as texturas do jogador da memória

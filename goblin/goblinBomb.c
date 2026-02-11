@@ -9,30 +9,6 @@ bool CheckColisionGoblinBomb(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
-void DrawGoblinBombLifeBar(GoblinBomb *goblinBomb)
-{
-    if(goblinBomb->isDead) 
-    return;
-
-    float barWidth = 60.0f;
-    float barHeight = 8.0f;
-    float x = goblinBomb->position.x + 120;
-    float y = goblinBomb->position.y + 80;
-
-    float lifePercent = goblinBomb->life / goblinBomb->maxLife;
-
-    if (lifePercent < 0) lifePercent = 0;
-    if (lifePercent > 1) lifePercent = 1;
-
-    float currentBarWidth = barWidth * lifePercent;
-
-    DrawRectangle(x, y, barWidth, barHeight, RED);
-
-    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
-
-    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
-}
-
 void InitGoblinBomb(GoblinBomb *goblinBomb)
 {
     goblinBomb->spriteIdle = LoadTexture("resources/sprites/goblinBomb/Idle.png");
@@ -448,6 +424,14 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
 
 void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
 {
+    goblinBomb->entity.isDead = goblinBomb->isDead;
+    goblinBomb->entity.life = goblinBomb->life;
+    goblinBomb->entity.maxLife = goblinBomb->maxLife;
+    goblinBomb->entity.position.x = goblinBomb->position.x;
+    goblinBomb->entity.position.y = goblinBomb->position.y;
+
+    DrawBar(&goblinBomb->entity, 120, -90);
+
     Rectangle source;
     Rectangle dest;
 
@@ -501,8 +485,6 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
 
         DrawTexturePro(goblinBomb->spriteBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
     }
-
-    DrawGoblinBombLifeBar(goblinBomb);
 }
 
 void UnloadGoblinBomb(GoblinBomb *goblinBomb)

@@ -5,7 +5,7 @@
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
 
-#define GOBLIN_TANK_MAP 0
+#define GOBLIN_TANK_MAP 5
 
 #define GOBLIN_TANK_OFFSET_Y 10
 #define GOBLIN_TANK_HITBOX_WITH_DIV 11

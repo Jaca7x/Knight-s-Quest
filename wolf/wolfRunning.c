@@ -10,34 +10,15 @@ bool CheckCollision(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
-void DrawWolfRunningLifeBar(WolfRun *wolfRun)
-{
-    float barWidth = 60.0f;
-    float barHeight = 8.0f;
-    float x = wolfRun->position.x + 80;  // ajuste horizontal
-    float y = wolfRun->position.y + 30;  // acima do sprite
-
-    float lifePercent = wolfRun->life / 100.0f;
-    float currentBarWidth = barWidth * lifePercent;
-
-    // Fundo (vermelho)
-    DrawRectangle(x, y, barWidth, barHeight, RED);
-
-    // Vida atual (verde)
-    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
-
-    // Contorno
-    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
-}
-
-
 void InitRunningWolf(WolfRun *wolfRun)
 {
     wolfRun->position = (Vector2){1120, 450};
     wolfRun->start = (Vector2){500, 450};
     wolfRun->end = (Vector2){600, 450};
 
-    wolfRun->life = 100;
+    wolfRun->maxLife = 100.0f;
+    wolfRun->life = wolfRun->maxLife;
+
     wolfRun->speedRun = 120.0f;
     wolfRun->speed = 95.0f;
 
@@ -281,6 +262,14 @@ void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)
 
 void DrawRunningWolf(WolfRun *wolfRun) 
 {
+    wolfRun->entity.isDead = wolfRun->isDead;
+    wolfRun->entity.life = wolfRun->life;
+    wolfRun->entity.maxLife = wolfRun->maxLife;
+    wolfRun->entity.position.x = wolfRun->position.x;
+    wolfRun->entity.position.y = wolfRun->position.y;
+
+    DrawBar(&wolfRun->entity, 80, -30);
+
     Texture2D currentSprite;
 
     // Escolhe o sprite baseado no estado atual
@@ -328,11 +317,6 @@ void DrawRunningWolf(WolfRun *wolfRun)
     Vector2 origin = {0, 0};
 
     DrawTexturePro(currentSprite, source, dest, origin, 0.0f, WHITE);
-
-    if (!wolfRun->isDead)
-    {
-        DrawWolfRunningLifeBar(wolfRun);
-    }
 }
 
 void UnloadRunningWolf(WolfRun *wolfRun) 

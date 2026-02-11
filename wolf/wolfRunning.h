@@ -3,6 +3,7 @@
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
+#include "../lifeBar/lifeBarMob.h"
 #include "math.h"
 
 #define MAP_WOLF_RUNNING_AREA 2
@@ -11,11 +12,14 @@ typedef struct player Player;
 
 typedef struct wolfRun
 {
+    Entity entity;
+
     Vector2 position;
     Vector2 start;
     Vector2 end;
 
     int life;
+    float maxLife;
 
     float speed;
     float speedRun;

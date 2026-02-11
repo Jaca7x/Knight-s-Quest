@@ -3,6 +3,7 @@
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
+#include "../lifeBar/lifeBarMob.h"
 
 #define MAP_GOBLIN_ARCHER_AREA 1
 
@@ -20,6 +21,8 @@ typedef struct Arrow {
 
 typedef struct goblinArcher
 {
+    Entity entity;
+
     // Posição e movimento
     Vector2 position;
     float speed;
@@ -27,6 +30,7 @@ typedef struct goblinArcher
 
     // Vida
     int life;
+    float maxLife;
 
     // Animação
     int currentFrame;

@@ -3,6 +3,7 @@
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
+#include "../lifeBar/lifeBarMob.h"
 #include "math.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,6 +15,8 @@ typedef struct player Player;
 
 typedef struct wolf
 {
+    Entity entity;
+    
     Vector2 position;
     Vector2 start;
     Vector2 end;

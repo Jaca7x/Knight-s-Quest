@@ -3,6 +3,7 @@
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
+#include "../lifeBar/lifeBarMob.h"
 
 #define MAP_GOBLIN_BOMB 7
 
@@ -41,6 +42,8 @@ typedef struct bomb
 
 typedef struct goblinBomb
 {
+    Entity entity;
+
     Texture2D spriteIdle;
     Texture2D spriteAttackBomb;
     Texture2D spriteAttack;

@@ -8,31 +8,12 @@ bool CheckCollisionArrow (float x1, float y1, float w1, float h1,
             y1 < y2 + h2 &&
             y1 + h1 > y2);
 }
-
-void DrawGoblinArcherLifeBar(GoblinArcher *goblinArcher)
-{
-    float barWidth = 60.0f;
-    float barHeight = 8.0f;
-    float x = goblinArcher->position.x + 10;  // ajuste horizontal
-    float y = goblinArcher->position.y - 10;  // acima do sprite
-
-    float lifePercent = goblinArcher->life / 50.0f;
-    float currentBarWidth = barWidth * lifePercent;
-
-    // Fundo (vermelho)
-    DrawRectangle(x, y, barWidth, barHeight, RED);
-
-    // Vida atual (verde)
-    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
-
-    // Contorno
-    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
-}
                      
 void InitGoblinArcher(GoblinArcher *goblinArcher)
 {
     goblinArcher->position = (Vector2){1120, 567};
-    goblinArcher->life = 50;
+    goblinArcher->maxLife = 50.0f;
+    goblinArcher->life = goblinArcher->maxLife;
 
     goblinArcher->speed = 95.0f;
 
@@ -268,6 +249,14 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 
 void DrawGoblinArcher(GoblinArcher *goblinArcher)
 {
+    goblinArcher->entity.isDead = goblinArcher->isDead;
+    goblinArcher->entity.life = goblinArcher->life;
+    goblinArcher->entity.maxLife = goblinArcher->maxLife;
+    goblinArcher->entity.position.x = goblinArcher->position.x;
+    goblinArcher->entity.position.y = goblinArcher->position.y;
+
+    DrawBar(&goblinArcher->entity, 10, 10);
+
     Rectangle source = {
         goblinArcher->currentFrame * goblinArcher->frameWidth,
         0,
@@ -316,11 +305,6 @@ void DrawGoblinArcher(GoblinArcher *goblinArcher)
             goblinArcher->arrow.scale,
             WHITE
         );
-    }
-
-    if (!goblinArcher->isDead && goblinArcher->life > 0)
-    {
-        DrawGoblinArcherLifeBar(goblinArcher);
     }
 }   
 

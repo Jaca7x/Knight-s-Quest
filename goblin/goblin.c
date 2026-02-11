@@ -241,7 +241,7 @@ void DrawGoblin(Goblin *goblin)
     goblin->entity.position.x = goblin->position.x;
     goblin->entity.position.y = goblin->position.y;
 
-    DrawBar(&goblin->entity, 10, 10);
+    DrawBar(&goblin->entity, 0, 10);
 
     Rectangle source = {
         goblin->currentFrame * goblin->frameWidth,
