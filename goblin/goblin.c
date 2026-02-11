@@ -10,30 +10,6 @@ bool CheckCollisionGoblin(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
-void DrawGoblinLifeBar(Goblin *goblin)
-{
-    float barWidth = 60.0f;
-    float barHeight = 8.0f;
-    float x = goblin->position.x + 10;  // ajuste horizontal
-    float y = goblin->position.y - 10;  // acima do sprite
-
-    float maxLife = (goblin->life > 50) ? 70.0f : 50.0f;
-
-    float lifePercent = goblin->life / maxLife;
-    if (lifePercent < 0) lifePercent = 0;
-
-    float currentBarWidth = barWidth * lifePercent;
-
-    // Fundo (vermelho)
-    DrawRectangle(x, y, barWidth, barHeight, RED);
-
-    // Vida atual (verde)
-    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
-
-    // Contorno
-    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
-}
-
 void InitGoblinBase(Goblin *goblin, Vector2 pos) 
 {
     goblin->position = pos;
@@ -78,7 +54,7 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
     goblin->frameFactor = 0.15f;
 
     goblin->life = 50;
-    goblin->maxLife = 50;
+    goblin->maxLife = 50.0f;
     goblin->speed = 100.0f;
     goblin->baseSpeed = 100.0f;
 
@@ -97,7 +73,7 @@ void InitRedGoblin(Goblin *goblin, Vector2 pos)
     InitGoblinBase(goblin, pos);
 
     goblin->life = 70;
-    goblin->maxLife = 70;
+    goblin->maxLife = 70.0f;
     goblin->speed = 80.0f;
     goblin->baseSpeed = 80.0f;
     goblin->damage = 40;
@@ -257,9 +233,16 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
     }
 }
 
-
 void DrawGoblin(Goblin *goblin) 
 {
+    goblin->entity.isDead = goblin->isDead;
+    goblin->entity.life = goblin->life;
+    goblin->entity.maxLife = goblin->maxLife;
+    goblin->entity.position.x = goblin->position.x;
+    goblin->entity.position.y = goblin->position.y;
+
+    DrawBar(&goblin->entity, 10, 10);
+
     Rectangle source = {
         goblin->currentFrame * goblin->frameWidth,
         0,
@@ -297,11 +280,6 @@ void DrawGoblin(Goblin *goblin)
     else if (goblin->isAtacking)
     {
         DrawTexturePro(goblin->goblinSpriteAtk, source, dest, origin, rotation, WHITE);
-    }
-
-    if (!goblin->isDead)
-    {
-        DrawGoblinLifeBar(goblin);
     }
 }
 

@@ -3,6 +3,7 @@
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
+#include "../lifeBar/lifeBarMob.h"
 
 typedef struct player Player;
 
@@ -11,6 +12,8 @@ typedef struct player Player;
 
 typedef struct goblin {
 
+    Entity entity;
+    
     Vector2 position;
 
     Texture2D goblinSpriteWalk;
@@ -55,7 +58,7 @@ typedef struct goblin {
     float scale;
     
     int life;
-    int maxLife;
+    float maxLife;
     float speed;
     float baseSpeed; 
 
