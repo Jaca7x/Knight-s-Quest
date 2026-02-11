@@ -20,6 +20,8 @@
 
 #define PLAYER_HITBOX_WIDTH_DIV  1.5f
 
+#define HIT_TIMER 0.4f
+
 void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
 void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogueIndex);
 

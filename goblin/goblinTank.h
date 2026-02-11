@@ -3,6 +3,7 @@
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
+#include "../lifeBar/lifeBarMob.h"
 
 #define GOBLIN_TANK_MAP 0
 
@@ -20,10 +21,43 @@
 #define GOBLIN_ATTACK_RIGHT_IDLE      65
 #define GOBLIN_ATTACK_RIGHT_STRIKE    0
 
+#define COOL_DOWN_ATTACK 1.0f
+#define FRAME_TO_DAMAGE 8
+#define FRAME_TO_SOUND_ATTACK 5
+
+#define LIFE_ZERO 0
+#define COOL_DOWN_ZERO 0.0f
+#define FRAME_COUNTER_ZERO 0
+#define CURRENT_FRAME_ZERO 0
+
+#define GOBLIN_TANK_FRAME_DELAY 30
+#define GOBLIN_TANK_ATTACK_FRAME_DELAY 10
+
+#define NEXT_FRAME 1
+#define PREVIOUS_FRAME 1
+
+#define DEATH_ANIM_FRAME_TIME 0.2f
+#define FRAME_OF_DEATH 7
+
+#define DIRECTION_LEFT -1
+#define DIRECTION_RIGHT 1
+
+#define ATTACK_HITBOX_START_FRAME 3
+
+#define SPRITE_ROW_BASE 0
+
+#define HURT_OFFSET_HURT_Y -15
+#define HURT_OFFSET_DEAD_Y -5
+#define HURT_OFFSET_ATTACK_Y -55
+#define HURT_OFFSET_WALKING_Y -10
+#define HURT_OFFSET_IDLE_Y -15
+
 typedef struct Player player;
 
 typedef struct goblinTank
 {
+    Entity entity;
+
     Vector2 position;
 
     float speed;
@@ -80,10 +114,11 @@ typedef struct goblinTank
     float viewPlayer;
 
     int direction;
+    float distanceToTurn;
     float goblinTankAttackRange;
     float goblinTankAttackRangeRight;
 
-    float attackTime;
+    int push;
     float attackCooldown;
     float attackCooldownTimer;   
 
