@@ -21,6 +21,7 @@
 #include "npcs/peasant.h"
 #include "goblin/goblinTank.h"
 #include "goblin/goblinBomb.h"
+#include "lifeBar/lifeBarMob.h"
 
 
 // ============================================================================
@@ -36,7 +37,6 @@
 #define TILESET6_FIRSTGID 181 
 #define TILESET7_FIRSTGID 217
 #define MAP_COUNT 9        
-
 
 // ============================================================================
 // Estruturas
