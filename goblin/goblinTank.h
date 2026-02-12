@@ -8,7 +8,7 @@
 
 /* ===================== MAP ===================== */
 
-#define GOBLIN_TANK_MAP 0                // Map index where the Goblin Tank appears
+#define GOBLIN_TANK_MAP 5                // Map index where the Goblin Tank appears
 
 /* ===================== DIRECTION ===================== */
 

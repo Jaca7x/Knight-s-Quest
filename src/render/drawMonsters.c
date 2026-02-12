@@ -2,8 +2,6 @@
 
 void DrawMonsters(Monsters *monsters, int rowBase, int offsetHurtY, int offsetDeadY, int offsetAtackY, int offsetWalkY, int offsetIdleY)
 {
-    printf("direction: %d\n", monsters->direction);
-    
     Rectangle source = {0, 0, 0, 0};
     Texture2D currentTexture;
     Rectangle dest = {0, 0, 0, 0};
