@@ -11,98 +11,111 @@ bool CheckColisionGoblinBomb(float x1, float y1, float w1, float h1,
 
 void InitGoblinBomb(GoblinBomb *goblinBomb)
 {
-    goblinBomb->base.spriteIdle = LoadTexture("resources/sprites/goblinBomb/Idle.png");
-    goblinBomb->spriteAttackBomb = LoadTexture("resources/sprites/goblinBomb/Attack3.png");
-    goblinBomb->base.spriteAtack = LoadTexture("resources/sprites/goblinBomb/Attack1.png");
-    goblinBomb->base.spriteHurt = LoadTexture("resources/sprites/goblinBomb/Hurt.png");
-    goblinBomb->base.spriteDead= LoadTexture("resources/sprites/goblinBomb/Death.png");
-    goblinBomb->base.spriteWalk = LoadTexture("resources/sprites/goblinBomb/Run.png");
+    /* Textures */
+    goblinBomb->base.spriteIdle    = LoadTexture("resources/sprites/goblinBomb/Idle.png");
+    goblinBomb->base.spriteAtack   = LoadTexture("resources/sprites/goblinBomb/Attack1.png");
+    goblinBomb->spriteAttackBomb   = LoadTexture("resources/sprites/goblinBomb/Attack3.png");
+    goblinBomb->base.spriteHurt    = LoadTexture("resources/sprites/goblinBomb/Hurt.png");
+    goblinBomb->base.spriteDead    = LoadTexture("resources/sprites/goblinBomb/Death.png");
+    goblinBomb->base.spriteWalk    = LoadTexture("resources/sprites/goblinBomb/Run.png");
+    goblinBomb->spriteBomb         = LoadTexture("resources/sprites/goblinBomb/Bomb_sprite.png");
 
+    /* Position */
     goblinBomb->base.position = (Vector2){800, 440};
-    goblinBomb->bomb.pos = (Vector2){800, 440};
-
-    goblinBomb->maxLife = 70.0f;
-    goblinBomb->life = goblinBomb->maxLife;
-    goblinBomb->speed = 30.0f;
-    goblinBomb->damage = 20;
-
-    goblinBomb->frameIdle = 4;
-    goblinBomb->frameAttackBomb = 12;
-    goblinBomb->frameAttack = 8;
-    goblinBomb->frameHurt = 4;
-    goblinBomb->frameDeath = 4;
-    goblinBomb->frameRun = 8;
-    goblinBomb->base.scale = 0.5;
-    goblinBomb->base.scaleIdle = 0.5;
-
-    goblinBomb->base.frameWidthIdle = goblinBomb->base.spriteIdle.width / goblinBomb->frameIdle;
-    goblinBomb->base.frameHeightIdle = goblinBomb->base.spriteIdle.height;
-
-    goblinBomb->frameWidthAttackBomb = goblinBomb->spriteAttackBomb.width / goblinBomb->frameAttackBomb;
-    goblinBomb->frameHeightAttackBomb = goblinBomb->spriteAttackBomb.height;
-
-    goblinBomb->base.frameWidthAtack = goblinBomb->base.spriteAtack.width / goblinBomb->frameAttack;
-    goblinBomb->base.frameHeightAtack = goblinBomb->base.spriteAtack.height;
-
-    goblinBomb->base.frameWidthHurt = goblinBomb->base.spriteHurt.width / goblinBomb->frameHurt;
-    goblinBomb->base.frameHeightHurt = goblinBomb->base.spriteHurt.height;
-
-    goblinBomb->base.frameWidthDead = goblinBomb->base.spriteDead.width / goblinBomb->frameDeath;
-    goblinBomb->base.frameHeightDead = goblinBomb->base.spriteDead.height;
-
-    goblinBomb->base.frameWidthWalk = goblinBomb->base.spriteWalk.width / goblinBomb->frameRun;
-    goblinBomb->base.frameHeightWalk = goblinBomb->base.spriteWalk.height;
-
-    goblinBomb->base.currentFrame = 0;
-    goblinBomb->frameCounter = 0;
-
-    goblinBomb->base.isIdle = true;
-    goblinBomb->isAttackBomb = false;
-    goblinBomb->base.isWalking = false;
-
-    goblinBomb->bomb.isActive = false;
-    goblinBomb->bombExplode = false;
-    goblinBomb->hasThrownBomb = false;
-    goblinBomb->base.isAtacking = false;
-
-    goblinBomb->droppedHeart = false;
-
-    goblinBomb->spriteBomb = LoadTexture("resources/sprites/goblinBomb/Bomb_sprite.png");
-    goblinBomb->damageBomb = 50;
-    goblinBomb->timerForExplosion = 0.0f;
-    goblinBomb->radiusToDamage = 50.0f;
-    goblinBomb->bombRange = 200.0f;
-    goblinBomb->attackRange = 35.0f;
-    goblinBomb->viewPlayer = 150.0f;
-
-    goblinBomb->bomb.frameBomb = 19;
-    goblinBomb->bomb.frameWidthBomb = goblinBomb->spriteBomb.width / goblinBomb->bomb.frameBomb;
-    goblinBomb->bomb.frameHeightBomb = goblinBomb->spriteBomb.height;
-
-    goblinBomb->timerAttackBomb = 0.0f;
-    goblinBomb->animAttackBombEnd = false;
-    goblinBomb->bomb.currentFrameBomb = 0;
-    goblinBomb->bomb.frameCounterBomb = 0;
-    goblinBomb->bomb.speed = 65.0f;
-
-    goblinBomb->bomb.playerIsDamage = false;
-
+    goblinBomb->bomb.pos      = goblinBomb->base.position;
     goblinBomb->base.direction = 1;
 
-    goblinBomb->animAttackTimer = 0.0f;
+    /* Stats */
+    goblinBomb->maxLife = 70.0f;
+    goblinBomb->life    = goblinBomb->maxLife;
+    goblinBomb->speed   = 30.0f;
+    goblinBomb->damage  = 20;
+    goblinBomb->damageBomb = 50;
+    goblinBomb->droppedHeart = false;
 
-    goblinBomb->base.monsterHasHit = false;
-    goblinBomb->isDead = false;
-    goblinBomb->wasWalking = false;
-    goblinBomb->attackSoundPlayed = false;
+    /* Animation frame count */
+    goblinBomb->frameIdle       = 4;
+    goblinBomb->frameRun        = 8;
+    goblinBomb->frameAttack     = 8;
+    goblinBomb->frameAttackBomb = 12;
+    goblinBomb->frameHurt       = 4;
+    goblinBomb->frameDeath      = 4;
+
+    goblinBomb->base.scale      = 0.5f;
+    goblinBomb->base.scaleIdle  = 0.5f;
+
+    /* Frame size calculation */
+    goblinBomb->base.frameWidthIdle  = goblinBomb->base.spriteIdle.width / goblinBomb->frameIdle;
+    goblinBomb->base.frameHeightIdle = goblinBomb->base.spriteIdle.height;
+
+    goblinBomb->base.frameWidthWalk  = goblinBomb->base.spriteWalk.width / goblinBomb->frameRun;
+    goblinBomb->base.frameHeightWalk = goblinBomb->base.spriteWalk.height;
+
+    goblinBomb->base.frameWidthAtack  = goblinBomb->base.spriteAtack.width / goblinBomb->frameAttack;
+    goblinBomb->base.frameHeightAtack = goblinBomb->base.spriteAtack.height;
+
+    goblinBomb->frameWidthAttackBomb  = goblinBomb->spriteAttackBomb.width / goblinBomb->frameAttackBomb;
+    goblinBomb->frameHeightAttackBomb = goblinBomb->spriteAttackBomb.height;
+
+    goblinBomb->base.frameWidthHurt  = goblinBomb->base.spriteHurt.width / goblinBomb->frameHurt;
+    goblinBomb->base.frameHeightHurt = goblinBomb->base.spriteHurt.height;
+
+    goblinBomb->base.frameWidthDead  = goblinBomb->base.spriteDead.width / goblinBomb->frameDeath;
+    goblinBomb->base.frameHeightDead = goblinBomb->base.spriteDead.height;
+
+    goblinBomb->bomb.frameBomb       = 19;
+    goblinBomb->bomb.frameWidthBomb  = goblinBomb->spriteBomb.width / goblinBomb->bomb.frameBomb;
+    goblinBomb->bomb.frameHeightBomb = goblinBomb->spriteBomb.height;
+
+    goblinBomb->base.currentFrame = 0;
+    goblinBomb->frameCounter      = 0;
+
+    /* Combat / Range */
+    goblinBomb->timerForExplosion = 0.0f;
+    goblinBomb->radiusToDamage    = 50.0f;
+    goblinBomb->bombRange         = 200.0f;
+    goblinBomb->attackRange       = 35.0f;
+    goblinBomb->viewPlayer        = 150.0f;
+
+    goblinBomb->timerAttackBomb   = 0.0f;
+    goblinBomb->animAttackTimer   = 0.0f;
+    goblinBomb->animAttackBombEnd = false;
 
     goblinBomb->hurtDuration = 2.0f;
-    goblinBomb->hurtTimer = 0.0f;
+    goblinBomb->hurtTimer    = 0.0f;
 
-    goblinBomb->bomb.explosion = LoadSound("resources/sounds/sound_effects/bomb/explosion.wav");
-    goblinBomb->bomb.timer = LoadSound("resources/sounds/sound_effects/bomb/timer.wav");
-    goblinBomb->soundAttack = LoadSound("resources/sounds/sound_effects/wolf/red-wolf-scratch.wav");
-    goblinBomb->soundBagGoblin = LoadSound("resources/sounds/sound_effects/goblin/bag.wav");
+    /* Bomb system */
+    goblinBomb->bomb.isActive        = false;
+    goblinBomb->bombExplode          = false;
+    goblinBomb->hasThrownBomb        = false;
+    goblinBomb->bomb.currentFrameBomb = 0;
+    goblinBomb->bomb.frameCounterBomb = 0;
+    goblinBomb->bomb.speed            = 65.0f;
+    goblinBomb->bomb.playerIsDamage   = false;
+
+    /* States */
+    goblinBomb->base.isIdle        = true;
+    goblinBomb->base.isWalking     = false;
+    goblinBomb->base.isAtacking    = false;
+    goblinBomb->base.monsterHasHit = false;
+
+    goblinBomb->isAttackBomb      = false;
+    goblinBomb->isDead            = false;
+    goblinBomb->wasWalking        = false;
+    goblinBomb->attackSoundPlayed = false;
+
+    /* Sounds */
+    goblinBomb->bomb.explosion =
+        LoadSound("resources/sounds/sound_effects/bomb/explosion.wav");
+
+    goblinBomb->bomb.timer =
+        LoadSound("resources/sounds/sound_effects/bomb/timer.wav");
+
+    goblinBomb->soundAttack =
+        LoadSound("resources/sounds/sound_effects/wolf/red-wolf-scratch.wav");
+
+    goblinBomb->soundBagGoblin =
+        LoadSound("resources/sounds/sound_effects/goblin/bag.wav");
 }
 
 void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)

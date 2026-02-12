@@ -1,94 +1,101 @@
-#ifndef GOBLINARCHER_H
-#define GOBLINARCHER_H
+#ifndef GOBLIN_ARCHER_H
+#define GOBLIN_ARCHER_H
 
 #include "../librays/raylib.h"
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
+#include "../src/render/drawMonsters.h"
+
+/* =========================================================
+   DEFINES
+========================================================= */
 
 #define MAP_GOBLIN_ARCHER_AREA 1
+#define OFFSET_ZERO 0
 
-typedef struct player Player;
+/* =========================================================
+   STRUCT: Arrow
+========================================================= */
 
-typedef struct Arrow {
+typedef struct Arrow
+{
     Vector2 position;
+
     float speed;
-    int direction;     
-    bool active;
     float scale;
     float rotation;
-    float arrowYOffset; 
+    float arrowYOffset;
+
+    int direction;
+    bool active;
+
 } Arrow;
 
-typedef struct goblinArcher
+/* =========================================================
+   STRUCT: GoblinArcher
+========================================================= */
+
+typedef struct GoblinArcher
 {
+    /* ---------- Base ---------- */
     Entity entity;
+    Monsters base;
 
-    // Posição e movimento
-    Vector2 position;
+    /* ---------- Movement ---------- */
     float speed;
-    int direction;     
 
-    // Vida
+    /* ---------- Health ---------- */
     int life;
     float maxLife;
+    bool droppedHeart;
 
-    // Animação
-    int currentFrame;
+    /* ---------- Animation ---------- */
     int frameCounter;
-    int frameWidth;
-    int frameHeight;
-    float frameFactor;
 
+    int frameIdle;
     int frameWalk;
     int frameAtk;
-    int frameIdle;
-    int frameDead;
     int frameHurt;
+    int frameDead;
 
-    Texture2D spriteWalkGoblinArcher;
-    Texture2D spriteAtkGoblinArcher;
-    Texture2D spriteIdleGoblinArcher;
-    Texture2D spriteDeadGoblinArcher;
-    Texture2D spriteHurtGoblinArcher;
+    float attackAnimTimer;
 
-    // Estado
-    bool isWalking;
-    bool isRunning;
-    bool isIdle;
-    bool isAtacking;
-    bool isDead;
-    bool goblinHasHit;
     bool hasHitPlayer;
 
     float deathAnimTimer;
     bool deathAnimationDone;
 
-    // Ataque (flecha)
+    /* ---------- Attack ---------- */
     Texture2D arrowTexture;
     Arrow arrow;
+
     float arrowSpeed;
-    int arrowTolerance;
-    int arrowDamage;
-    bool arrowFired;            
+    float arrowCooldown;
     float attackCooldown;
     float attackDamageTimer;
-    float goblinView;           
-    float attackRange;          
-    float arrowCooldown;        
 
-    float attackAnimTimer;
+    float goblinView;
+    float attackRange;
 
-    bool droppedHeart; 
+    int arrowTolerance;
+    int arrowDamage;
 
+    bool arrowFired;
+
+    /* ---------- Sounds ---------- */
     Sound goblinArcherDeathSound;
     Sound goblinArcherLoadingSound;
     Sound arrowHitSound;
 
 } GoblinArcher;
 
+/* =========================================================
+   FUNCTIONS
+========================================================= */
+
 void InitGoblinArcher(GoblinArcher *goblinArcher);
 void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta);
 void DrawGoblinArcher(GoblinArcher *goblinArcher);
 void UnloadGoblinArcher(GoblinArcher *goblinArcher);
 
-#endif // GOBLINARCHER_H
+#endif // GOBLIN_ARCHER_H
