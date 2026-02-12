@@ -4,74 +4,83 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
+#include "../src/render/drawMonsters.h"
 
-#define GOBLIN_TANK_MAP 5
+/* ===================== MAP ===================== */
 
-#define GOBLIN_TANK_OFFSET_Y 10
-#define GOBLIN_TANK_HITBOX_WITH_DIV 11
-#define GOBLIN_TANK_HITBOX_HEIGHT_DIV 6
+#define GOBLIN_TANK_MAP 0                // Map index where the Goblin Tank appears
 
-#define GOBLIN_TANK_HURTBOX_OFFSET_X  115
+/* ===================== DIRECTION ===================== */
 
-// Goblin attack offsets - LEFT
-#define GOBLIN_ATTACK_LEFT_IDLE       125
-#define GOBLIN_ATTACK_LEFT_STRIKE     190
+#define DIRECTION_LEFT  -1               // Facing left
+#define DIRECTION_RIGHT  1               // Facing right
 
-// Goblin attack offsets - RIGHT
-#define GOBLIN_ATTACK_RIGHT_IDLE      65
-#define GOBLIN_ATTACK_RIGHT_STRIKE    0
+/* ===================== HITBOX / OFFSETS ===================== */
 
-#define COOL_DOWN_ATTACK 1.0f
-#define FRAME_TO_DAMAGE 8
-#define FRAME_TO_SOUND_ATTACK 5
+#define GOBLIN_TANK_OFFSET_Y              10   // Vertical offset for hitbox alignment
+#define GOBLIN_TANK_HITBOX_WITH_DIV       11   // Width divisor for hitbox scaling
+#define GOBLIN_TANK_HITBOX_HEIGHT_DIV     6    // Height divisor for hitbox scaling
+#define GOBLIN_TANK_HURTBOX_OFFSET_X      115  // Horizontal offset for hurtbox
 
-#define LIFE_ZERO 0
-#define COOL_DOWN_ZERO 0.0f
-#define FRAME_COUNTER_ZERO 0
-#define CURRENT_FRAME_ZERO 0
+#define GOBLIN_ATTACK_LEFT_IDLE           125  // Attack hitbox offset (left, idle)
+#define GOBLIN_ATTACK_LEFT_STRIKE         190  // Attack hitbox offset (left, strike frame)
 
-#define GOBLIN_TANK_FRAME_DELAY 30
-#define GOBLIN_TANK_ATTACK_FRAME_DELAY 10
+#define GOBLIN_ATTACK_RIGHT_IDLE          65   // Attack hitbox offset (right, idle)
+#define GOBLIN_ATTACK_RIGHT_STRIKE        0    // Attack hitbox offset (right, strike frame)
 
-#define NEXT_FRAME 1
-#define PREVIOUS_FRAME 1
+#define HURT_OFFSET_HURT_Y               -15   // Sprite offset while hurt
+#define HURT_OFFSET_DEAD_Y                -5   // Sprite offset while dead
+#define HURT_OFFSET_ATTACK_Y             -55   // Sprite offset while attacking
+#define HURT_OFFSET_WALKING_Y            -10   // Sprite offset while walking
+#define HURT_OFFSET_IDLE_Y               -15   // Sprite offset while idle
 
-#define DEATH_ANIM_FRAME_TIME 0.2f
-#define FRAME_OF_DEATH 7
+#define ATTACK_HITBOX_START_FRAME         3    // Frame where attack hitbox becomes active
+#define SPRITE_ROW_BASE                   0    // Base row in sprite sheet
 
-#define DIRECTION_LEFT -1
-#define DIRECTION_RIGHT 1
+/* ===================== FRAME / ANIMATION ===================== */
 
-#define ATTACK_HITBOX_START_FRAME 3
+#define GOBLIN_TANK_FRAME_DELAY           30   // Default animation frame delay
+#define GOBLIN_TANK_FRAME_DELAY_HURT      60   // Hurt animation frame delay
+#define GOBLIN_TANK_ATTACK_FRAME_DELAY    10   // Attack animation frame delay
 
-#define SPRITE_ROW_BASE 0
+#define FRAME_TO_DAMAGE                   8    // Frame that applies damage
+#define FRAME_TO_SOUND_ATTACK             5    // Frame that plays attack sound
+#define FRAME_OF_DEATH                    7    // Total frames in death animation
 
-#define HURT_OFFSET_HURT_Y -15
-#define HURT_OFFSET_DEAD_Y -5
-#define HURT_OFFSET_ATTACK_Y -55
-#define HURT_OFFSET_WALKING_Y -10
-#define HURT_OFFSET_IDLE_Y -15
+#define NEXT_FRAME                        1    // Frame increment step
+#define PREVIOUS_FRAME                    1    // Used to clamp last frame
+
+#define CURRENT_FRAME_ZERO                0    // Initial frame value
+#define FRAME_COUNTER_ZERO                0    // Initial frame counter value
+
+#define DEATH_ANIM_FRAME_TIME             0.2f // Time per death animation frame
+
+/* ===================== COMBAT / COOLDOWN ===================== */
+
+#define COOL_DOWN_ATTACK                  1.0f // Attack cooldown duration
+#define COOL_DOWN_ZERO                    0.0f // Zero value for cooldown checks
+#define LIFE_ZERO                         0    // Zero life threshold
+
+/* ===================== STRUCT ===================== */
 
 typedef struct Player player;
 
 typedef struct goblinTank
 {
-    Entity entity;
-
-    Vector2 position;
+    Entity entity;  // Used for life bar rendering
+    Monsters base;  // Base monster data used for rendering
 
     float speed;
+    float viewPlayer;
+    float distanceToTurn;
+
+    float goblinTankAttackRange;
+    float goblinTankAttackRangeRight;
+
     int life;
     float maxLife;
-
-    Texture2D goblinTankSpriteWalk;
-    Texture2D goblinTankSpriteHurt;
-    Texture2D goblinTankSpriteDead;
-    Texture2D goblinTankSpriteIdle;
-    Texture2D goblinTankSpriteAtk;
-
-    int scale;
-    int scaleIdle;
+    int damage;
+    int push;
 
     int frameWalk;
     int frameHurt;
@@ -79,52 +88,21 @@ typedef struct goblinTank
     int frameIdle;
     int frameAtk;
 
-    int currentFrame;      
-    int frameCounter;      
-    
-    int frameWidthWalk;       
-    int frameHeightWalk;     
+    int frameCounter;
 
-    int frameWidthIdle;       
-    int frameHeightIdle;     
-    
-    int frameWidthAttack;       
-    int frameHeightAttack;     
+    float atackCooldown;
+    float atackCooldownTimer;
+    float atackAnimTimer;
 
-    int frameWidthDead;       
-    int frameHeightDead;   
+    float deathAnimTimer;
+    float hurtTimer;
+    float hurtDuration;
 
-    int frameWidthHurt;       
-    int frameHeightHurt;     
-
-    int damage;
-
-    bool isIdle;
-    bool isWalking;
-    bool isAttacking;
-    bool isDead;
-    bool goblinTankHasHurt;
-    bool goblinTankHasHit;
+    bool hitPlayer;
+    bool hitApplied;
     bool deathAnimationDone;
     bool growlSoundPlay;
     bool droppedHeart;
-
-    float deathAnimTimer;
-
-    float viewPlayer;
-
-    int direction;
-    float distanceToTurn;
-    float goblinTankAttackRange;
-    float goblinTankAttackRangeRight;
-
-    int push;
-    float attackCooldown;
-    float attackCooldownTimer;   
-
-    float attackAnimTimer;  
-    
-    bool hitApplied;
 
     Sound soundAttackGoblinTank;
     Sound soundGrowlGoblinTank;
@@ -133,10 +111,11 @@ typedef struct goblinTank
 
 } GoblinTank;
 
+/* ===================== FUNCTIONS ===================== */
 
 void InitGoblinTank(GoblinTank *goblinTank);
 void UpdateGoblinTank(GoblinTank *goblinTank, float deltaTime, Player *player);
 void DrawGoblinTank(GoblinTank *goblinTank, Player *player);
 void UnloadGoblinTank(GoblinTank *goblinTank);
 
-#endif // GOBLIN_TANK_H
+#endif

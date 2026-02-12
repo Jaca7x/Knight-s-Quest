@@ -22,6 +22,7 @@
 #include "goblin/goblinTank.h"
 #include "goblin/goblinBomb.h"
 #include "lifeBar/lifeBarMob.h"
+#include "src/render/drawMonsters.h"
 
 
 // ============================================================================
