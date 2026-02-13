@@ -9,7 +9,7 @@
 #include "../npcs/npc.h"   
 #include "../boss/boss.h"
 #include "../goblin/goblinTank.h"
-#include "../goblin/goblinBomb.h"
+#include "../goblin/bombGoblin.h"
 #include "../src/define/define.h"
 
 #define NUM_MAPS 4
@@ -26,7 +26,7 @@ typedef struct goblinArcher GoblinArcher;
 typedef struct npc Npc;
 typedef struct boss Boss;
 typedef struct goblinTank GoblinTank;
-typedef struct goblinBomb GoblinBomb;
+typedef struct bombGoblin BombGoblin;
 
 typedef struct {
     const char *text;
@@ -122,7 +122,7 @@ typedef struct player
 void InitPlayer(Player *player);
 void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf,
     Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, 
-    Npc *npc, Boss *boss, GoblinTank *goblinTank, GoblinBomb *goblinBomb);
+    Npc *npc, Boss *boss, GoblinTank *goblinTank, BombGoblin *bombGoblin);
 void DrawPlayer(Player *player);
 void UnloadPlayer(Player *player);
 

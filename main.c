@@ -21,7 +21,7 @@
 #include "boss/boss.h"
 #include "npcs/peasant.h"
 #include "goblin/goblinTank.h"
-#include "goblin/goblinBomb.h"
+#include "goblin/bombGoblin.h"
 #include "lifeBar/lifeBarMob.h"
 #include "src/render/drawMonsters.h"
 
@@ -254,7 +254,7 @@ int currentMapIndex = 0;
 void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfRun *wolfRun, 
                 Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, Heart hearts[],
                 Npc *npc, Ghost *ghost, Interaction *interaction, Boss *boss, GoblinTank *goblinTank, 
-                Peasant *peasant, GoblinBomb *goblinBomb, TileMap *map, const char *mapFiles[])
+                Peasant *peasant, BombGoblin *bombGoblin, TileMap *map, const char *mapFiles[])
 {
     InitPlayer(player);
     InitWolfBase(wolf, (Vector2){500, 450});
@@ -271,7 +271,7 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
     InitBoss(boss);
     InitGoblinTank(goblinTank);
     InitPeasant(peasant);
-    InitGoblinBomb(goblinBomb);
+    InitBombGoblin(bombGoblin);
 
     currentMapIndex = 0;
 
@@ -692,8 +692,8 @@ int main(void)
         "O Goblin Bomba é um dos tipos mais difíceis\nde se encontrar, pois muitas vezes eles acabam\nse explodindo antes mesmo de serem vistos.",
         "Cuidado: dependendo de como você\nse aproxima, ele pode arremessar\numa bomba nada carinhosa.",
 
-        LoadTexture("resources/sprites/goblinBomb/Idle.png"),
-        LoadTexture("resources/sprites/goblinBomb/Bomb_sprite.png"),
+        LoadTexture("resources/sprites/bombGoblin/Idle.png"),
+        LoadTexture("resources/sprites/bombGoblin/Bomb_sprite.png"),
 
         4,       
         0,       
@@ -817,8 +817,8 @@ int main(void)
     GoblinTank goblinTank;
     InitGoblinTank(&goblinTank);
 
-    GoblinBomb goblinBomb;
-    InitGoblinBomb(&goblinBomb);
+    BombGoblin bombGoblin;
+    InitBombGoblin(&bombGoblin);
 
     Texture2D tileset1 = LoadTexture("assets/maps/tiles_map/castlemap.png");
     Texture2D tileset2 = LoadTexture("assets/maps/tiles_map/castlesky.png");
@@ -926,10 +926,10 @@ int main(void)
     boss.bossWalkSound,
     boss.bossHurtSound,
 
-    goblinBomb.bomb.explosion,
-    goblinBomb.bomb.timer,
-    goblinBomb.soundAttack,
-    goblinBomb.soundBagGoblin
+    bombGoblin.bomb.explosion,
+    bombGoblin.bomb.timer,
+    bombGoblin.soundAttack,
+    bombGoblin.soundBagGoblin
 };
 
 int effectSoundCount = sizeof(effectSounds) / sizeof(effectSounds[0]);
@@ -1329,10 +1329,10 @@ while (!WindowShouldClose())
                 player.position.y = 520;
             }   
 
-            if (currentMapIndex == MAP_GOBLIN_BOMB)
+            if (currentMapIndex == MAP_BOMB_GOBLIN)
             {
-                DrawGoblinBomb(&goblinBomb, &player);
-                UpdateGoblinBomb(&goblinBomb, delta, &player);
+                DrawBombGoblin(&bombGoblin, &player);
+                UpdateBombGoblin(&bombGoblin, delta, &player);
             }
             
             if (bossTriggered)
@@ -1387,7 +1387,7 @@ while (!WindowShouldClose())
             }
 
             UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &redGoblin, 
-                &goblinArcher, &wolfRun, &goblinTank, &goblinBomb);
+                &goblinArcher, &wolfRun, &goblinTank, &bombGoblin);
             DrawHearts(hearts, delta, &player);
 
             if (MAP_NPC == currentMapIndex) {
@@ -1407,7 +1407,7 @@ while (!WindowShouldClose())
             }
     
             UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, 
-                &npc, &boss, &goblinTank, &goblinBomb);
+                &npc, &boss, &goblinTank, &bombGoblin);
             DrawPlayer(&player);
 
             DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f, &player, button_pressed);
@@ -1757,7 +1757,7 @@ while (!WindowShouldClose())
             {
                 gameState = MENU;
                 PlaySound(buttonSelect);
-                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &goblinBomb, &map, mapFiles);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &bombGoblin, &map, mapFiles);
             }
         } break;
 
@@ -1776,7 +1776,7 @@ while (!WindowShouldClose())
             {
                 gameState = MENU;
                 PlaySound(buttonSelect);
-                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &goblinBomb, &map, mapFiles);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &bombGoblin, &map, mapFiles);
             }
         } break;
 
@@ -1821,7 +1821,7 @@ while (!WindowShouldClose())
     UnloadMusicStream(soundTrack);
     UnloadSound(buttonSelect);
     UnloadBoss(&boss);
-    UnloadGoblinBomb(&goblinBomb);
+    UnloadBombGoblin(&bombGoblin);
     CloseWindow();
     return 0;
 }   

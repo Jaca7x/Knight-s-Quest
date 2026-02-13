@@ -215,7 +215,7 @@ void InitPlayer(Player *player)
 
 // Atualiza o estado do jogador (movimento, física e animação).
 void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, Goblin *redGoblin, 
-    GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc, Boss *boss, GoblinTank *goblinTank, GoblinBomb *goblinBomb)
+    GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc, Boss *boss, GoblinTank *goblinTank, BombGoblin *bombGoblin)
 {  
     // Verificar se morreu pela primeira vez
     if (player->life <= 0 && !player->isDead)
@@ -299,7 +299,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redGoblin->base.isDead, redGoblin->base.position.x, &redGoblin->base.monsterHasHit, &redGoblin->life, &redGoblin->RedGoblinHitSound, &redGoblin->RedGoblinHitSound, player);
     AttackMonsters(currentMapIndex, MAP_GOBLIN_ARCHER_AREA, &goblinArcher->base.isDead, goblinArcher->base.position.x, &goblinArcher->base.monsterHasHit, &goblinArcher->life, &goblinArcher->goblinArcherDeathSound, &goblinArcher->goblinArcherDeathSound, player);
     AttackMonsters(currentMapIndex, GOBLIN_TANK_MAP, &goblinTank->base.isDead, goblinTank->base.position.x + GOBLIN_TANK_HURTBOX_OFFSET_X, &goblinTank->base.monsterHasHit, &goblinTank->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
-    AttackMonsters(currentMapIndex, MAP_GOBLIN_BOMB, &goblinBomb->isDead, goblinBomb->base.position.x + PLAYER_HITBOX_OFFSET_X, &goblinBomb->base.monsterHasHit, &goblinBomb->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
+    AttackMonsters(currentMapIndex, MAP_BOMB_GOBLIN, &bombGoblin->base.isDead, bombGoblin->base.position.x + PLAYER_HITBOX_OFFSET_X, &bombGoblin->base.monsterHasHit, &bombGoblin->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
     
     //BOSS
     AttackMonsters(currentMapIndex, BOSS_MAP, &boss->isDead, boss->position.x, &boss->bossHasHit, &boss->life, &boss->bossHurtSound, &boss->bossHurtSound, player);

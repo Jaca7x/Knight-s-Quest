@@ -91,12 +91,19 @@ void InitGoblinTank(GoblinTank *goblinTank)
     goblinTank->base.frameHeightHurt = goblinTank->base.spriteHurt.height;
 
     // Sounds
-    goblinTank->soundAttackGoblinTank = LoadSound("resources/sounds/sound_effects/goblin/attack-goblinTank.wav");
-    goblinTank->soundGrowlGoblinTank  = LoadSound("resources/sounds/sound_effects/goblin/idle-goblinTank.wav");
-    goblinTank->soundHurtGoblinTank   = LoadSound("resources/sounds/sound_effects/goblin/hurt-goblinTank.wav");
-    goblinTank->soundDeathGolbinTank  = LoadSound("resources/sounds/sound_effects/goblin/death-goblinTank.wav");
-}
+    goblinTank->soundAttackGoblinTank =
+        LoadSound("resources/sounds/sound_effects/goblin/attack-goblinTank.wav");
 
+    goblinTank->soundGrowlGoblinTank  = 
+        LoadSound("resources/sounds/sound_effects/goblin/idle-goblinTank.wav");
+
+    goblinTank->soundHurtGoblinTank   = 
+        LoadSound("resources/sounds/sound_effects/goblin/hurt-goblinTank.wav");
+
+    goblinTank->soundDeathGolbinTank  = 
+        LoadSound("resources/sounds/sound_effects/goblin/death-goblinTank.wav");
+}
+ 
 void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
 {
     if (goblinTank->life <= LIFE_ZERO && !goblinTank->base.isDead)
@@ -148,7 +155,12 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
 
     goblinTank->frameCounter++;
 
-    if (goblinTank->base.monsterHasHit && !goblinTank->base.isDead && goblinTank->frameCounter >= GOBLIN_TANK_FRAME_DELAY_HURT)
+    if 
+    (
+        goblinTank->base.monsterHasHit 
+        && !goblinTank->base.isDead 
+        && goblinTank->frameCounter >= GOBLIN_TANK_FRAME_DELAY_HURT
+    )
     {
         goblinTank->frameCounter = FRAME_COUNTER_ZERO;
         goblinTank->base.currentFrame = (goblinTank->base.currentFrame + NEXT_FRAME) % goblinTank->frameHurt;
@@ -207,7 +219,12 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         goblinTank->base.direction = DIRECTION_LEFT;
     }
 
-    if (!goblinTank->base.isDead && !goblinTank->base.monsterHasHit && distanceToViewPlayer <= goblinTank->viewPlayer)
+    if 
+    (
+        !goblinTank->base.isDead 
+        && !goblinTank->base.monsterHasHit 
+        && distanceToViewPlayer <= goblinTank->viewPlayer
+    )
     {
         goblinTank->base.isWalking = true;
         goblinTank->base.isIdle = false;
@@ -223,7 +240,12 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         {
             goblinTank->atackAnimTimer = COOL_DOWN_ATTACK;
 
-            if (goblinTank->base.isAtacking && !goblinTank->hitApplied && goblinTank->base.currentFrame == FRAME_TO_DAMAGE_GOBLIN_TANK)
+            if 
+            (
+                goblinTank->base.isAtacking 
+                && !goblinTank->hitApplied 
+                && goblinTank->base.currentFrame == FRAME_TO_DAMAGE_GOBLIN_TANK
+            )
             {
                 player->life -= goblinTank->damage;
                 goblinTank->hitPlayer = true;
@@ -242,7 +264,11 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         {
             goblinTank->atackAnimTimer = COOL_DOWN_ATTACK;
 
-            if (goblinTank->base.isAtacking && !goblinTank->hitApplied && goblinTank->base.currentFrame == FRAME_TO_DAMAGE_GOBLIN_TANK)
+            if (
+                goblinTank->base.isAtacking
+                && !goblinTank->hitApplied 
+                && goblinTank->base.currentFrame == FRAME_TO_DAMAGE_GOBLIN_TANK
+            )
             {
                 player->life -= goblinTank->damage;
                 goblinTank->hitPlayer = true;

@@ -6,6 +6,7 @@
 #define OFFSET_ZERO                       0 // Offset 0     
 #define LIFE_ZERO                         0 // Life 0
 #define SPEED_ZERO                        0 // Speed 0
+#define POSITION_ZERO 0
 
 /* ===================== COMBAT / COOLDOWN ===================== */
 

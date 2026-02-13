@@ -74,14 +74,14 @@
 
 void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, 
     Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, WolfRun *wolfRun, GoblinTank *goblinTank,
-    GoblinBomb *goblinBomb) 
+    BombGoblin *bombGoblin) 
 {
    
     ChanceSpawnDrop(hearts, goblin->base.isDead, &goblin->droppedHeart, 100, 0, 70, goblin->base.position.x, goblin->base.position.y, hearts[0].spawnSound);
     ChanceSpawnDrop(hearts, goblinArcher->base.isDead, &goblinArcher->droppedHeart, 100, 0, 70, goblinArcher->base.position.x, goblinArcher->base.position.y, hearts[1].spawnSound);
     ChanceSpawnDrop(hearts, redGoblin->base.isDead, &redGoblin->droppedHeart, 100, 0, 50, redGoblin->base.position.x, redGoblin->base.position.y, hearts[4].spawnSound);
     ChanceSpawnDrop(hearts, goblinTank->base.isDead, &goblinTank->droppedHeart, 100, 0, 70, goblinTank->base.position.x + 130, goblinTank->base.position.y + 60, hearts[7].spawnSound);
-    ChanceSpawnDrop(hearts, goblinBomb->isDead, &goblinBomb->droppedHeart, 100, 0, 60, goblinBomb->base.position.x + 80, goblinBomb->base.position.y + 130, hearts[8].spawnSound);
+    ChanceSpawnDrop(hearts, bombGoblin->base.isDead, &bombGoblin->droppedHeart, 100, 0, 60, bombGoblin->base.position.x + 80, bombGoblin->base.position.y + 130, hearts[8].spawnSound);
 
     ChanceSpawnDrop(hearts, wolf->isDead, &wolf->droppedHeart, 100, 0, 60, wolf->position.x + 50, wolf->position.y + 100, hearts[2].spawnSound);
     ChanceSpawnDrop(hearts, wolfRun->isDead, &wolfRun->droppedHeart, 100, 0, 60, wolfRun->position.x + 50, wolfRun->position.y + 100, hearts[3].spawnSound);
