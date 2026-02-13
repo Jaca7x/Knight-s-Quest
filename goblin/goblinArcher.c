@@ -91,47 +91,47 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
 
 void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
 {
-    if (goblinArcher->life <= 0 && !goblinArcher->base.isDead)
+    if (goblinArcher->life <= LIFE_ZERO && !goblinArcher->base.isDead)
     {
         PlaySound(goblinArcher->goblinArcherDeathSound);
         goblinArcher->base.isDead = true;
-        goblinArcher->base.currentFrame = 0;
+        goblinArcher->base.currentFrame = CURRENT_FRAME_ZERO;
         goblinArcher->hasHitPlayer = false;  
         goblinArcher->base.monsterHasHit = false;
         player->hasHit = false;
-        goblinArcher->frameDead = 7;
-        goblinArcher->deathAnimTimer = 0.0f;
+        goblinArcher->frameDead = FRAME_DEAD_GOBLIN_ARCHER;
+        goblinArcher->deathAnimTimer = ANIM_DEAD_ZERO;
         goblinArcher->deathAnimationDone = false;
         goblinArcher->base.isWalking = false;
         goblinArcher->base.isAtacking = false;
         goblinArcher->base.isIdle = false;
         goblinArcher->arrow.active = false;
-        goblinArcher->attackAnimTimer = 0.0f;
-        goblinArcher->arrowDamage = 0.0f;
+        goblinArcher->attackAnimTimer = ANIM_ATTACK_ZERO;
+        goblinArcher->arrowDamage = ARROW_DAMAGE_ZERO;
     }
 
     if (goblinArcher->base.isDead && goblinArcher->deathAnimationDone)
         return;
 
     goblinArcher->frameCounter++;
-    if (goblinArcher->frameCounter >= (60 / 10))
+    if (goblinArcher->frameCounter >= (GAME_FPS / ANIMATION_FPS))
     {
-        goblinArcher->frameCounter = 0;
+        goblinArcher->frameCounter = FRAME_COUNTER_ZERO;
 
         if (goblinArcher->base.isDead && !goblinArcher->deathAnimationDone)
         {
             goblinArcher->deathAnimTimer += delta;
 
-            if (goblinArcher->deathAnimTimer >= 0.2f)
+            if (goblinArcher->deathAnimTimer >= DEATH_ANIM_FRAME_TIME)
             {   
                 goblinArcher->frameDead++;
-                goblinArcher->deathAnimTimer = 0.3f;
+                goblinArcher->deathAnimTimer = DEATH_ANIM_FRAME_TIME;
 
-                if (goblinArcher->frameDead >= 8)
+                if (goblinArcher->frameDead >= FRAME_DEAD_GOBLIN_ARCHER)
                 {
-                    goblinArcher->frameDead = 8;
+                    goblinArcher->frameDead = FRAME_DEAD_GOBLIN_ARCHER;
                     goblinArcher->deathAnimationDone = true;
-                    goblinArcher->speed = 0.0f;
+                    goblinArcher->speed = SPEED_ZERO;
         
                 }
             }
@@ -139,46 +139,46 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
         }
         else if (goblinArcher->base.monsterHasHit && !goblinArcher->base.isDead)
         {
-            goblinArcher->base.currentFrame = (goblinArcher->base.currentFrame + 1) % goblinArcher->frameHurt;
+            goblinArcher->base.currentFrame = (goblinArcher->base.currentFrame + NEXT_FRAME) % goblinArcher->frameHurt;
         }
         else if (goblinArcher->base.isAtacking)
         {
-            if (goblinArcher->base.currentFrame == 5)
+            if (goblinArcher->base.currentFrame == FRAME_TO_PLAY_SOUND_LOADING)
             {
                PlaySound(goblinArcher->goblinArcherLoadingSound);
             }
-            goblinArcher->base.currentFrame = (goblinArcher->base.currentFrame + 1) % goblinArcher->frameAtk;
+            goblinArcher->base.currentFrame = (goblinArcher->base.currentFrame + NEXT_FRAME) % goblinArcher->frameAtk;
         }
         else if (goblinArcher->base.isWalking)
         {
-            goblinArcher->base.currentFrame = (goblinArcher->base.currentFrame + 1) % goblinArcher->frameWalk;
+            goblinArcher->base.currentFrame = (goblinArcher->base.currentFrame + NEXT_FRAME) % goblinArcher->frameWalk;
         }
         else if (goblinArcher->base.isIdle)
         {
-            goblinArcher->base.currentFrame = (goblinArcher->base.currentFrame + 1) % goblinArcher->frameIdle;
+            goblinArcher->base.currentFrame = (goblinArcher->base.currentFrame + NEXT_FRAME) % goblinArcher->frameIdle;
         }
     }
 
     // Cooldowns
-    if (goblinArcher->arrowCooldown > 0.0f)
+    if (goblinArcher->arrowCooldown > ARROW_COOLDOWN_ZERO)
     {
         goblinArcher->arrowCooldown -= delta;
-        if (goblinArcher->arrowCooldown < 0.0f)
-            goblinArcher->arrowCooldown = 0.0f;
+        if (goblinArcher->arrowCooldown < ARROW_COOLDOWN_ZERO)
+            goblinArcher->arrowCooldown = ARROW_COOLDOWN_ZERO;
     }
 
-    if (goblinArcher->attackAnimTimer > 0.0f)
+    if (goblinArcher->attackAnimTimer > ANIM_ATTACK_ZERO)
     {
         goblinArcher->attackAnimTimer -= delta;
-        if (goblinArcher->attackAnimTimer < 0.0f)
-            goblinArcher->attackAnimTimer = 0.0f;
+        if (goblinArcher->attackAnimTimer < ANIM_ATTACK_ZERO)
+            goblinArcher->attackAnimTimer = ANIM_ATTACK_ZERO;
     }
 
     float distanceToPlayer = fabs(player->position.x - goblinArcher->base.position.x);
 
-    if (distanceToPlayer <= goblinArcher->goblinView && player->life > 0 && !goblinArcher->base.isDead)
+    if (distanceToPlayer <= goblinArcher->goblinView && player->life > LIFE_ZERO && !goblinArcher->base.isDead)
     {
-        goblinArcher->base.direction = (player->position.x < goblinArcher->base.position.x) ? -1 : 1;
+        goblinArcher->base.direction = (player->position.x < goblinArcher->base.position.x) ? DIRECTION_LEFT : DIRECTION_RIGHT;
 
         if (distanceToPlayer <= goblinArcher->attackRange)
         {
@@ -186,25 +186,25 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
             goblinArcher->base.isWalking = false;
             goblinArcher->base.isAtacking = true;
 
-            if (goblinArcher->arrowCooldown <= 0.0f)
+            if (goblinArcher->arrowCooldown <= ARROW_COOLDOWN_ZERO)
             {
                 // Lança flecha
                 goblinArcher->arrow.active = true;
-                goblinArcher->arrow.arrowYOffset = 0.05f;
-                goblinArcher->arrowCooldown = 1.5f;
-                goblinArcher->attackAnimTimer = 0.4f;
+                goblinArcher->arrow.arrowYOffset = ARROW_OFFSET_Y;
+                goblinArcher->arrowCooldown = ARROW_COOLDOWN;
+                goblinArcher->attackAnimTimer = ATTACK_ANIM_TIMER_GOBLIN_ARCHER;
                 goblinArcher->arrow.position = (Vector2){
                     goblinArcher->base.position.x,
                     goblinArcher->base.position.y + goblinArcher->base.frameHeightIdle * goblinArcher->arrow.arrowYOffset
                 };
-                goblinArcher->arrow.scale = 0.2f;
-                goblinArcher->arrow.rotation = 0.0f;
+                goblinArcher->arrow.scale = ARROW_SCALE;
+                goblinArcher->arrow.rotation = ARROW_ROTATION;
                 goblinArcher->arrow.direction = goblinArcher->base.direction;
                 goblinArcher->arrow.speed = goblinArcher->arrowSpeed;
             }
 
             // Controle da animação de ataque separado do cooldown
-            if (goblinArcher->attackAnimTimer > 0.0f)
+            if (goblinArcher->attackAnimTimer > ANIM_ATTACK_ZERO)
             {
                 goblinArcher->base.isIdle = false;
                 goblinArcher->base.isAtacking = true;
@@ -250,7 +250,7 @@ void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)
             PlaySound(goblinArcher->arrowHitSound);
             player->life -= goblinArcher->arrowDamage;
             goblinArcher->arrow.active = false;
-            player->hitTimer = 0.4f;   
+            player->hitTimer = HIT_TIMER;   
             goblinArcher->hasHitPlayer = true;
             player->hasHit = true; 
         }
@@ -275,7 +275,7 @@ void DrawGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->entity.position.x = goblinArcher->base.position.x;
     goblinArcher->entity.position.y = goblinArcher->base.position.y;
 
-    DrawBar(&goblinArcher->entity, 10, 10);
+    DrawBar(&goblinArcher->entity, GOBLIN_ARCHER_BAR_LIFE_OFFSET_X, GOBLIN_ARCHER_BAR_LIFE_OFFSET_Y);
 
     DrawMonsters(&goblinArcher->base, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO);
 

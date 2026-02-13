@@ -5,29 +5,46 @@
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
 #include "../src/render/drawMonsters.h"
+#include "../src/define/define.h"
 
 /* MAP / GENERAL DEFINES */
 
-#define OFFSET_ZERO        0
 #define MAP_GOBLIN_BOMB    7
-#define ROW_BASE           0
 
 /* GOBLIN HITBOX / SCALE */
 
-#define GOBLIN_HITBOX_OFFSET_X   110
-#define GOBLIN_HITBOX_OFFSET_Y   130
-#define GOBLIN_HITBOX_SCALE      0.5f
+#define GOBLIN_BOMB_HITBOX_OFFSET_X   110
+#define GOBLIN_BOMB_HITBOX_OFFSET_Y   130
+#define GOBLIN_BOMB_HITBOX_SCALE      0.5f
 
-#define GOBLIN_SCALE_WIDTH       1.98f
-#define GOBLIN_SCALE_HEIGHT      1.87f
+#define GOBLIN_BOMB_SCALE_WIDTH       1.98f
+#define GOBLIN_BOMB_SCALE_HEIGHT      1.87f
 
 /* BOMB DEFINES */
 
-#define BOMB_CENTER_OFFSET_X     5
-#define BOMB_CENTER_OFFSET_Y     50
-#define BOMB_CENTER_SCALE        1.2f
-#define BOMB_EXPLOSION_DELAY     3.14f
+#define BOMB_CENTER_OFFSET_X        5
+#define BOMB_CENTER_OFFSET_Y        50
+#define BOMB_CENTER_SCALE           1.2f
+#define BOMB_EXPLOSION_DELAY        3.14f
+#define FRAME_COUNTER_BOMB_ZERO     0
+#define FRAME_CURRENT_BOMB_ZERO     0
+#define FRAME_TO_SOUND_EXPLOSION    14
+#define FRAME_TO_DAMAGE_EXPLOSION   14
 
+/* OFFSETS */
+#define OFFSET_BAR_LIFE_X_GOBLIN_BOMB        120
+#define OFFSET_BAR_LIFE_Y_GOBLIN_BOMB       -90
+
+/* FRAMES */
+#define FRAME_DELAY_GOBLIN_BOMB             10
+#define FRAME_TO_ATTACK_GOBLIN_BOMB          7
+
+/* COOLDOWN / TIMER */
+#define ATTACK_BOMB_TIMER_ZERO   0.0f
+
+/* SOUND */
+#define FRAME_TO_SOUND_BAG                   2
+#define FRAME_TO_SOUND_ATTACK_GOBLIN_BOMB    6
 
 typedef struct player Player;
 
@@ -96,7 +113,9 @@ typedef struct goblinBomb
     float timerForExplosion;
     float radiusToDamage;
     float bombRange;
-    float attackRange;
+    float atackRange;
+    float atackRangeRight;
+    int push;
 
     float timerAttackBomb;
     float animAttackTimer;

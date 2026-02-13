@@ -295,8 +295,8 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolfRun->isDead, wolfRun->position.x, &wolfRun->wolfHasHit, &wolfRun->life, &wolfRun->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
 
     //GOBLINS
-    AttackMonsters(currentMapIndex, GOBLIN_MAP, &goblin->isDead, goblin->position.x, &goblin->goblinHasHit, &goblin->life, &goblin->goblinDeathSound, &goblin->goblinDeathSound, player);
-    AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redGoblin->isDead, redGoblin->position.x, &redGoblin->goblinHasHit, &redGoblin->life, &redGoblin->RedGoblinHitSound, &redGoblin->RedGoblinHitSound, player);
+    AttackMonsters(currentMapIndex, GOBLIN_MAP, &goblin->base.isDead, goblin->base.position.x, &goblin->base.monsterHasHit, &goblin->life, &goblin->goblinDeathSound, &goblin->goblinDeathSound, player);
+    AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redGoblin->base.isDead, redGoblin->base.position.x, &redGoblin->base.monsterHasHit, &redGoblin->life, &redGoblin->RedGoblinHitSound, &redGoblin->RedGoblinHitSound, player);
     AttackMonsters(currentMapIndex, MAP_GOBLIN_ARCHER_AREA, &goblinArcher->base.isDead, goblinArcher->base.position.x, &goblinArcher->base.monsterHasHit, &goblinArcher->life, &goblinArcher->goblinArcherDeathSound, &goblinArcher->goblinArcherDeathSound, player);
     AttackMonsters(currentMapIndex, GOBLIN_TANK_MAP, &goblinTank->base.isDead, goblinTank->base.position.x + GOBLIN_TANK_HURTBOX_OFFSET_X, &goblinTank->base.monsterHasHit, &goblinTank->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
     AttackMonsters(currentMapIndex, MAP_GOBLIN_BOMB, &goblinBomb->isDead, goblinBomb->base.position.x + PLAYER_HITBOX_OFFSET_X, &goblinBomb->base.monsterHasHit, &goblinBomb->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);

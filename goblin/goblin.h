@@ -4,41 +4,27 @@
 #include "../librays/raylib.h"
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
+#include "../src/render/drawMonsters.h"
 
 typedef struct player Player;
 
+#define OFFSET_ZERO 0
 #define GOBLIN_MAP 1
 #define RED_GOBLIN_MAP 3
 
 typedef struct goblin {
 
     Entity entity;
-    
-    Vector2 position;
-
-    Texture2D goblinSpriteWalk;
-    Texture2D goblinSpriteHurt;
-    Texture2D goblinSpriteDead;
-    Texture2D goblinSpriteIdle;
-    Texture2D goblinSpriteAtk;
+    Monsters base;
 
     int frameWalk;
     int frameHurt;
     int frameDead;
     int frameIdle;
     int frameAtk;
-
-    int currentFrame;      
-    int frameCounter;      
-    int frameWidth;       
-    int frameHeight;       
-    float frameFactor;     
+      
+    int frameCounter;            
     
-    bool isIdle;
-    bool isWalking;
-    bool isAtacking;
-    bool isDead;
-    bool goblinHasHit;
     bool deathAnimationDone;
 
 
@@ -47,7 +33,6 @@ typedef struct goblin {
     float goblinAttackRangeRight;
     float goblinAttackRangeLeft;
     bool goblinHasHitPlayer;
-    int direction;
 
     float hurtTimer;
     float hurtDuration;
@@ -55,7 +40,7 @@ typedef struct goblin {
     float attackTimer;
     float attackCooldown;
 
-    float scale;
+    float scaleHitbox;
     
     int life;
     float maxLife;

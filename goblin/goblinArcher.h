@@ -5,19 +5,31 @@
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
 #include "../src/render/drawMonsters.h"
+#include "../src/define/define.h"
 
 /* =========================================================
    DEFINES
 ========================================================= */
 
 #define MAP_GOBLIN_ARCHER_AREA 1
-#define OFFSET_ZERO 0
 
+#define ARROW_DAMAGE_ZERO 0
+#define FRAME_DEAD_GOBLIN_ARCHER 8
+#define FRAME_TO_PLAY_SOUND_LOADING 5
+#define ARROW_COOLDOWN_ZERO 0.0f
+#define ARROW_COOLDOWN 1.5f
+#define ATTACK_ANIM_TIMER_GOBLIN_ARCHER   0.4f
+#define ARROW_SCALE 0.2f
+#define ARROW_ROTATION 0.0f
+#define ARROW_OFFSET_Y 0.05f
+
+#define GOBLIN_ARCHER_BAR_LIFE_OFFSET_X 10
+#define GOBLIN_ARCHER_BAR_LIFE_OFFSET_Y 10
 /* =========================================================
    STRUCT: Arrow
 ========================================================= */
 
-typedef struct Arrow
+typedef struct arrow
 {
     Vector2 position;
 
@@ -35,7 +47,7 @@ typedef struct Arrow
    STRUCT: GoblinArcher
 ========================================================= */
 
-typedef struct GoblinArcher
+typedef struct goblinArcher
 {
     /* ---------- Base ---------- */
     Entity entity;

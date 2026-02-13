@@ -12,13 +12,13 @@ bool CheckCollisionGoblin(float x1, float y1, float w1, float h1,
 
 void InitGoblinBase(Goblin *goblin, Vector2 pos) 
 {
-    goblin->position = pos;
+    goblin->base.position = pos;
 
-    goblin->goblinSpriteWalk = LoadTexture("resources/sprites/goblin/goblin-walk.png");
-    goblin->goblinSpriteHurt = LoadTexture("resources/sprites/goblin/goblin-hurt.png");
-    goblin->goblinSpriteDead = LoadTexture("resources/sprites/goblin/goblin-dead.png");
-    goblin->goblinSpriteIdle = LoadTexture("resources/sprites/goblin/goblin-idle.png");
-    goblin->goblinSpriteAtk = LoadTexture("resources/sprites/goblin/goblin-atk.png");
+    goblin->base.spriteWalk = LoadTexture("resources/sprites/goblin/goblin-walk.png");
+    goblin->base.spriteHurt = LoadTexture("resources/sprites/goblin/goblin-hurt.png");
+    goblin->base.spriteDead = LoadTexture("resources/sprites/goblin/goblin-dead.png");
+    goblin->base.spriteIdle = LoadTexture("resources/sprites/goblin/goblin-idle.png");
+    goblin->base.spriteAtack = LoadTexture("resources/sprites/goblin/goblin-atk.png");
 
     goblin->frameWalk = 6;
     goblin->frameHurt = 4;
@@ -26,23 +26,36 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
     goblin->frameIdle = 8;
     goblin->frameAtk = 6;
 
-    goblin->currentFrame = 0;
+    goblin->base.currentFrame = 0;
     goblin->frameCounter = 8;
-    goblin->frameWidth = goblin->goblinSpriteIdle.width / goblin->frameIdle;
-    goblin->frameHeight = goblin->goblinSpriteIdle.height;
 
-    goblin->isIdle = true;
-    goblin->isWalking = false;
-    goblin->isAtacking = false;
-    goblin->isDead = false;
-    goblin->goblinHasHit = false;
+    goblin->base.frameWidthIdle = goblin->base.spriteIdle.width / goblin->frameIdle;
+    goblin->base.frameHeightIdle = goblin->base.spriteIdle.height;
+
+    goblin->base.frameWidthWalk = goblin->base.spriteWalk.width / goblin->frameWalk;
+    goblin->base.frameHeightWalk = goblin->base.spriteWalk.height;
+    
+    goblin->base.frameWidthAtack = goblin->base.spriteAtack.width / goblin->frameAtk;
+    goblin->base.frameHeightAtack = goblin->base.spriteAtack.height;
+
+    goblin->base.frameWidthDead = goblin->base.spriteDead.width / goblin->frameDead;
+    goblin->base.frameHeightDead = goblin->base.spriteDead.height;
+
+    goblin->base.frameWidthHurt = goblin->base.spriteHurt.width / goblin->frameHurt;
+    goblin->base.frameHeightHurt = goblin->base.spriteHurt.height;
+
+    goblin->base.isIdle = true;
+    goblin->base.isWalking = false;
+    goblin->base.isAtacking = false;
+    goblin->base.isDead = false;
+    goblin->base.monsterHasHit = false;
     goblin->deathAnimationDone = false;
 
     goblin->viewPlayer = 300.0f;
     goblin->goblinAttackRangeRight = 100.0f;
     goblin->goblinAttackRangeLeft = 15.0f;
     goblin->goblinHasHitPlayer = false;
-    goblin->direction = 1;
+    goblin->base.direction = 1;
 
     goblin->hurtTimer = 0.0f;
     goblin->hurtDuration = 0.4f;
@@ -50,8 +63,9 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
     goblin->attackTimer = 0.0f;
     goblin->attackCooldown = 1.0f;
 
-    goblin->scale = 0.02f;
-    goblin->frameFactor = 0.15f;
+    goblin->scaleHitbox = 0.02f;
+    goblin->base.scale = 6.67f;
+    goblin->base.scaleIdle = 6.67f;
 
     goblin->life = 50;
     goblin->maxLife = 50.0f;
@@ -78,11 +92,11 @@ void InitRedGoblin(Goblin *goblin, Vector2 pos)
     goblin->baseSpeed = 80.0f;
     goblin->damage = 40;
 
-    goblin->goblinSpriteWalk = LoadTexture("resources/sprites/redGoblin/Walk.png");
-    goblin->goblinSpriteHurt = LoadTexture("resources/sprites/redGoblin/Hurt.png");
-    goblin->goblinSpriteDead = LoadTexture("resources/sprites/redGoblin/Dead.png");
-    goblin->goblinSpriteIdle = LoadTexture("resources/sprites/redGoblin/Idle.png");
-    goblin->goblinSpriteAtk = LoadTexture("resources/sprites/redGoblin/Attack.png");
+    goblin->base.spriteWalk = LoadTexture("resources/sprites/redGoblin/Walk.png");
+    goblin->base.spriteHurt = LoadTexture("resources/sprites/redGoblin/Hurt.png");
+    goblin->base.spriteDead = LoadTexture("resources/sprites/redGoblin/Dead.png");
+    goblin->base.spriteIdle = LoadTexture("resources/sprites/redGoblin/Idle.png");
+    goblin->base.spriteAtack = LoadTexture("resources/sprites/redGoblin/Attack.png");
 
     goblin->goblinDeathSound = LoadSound("resources/sounds/sound_effects/goblin/red-goblin-death.wav");
     goblin->RedGoblinHitSound = LoadSound("resources/sounds/sound_effects/goblin/red-goblin-hit.wav");
@@ -91,51 +105,51 @@ void InitRedGoblin(Goblin *goblin, Vector2 pos)
 void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta)
 {
     // --- MORTE ---
-    if (goblin->life <= 0 && !goblin->isDead) 
+    if (goblin->life <= 0 && !goblin->base.isDead) 
     {
         PlaySound(goblin->goblinDeathSound);
-        goblin->isDead = true;
-        goblin->goblinHasHit = false;
-        goblin->currentFrame = 0;
+        goblin->base.isDead = true;
+        goblin->base.monsterHasHit = false;
+        goblin->base.currentFrame = 0;
         goblin->goblinHasHitPlayer = false;
         goblin->attackTimer = 0.0f; 
         goblin->frameDead = 7;
         goblin->deathAnimationDone = false;
-        goblin->isWalking = false;
-        goblin->isAtacking = false;
-        goblin->isIdle = false;
+        goblin->base.isWalking = false;
+        goblin->base.isAtacking = false;
+        goblin->base.isIdle = false;
     }
 
-    if (goblin->isDead && goblin->deathAnimationDone)
+    if (goblin->base.isDead && goblin->deathAnimationDone)
         return; 
 
     // --- HURT ---
-    if (goblin->goblinHasHit) 
+    if (goblin->base.monsterHasHit) 
     {
-        goblin->isIdle = false;
-        goblin->isWalking = false;
-        goblin->isAtacking = false;
+        goblin->base.isIdle = false;
+        goblin->base.isWalking = false;
+        goblin->base.isAtacking = false;
 
         goblin->hurtTimer += delta;
 
         if (goblin->hurtTimer >= goblin->hurtDuration) 
         {
-            goblin->goblinHasHit = false;
-            goblin->hurtTimer = 0.0f;
-            goblin->isIdle = true;
+            goblin->base.monsterHasHit = false;
+            goblin->hurtTimer = HURT_TIMER_ZERO;
+            goblin->base.isIdle = true;
         }
     }
 
     // --- FRAME UPDATE ---
     goblin->frameCounter++;
-    if (goblin->frameCounter >= (60 / 10))
+    if (goblin->frameCounter >= (GAME_FPS / ANIMATION_FPS))
     {
         goblin->frameCounter = 0;
-        if (goblin->goblinHasHit && !goblin->isDead)
+        if (goblin->base.monsterHasHit && !goblin->base.isDead)
         {
-            goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameHurt;
+            goblin->base.currentFrame = (goblin->base.currentFrame + 1) % goblin->frameHurt;
         }
-        else if (goblin->isDead && !goblin->deathAnimationDone) 
+        else if (goblin->base.isDead && !goblin->deathAnimationDone) 
         {
             goblin->deathAnimTimer += delta;
             if (goblin->deathAnimTimer >= 0.2f)
@@ -149,23 +163,23 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
                     goblin->deathAnimationDone = true;
                 }
             }
-            goblin->currentFrame = goblin->frameDead;   
+            goblin->base.currentFrame = goblin->frameDead;   
         }
-        else if (goblin->isAtacking) 
+        else if (goblin->base.isAtacking) 
         {
-            if (goblin->currentFrame == 1)
+            if (goblin->base.currentFrame == 1)
             {
                 PlaySound(goblin->goblinCutSound);
             }   
-            goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameAtk;
+            goblin->base.currentFrame = (goblin->base.currentFrame + 1) % goblin->frameAtk;
         }
-        else if (goblin->isWalking) 
+        else if (goblin->base.isWalking) 
         {
-            goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameWalk;
+            goblin->base.currentFrame = (goblin->base.currentFrame + 1) % goblin->frameWalk;
         } 
-        else if (goblin->isIdle) 
+        else if (goblin->base.isIdle) 
         {
-            goblin->currentFrame = (goblin->currentFrame + 1) % goblin->frameIdle;
+            goblin->base.currentFrame = (goblin->base.currentFrame + 1) % goblin->frameIdle;
         }  
     }
 
@@ -173,121 +187,84 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
     if (goblin->attackTimer > 0.0f) 
     {
         goblin->attackTimer -= delta;
-        goblin->isAtacking = true;
-        goblin->isWalking = false;
-        goblin->isIdle = false;
+        goblin->base.isAtacking = true;
+        goblin->base.isWalking = false;
+        goblin->base.isIdle = false;
     }
     else
     {
         float push = 50.0f;
 
-        float distanceToPlayer = fabs(player->position.x - goblin->position.x);
+        float distanceToPlayer = fabs(player->position.x - goblin->base.position.x);
 
-        if (!goblin->isDead && distanceToPlayer <= goblin->viewPlayer && !goblin->goblinHasHit)
+        if (!goblin->base.isDead && distanceToPlayer <= goblin->viewPlayer && !goblin->base.monsterHasHit)
         {
-            goblin->direction = (player->position.x > goblin->position.x) ? 1 : -1;
+            goblin->base.direction = (player->position.x > goblin->base.position.x) ? 1 : -1;
 
-            goblin->isAtacking = false;
-            goblin->isWalking = true;
-            goblin->isIdle = false;
+            goblin->base.isAtacking = false;
+            goblin->base.isWalking = true;
+            goblin->base.isIdle = false;
 
-            goblin->position.x += goblin->speed * goblin->direction * delta;
+            goblin->base.position.x += goblin->speed * goblin->base.direction * delta;
 
-            if (distanceToPlayer <= goblin->goblinAttackRangeRight && goblin->direction == -1)
+            if (distanceToPlayer <= goblin->goblinAttackRangeRight && goblin->base.direction == -1)
             {
-                goblin->isAtacking = true;
+                goblin->base.isAtacking = true;
                 goblin->attackTimer = goblin->attackCooldown;
                 player->life -= goblin->damage;
                 goblin->goblinHasHitPlayer = true;
                 player->hasHit = true;
                 player->hitTimer = 0.4f;
 
-                player->position.x += (player->position.x < goblin->position.x) ? -push : push;
+                player->position.x += (player->position.x < goblin->base.position.x) ? -push : push;
             }
-            else if (distanceToPlayer <= goblin->goblinAttackRangeLeft && goblin->direction == 1)
+            else if (distanceToPlayer <= goblin->goblinAttackRangeLeft && goblin->base.direction == 1)
             {
-                goblin->isAtacking = true;
+                goblin->base.isAtacking = true;
                 goblin->attackTimer = goblin->attackCooldown;
                 player->life -= goblin->damage;
                 goblin->goblinHasHitPlayer = true;
                 player->hasHit = true;
                 player->hitTimer = 0.4f;
 
-                player->position.x += (player->position.x < goblin->position.x) ? -push : push;
+                player->position.x += (player->position.x < goblin->base.position.x) ? -push : push;
             }
         }
         else
         {
-            goblin->isIdle = true;
-            goblin->isWalking = false;
-            goblin->isAtacking = false;
+            goblin->base.isIdle = true;
+            goblin->base.isWalking = false;
+            goblin->base.isAtacking = false;
             goblin->goblinHasHitPlayer = false;
         }
 
-        if (!goblin->isDead && CheckCollisionGoblin(
+        if (!goblin->base.isDead && CheckCollisionGoblin(
                 player->position.x, player->position.y, player->frameWidth , player->frameHeight,
-                goblin->position.x, goblin->position.y, goblin->frameWidth * goblin->scale, goblin->frameHeight * goblin->scale ))
+                goblin->base.position.x, goblin->base.position.y, goblin->base.frameWidthIdle * goblin->scaleHitbox, goblin->base.frameHeightIdle * goblin->scaleHitbox ))
         {
-            player->position.x += (player->position.x < goblin->position.x) ? -push : push;
+            player->position.x += (player->position.x < goblin->base.position.x) ? -push : push;
         }
     }
 }
 
 void DrawGoblin(Goblin *goblin) 
 {
-    goblin->entity.isDead = goblin->isDead;
+    goblin->entity.isDead = goblin->base.isDead;
     goblin->entity.life = goblin->life;
     goblin->entity.maxLife = goblin->maxLife;
-    goblin->entity.position.x = goblin->position.x;
-    goblin->entity.position.y = goblin->position.y;
+    goblin->entity.position.x = goblin->base.position.x;
+    goblin->entity.position.y = goblin->base.position.y;
 
     DrawBar(&goblin->entity, 0, 10);
 
-    Rectangle source = {
-        goblin->currentFrame * goblin->frameWidth,
-        0,
-        goblin->frameWidth * goblin->direction,
-        goblin->frameHeight
-    };
-
-    Rectangle dest = {
-        goblin->position.x,
-        goblin->position.y,
-        goblin->frameWidth * goblin->frameFactor,
-        goblin->frameHeight * goblin->frameFactor
-    };
-
-    Vector2 origin = {0, 0};
-
-    float rotation = 0.0f;
-
-    if (goblin->isDead)
-    {
-        DrawTexturePro(goblin->goblinSpriteDead, source, dest, origin, rotation, WHITE);
-    }
-    else if (goblin->goblinHasHit)
-    {
-       DrawTexturePro(goblin->goblinSpriteHurt, source, dest, origin, rotation, WHITE); 
-    }
-    else if (goblin->isIdle)
-    {
-        DrawTexturePro(goblin->goblinSpriteIdle, source, dest, origin, rotation, WHITE);
-    } 
-    else if (goblin->isWalking)
-    {
-        DrawTexturePro(goblin->goblinSpriteWalk, source, dest, origin, rotation, WHITE);
-    } 
-    else if (goblin->isAtacking)
-    {
-        DrawTexturePro(goblin->goblinSpriteAtk, source, dest, origin, rotation, WHITE);
-    }
+    DrawMonsters(&goblin->base, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO);
 }
 
 void UnloadGoblin(Goblin *goblin) 
 {
-    UnloadTexture(goblin->goblinSpriteWalk);
-    UnloadTexture(goblin->goblinSpriteHurt);
-    UnloadTexture(goblin->goblinSpriteDead);
-    UnloadTexture(goblin->goblinSpriteIdle);
-    UnloadTexture(goblin->goblinSpriteAtk);
+    UnloadTexture(goblin->base.spriteWalk);
+    UnloadTexture(goblin->base.spriteHurt);
+    UnloadTexture(goblin->base.spriteDead);
+    UnloadTexture(goblin->base.spriteIdle);
+    UnloadTexture(goblin->base.spriteAtack);
 }

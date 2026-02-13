@@ -1,6 +1,7 @@
 // ============================================================================
 // Inclusão de bibliotecas
 // ============================================================================
+
 #include "librays/raylib.h"       
 #include "librays/raymath.h"
 #include "librays/cJSON.h"        
@@ -23,7 +24,6 @@
 #include "goblin/goblinBomb.h"
 #include "lifeBar/lifeBarMob.h"
 #include "src/render/drawMonsters.h"
-
 
 // ============================================================================
 // Definições constantes
@@ -69,7 +69,6 @@ typedef enum {
     MUSIC_BOSS
 } MusicState;
 
-
 // Estrutura que representa um mapa carregado do Tiled
 typedef struct
 {
@@ -77,7 +76,6 @@ typedef struct
     int tileWidth, tileHeight;   
     int *data;                   
 } TileMap;
-
 
 //Estrutura das telas de tutoriais
 typedef struct MonsterTutorial
@@ -111,7 +109,6 @@ typedef struct MonsterTutorial
     Rectangle dest2;
 
 } MonsterTutorial;
-
 
 // ============================================================================
 // Funções auxiliares para mapas
@@ -251,6 +248,7 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
 // ============================================================================
 // Função principal
 // ============================================================================
+
 int currentMapIndex = 0;
 
 void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfRun *wolfRun, 

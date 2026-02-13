@@ -74,7 +74,8 @@ void InitGoblinBomb(GoblinBomb *goblinBomb)
     goblinBomb->timerForExplosion = 0.0f;
     goblinBomb->radiusToDamage    = 50.0f;
     goblinBomb->bombRange         = 200.0f;
-    goblinBomb->attackRange       = 35.0f;
+    goblinBomb->atackRange       = 35.0f;
+    goblinBomb->push              = 50;
     goblinBomb->viewPlayer        = 150.0f;
 
     goblinBomb->timerAttackBomb   = 0.0f;
@@ -128,14 +129,14 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     goblinBomb->frameCounter++;
     goblinBomb->bomb.frameCounterBomb++;
 
-    if (goblinBomb->life <= 0 && !goblinBomb->isDead)
+    if (goblinBomb->life <= LIFE_ZERO && !goblinBomb->isDead)
     {
         goblinBomb->isDead = true;
         goblinBomb->base.isIdle = false;
         goblinBomb->isAttackBomb = false;
         goblinBomb->base.isWalking = false;
         goblinBomb->base.isAtacking = false;
-        goblinBomb->base.currentFrame = 0;
+        goblinBomb->base.currentFrame = CURRENT_FRAME_ZERO;
         
         goblinBomb->bomb.isActive = false;
         
@@ -154,41 +155,41 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         if (goblinBomb->hurtTimer >= goblinBomb->hurtDuration)
         {
             goblinBomb->base.monsterHasHit = false;
-            goblinBomb->hurtTimer = 0.0f;
+            goblinBomb->hurtTimer = HURT_TIMER_ZERO;
             goblinBomb->base.isIdle = true;
         }
     }
 
     if (goblinBomb->isDead)
     {
-        if (goblinBomb->frameCounter >= 10)
+        if (goblinBomb->frameCounter >= FRAME_DELAY_GOBLIN_BOMB)
         {
-            goblinBomb->frameCounter = 0;
+            goblinBomb->frameCounter = FRAME_COUNTER_ZERO;
             goblinBomb->base.currentFrame++;
 
             if (goblinBomb->base.currentFrame >= goblinBomb->frameDeath)
-                goblinBomb->base.currentFrame = goblinBomb->frameDeath - 1;
+                goblinBomb->base.currentFrame = goblinBomb->frameDeath - PREVIOUS_FRAME;
         }
 
         return;
     }
-    else if (goblinBomb->frameCounter >= 10)
+    else if (goblinBomb->frameCounter >= FRAME_DELAY_GOBLIN_BOMB)
     {
-        goblinBomb->frameCounter = 0;
+        goblinBomb->frameCounter = FRAME_COUNTER_ZERO;
 
         if (goblinBomb->base.isIdle)
         {
             goblinBomb->base.currentFrame++;
             if (goblinBomb->base.currentFrame >= goblinBomb->frameIdle)
             {
-                goblinBomb->base.currentFrame = 0;
+                goblinBomb->base.currentFrame = FRAME_COUNTER_ZERO;
             }
         }
         else if (goblinBomb->isAttackBomb)
         {
             goblinBomb->base.currentFrame++;
 
-            if (goblinBomb->base.currentFrame == 2 && !goblinBomb->soundBagPlayed)
+            if (goblinBomb->base.currentFrame == FRAME_TO_SOUND_BAG && !goblinBomb->soundBagPlayed)
             {
                 PlaySound(goblinBomb->soundBagGoblin);
                 goblinBomb->soundBagPlayed = true;
@@ -196,14 +197,14 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
             
             if (goblinBomb->base.currentFrame >= goblinBomb->frameAttackBomb)
             {
-                goblinBomb->base.currentFrame = 0;
+                goblinBomb->base.currentFrame = CURRENT_FRAME_ZERO;
             }
         }
         else if (goblinBomb->base.isAtacking)
         {
             goblinBomb->base.currentFrame++;
             
-            if (goblinBomb->base.currentFrame == 6 && !goblinBomb->attackSoundPlayed)
+            if (goblinBomb->base.currentFrame == FRAME_TO_SOUND_ATTACK_GOBLIN_BOMB && !goblinBomb->attackSoundPlayed)
             {
                 PlaySound(goblinBomb->soundAttack);
                 goblinBomb->attackSoundPlayed = true;
@@ -211,7 +212,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
             
             if (goblinBomb->base.currentFrame >= goblinBomb->frameAttack)
             {
-                goblinBomb->base.currentFrame = 0;
+                goblinBomb->base.currentFrame = CURRENT_FRAME_ZERO;
             }
         }
         else if (goblinBomb->base.monsterHasHit)
@@ -219,7 +220,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
             goblinBomb->base.currentFrame++;
             if (goblinBomb->base.currentFrame >= goblinBomb->frameHurt)
             {
-                goblinBomb->base.currentFrame = 0;
+                goblinBomb->base.currentFrame = CURRENT_FRAME_ZERO;
             }
         }
         else if (goblinBomb->base.isWalking)
@@ -228,39 +229,39 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         
             if (goblinBomb->base.currentFrame >= goblinBomb->frameRun)
             {
-                goblinBomb->base.currentFrame = 0;
+                goblinBomb->base.currentFrame = CURRENT_FRAME_ZERO;
             }
         }
     }
 
-    if (goblinBomb->bomb.frameCounterBomb >= 10)
+    if (goblinBomb->bomb.frameCounterBomb >= FRAME_DELAY_GOBLIN_BOMB)
     {
-        goblinBomb->bomb.frameCounterBomb = 0;
+        goblinBomb->bomb.frameCounterBomb = FRAME_COUNTER_BOMB_ZERO;
 
         if (goblinBomb->bomb.isActive)
         {
             goblinBomb->bomb.currentFrameBomb++;
 
-            if (goblinBomb->bomb.currentFrameBomb == 14)
+            if (goblinBomb->bomb.currentFrameBomb == FRAME_TO_SOUND_EXPLOSION)
             {
                 PlaySound(goblinBomb->bomb.explosion);
             }
             
             if (goblinBomb->bomb.currentFrameBomb >= goblinBomb->bomb.frameBomb)
             {
-                goblinBomb->bomb.currentFrameBomb = 0;
-                goblinBomb->bomb.frameCounterBomb = 0;
+                goblinBomb->bomb.currentFrameBomb = FRAME_CURRENT_BOMB_ZERO;
+                goblinBomb->bomb.frameCounterBomb = FRAME_COUNTER_BOMB_ZERO;
             }
         }
     }
 
     float disatanceToAttack = fabs(player->position.x - goblinBomb->base.position.x);
 
-    goblinBomb->base.direction = (player->position.x > goblinBomb->base.position.x) ? 1 : -1;
+    goblinBomb->base.direction = (player->position.x > goblinBomb->base.position.x) ? DIRECTION_RIGHT: DIRECTION_LEFT;
 
     if (disatanceToAttack <= goblinBomb->viewPlayer && goblinBomb->hasThrownBomb)
     {
-        if (disatanceToAttack > goblinBomb->attackRange)
+        if (disatanceToAttack > goblinBomb->atackRange)
         {
             goblinBomb->base.isWalking = true;
             goblinBomb->base.isIdle = false;
@@ -287,7 +288,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
     {
         if (goblinBomb->bombRange > disatanceToAttack)
         {
-            if (goblinBomb->attackRange > disatanceToAttack)
+            if (goblinBomb->atackRange > disatanceToAttack)
             {
                 goblinBomb->base.isAtacking = true;
                 goblinBomb->isAttackBomb = false;
@@ -296,7 +297,7 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
                 if (!wasAttacking)
                 {
                     PlaySound(goblinBomb->soundAttack);
-                    goblinBomb->base.currentFrame = 0; 
+                    goblinBomb->base.currentFrame = CURRENT_FRAME_ZERO; 
                 }
             }
             else
@@ -325,21 +326,19 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
 
                 goblinBomb->bomb.isActive = true;
                 PlaySound(goblinBomb->bomb.timer);
-                goblinBomb->timerAttackBomb = 0.0f;
+                goblinBomb->timerAttackBomb = ATTACK_BOMB_TIMER_ZERO;
             }
         }
     }
     else
     {
-        float right = 200.0f;
-        
-        if (goblinBomb->attackRange > disatanceToAttack && goblinBomb->base.direction == -1)
+        if (goblinBomb->atackRange > disatanceToAttack && goblinBomb->base.direction == DIRECTION_LEFT)
         {
             goblinBomb->base.isAtacking = true;
             goblinBomb->base.isIdle = false;
             goblinBomb->base.isWalking = false;
         }
-        else if (right > disatanceToAttack && goblinBomb->base.direction == 1)
+        else if (goblinBomb->atackRangeRight > disatanceToAttack && goblinBomb->base.direction == DIRECTION_RIGHT)
         {
             goblinBomb->base.isAtacking = true;
             goblinBomb->base.isIdle = false;
@@ -359,10 +358,10 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
 
     Rectangle goblinRec =
         {
-            goblinBomb->base.position.x + GOBLIN_HITBOX_OFFSET_X,
-            goblinBomb->base.position.y + GOBLIN_HITBOX_OFFSET_Y,
-            goblinBomb->base.frameWidthAtack / GOBLIN_HITBOX_SCALE,
-            goblinBomb->base.frameHeightAtack / GOBLIN_HITBOX_SCALE};
+            goblinBomb->base.position.x + GOBLIN_BOMB_HITBOX_OFFSET_X,
+            goblinBomb->base.position.y + GOBLIN_BOMB_HITBOX_OFFSET_Y,
+            goblinBomb->base.frameWidthAtack / GOBLIN_BOMB_HITBOX_SCALE,
+            goblinBomb->base.frameHeightAtack / GOBLIN_BOMB_HITBOX_SCALE};
 
     Vector2 centerCircle =
         {
@@ -383,12 +382,12 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
             goblinBomb->bomb.pos.x += goblinBomb->bomb.speed * goblinBomb->base.direction * delta;
 
             if (!goblinBomb->bomb.playerIsDamage && CheckCollisionCircleRec(centerCircle, goblinBomb->radiusToDamage, playerRec) 
-            && goblinBomb->bomb.currentFrameBomb == 14)
+            && goblinBomb->bomb.currentFrameBomb == FRAME_TO_DAMAGE_EXPLOSION)
             {
                 player->life -= goblinBomb->damageBomb;
                 goblinBomb->bomb.playerIsDamage = true;
                 player->hasHit = true;
-                player->hitTimer = 0.4f;
+                player->hitTimer = HIT_TIMER;
             }
         }
         else
@@ -399,26 +398,24 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
 
             goblinBomb->base.isIdle = true;
             goblinBomb->isAttackBomb = false;
-            goblinBomb->timerForExplosion = 0.0f;
+            goblinBomb->timerForExplosion = ATTACK_BOMB_TIMER_ZERO;
             goblinBomb->bomb.playerIsDamage = false;
         }
     }
 
     goblinBomb->animAttackTimer -= delta;
 
-    if (goblinBomb->base.isAtacking && goblinBomb->base.currentFrame == 7 && goblinBomb->animAttackTimer <= 0.0)
+    if (goblinBomb->base.isAtacking && goblinBomb->base.currentFrame == FRAME_TO_ATTACK_GOBLIN_BOMB && goblinBomb->animAttackTimer <= ANIM_ATTACK_ZERO)
     {
         if (CheckCollisionRecs(playerRec, goblinRec))
         {
             player->life -= goblinBomb->damage;
             player->hasHit = true;
-            player->hitTimer = 0.4f;
+            player->hitTimer = HIT_TIMER;
 
-            goblinBomb->animAttackTimer = 1.0f;
+            goblinBomb->animAttackTimer = ANIM_ATTACK;
         }
     }
-
-    int push = 50;
 
     if (!goblinBomb->isDead && CheckColisionGoblinBomb(
         player->position.x + PLAYER_HITBOX_OFFSET_X, 
@@ -426,13 +423,13 @@ void UpdateGoblinBomb(GoblinBomb *goblinBomb, float delta, Player *player)
         player->frameWidth / PLAYER_HITBOX_WIDTH_DIV, 
         player->frameHeight,
 
-        goblinBomb->base.position.x + GOBLIN_HITBOX_OFFSET_X, 
-        goblinBomb->base.position.y + GOBLIN_HITBOX_OFFSET_Y, 
-        goblinBomb->base.frameWidthHurt / GOBLIN_SCALE_WIDTH, 
-        goblinBomb->base.frameHeightHurt / GOBLIN_SCALE_HEIGHT
+        goblinBomb->base.position.x + GOBLIN_BOMB_HITBOX_OFFSET_X, 
+        goblinBomb->base.position.y + GOBLIN_BOMB_HITBOX_OFFSET_Y, 
+        goblinBomb->base.frameWidthHurt / GOBLIN_BOMB_SCALE_WIDTH, 
+        goblinBomb->base.frameHeightHurt / GOBLIN_BOMB_SCALE_HEIGHT
         ))
     {
-        player->position.x += (player->position.x < goblinBomb->base.position.x) ? -push : push;
+        player->position.x += (player->position.x < goblinBomb->base.position.x) ? -goblinBomb->push : goblinBomb->push;
     }
 }
 
@@ -444,7 +441,7 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
     goblinBomb->entity.position.x = goblinBomb->base.position.x;
     goblinBomb->entity.position.y = goblinBomb->base.position.y;
 
-    DrawBar(&goblinBomb->entity, 120, -90);
+    DrawBar(&goblinBomb->entity, OFFSET_BAR_LIFE_X_GOBLIN_BOMB, OFFSET_BAR_LIFE_Y_GOBLIN_BOMB);
 
     Rectangle source;
     Rectangle dest;
@@ -453,7 +450,7 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
 
     if (goblinBomb->isAttackBomb)
     {
-        source = (Rectangle){goblinBomb->base.currentFrame * goblinBomb->frameWidthAttackBomb, ROW_BASE, goblinBomb->frameWidthAttackBomb * goblinBomb->base.direction, goblinBomb->frameHeightAttackBomb};
+        source = (Rectangle){goblinBomb->base.currentFrame * goblinBomb->frameWidthAttackBomb, SPRITE_ROW_BASE, goblinBomb->frameWidthAttackBomb * goblinBomb->base.direction, goblinBomb->frameHeightAttackBomb};
         dest = (Rectangle){goblinBomb->base.position.x, goblinBomb->base.position.y, goblinBomb->frameWidthAttackBomb / goblinBomb->base.scale, goblinBomb->frameHeightAttackBomb / goblinBomb->base.scale};
 
         DrawTexturePro(goblinBomb->spriteAttackBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
@@ -461,7 +458,7 @@ void DrawGoblinBomb(GoblinBomb *goblinBomb, Player *player)
 
     if (goblinBomb->bomb.isActive)
     {
-        source = (Rectangle){goblinBomb->bomb.currentFrameBomb * goblinBomb->bomb.frameWidthBomb, ROW_BASE, goblinBomb->bomb.frameWidthBomb * goblinBomb->base.direction, goblinBomb->bomb.frameHeightBomb};
+        source = (Rectangle){goblinBomb->bomb.currentFrameBomb * goblinBomb->bomb.frameWidthBomb, SPRITE_ROW_BASE, goblinBomb->bomb.frameWidthBomb * goblinBomb->base.direction, goblinBomb->bomb.frameHeightBomb};
         dest = (Rectangle){goblinBomb->bomb.pos.x, goblinBomb->bomb.pos.y + BOMB_CENTER_OFFSET_Y, goblinBomb->bomb.frameWidthBomb / goblinBomb->base.scale, goblinBomb->bomb.frameHeightBomb / goblinBomb->base.scale};
 
         DrawTexturePro(goblinBomb->spriteBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);

@@ -10,17 +10,11 @@
 #include "../boss/boss.h"
 #include "../goblin/goblinTank.h"
 #include "../goblin/goblinBomb.h"
+#include "../src/define/define.h"
 
 #define NUM_MAPS 4
 #define NUM_MAPS_WITH_PEASANT 3
 #define DIALOGS_PER_MAP 3
-
-#define PLAYER_HITBOX_OFFSET_X   50
-#define PLAYER_HITBOX_OFFSET_Y   35
-
-#define PLAYER_HITBOX_WIDTH_DIV  1.5f
-
-#define HIT_TIMER 0.4f
 
 void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
 void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogueIndex);

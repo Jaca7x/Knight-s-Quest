@@ -111,7 +111,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         goblinTank->base.monsterHasHit = false;
         goblinTank->hitPlayer = false;
         goblinTank->base.currentFrame = CURRENT_FRAME_ZERO;
-        goblinTank->frameDead = FRAME_OF_DEATH;
+        goblinTank->frameDead = FRAME_OF_DEATH_GOBLIN_TANK;
     }
 
     if (goblinTank->base.isDead && goblinTank->deathAnimationDone)
@@ -141,7 +141,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         if (goblinTank->hurtTimer >= goblinTank->hurtDuration)
         {
             goblinTank->base.monsterHasHit = false;
-            goblinTank->hurtTimer = 0.0f;
+            goblinTank->hurtTimer = HURT_TIMER_ZERO;
             goblinTank->base.isIdle = true;
         }
     }
@@ -171,7 +171,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
     }
     else if (goblinTank->base.isAtacking && goblinTank->frameCounter >= GOBLIN_TANK_ATTACK_FRAME_DELAY)
     {
-        if (goblinTank->base.currentFrame == FRAME_TO_SOUND_ATTACK)
+        if (goblinTank->base.currentFrame == FRAME_TO_SOUND_ATTACK_GOBLIN_TANK)
         {
             PlaySound(goblinTank->soundAttackGoblinTank);
         }
@@ -223,7 +223,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         {
             goblinTank->atackAnimTimer = COOL_DOWN_ATTACK;
 
-            if (goblinTank->base.isAtacking && !goblinTank->hitApplied && goblinTank->base.currentFrame == FRAME_TO_DAMAGE)
+            if (goblinTank->base.isAtacking && !goblinTank->hitApplied && goblinTank->base.currentFrame == FRAME_TO_DAMAGE_GOBLIN_TANK)
             {
                 player->life -= goblinTank->damage;
                 goblinTank->hitPlayer = true;
@@ -242,7 +242,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         {
             goblinTank->atackAnimTimer = COOL_DOWN_ATTACK;
 
-            if (goblinTank->base.isAtacking && !goblinTank->hitApplied && goblinTank->base.currentFrame == FRAME_TO_DAMAGE)
+            if (goblinTank->base.isAtacking && !goblinTank->hitApplied && goblinTank->base.currentFrame == FRAME_TO_DAMAGE_GOBLIN_TANK)
             {
                 player->life -= goblinTank->damage;
                 goblinTank->hitPlayer = true;
@@ -267,7 +267,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
     {
         if (goblinTank->base.isAtacking)
         {
-            if (goblinTank->base.currentFrame >= ATTACK_HITBOX_START_FRAME)
+            if (goblinTank->base.currentFrame >= ATTACK_HITBOX_START_FRAME_GOBLIN_TANK)
             {
                 attackOffsetX = GOBLIN_ATTACK_LEFT_STRIKE;
             }
@@ -283,7 +283,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
     {
         if (goblinTank->base.isAtacking)
         {
-            if (goblinTank->base.currentFrame >= ATTACK_HITBOX_START_FRAME)
+            if (goblinTank->base.currentFrame >= ATTACK_HITBOX_START_FRAME_GOBLIN_TANK)
             {
                 attackOffsetX = GOBLIN_ATTACK_RIGHT_STRIKE;
             }
@@ -320,17 +320,17 @@ void DrawGoblinTank(GoblinTank *goblinTank, Player *player)
     goblinTank->entity.position.y = goblinTank->base.position.y;
     goblinTank->entity.isDead = goblinTank->base.isDead;
 
-    DrawBar(&goblinTank->entity, 140, 15);
+    DrawBar(&goblinTank->entity, OFFSET_BAR_LIFE_X_GOBLIN_TANK, OFFSET_BAR_LIFE_Y_GOBLIN_TANK);
 
     DrawMonsters
     (
         &goblinTank->base, 
         SPRITE_ROW_BASE, 
-        HURT_OFFSET_HURT_Y, 
-        HURT_OFFSET_DEAD_Y, 
-        HURT_OFFSET_ATTACK_Y, 
-        HURT_OFFSET_WALKING_Y, 
-        HURT_OFFSET_IDLE_Y
+        HURT_GOBLIN_TANK_OFFSET_HURT_Y, 
+        HURT_GOBLIN_TANK_OFFSET_DEAD_Y, 
+        HURT_GOBLIN_TANK_OFFSET_ATTACK_Y, 
+        HURT_GOBLIN_TANK_OFFSET_WALKING_Y,
+        HURT_GOBLIN_TANK_OFFSET_IDLE_Y
     );
 }
 
@@ -341,6 +341,7 @@ void UnloadGoblinTank(GoblinTank *goblinTank)
     UnloadTexture(goblinTank->base.spriteDead);
     UnloadTexture(goblinTank->base.spriteIdle);
     UnloadTexture(goblinTank->base.spriteAtack);
+    
     UnloadSound(goblinTank->soundAttackGoblinTank);
     UnloadSound(goblinTank->soundGrowlGoblinTank);
     UnloadSound(goblinTank->soundHurtGoblinTank);
