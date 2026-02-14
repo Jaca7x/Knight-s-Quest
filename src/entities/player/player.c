@@ -79,59 +79,59 @@ void AttackMonsters(int currentMapIndex, int map, bool *isDead, int positionMons
 void InitPlayer(Player *player)
 {
     // Carregar efeitos sonoros
-    player->attackLightSound = LoadSound("resources/sounds/sound_effects/player/attack-1.wav");
-    player->attackHeavySound = LoadSound("resources/sounds/sound_effects/player/attack-2.wav");
-    player->jumpSound        = LoadSound("resources/sounds/sound_effects/player/jump.wav");
+    player->attackLightSound = LoadSound("assets/resources/sounds/sound_effects/player/attack-1.wav");
+    player->attackHeavySound = LoadSound("assets/resources/sounds/sound_effects/player/attack-2.wav");
+    player->jumpSound        = LoadSound("assets/resources/sounds/sound_effects/player/jump.wav");
 
-    player->playerDialogueWithNPC1 = LoadSound("resources/sounds/voices/player/player-dialogue-npc-1.wav");
-    player->playerDialogueWithNPC2 = LoadSound("resources/sounds/voices/player/player-dialogue-npc-2.wav");
+    player->playerDialogueWithNPC1 = LoadSound("assets/resources/sounds/voices/player/player-dialogue-npc-1.wav");
+    player->playerDialogueWithNPC2 = LoadSound("assets/resources/sounds/voices/player/player-dialogue-npc-2.wav");
 
-    player->dialogues[0][0].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost1-1.wav");
-    player->dialogues[0][1].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost1-2.wav");
-    player->dialogues[0][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost1-3.wav");
+    player->dialogues[0][0].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost1-1.wav");
+    player->dialogues[0][1].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost1-2.wav");
+    player->dialogues[0][2].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost1-3.wav");
 
     // MAPA 2
-    player->dialogues[1][0].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost2-1.wav");
-    player->dialogues[1][1].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost2-2.wav");
-    player->dialogues[1][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost2-3.wav");
+    player->dialogues[1][0].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost2-1.wav");
+    player->dialogues[1][1].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost2-2.wav");
+    player->dialogues[1][2].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost2-3.wav");
 
     // MAPA 3
-    player->dialogues[2][0].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost3-1.wav");
-    player->dialogues[2][1].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost3-2.wav");
-    player->dialogues[2][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost3-3.wav");
+    player->dialogues[2][0].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost3-1.wav");
+    player->dialogues[2][1].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost3-2.wav");
+    player->dialogues[2][2].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost3-3.wav");
 
     // MAPA 4
-    player->dialogues[3][0].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost4-1.wav");
-    player->dialogues[3][1].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost4-2.wav");
-    player->dialogues[3][2].sound = LoadSound("resources/sounds/voices/player/player-dialogueghost4-3.wav");
+    player->dialogues[3][0].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost4-1.wav");
+    player->dialogues[3][1].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost4-2.wav");
+    player->dialogues[3][2].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost4-3.wav");
 
     //PEASANT DIALOGUES
     player->dialoguesWithPeasant[0][0].text = "Gareth II: Ei! Você aí! O que está fazendo\n no meio dessa floresta infestada de goblins?!";
-    player->dialoguesWithPeasant[0][0].sound = LoadSound("resources/sounds/voices/player/player-peasant1-0.wav");
+    player->dialoguesWithPeasant[0][0].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant1-0.wav");
 
     player->dialoguesWithPeasant[0][1].text = "Gareth II: Você enlouqueceu? Eles vão te matar!";
-    player->dialoguesWithPeasant[0][1].sound = LoadSound("resources/sounds/voices/player/player-peasant1-1.wav");
+    player->dialoguesWithPeasant[0][1].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant1-1.wav");
 
     player->dialoguesWithPeasant[0][2].text = "Gareth II: Você veio sozinho?! Volte para\na vila agora antes que seja tarde demais!";
-    player->dialoguesWithPeasant[0][2].sound = LoadSound("resources/sounds/voices/player/player-peasant1-2.wav");
+    player->dialoguesWithPeasant[0][2].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant1-2.wav");
 
     player->dialoguesWithPeasant[1][0].text = "Gareth II: Vamos rápido, antes que os goblins\nnos vejam!";
-    player->dialoguesWithPeasant[1][0].sound = LoadSound("resources/sounds/voices/player/player-peasant2-0.wav");
+    player->dialoguesWithPeasant[1][0].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant2-0.wav");
 
     player->dialoguesWithPeasant[1][1].text = "Gareth II: Você está louco? Você é apenas um\nfazendeiro, está indo para a morte!";
-    player->dialoguesWithPeasant[1][1].sound = LoadSound("resources/sounds/voices/player/player-peasant2-1.wav");
+    player->dialoguesWithPeasant[1][1].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant2-1.wav");
 
     player->dialoguesWithPeasant[1][2].text = "Gareth II: Certo, vamos mais rápido.\nNão podemos perder mais tempo aqui!";
-    player->dialoguesWithPeasant[1][2].sound = LoadSound("resources/sounds/voices/player/player-peasant2-2.wav");
+    player->dialoguesWithPeasant[1][2].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant2-2.wav");
 
     player->dialoguesWithPeasant[2][0].text = "Gareth II: Mas… que estranho, há tão poucos\ngoblins por aqui...";
-    player->dialoguesWithPeasant[2][0].sound = LoadSound("resources/sounds/voices/player/player-peasant3-0.wav");
+    player->dialoguesWithPeasant[2][0].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant3-0.wav");
 
     player->dialoguesWithPeasant[2][1].text = "Gareth II: Sim, algo não está certo. Sinto que\nestamos sendo observados...";
-    player->dialoguesWithPeasant[2][1].sound = LoadSound("resources/sounds/voices/player/player-peasant3-1.wav");
+    player->dialoguesWithPeasant[2][1].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant3-1.wav");
 
     player->dialoguesWithPeasant[2][2].text = "Gareth II: ESCONDA-SE!";
-    player->dialoguesWithPeasant[2][2].sound = LoadSound("resources/sounds/voices/player/player-peasant3-2.wav");
+    player->dialoguesWithPeasant[2][2].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant3-2.wav");
 
     player->attackSoundPlayed = false;
     player->jumpSoundPlayed   = false;
@@ -139,15 +139,15 @@ void InitPlayer(Player *player)
     player->walkSoundPlayingGrass   = false;
 
     // Carregar sprites
-    player->spritePlayerRun      = LoadTexture("resources/sprites/player/RUN.png");
-    player->spritePlayerWalk     = LoadTexture("resources/sprites/player/WALK.png");
-    player->spritePlayerIdle     = LoadTexture("resources/sprites/player/IDLE.png");
-    player->spritePlayerJump     = LoadTexture("resources/sprites/player/JUMP.png");
-    player->spritePlayerAttack1  = LoadTexture("resources/sprites/player/ATTACK 1.png");
-    player->spritePlayerAttack2  = LoadTexture("resources/sprites/player/ATTACK 2.png");
-    player->spritePlayerHurt     = LoadTexture("resources/sprites/player/HURT.png");
-    player->spritePlayerDead     = LoadTexture("resources/sprites/player/DEATH.png");
-    player->playerSpeech         = LoadTexture("resources/sprites/player/player-speech.png");
+    player->spritePlayerRun      = LoadTexture("assets/resources/sprites/player/RUN.png");
+    player->spritePlayerWalk     = LoadTexture("assets/resources/sprites/player/WALK.png");
+    player->spritePlayerIdle     = LoadTexture("assets/resources/sprites/player/IDLE.png");
+    player->spritePlayerJump     = LoadTexture("assets/resources/sprites/player/JUMP.png");
+    player->spritePlayerAttack1  = LoadTexture("assets/resources/sprites/player/ATTACK 1.png");
+    player->spritePlayerAttack2  = LoadTexture("assets/resources/sprites/player/ATTACK 2.png");
+    player->spritePlayerHurt     = LoadTexture("assets/resources/sprites/player/HURT.png");
+    player->spritePlayerDead     = LoadTexture("assets/resources/sprites/player/DEATH.png");
+    player->playerSpeech         = LoadTexture("assets/resources/sprites/player/player-speech.png");
 
     // Quantidade de frames de cada animação
     player->frameRun    = 8;
@@ -206,11 +206,11 @@ void InitPlayer(Player *player)
     player->lightDamage = 50;
     player->heavyDamage = 70;
 
-    player->walkingInCastle = LoadSound("resources/sounds/sound_effects/player/walking-castle.wav");
-    player->walkingInGrass = LoadSound("resources/sounds/sound_effects/player/walking-grass.wav");
+    player->walkingInCastle = LoadSound("assets/resources/sounds/sound_effects/player/walking-castle.wav");
+    player->walkingInGrass = LoadSound("assets/resources/sounds/sound_effects/player/walking-grass.wav");
 
-    player->playerHurtSound = LoadSound("resources/sounds/sound_effects/player/player-hurt.wav");
-    player->death = LoadSound("resources/sounds/sound_effects/player/game-over.wav");
+    player->playerHurtSound = LoadSound("assets/resources/sounds/sound_effects/player/player-hurt.wav");
+    player->death = LoadSound("assets/resources/sounds/sound_effects/player/game-over.wav");
 }
 
 // Atualiza o estado do jogador (movimento, física e animação).

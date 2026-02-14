@@ -477,11 +477,11 @@ int main(void)
 
     InitAudioDevice();
 
-    Music menuMusic = LoadMusicStream("resources/music/menu-music.mp3");
-    Music soundTrack = LoadMusicStream("resources/music/soundtrack.mp3");
+    Music menuMusic = LoadMusicStream("assets/resources/music/menu-music.mp3");
+    Music soundTrack = LoadMusicStream("assets/resources/music/soundtrack.mp3");
 
-    Sound buttonSelect = LoadSound("resources/sounds/sound_effects/buttons/menu-select-button.wav");
-    Sound onOFF = LoadSound("resources/sounds/sound_effects/buttons/ON-OFF.wav");
+    Sound buttonSelect = LoadSound("assets/resources/sounds/sound_effects/buttons/menu-select-button.wav");
+    Sound onOFF = LoadSound("assets/resources/sounds/sound_effects/buttons/ON-OFF.wav");
     
     float textTime = 0.0f;
 
@@ -527,8 +527,8 @@ int main(void)
         "Um pequeno inimigo, mas feroz\ncuidado com suas rápidas facadas.",
         "Cuidado com suas flechas, se estiver na\nmira quasesempre um disparo certeiro.",
 
-        LoadTexture("resources/sprites/goblin/goblin-atk.png"),
-        LoadTexture("resources/sprites/goblinArcher/goblinArcher-atk.png"),
+        LoadTexture("assets/resources/sprites/goblin/goblin-atk.png"),
+        LoadTexture("assets/resources/sprites/goblinArcher/goblinArcher-atk.png"),
 
         6, 0, 0.15f, 0.0f, 0, 0,   
         6, 0, 0.15f, 0.0f, 0, 0,
@@ -553,8 +553,8 @@ int main(void)
         "O lobo sentinela dificilmente ira atrás de você,\nele apenas ataca se entrar na área dele.",
         "O lobo perseguidor, logo após de ver sua\npresa, ira correr furiosamente atrás\nde sua presa.",
 
-        LoadTexture("resources/sprites/wolf/Attack_1.png"),
-        LoadTexture("resources/sprites/wolf/Run.png"),
+        LoadTexture("assets/resources/sprites/wolf/Attack_1.png"),
+        LoadTexture("assets/resources/sprites/wolf/Run.png"),
 
         6,       
         0,       
@@ -590,8 +590,8 @@ int main(void)
         "O goblin vermelho é quase idêntico aos seus\nirmãos verdes, exceto por sua faca, sempre\nmanchada pelo sangue de suas últimas vítimas.", 
         "O lobo de sangue, e o variação mais feroz\ndos lobos seus ataques são muito poderosos.",
 
-        LoadTexture("resources/sprites/redGoblin/Attack.png"),
-        LoadTexture("resources/sprites/redWolf/Idle.png"),
+        LoadTexture("assets/resources/sprites/redGoblin/Attack.png"),
+        LoadTexture("assets/resources/sprites/redWolf/Idle.png"),
 
         6, 0, 0.15f, 0.0f, 0, 0,
 
@@ -618,8 +618,8 @@ int main(void)
         "O lobo albino é o mais rápido de todos os lobos, cuidado",
         "A velocidade dele e surreal, ele pode estar\natás de você enquanto acha que ele está\na sua frente.",
 
-        LoadTexture("resources/sprites/whiteWolf/Attack.png"),
-        LoadTexture("resources/sprites/whiteWolf/Walk.png"),
+        LoadTexture("assets/resources/sprites/whiteWolf/Attack.png"),
+        LoadTexture("assets/resources/sprites/whiteWolf/Walk.png"),
 
         4,       
         0,       
@@ -655,8 +655,8 @@ int main(void)
         "O goblin pesado, e muito poderoso\nseus ataques fazem toda a floresta\ntremer.",
         "O martelo dele e feito de metal puro\nentão tome cuidado.",
 
-        LoadTexture("resources/sprites/goblinTank/goblinTank-idle.png"),
-        LoadTexture("resources/sprites/goblinTank/goblinTank-attack.png"),
+        LoadTexture("assets/resources/sprites/goblinTank/goblinTank-idle.png"),
+        LoadTexture("assets/resources/sprites/goblinTank/goblinTank-attack.png"),
 
         8,       
         0,       
@@ -692,8 +692,8 @@ int main(void)
         "O Goblin Bomba é um dos tipos mais difíceis\nde se encontrar, pois muitas vezes eles acabam\nse explodindo antes mesmo de serem vistos.",
         "Cuidado: dependendo de como você\nse aproxima, ele pode arremessar\numa bomba nada carinhosa.",
 
-        LoadTexture("resources/sprites/bombGoblin/Idle.png"),
-        LoadTexture("resources/sprites/bombGoblin/Bomb_sprite.png"),
+        LoadTexture("assets/resources/sprites/bombGoblin/Idle.png"),
+        LoadTexture("assets/resources/sprites/bombGoblin/Bomb_sprite.png"),
 
         4,       
         0,       
@@ -729,8 +729,8 @@ int main(void)
         "Brakkor é o grande rei dos goblins\ndizem que ele chegou ao trono após\nderrotar seus outros irmãos.",
         "O dourado se refere a sua armadura\nsegundo lendas ela foi forjada com os\ntesouros que Brakkor roubou dos outros\nreinos.",
 
-        LoadTexture("resources/sprites/boss/boss_attack.png"),
-        LoadTexture("resources/sprites/boss/boss_idle.png"),
+        LoadTexture("assets/resources/sprites/boss/boss_attack.png"),
+        LoadTexture("assets/resources/sprites/boss/boss_idle.png"),
 
         9,       
         0,       
@@ -828,16 +828,16 @@ int main(void)
     Texture2D tileset6 = LoadTexture("assets/maps/tiles_map/goblin2.png");
     Texture2D tileset7 = LoadTexture("assets/maps/tiles_map/goblin3.png");
 
-    Texture2D staminaBar = LoadTexture("resources/sprites/stamina/staminaBar.png");
+    Texture2D staminaBar = LoadTexture("assets/resources/sprites/stamina/staminaBar.png");
 
-    Texture2D barLifeSprite = LoadTexture("resources/sprites/life/life.png");
+    Texture2D barLifeSprite = LoadTexture("assets/resources/sprites/life/life.png");
 
-    Texture2D deathImage = LoadTexture("resources/img/deathImage.png");
-    Texture2D completGame = LoadTexture("resources/img/youWin.png");
+    Texture2D deathImage = LoadTexture("assets/resources/img/deathImage.png");
+    Texture2D completGame = LoadTexture("assets/resources/img/youWin.png");
 
-    Texture2D menuImage = LoadTexture("resources/img/menu.png");
+    Texture2D menuImage = LoadTexture("assets/resources/img/menu.png");
 
-    Font titleMaps = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
+    Font titleMaps = LoadFontEx("assets/resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
     float volume = 0.5;
     float volumeEfects = 1.0;

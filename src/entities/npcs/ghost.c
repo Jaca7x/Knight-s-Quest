@@ -82,32 +82,32 @@ const char **GetPlayerDialog(int mapIndex, int *numLines)
 void InitGhost(Ghost *ghost)
 {
     ghost->position = (Vector2){200, 540};
-    ghost->ghostIdle = LoadTexture("resources/sprites/npc/ghost-idle.png");
-    ghost->ghostBtnE = LoadTexture("resources/sprites/btns/btn-E.png");
-    ghost->ghostSpeech = LoadTexture("resources/sprites/npc/ghost-speech.png");
-    ghost->ghostExclamation = LoadTexture("resources/sprites/npc/exclamation.png");
+    ghost->ghostIdle = LoadTexture("assets/resources/sprites/npc/ghost-idle.png");
+    ghost->ghostBtnE = LoadTexture("assets/resources/sprites/btns/btn-E.png");
+    ghost->ghostSpeech = LoadTexture("assets/resources/sprites/npc/ghost-speech.png");
+    ghost->ghostExclamation = LoadTexture("assets/resources/sprites/npc/exclamation.png");
 
     ghost->frameIdle = 3;
 
     // MAPA 1
-    ghost->dialogues[0][0].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue1-1.wav");
-    ghost->dialogues[0][1].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue1-2.wav");
-    ghost->dialogues[0][2].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue1-3.wav");
+    ghost->dialogues[0][0].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue1-1.wav");
+    ghost->dialogues[0][1].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue1-2.wav");
+    ghost->dialogues[0][2].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue1-3.wav");
 
     // MAPA 2
-    ghost->dialogues[1][0].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue2-1.wav");
-    ghost->dialogues[1][1].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue2-2.wav");
-    ghost->dialogues[1][2].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue2-3.wav");
+    ghost->dialogues[1][0].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue2-1.wav");
+    ghost->dialogues[1][1].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue2-2.wav");
+    ghost->dialogues[1][2].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue2-3.wav");
 
     // MAPA 3
-    ghost->dialogues[2][0].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue3-1.wav");
-    ghost->dialogues[2][1].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue3-2.wav");
-    ghost->dialogues[2][2].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue3-3.wav");
+    ghost->dialogues[2][0].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue3-1.wav");
+    ghost->dialogues[2][1].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue3-2.wav");
+    ghost->dialogues[2][2].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue3-3.wav");
 
     // MAPA 4
-    ghost->dialogues[3][0].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue4-1.wav");
-    ghost->dialogues[3][1].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue4-2.wav");
-    ghost->dialogues[3][2].sound = LoadSound("resources/sounds/voices/ghost/ghost-dialogue4-3.wav");
+    ghost->dialogues[3][0].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue4-1.wav");
+    ghost->dialogues[3][1].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue4-2.wav");
+    ghost->dialogues[3][2].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue4-3.wav");
 
     bool isInteraction = false;
 
@@ -116,7 +116,7 @@ void InitGhost(Ghost *ghost)
     ghost->currentFrame = 0;
     ghost->frameCounter = 0;
 
-    ghost->textFont = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250); 
+    ghost->textFont = LoadFontEx("assets/resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250); 
     ghost->speechFontSize = 30;
 }
 

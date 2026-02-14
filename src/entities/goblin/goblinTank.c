@@ -64,11 +64,11 @@ void InitGoblinTank(GoblinTank *goblinTank)
     goblinTank->droppedHeart = false;
 
     // Sprites
-    goblinTank->base.spriteWalk   = LoadTexture("resources/sprites/goblinTank/goblinTank-walk.png");
-    goblinTank->base.spriteHurt   = LoadTexture("resources/sprites/goblinTank/goblinTank-hurt.png");
-    goblinTank->base.spriteDead   = LoadTexture("resources/sprites/goblinTank/goblinTank-dead.png");
-    goblinTank->base.spriteIdle   = LoadTexture("resources/sprites/goblinTank/goblinTank-idle.png");
-    goblinTank->base.spriteAtack  = LoadTexture("resources/sprites/goblinTank/goblinTank-attack.png");
+    goblinTank->base.spriteWalk   = LoadTexture("assets/resources/sprites/goblinTank/goblinTank-walk.png");
+    goblinTank->base.spriteHurt   = LoadTexture("assets/resources/sprites/goblinTank/goblinTank-hurt.png");
+    goblinTank->base.spriteDead   = LoadTexture("assets/resources/sprites/goblinTank/goblinTank-dead.png");
+    goblinTank->base.spriteIdle   = LoadTexture("assets/resources/sprites/goblinTank/goblinTank-idle.png");
+    goblinTank->base.spriteAtack  = LoadTexture("assets/resources/sprites/goblinTank/goblinTank-attack.png");
 
     // Scale
     goblinTank->base.scale = 4;
@@ -92,16 +92,16 @@ void InitGoblinTank(GoblinTank *goblinTank)
 
     // Sounds
     goblinTank->soundAttackGoblinTank =
-        LoadSound("resources/sounds/sound_effects/goblin/attack-goblinTank.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/attack-goblinTank.wav");
 
     goblinTank->soundGrowlGoblinTank  = 
-        LoadSound("resources/sounds/sound_effects/goblin/idle-goblinTank.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/idle-goblinTank.wav");
 
     goblinTank->soundHurtGoblinTank   = 
-        LoadSound("resources/sounds/sound_effects/goblin/hurt-goblinTank.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/hurt-goblinTank.wav");
 
     goblinTank->soundDeathGolbinTank  = 
-        LoadSound("resources/sounds/sound_effects/goblin/death-goblinTank.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/death-goblinTank.wav");
 }
  
 void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)

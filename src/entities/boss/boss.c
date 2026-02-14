@@ -65,11 +65,11 @@ void InitBoss(Boss *boss)
     boss->currentFrame = 0;
     boss->frameCounter = 0;
     
-    boss->spriteAtk = LoadTexture("resources/sprites/boss/boss_attack.png");
-    boss->spriteDead = LoadTexture("resources/sprites/boss/boss_dead.png");
-    boss->spriteIdle = LoadTexture("resources/sprites/boss/boss_idle.png");
-    boss->spriteHurt = LoadTexture("resources/sprites/boss/boss_hurt.png");
-    boss->spriteWalk = LoadTexture("resources/sprites/boss/boss_walk.png");
+    boss->spriteAtk = LoadTexture("assets/resources/sprites/boss/boss_attack.png");
+    boss->spriteDead = LoadTexture("assets/resources/sprites/boss/boss_dead.png");
+    boss->spriteIdle = LoadTexture("assets/resources/sprites/boss/boss_idle.png");
+    boss->spriteHurt = LoadTexture("assets/resources/sprites/boss/boss_hurt.png");
+    boss->spriteWalk = LoadTexture("assets/resources/sprites/boss/boss_walk.png");
 
     boss->frameAtk  = 9;
     boss->frameDead = 4;
@@ -123,15 +123,15 @@ void InitBoss(Boss *boss)
     
     boss->damage = 40;
 
-    boss->bossMusic = LoadMusicStream("resources/music/boss-soundtrack.mp3");
+    boss->bossMusic = LoadMusicStream("assets/resources/music/boss-soundtrack.mp3");
 
     boss->musicStarted = false;
 
-    boss->bossGrounImpact = LoadSound("resources/sounds/sound_effects/boss/boss-impact.wav");
-    boss->bossWalkSound = LoadSound("resources/sounds/sound_effects/boss/boss-walk.wav");
-    boss->bossHurtSound = LoadSound("resources/sounds/sound_effects/boss/boss-hurt.wav");
-    boss->bossDeathSound = LoadSound("resources/sounds/sound_effects/boss/boss-death.wav");
-    boss->bossAttackSound = LoadSound("resources/sounds/sound_effects/boss/boss-attack.wav");
+    boss->bossGrounImpact = LoadSound("assets/resources/sounds/sound_effects/boss/boss-impact.wav");
+    boss->bossWalkSound = LoadSound("assets/resources/sounds/sound_effects/boss/boss-walk.wav");
+    boss->bossHurtSound = LoadSound("assets/resources/sounds/sound_effects/boss/boss-hurt.wav");
+    boss->bossDeathSound = LoadSound("assets/resources/sounds/sound_effects/boss/boss-death.wav");
+    boss->bossAttackSound = LoadSound("assets/resources/sounds/sound_effects/boss/boss-attack.wav");
 }
 
 void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered) 

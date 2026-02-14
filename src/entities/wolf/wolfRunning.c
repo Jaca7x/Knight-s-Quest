@@ -25,12 +25,12 @@ void InitRunningWolf(WolfRun *wolfRun)
     wolfRun->currentFrame = 0;
     wolfRun->frameCounter = 0;
 
-    wolfRun->spriteWalkWolf  = LoadTexture("resources/sprites/wolf/WALK.png");
-    wolfRun->spriteAtkWolf  = LoadTexture("resources/sprites/wolf/Attack_1.png");
-    wolfRun->spriteIdleWolf = LoadTexture("resources/sprites/wolf/Idle.png");
-    wolfRun->spriteDeadWolf = LoadTexture("resources/sprites/wolf/Dead.png");
-    wolfRun->spriteRunWolf = LoadTexture("resources/sprites/wolf/Run.png");
-    wolfRun->spriteHurtWolf = LoadTexture("resources/sprites/wolf/Hurt.png");
+    wolfRun->spriteWalkWolf  = LoadTexture("assets/resources/sprites/wolf/WALK.png");
+    wolfRun->spriteAtkWolf  = LoadTexture("assets/resources/sprites/wolf/Attack_1.png");
+    wolfRun->spriteIdleWolf = LoadTexture("assets/resources/sprites/wolf/Idle.png");
+    wolfRun->spriteDeadWolf = LoadTexture("assets/resources/sprites/wolf/Dead.png");
+    wolfRun->spriteRunWolf = LoadTexture("assets/resources/sprites/wolf/Run.png");
+    wolfRun->spriteHurtWolf = LoadTexture("assets/resources/sprites/wolf/Hurt.png");
 
     wolfRun->frameWalk   = 11;
     wolfRun->frameAtk   = 6;
@@ -60,11 +60,11 @@ void InitRunningWolf(WolfRun *wolfRun)
     wolfRun->damage = 20;
     wolfRun->viewPlayer = 300.0f;
 
-    wolfRun->wolfHitSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit.wav");
-    wolfRun->wolfHitSoundHeavy = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-heavy.wav");
-    wolfRun->wolfDeathSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-death.wav");
-    wolfRun->wolfScratch = LoadSound("resources/sounds/sound_effects/wolf/wolf-scratch.wav");
-    wolfRun->wolfGrowl = LoadSound("resources/sounds/sound_effects/wolf/wolf-growl2.wav");
+    wolfRun->wolfHitSound = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-hit.wav");
+    wolfRun->wolfHitSoundHeavy = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-hit-heavy.wav");
+    wolfRun->wolfDeathSound = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-death.wav");
+    wolfRun->wolfScratch = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-scratch.wav");
+    wolfRun->wolfGrowl = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-growl2.wav");
 }
 
 void UpdateRunningWolf(WolfRun *wolfRun, Player *player, float delta)

@@ -16,7 +16,7 @@ https://www.raylib.com
 
 Após a instalação do MSYS2 e da raylib, você deve abrir:
 
-<img src="readme/msys2-logo.png" alt="Attack" width="200"/>
+<img src="assets/docs/image/msys2-logo.png" alt="Attack" width="200"/>
 
 Dentro do terminal, escreva:
 
@@ -127,7 +127,7 @@ mingw32-make
 
 Se aparecer algo como:
 
-<img src="readme/make-ex.png" alt="Attack" width="800"/> <br>
+<img src="assets/docs/image/make-ex.png" alt="Attack" width="800"/> <br>
 
 Tudo deu certo, e agora é só executar o jogo!
 

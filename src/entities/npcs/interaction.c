@@ -10,7 +10,7 @@ void InitInteraction(Interaction *interaction)
 
     interaction->totalFrames = interaction->columns * interaction->rows;
 
-    interaction->interactionTexture = LoadTexture("resources/sprites/npc/interaction.png");
+    interaction->interactionTexture = LoadTexture("assets/resources/sprites/npc/interaction.png");
 
     interaction->frameWidth = interaction->interactionTexture.width / interaction->columns;
     interaction->frameHeight = interaction->interactionTexture.height / interaction->rows;

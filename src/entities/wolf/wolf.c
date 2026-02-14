@@ -23,11 +23,11 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
     wolf->currentFrame = 0;
     wolf->frameCounter = 0;
 
-    wolf->spriteWalkWolf = LoadTexture("resources/sprites/wolf/walk.png");
-    wolf->spriteAtkWolf  = LoadTexture("resources/sprites/wolf/Attack_1.png");
-    wolf->spriteIdleWolf = LoadTexture("resources/sprites/wolf/Idle.png");
-    wolf->spriteDeadWolf = LoadTexture("resources/sprites/wolf/Dead.png");
-    wolf->spriteHurtWolf = LoadTexture("resources/sprites/wolf/Hurt.png");
+    wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/wolf/walk.png");
+    wolf->spriteAtkWolf  = LoadTexture("assets/resources/sprites/wolf/Attack_1.png");
+    wolf->spriteIdleWolf = LoadTexture("assets/resources/sprites/wolf/Idle.png");
+    wolf->spriteDeadWolf = LoadTexture("assets/resources/sprites/wolf/Dead.png");
+    wolf->spriteHurtWolf = LoadTexture("assets/resources/sprites/wolf/Hurt.png");
 
     wolf->frameWalk  = 11;
     wolf->frameAtk   = 6;
@@ -58,13 +58,13 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
 
     wolf->droppedHeart = false;
 
-    wolf->wolfHitSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit.wav");
-    wolf->wolfHitSoundHeavy = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-heavy.wav");
-    wolf->wolfDeathSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-death.wav");
-    wolf->wolfScratch = LoadSound("resources/sounds/sound_effects/wolf/wolf-scratch.wav");
+    wolf->wolfHitSound = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-hit.wav");
+    wolf->wolfHitSoundHeavy = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-hit-heavy.wav");
+    wolf->wolfDeathSound = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-death.wav");
+    wolf->wolfScratch = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-scratch.wav");
 
 
-    wolf->wolfGrowl = LoadSound("resources/sounds/sound_effects/wolf/wolf-growl.wav");
+    wolf->wolfGrowl = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-growl.wav");
     wolf->growlPlayed = true;
     wolf->timeSinceLastGrowl = 0.0f;
 }
@@ -77,16 +77,16 @@ void InitWhiteWolf(Wolf *wolf, Vector2 pos)
     wolf->life = 100;
     wolf->maxLife = 100;
 
-    wolf->spriteWalkWolf = LoadTexture("resources/sprites/whiteWolf/Walk.png");
-    wolf->spriteAtkWolf  = LoadTexture("resources/sprites/whiteWolf/Attack.png");
-    wolf->spriteIdleWolf = LoadTexture("resources/sprites/whiteWolf/Idle.png");
-    wolf->spriteDeadWolf = LoadTexture("resources/sprites/whiteWolf/Dead.png");
-    wolf->spriteHurtWolf = LoadTexture("resources/sprites/whiteWolf/Hurt.png");
-    wolf->spriteWalkWolf = LoadTexture("resources/sprites/whiteWolf/Walk.png");
+    wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/whiteWolf/Walk.png");
+    wolf->spriteAtkWolf  = LoadTexture("assets/resources/sprites/whiteWolf/Attack.png");
+    wolf->spriteIdleWolf = LoadTexture("assets/resources/sprites/whiteWolf/Idle.png");
+    wolf->spriteDeadWolf = LoadTexture("assets/resources/sprites/whiteWolf/Dead.png");
+    wolf->spriteHurtWolf = LoadTexture("assets/resources/sprites/whiteWolf/Hurt.png");
+    wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/whiteWolf/Walk.png");
 
     wolf->frameAtk = 4;
 
-    wolf->wolfScratch = LoadSound("resources/sounds/sound_effects/wolf/white-wolf-scratch.wav");
+    wolf->wolfScratch = LoadSound("assets/resources/sounds/sound_effects/wolf/white-wolf-scratch.wav");
 }
 
 void InitRedWolf(Wolf *wolf, Vector2 pos) 
@@ -98,19 +98,19 @@ void InitRedWolf(Wolf *wolf, Vector2 pos)
     wolf->life = 200;
     wolf->maxLife = 200;
 
-    wolf->spriteWalkWolf = LoadTexture("resources/sprites/redWolf/Walk.png");
-    wolf->spriteAtkWolf  = LoadTexture("resources/sprites/redWolf/Attack.png");
-    wolf->spriteIdleWolf = LoadTexture("resources/sprites/redWolf/Idle.png");
-    wolf->spriteDeadWolf = LoadTexture("resources/sprites/redWolf/Dead.png");
-    wolf->spriteHurtWolf = LoadTexture("resources/sprites/redWolf/Hurt.png");
-    wolf->spriteWalkWolf = LoadTexture("resources/sprites/redWolf/Walk.png");
+    wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/redWolf/Walk.png");
+    wolf->spriteAtkWolf  = LoadTexture("assets/resources/sprites/redWolf/Attack.png");
+    wolf->spriteIdleWolf = LoadTexture("assets/resources/sprites/redWolf/Idle.png");
+    wolf->spriteDeadWolf = LoadTexture("assets/resources/sprites/redWolf/Dead.png");
+    wolf->spriteHurtWolf = LoadTexture("assets/resources/sprites/redWolf/Hurt.png");
+    wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/redWolf/Walk.png");
     
     wolf->frameAtk   = 5;
 
-    wolf->wolfHitSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-deep.wav");
-    wolf->wolfHitSoundHeavy = LoadSound("resources/sounds/sound_effects/wolf/wolf-hit-heavy-deep.wav");
-    wolf->wolfDeathSound = LoadSound("resources/sounds/sound_effects/wolf/wolf-death-deep.wav");
-    wolf->wolfScratch = LoadSound("resources/sounds/sound_effects/wolf/red-wolf-scratch.wav");
+    wolf->wolfHitSound = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-hit-deep.wav");
+    wolf->wolfHitSoundHeavy = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-hit-heavy-deep.wav");
+    wolf->wolfDeathSound = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-death-deep.wav");
+    wolf->wolfScratch = LoadSound("assets/resources/sounds/sound_effects/wolf/red-wolf-scratch.wav");
 }
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)

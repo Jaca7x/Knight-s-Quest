@@ -52,13 +52,13 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->arrow.active = false;
 
     // Sprites
-    goblinArcher->base.spriteIdle  = LoadTexture("resources/sprites/goblinArcher/goblinArcher-idle.png");
-    goblinArcher->base.spriteWalk  = LoadTexture("resources/sprites/goblinArcher/goblinArcher-walk.png");
-    goblinArcher->base.spriteAtack = LoadTexture("resources/sprites/goblinArcher/goblinArcher-atk.png");
-    goblinArcher->base.spriteHurt  = LoadTexture("resources/sprites/goblinArcher/goblinArcher-hurt.png");
-    goblinArcher->base.spriteDead  = LoadTexture("resources/sprites/goblinArcher/goblinArcher-dead.png");
+    goblinArcher->base.spriteIdle  = LoadTexture("assets/resources/sprites/goblinArcher/goblinArcher-idle.png");
+    goblinArcher->base.spriteWalk  = LoadTexture("assets/resources/sprites/goblinArcher/goblinArcher-walk.png");
+    goblinArcher->base.spriteAtack = LoadTexture("assets/resources/sprites/goblinArcher/goblinArcher-atk.png");
+    goblinArcher->base.spriteHurt  = LoadTexture("assets/resources/sprites/goblinArcher/goblinArcher-hurt.png");
+    goblinArcher->base.spriteDead  = LoadTexture("assets/resources/sprites/goblinArcher/goblinArcher-dead.png");
 
-    goblinArcher->arrowTexture     = LoadTexture("resources/sprites/goblinArcher/Arrow.png");
+    goblinArcher->arrowTexture     = LoadTexture("assets/resources/sprites/goblinArcher/Arrow.png");
 
     // Scales
     const float defaultScale = 6.67f;
@@ -92,13 +92,13 @@ void InitGoblinArcher(GoblinArcher *goblinArcher)
 
     //Sounds
     goblinArcher->goblinArcherDeathSound =
-        LoadSound("resources/sounds/sound_effects/goblin/goblin-death.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/goblin-death.wav");
 
     goblinArcher->goblinArcherLoadingSound =
-        LoadSound("resources/sounds/sound_effects/goblin/bow-loading.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/bow-loading.wav");
 
     goblinArcher->arrowHitSound =
-        LoadSound("resources/sounds/sound_effects/goblin/arrow-hit.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/arrow-hit.wav");
 }
 
 void UpdateGoblinArcher(GoblinArcher *goblinArcher, Player *player, float delta)

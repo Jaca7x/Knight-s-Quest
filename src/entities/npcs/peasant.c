@@ -83,22 +83,22 @@ void InitPeasant(Peasant *peasant)
 {
     peasant->position = (Vector2){50.0f, 526.0f };
 
-    peasant->peasantSpeech = LoadTexture("resources/sprites/npc/peasant-speech.png");
-    peasant->peasantIdle = LoadTexture("resources/sprites/npc/peasant.png");
-    peasant->peasantBtnE = LoadTexture("resources/sprites/btns/btn-E.png");
-    peasant->peasantExclamation = LoadTexture("resources/sprites/npc/exclamation.png");
+    peasant->peasantSpeech = LoadTexture("assets/resources/sprites/npc/peasant-speech.png");
+    peasant->peasantIdle = LoadTexture("assets/resources/sprites/npc/peasant.png");
+    peasant->peasantBtnE = LoadTexture("assets/resources/sprites/btns/btn-E.png");
+    peasant->peasantExclamation = LoadTexture("assets/resources/sprites/npc/exclamation.png");
 
-    peasant->dialogues[0][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-0.wav");
-    peasant->dialogues[0][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-1.wav");
-    peasant->dialogues[0][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue1-2.wav");
+    peasant->dialogues[0][0].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue1-0.wav");
+    peasant->dialogues[0][1].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue1-1.wav");
+    peasant->dialogues[0][2].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue1-2.wav");
 
-    peasant->dialogues[1][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-0.wav");
-    peasant->dialogues[1][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-1.wav");
-    peasant->dialogues[1][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue2-2.wav");
+    peasant->dialogues[1][0].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue2-0.wav");
+    peasant->dialogues[1][1].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue2-1.wav");
+    peasant->dialogues[1][2].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue2-2.wav");
 
-    peasant->dialogues[2][0].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-0.wav");
-    peasant->dialogues[2][1].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-1.wav");
-    peasant->dialogues[2][2].sound = LoadSound("resources/sounds/voices/peasant/peasant-dialogue3-2.wav");
+    peasant->dialogues[2][0].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue3-0.wav");
+    peasant->dialogues[2][1].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue3-1.wav");
+    peasant->dialogues[2][2].sound = LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue3-2.wav");
 
     peasant->frameIdle = 2;
 
@@ -109,7 +109,7 @@ void InitPeasant(Peasant *peasant)
     peasant->currentFrame = 0;
     peasant->frameCounter = 0;
 
-    peasant->textFont = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
+    peasant->textFont = LoadFontEx("assets/resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
     peasant->speechFontSize = 30;
 

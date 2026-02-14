@@ -12,13 +12,13 @@ bool CheckColisionBombGoblin(float x1, float y1, float w1, float h1,
 void InitBombGoblin(BombGoblin *bombGoblin)
 {
     // Textures
-    bombGoblin->base.spriteIdle = LoadTexture("resources/sprites/bombGoblin/Idle.png");
-    bombGoblin->base.spriteAtack = LoadTexture("resources/sprites/bombGoblin/Attack1.png");
-    bombGoblin->spriteAttackBomb = LoadTexture("resources/sprites/bombGoblin/Attack3.png");
-    bombGoblin->base.spriteHurt = LoadTexture("resources/sprites/bombGoblin/Hurt.png");
-    bombGoblin->base.spriteDead = LoadTexture("resources/sprites/bombGoblin/Death.png");
-    bombGoblin->base.spriteWalk = LoadTexture("resources/sprites/bombGoblin/Run.png");
-    bombGoblin->spriteBomb = LoadTexture("resources/sprites/bombGoblin/Bomb_sprite.png");
+    bombGoblin->base.spriteIdle = LoadTexture("assets/resources/sprites/bombGoblin/Idle.png");
+    bombGoblin->base.spriteAtack = LoadTexture("assets/resources/sprites/bombGoblin/Attack1.png");
+    bombGoblin->spriteAttackBomb = LoadTexture("assets/resources/sprites/bombGoblin/Attack3.png");
+    bombGoblin->base.spriteHurt = LoadTexture("assets/resources/sprites/bombGoblin/Hurt.png");
+    bombGoblin->base.spriteDead = LoadTexture("assets/resources/sprites/bombGoblin/Death.png");
+    bombGoblin->base.spriteWalk = LoadTexture("assets/resources/sprites/bombGoblin/Run.png");
+    bombGoblin->spriteBomb = LoadTexture("assets/resources/sprites/bombGoblin/Bomb_sprite.png");
 
     // Position
     bombGoblin->base.position = (Vector2){800, 440};
@@ -107,16 +107,16 @@ void InitBombGoblin(BombGoblin *bombGoblin)
 
     // Sounds 
     bombGoblin->bomb.explosion =
-        LoadSound("resources/sounds/sound_effects/bomb/explosion.wav");
+        LoadSound("assets/resources/sounds/sound_effects/bomb/explosion.wav");
 
     bombGoblin->bomb.timer =
-        LoadSound("resources/sounds/sound_effects/bomb/timer.wav");
+        LoadSound("assets/resources/sounds/sound_effects/bomb/timer.wav");
 
     bombGoblin->soundAttack =
-        LoadSound("resources/sounds/sound_effects/wolf/red-wolf-scratch.wav");
+        LoadSound("assets/resources/sounds/sound_effects/wolf/red-wolf-scratch.wav");
 
     bombGoblin->soundBagGoblin =
-        LoadSound("resources/sounds/sound_effects/goblin/bag.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/bag.wav");
 }
 
 void UpdateBombGoblin(BombGoblin *bombGoblin, float delta, Player *player)

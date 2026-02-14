@@ -8,17 +8,17 @@ bool checkNpcInteraction(Npc *npc, Player *player)
 
 void InitNpc(Npc *npc)
 {
-    npc->spriteNpc = LoadTexture("resources/sprites/npc/npc-map1.png"); 
-    npc->btnE = LoadTexture("resources/sprites/btns/btn-E.png"); 
-    npc->spriteNpcIdle = LoadTexture("resources/sprites/npc/npc1-idle.png");
-    npc->npcSpeech = LoadTexture("resources/sprites/npc/npc-speech.png"); 
-    npc->exclamation = LoadTexture("resources/sprites/npc/exclamation.png");
+    npc->spriteNpc = LoadTexture("assets/resources/sprites/npc/npc-map1.png"); 
+    npc->btnE = LoadTexture("assets/resources/sprites/btns/btn-E.png"); 
+    npc->spriteNpcIdle = LoadTexture("assets/resources/sprites/npc/npc1-idle.png");
+    npc->npcSpeech = LoadTexture("assets/resources/sprites/npc/npc-speech.png"); 
+    npc->exclamation = LoadTexture("assets/resources/sprites/npc/exclamation.png");
     npc->position = (Vector2){1000, 546};
 
-    npc->textSpeech = LoadFontEx("resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
+    npc->textSpeech = LoadFontEx("assets/resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
-    npc->dialogueWithPlayer1 = LoadSound("resources/sounds/voices/npc/npc-1-dialogue.wav");
-    npc->dialogueWithPlayer2 = LoadSound("resources/sounds/voices/npc/npc-2-dialogue.wav");
+    npc->dialogueWithPlayer1 = LoadSound("assets/resources/sounds/voices/npc/npc-1-dialogue.wav");
+    npc->dialogueWithPlayer2 = LoadSound("assets/resources/sounds/voices/npc/npc-2-dialogue.wav");
 
 
     npc->frameTalking = 4; 

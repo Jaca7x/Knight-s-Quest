@@ -51,11 +51,11 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
     goblin->goblinHasHitPlayer = false;
 
     // Sprites
-    goblin->base.spriteWalk = LoadTexture("resources/sprites/goblin/goblin-walk.png");
-    goblin->base.spriteHurt = LoadTexture("resources/sprites/goblin/goblin-hurt.png");
-    goblin->base.spriteDead = LoadTexture("resources/sprites/goblin/goblin-dead.png");
-    goblin->base.spriteIdle = LoadTexture("resources/sprites/goblin/goblin-idle.png");
-    goblin->base.spriteAtack = LoadTexture("resources/sprites/goblin/goblin-atk.png");
+    goblin->base.spriteWalk = LoadTexture("assets/resources/sprites/goblin/goblin-walk.png");
+    goblin->base.spriteHurt = LoadTexture("assets/resources/sprites/goblin/goblin-hurt.png");
+    goblin->base.spriteDead = LoadTexture("assets/resources/sprites/goblin/goblin-dead.png");
+    goblin->base.spriteIdle = LoadTexture("assets/resources/sprites/goblin/goblin-idle.png");
+    goblin->base.spriteAtack = LoadTexture("assets/resources/sprites/goblin/goblin-atk.png");
 
     // Scale
     goblin->scaleHitbox = 0.02f;
@@ -87,12 +87,12 @@ void InitGoblinBase(Goblin *goblin, Vector2 pos)
 
     // Sounds
     goblin->goblinDeathSound = 
-        LoadSound("resources/sounds/sound_effects/goblin/goblin-death.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/goblin-death.wav");
     goblin->goblinCutSound = 
-        LoadSound("resources/sounds/sound_effects/goblin/goblin-cut.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/goblin-cut.wav");
 
     goblin->RedGoblinHitSound = 
-        LoadSound("resources/sounds/sound_effects/goblin/red-goblin-hit.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/red-goblin-hit.wav");
 }
 
 void InitRedGoblin(Goblin *goblin, Vector2 pos)
@@ -107,17 +107,17 @@ void InitRedGoblin(Goblin *goblin, Vector2 pos)
     goblin->damage = 40;
 
     // Sprites red goblin
-    goblin->base.spriteWalk = LoadTexture("resources/sprites/redGoblin/Walk.png");
-    goblin->base.spriteHurt = LoadTexture("resources/sprites/redGoblin/Hurt.png");
-    goblin->base.spriteDead = LoadTexture("resources/sprites/redGoblin/Dead.png");
-    goblin->base.spriteIdle = LoadTexture("resources/sprites/redGoblin/Idle.png");
-    goblin->base.spriteAtack = LoadTexture("resources/sprites/redGoblin/Attack.png");
+    goblin->base.spriteWalk = LoadTexture("assets/resources/sprites/redGoblin/Walk.png");
+    goblin->base.spriteHurt = LoadTexture("assets/resources/sprites/redGoblin/Hurt.png");
+    goblin->base.spriteDead = LoadTexture("assets/resources/sprites/redGoblin/Dead.png");
+    goblin->base.spriteIdle = LoadTexture("assets/resources/sprites/redGoblin/Idle.png");
+    goblin->base.spriteAtack = LoadTexture("assets/resources/sprites/redGoblin/Attack.png");
 
     // Sounds red goblin
     goblin->goblinDeathSound = 
-        LoadSound("resources/sounds/sound_effects/goblin/red-goblin-death.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/red-goblin-death.wav");
     goblin->RedGoblinHitSound = 
-        LoadSound("resources/sounds/sound_effects/goblin/red-goblin-hit.wav");
+        LoadSound("assets/resources/sounds/sound_effects/goblin/red-goblin-hit.wav");
 }
 
 void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float delta)

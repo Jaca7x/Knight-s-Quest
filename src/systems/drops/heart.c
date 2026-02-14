@@ -17,7 +17,7 @@ void drawMassage(float delta, Player *player)
 
         if (messageTimer < COOLDOWN)
         {
-            Font medieval = LoadFontEx("resources/fonts/Goudy-Mediaeval-DemiBold.ttf", FONT_SIZE, CODEPOINT_BASE, CODEPOINT_COUNT);
+            Font medieval = LoadFontEx("assets/resources/fonts/Goudy-Mediaeval-DemiBold.ttf", FONT_SIZE, CODEPOINT_BASE, CODEPOINT_COUNT);
             DrawTextPro(
                 medieval,
                 "Coração coletado! +25 de vida!",
@@ -70,7 +70,7 @@ void InitHearts(Heart hearts[])
         hearts[i].position = (Vector2){POSITION_ZERO, POSITION_ZERO};
 
         // SPRITE
-        hearts[i].texture = LoadTexture("resources/sprites/life/heartDrop.png");
+        hearts[i].texture = LoadTexture("assets/resources/sprites/life/heartDrop.png");
 
         // STATES
         hearts[i].isActive = false;
@@ -80,9 +80,9 @@ void InitHearts(Heart hearts[])
 
         // SOUNDS
         hearts[i].collectSound = 
-            LoadSound("resources/sounds/sound_effects/drops/heart-collect.wav");
+            LoadSound("assets/resources/sounds/sound_effects/drops/heart-collect.wav");
         hearts[i].spawnSound = 
-            LoadSound("resources/sounds/sound_effects/drops/heart-spawn.wav");
+            LoadSound("assets/resources/sounds/sound_effects/drops/heart-spawn.wav");
     }
 }
 
