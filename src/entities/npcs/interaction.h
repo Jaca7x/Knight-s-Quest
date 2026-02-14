@@ -1,11 +1,11 @@
 #ifndef INTERACTION_H
 #define INTERACTION_H
 
-#include "../lib/raylib.h"
+#include "raylib.h"
 #include "ghost.h"
 #include "npc.h"
 #include "peasant.h"
-#include "../player/player.h"
+#include "entities/player/player.h"
 
 typedef struct ghost Ghost;
 typedef struct player Player;

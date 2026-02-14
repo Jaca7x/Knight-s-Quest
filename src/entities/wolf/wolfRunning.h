@@ -1,9 +1,9 @@
 #ifndef WOLFRUN_H
 #define WOLFRUN_H
 
-#include "../lib/raylib.h"
-#include "../player/player.h"
-#include "../lifeBar/lifeBarMob.h"
+#include "raylib.h"
+#include "entities/player/player.h"
+#include "ui/lifeBar/lifeBarMob.h"
 #include "math.h"
 
 #define MAP_WOLF_RUNNING_AREA 2

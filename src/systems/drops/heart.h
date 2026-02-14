@@ -1,15 +1,16 @@
 #ifndef HEART_H
 #define HEART_H
 
-#include "../lib/raylib.h" 
-#include "../player/player.h" 
-#include "../wolf/wolf.h" 
-#include "../goblin/goblin.h" 
-#include "../goblin/goblinArcher.h" 
-#include "../wolf/wolfRunning.h" 
-#include "../goblin/goblinTank.h"
-#include "../goblin/bombGoblin.h"
-#include "../src/core/define.h"
+#include "raylib.h"
+#include "entities/player/player.h" 
+#include "entities/wolf/wolf.h" 
+#include "entities/goblin/goblin.h" 
+#include "entities/goblin/goblinArcher.h" 
+#include "entities/wolf/wolfRunning.h" 
+#include "entities/goblin/goblinTank.h"
+#include "entities/goblin/bombGoblin.h"
+#include "core/define.h"
+
 
 // MAXIMUM NUMBER OF HEARTS SPAWNED
 #define MAX_HEARTS 9

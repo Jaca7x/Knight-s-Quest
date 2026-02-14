@@ -356,6 +356,8 @@ SRC = $(call rwildcard, ./, *.c, *.h)
 #OBJS = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 OBJS = $(patsubst %.c,%.o,$(filter %.c,$(SRC)))
 CFLAGS += -I.
+CFLAGS += -I./lib
+CFLAGS += -I./src
 
 # For Android platform we call a custom Makefile.Android
 ifeq ($(PLATFORM),PLATFORM_ANDROID)

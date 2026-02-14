@@ -1,8 +1,8 @@
 #ifndef BOSS_H
 #define BOSS_H
 
-#include "../lib/raylib.h"
-#include "../player/player.h"
+#include "raylib.h"
+#include "entities/player/player.h"
 
 #define BOSS_MAP 8
 

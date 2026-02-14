@@ -1,8 +1,7 @@
 #ifndef LIFE_BAR_MOB_H
 #define LIFE_BAR_MOB_H
 
-#include "../lib/raylib.h"
-
+#include "raylib.h"
 typedef struct entity
 {
     Vector2 position;

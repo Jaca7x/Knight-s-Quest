@@ -4,9 +4,9 @@
 typedef struct player Player; 
 typedef struct wolf Wolf;
 
-#include "../lib/raylib.h"   
-#include "../player/player.h"
-#include "../wolf/wolf.h"     
+#include "raylib.h"  
+#include "entities/player/player.h"
+#include "entities/wolf/wolf.h"     
 
 #define MAX_LIFE 100
 

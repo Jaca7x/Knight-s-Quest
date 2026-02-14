@@ -1,10 +1,10 @@
 #ifndef NPC_H
 #define NPC_H
 
-#include "../lib/raylib.h"
-#include "../player/player.h"
+#include "raylib.h"
+#include "entities/player/player.h"
 #include "interaction.h"
-#include "../lib/raymath.h"
+#include "raymath.h"
 #include <string.h>
 
 #define MAP_NPC 0

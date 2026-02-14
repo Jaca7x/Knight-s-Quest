@@ -1,11 +1,11 @@
 #ifndef GOBLIN_TANK_H
 #define GOBLIN_TANK_H
 
-#include "../lib/raylib.h"
-#include "../player/player.h"
-#include "../lifeBar/lifeBarMob.h"
-#include "../src/render/drawMonsters.h"
-#include "../src/core/define.h"
+#include "raylib.h"
+#include "entities/player/player.h"
+#include "ui/lifeBar/lifeBarMob.h"
+#include "render/drawMonsters.h"
+#include "core/define.h"
 
 // MAP
 

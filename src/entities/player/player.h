@@ -1,16 +1,17 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../lib/raylib.h"       
-#include "../wolf/wolf.h"            
-#include "../wolf/wolfRunning.h" 
-#include "../goblin/goblin.h" 
-#include "../goblin/goblinArcher.h" 
-#include "../npcs/npc.h"   
-#include "../boss/boss.h"
-#include "../goblin/goblinTank.h"
-#include "../goblin/bombGoblin.h"
-#include "../src/core/define.h"
+#include "raylib.h"      
+#include "src/entities/wolf/wolf.h"            
+#include "src/entities/wolf/wolfRunning.h" 
+#include "entities/goblin/goblin.h" 
+#include "entities/goblin/goblinArcher.h" 
+#include "entities/npcs/npc.h"   
+#include "entities/boss/boss.h"
+#include "entities/goblin/goblinTank.h"
+#include "entities/goblin/bombGoblin.h"
+#include "core/define.h"
+
 
 #define NUM_MAPS 4
 #define NUM_MAPS_WITH_PEASANT 3

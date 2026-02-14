@@ -2,8 +2,8 @@
 #define PEASANT_H
 #define NUM_MAPS_PEASANT 3
 
-#include "../lib/raylib.h"
-#include "../player/player.h"
+#include "raylib.h"
+#include "entities/player/player.h"
 #include "interaction.h"
 
 typedef struct interaction Interaction;
