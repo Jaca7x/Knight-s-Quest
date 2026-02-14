@@ -16,6 +16,8 @@
 #define NUM_MAPS_WITH_PEASANT 3
 #define DIALOGS_PER_MAP 3
 
+#define PLAYER_MAX_LIFE 100
+
 void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
 void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogueIndex);
 

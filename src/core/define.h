@@ -7,8 +7,15 @@
 #define LIFE_ZERO                         0 // Life 0
 #define SPEED_ZERO                        0 // Speed 0
 #define POSITION_ZERO 0
+#define COOLDOWN 1.0f
+#define ORIGIN_TOPLEFT (Vector2){ 0.0f, 0.0f }
+#define ROTATION 0.0f
+#define SPACING 1.0f 
+
+#define VOLUME_MAX 1.0f
 
 /* ===================== COMBAT / COOLDOWN ===================== */
+
 
 #define COOL_DOWN_ATTACK                  1.0f // Attack cooldown duration
 #define COOL_DOWN_ZERO                    0.0f // Zero value for cooldown checks
@@ -48,3 +55,7 @@
 #define PLAYER_HITBOX_OFFSET_Y   35 //Offset hitbox player
 
 #define PLAYER_HITBOX_WIDTH_DIV  1.5f
+
+// FONT
+#define CODEPOINT_BASE   0
+#define CODEPOINT_COUNT  250.0f

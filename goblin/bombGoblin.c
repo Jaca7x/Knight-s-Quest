@@ -138,6 +138,7 @@ void UpdateBombGoblin(BombGoblin *bombGoblin, float delta, Player *player)
         bombGoblin->base.isAtacking = false;
         bombGoblin->base.currentFrame = CURRENT_FRAME_ZERO;
         bombGoblin->base.monsterHasHit = false;
+        StopSound(bombGoblin->bomb.timer);
         
         bombGoblin->bomb.isActive = false;
         
@@ -454,6 +455,8 @@ void DrawBombGoblin(BombGoblin *bombGoblin, Player *player)
 
     Rectangle source;
     Rectangle dest;
+    Vector2 origin = (Vector2){0, 0};
+    float rotation = 0.0f;
 
     DrawMonsters(&bombGoblin->base, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO);
 
@@ -475,7 +478,7 @@ void DrawBombGoblin(BombGoblin *bombGoblin, Player *player)
             bombGoblin->frameHeightAttackBomb / bombGoblin->base.scale
         };
 
-        DrawTexturePro(bombGoblin->spriteAttackBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
+        DrawTexturePro(bombGoblin->spriteAttackBomb, source, dest, origin, rotation, RAYWHITE);
     }
 
     if (bombGoblin->bomb.isActive)
@@ -496,7 +499,7 @@ void DrawBombGoblin(BombGoblin *bombGoblin, Player *player)
             bombGoblin->bomb.frameHeightBomb / bombGoblin->base.scale
         };
 
-        DrawTexturePro(bombGoblin->spriteBomb, source, dest, (Vector2){0, 0}, 0.0f, RAYWHITE);
+        DrawTexturePro(bombGoblin->spriteBomb, source, dest, origin, rotation, RAYWHITE);
     }
 }
 
