@@ -1,7 +1,7 @@
 #ifndef INTERACTION_H
 #define INTERACTION_H
 
-#include "../librays/raylib.h"
+#include "../lib/raylib.h"
 #include "ghost.h"
 #include "npc.h"
 #include "peasant.h"

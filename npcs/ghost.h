@@ -3,7 +3,7 @@
 #define NUM_MAPS 4
 #define DIALOGS_PER_MAP 3
 
-#include "../librays/raylib.h"
+#include "../lib/raylib.h"
 #include "../player/player.h"
 #include "npc.h"
 #include "interaction.h"

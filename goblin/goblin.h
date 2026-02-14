@@ -1,10 +1,11 @@
 #ifndef GOBLIN_H
 #define GOBLIN_H
 
-#include "../librays/raylib.h"
+#include "../lib/raylib.h"
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
 #include "../src/render/drawMonsters.h"
+#include "../src/core/define.h"
 
 typedef struct player Player;
 

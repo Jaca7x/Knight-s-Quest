@@ -1,7 +1,7 @@
 #ifndef STAMINA_H
 #define STAMINA_H
 
-#include "../librays/raylib.h"   
+#include "../lib/raylib.h"   
 #include "../player/player.h"    
 
 #define MAX_STAMINA 150

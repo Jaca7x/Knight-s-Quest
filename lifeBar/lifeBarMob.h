@@ -1,7 +1,7 @@
 #ifndef LIFE_BAR_MOB_H
 #define LIFE_BAR_MOB_H
 
-#include "../librays/raylib.h"
+#include "../lib/raylib.h"
 
 typedef struct entity
 {

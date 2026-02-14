@@ -1,11 +1,11 @@
 #ifndef BOMBGOBLIN_H
 #define BOMBGOBLIN_H
 
-#include "../librays/raylib.h"
+#include "../lib/raylib.h"
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
 #include "../src/render/drawMonsters.h"
-#include "../src/define/define.h"
+#include "../src/core/define.h"
 
 // MAP
 

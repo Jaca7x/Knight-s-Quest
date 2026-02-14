@@ -1,7 +1,7 @@
 #ifndef DRAW_MONSTERS_H
 #define DRAW_MONSTERS_H
 
-#include "../../librays/raylib.h"
+#include "../../lib/raylib.h"
 #include "stdio.h"
 
 typedef struct monsters

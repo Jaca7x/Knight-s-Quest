@@ -1,7 +1,7 @@
 #ifndef WOLF_H
 #define WOLF_H
 
-#include "../librays/raylib.h"
+#include "../lib/raylib.h"
 #include "../player/player.h"
 #include "../lifeBar/lifeBarMob.h"
 #include "math.h"

@@ -4,7 +4,7 @@
 typedef struct player Player; 
 typedef struct wolf Wolf;
 
-#include "../librays/raylib.h"   
+#include "../lib/raylib.h"   
 #include "../player/player.h"
 #include "../wolf/wolf.h"     
 

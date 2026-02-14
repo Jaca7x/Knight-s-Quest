@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "../librays/raylib.h"       
+#include "../lib/raylib.h"       
 #include "../wolf/wolf.h"            
 #include "../wolf/wolfRunning.h" 
 #include "../goblin/goblin.h" 
@@ -10,7 +10,7 @@
 #include "../boss/boss.h"
 #include "../goblin/goblinTank.h"
 #include "../goblin/bombGoblin.h"
-#include "../src/define/define.h"
+#include "../src/core/define.h"
 
 #define NUM_MAPS 4
 #define NUM_MAPS_WITH_PEASANT 3

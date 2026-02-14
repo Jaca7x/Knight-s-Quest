@@ -2,9 +2,9 @@
 // Inclusão de bibliotecas
 // ============================================================================
 
-#include "librays/raylib.h"       
-#include "librays/raymath.h"
-#include "librays/cJSON.h"        
+#include "lib/raylib.h"       
+#include "lib/raymath.h"
+#include "lib/cJSON.h"        
 #include <stdlib.h>               
 #include <stdio.h>                
 #include "player/player.h"       

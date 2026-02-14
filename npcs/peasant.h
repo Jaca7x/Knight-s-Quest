@@ -2,7 +2,7 @@
 #define PEASANT_H
 #define NUM_MAPS_PEASANT 3
 
-#include "../librays/raylib.h"
+#include "../lib/raylib.h"
 #include "../player/player.h"
 #include "interaction.h"
 
