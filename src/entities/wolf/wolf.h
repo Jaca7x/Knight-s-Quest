@@ -7,6 +7,7 @@
 #include "math.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "core/define.h"
 
 #define MAP_WOLF_RUNNING_AREA 2
 #define MAP_WOLF_WHITE_AREA 4
