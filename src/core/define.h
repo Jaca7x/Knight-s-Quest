@@ -11,14 +11,16 @@
 #define ORIGIN_TOPLEFT (Vector2){ 0.0f, 0.0f }
 #define ROTATION 0.0f
 #define SPACING 1.0f 
+#define STAMINA_ZERO 0.0f
 
 #define VOLUME_MAX 1.0f
 
 /* ===================== COMBAT / COOLDOWN ===================== */
 
 
-#define COOL_DOWN_ATTACK                  1.0f // Attack cooldown duration
-#define COOL_DOWN_ZERO                    0.0f // Zero value for cooldown checks
+#define COOLDOWN_ATTACK                  1.0f // Attack cooldown duration
+#define COOLDOWN_ZERO                    0.0f // Zero value for cooldown checks
+#define TIMER_ZERO 0.0f
 #define LIFE_ZERO                         0    // Zero life threshol
 #define HURT_TIMER_ZERO                   0.0f // Reset hurt timer
 #define ANIM_ATTACK_ZERO                  0.0f // Reset atack timer

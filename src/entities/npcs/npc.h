@@ -43,10 +43,6 @@ typedef struct npc {
     int frameHeight;  
     int currentFrame; 
     int frameCounter; 
-
-    bool isTalking;   
-    bool isIdle;      
-    
 } Npc;
 
 void InitNpc(Npc *npc);

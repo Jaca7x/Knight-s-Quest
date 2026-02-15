@@ -1,11 +1,11 @@
 #include "heart.h"
 
-float messageTimer = COOL_DOWN_ZERO;
+float messageTimer = COOLDOWN_ZERO;
 bool showMessage = false;
 
 void triggerMassage()
 {
-    messageTimer = COOL_DOWN_ZERO;
+    messageTimer = COOLDOWN_ZERO;
     showMessage = true;
 }
 

@@ -7,7 +7,6 @@
 #include "render/drawMonsters.h"
 #include "core/define.h"
 
-
 // MAP
 
 #define MAP_BOMB_GOBLIN 7

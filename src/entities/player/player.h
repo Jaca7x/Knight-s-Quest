@@ -12,12 +12,33 @@
 #include "entities/goblin/bombGoblin.h"
 #include "core/define.h"
 
+// MAPS & DIALOGS
 
 #define NUM_MAPS 4
 #define NUM_MAPS_WITH_PEASANT 3
 #define DIALOGS_PER_MAP 3
 
+// STATS
 #define PLAYER_MAX_LIFE 100
+
+#define PLAYER_STAMINA_SPENT_LIGHT_ATTACKS 30.0f
+#define PLAYER_STAMINA_SPENT_HEAVY_ATTACKS 75.0f
+
+// TIMER & COOLDOWN
+#define PLAYER_ATTACK_TIMER 0.5f
+#define PLAYER_ATTACK_COOLDOWN_TIMER 0.3f
+
+// JUMP
+#define JUMP_FORCE_HIGH        -400.0f
+#define JUMP_FORCE_MEDIUM      -300.0f
+
+#define JUMP_COST_HIGH         35.0f
+#define JUMP_COST_MEDIUM       20.0f
+
+#define JUMP_STAMINA_HIGH      40.0f
+#define JUMP_STAMINA_MEDIUM    20.0f
+
+#define JUMP_FORCE_NONE        0.0f
 
 void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
 void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogueIndex);
@@ -45,10 +66,6 @@ typedef struct player
 {
     Vector2 position;
 
-    Sound attackLightSound;
-    Sound attackHeavySound;
-    Sound jumpSound;
-
     Sound playerDialogueWithNPC1;
     Sound playerDialogueWithNPC2;
 
@@ -59,6 +76,7 @@ typedef struct player
     bool jumpSoundPlayed;
     bool walkSoundPlayingCastle;
     bool walkSoundPlayingGrass;
+    
     float speedWalk;       
     float speedRun;       
 
@@ -114,12 +132,16 @@ typedef struct player
     float gravity;
     float velocityY;
 
-    float direction;
+    int direction;
 
     Sound walkingInCastle;
     Sound walkingInGrass;
     Sound playerHurtSound;
     Sound death;
+    Sound attackLightSound;
+    Sound attackHeavySound;
+    Sound jumpSound;
+
 } Player;
 
 void InitPlayer(Player *player);

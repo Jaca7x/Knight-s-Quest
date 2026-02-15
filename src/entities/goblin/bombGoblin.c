@@ -31,9 +31,8 @@ void InitBombGoblin(BombGoblin *bombGoblin)
     bombGoblin->speed = 30.0f;
     bombGoblin->damage  = 20;
     bombGoblin->damageBomb = 50;
-    bombGoblin->droppedHeart = false;
-
-    //Animation frame count
+    
+    // Animation frame count
     bombGoblin->frameIdle = 4;
     bombGoblin->frameRun = 8;
     bombGoblin->frameAttack = 8;
@@ -104,6 +103,7 @@ void InitBombGoblin(BombGoblin *bombGoblin)
     bombGoblin->isAttackBomb = false;
     bombGoblin->wasWalking = false;
     bombGoblin->attackSoundPlayed = false;
+    bombGoblin->droppedHeart = false;
 
     // Sounds 
     bombGoblin->bomb.explosion =

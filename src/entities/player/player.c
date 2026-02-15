@@ -3,19 +3,18 @@
 Rectangle GetPlayerHitbox(Player *player)
 {
     float scale = 2.0f;
-    float hitboxWidth  = player->frameWidth  * scale * 0.3f;    // Reduz largura 
-    float hitboxHeight = player->frameHeight * scale * 0.35f;    // Reduz altura 
+    float hitboxWidth = player->frameWidth * scale * 0.3f;    // Reduz largura
+    float hitboxHeight = player->frameHeight * scale * 0.35f; // Reduz altura
 
     // Centraliza a hitbox no sprite
-    float offsetX = (player->frameWidth  * scale - hitboxWidth)  / 2.0f;
+    float offsetX = (player->frameWidth * scale - hitboxWidth) / 2.0f;
     float offsetY = (player->frameHeight * scale - hitboxHeight) / 2.0f;
 
     return (Rectangle){
         player->position.x + offsetX,
         player->position.y + offsetY,
         hitboxWidth,
-        hitboxHeight
-    };
+        hitboxHeight};
 }
 
 void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex)
@@ -24,7 +23,7 @@ void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex)
     {
         Sound s = player->dialogues[currentMapIndex - 1][dialogueIndex].sound;
 
-        if (s.frameCount > 0)  
+        if (s.frameCount > FRAME_COUNTER_ZERO)
         {
             StopSound(s);
             PlaySound(s);
@@ -37,7 +36,7 @@ void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogu
     if (currentMapIndex >= 6 && currentMapIndex <= 8)
     {
         Sound s = player->dialoguesWithPeasant[currentMapIndex - 6][dialogueIndex].sound;
-        if (s.frameCount > 0)  
+        if (s.frameCount > FRAME_COUNTER_ZERO)
         {
             StopSound(s);
             PlaySound(s);
@@ -45,14 +44,14 @@ void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogu
     }
 }
 
-void AttackMonsters(int currentMapIndex, int map, bool *isDead, int positionMonster, bool *monsterHasHit, int *monsterLife, 
-    Sound *monsterSoundLight, Sound *monsterSoundHeavy, Player *player)
+void AttackMonsters(int currentMapIndex, int map, bool *isDead, int positionMonster, bool *monsterHasHit, int *monsterLife,
+                    Sound *monsterSoundLight, Sound *monsterSoundHeavy, Player *player)
 {
     if (currentMapIndex == map && !*isDead)
     {
         float distance = fabs(positionMonster - player->position.x);
         if (player->isAttacking && distance <= player->attackRange)
-        {   
+        {
             if (!*monsterHasHit)
             {
                 if (player->isAttackingLight)
@@ -67,158 +66,160 @@ void AttackMonsters(int currentMapIndex, int map, bool *isDead, int positionMons
                 }
                 *monsterHasHit = true;
             }
-        } 
-        else 
+        }
+        else
         {
             *monsterHasHit = false;
-        }   
+        }
     }
 }
 
-// Inicializa as variáveis do jogador e carrega os sprites.
 void InitPlayer(Player *player)
 {
-    // Carregar efeitos sonoros
-    player->attackLightSound = LoadSound("assets/resources/sounds/sound_effects/player/attack-1.wav");
-    player->attackHeavySound = LoadSound("assets/resources/sounds/sound_effects/player/attack-2.wav");
-    player->jumpSound        = LoadSound("assets/resources/sounds/sound_effects/player/jump.wav");
-
+    // Dialogues with Knight NPC
     player->playerDialogueWithNPC1 = LoadSound("assets/resources/sounds/voices/player/player-dialogue-npc-1.wav");
     player->playerDialogueWithNPC2 = LoadSound("assets/resources/sounds/voices/player/player-dialogue-npc-2.wav");
 
+    // Dialogues with Ghost NPC & MAP 1
     player->dialogues[0][0].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost1-1.wav");
     player->dialogues[0][1].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost1-2.wav");
     player->dialogues[0][2].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost1-3.wav");
 
-    // MAPA 2
+    // MAP 2
     player->dialogues[1][0].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost2-1.wav");
     player->dialogues[1][1].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost2-2.wav");
     player->dialogues[1][2].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost2-3.wav");
 
-    // MAPA 3
+    // MAP 3
     player->dialogues[2][0].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost3-1.wav");
     player->dialogues[2][1].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost3-2.wav");
     player->dialogues[2][2].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost3-3.wav");
 
-    // MAPA 4
+    // MAP 4
     player->dialogues[3][0].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost4-1.wav");
     player->dialogues[3][1].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost4-2.wav");
     player->dialogues[3][2].sound = LoadSound("assets/resources/sounds/voices/player/player-dialogueghost4-3.wav");
 
-    //PEASANT DIALOGUES
-    player->dialoguesWithPeasant[0][0].text = "Gareth II: Ei! Você aí! O que está fazendo\n no meio dessa floresta infestada de goblins?!";
+    // Dialogue with Peasant NPC & MAP 1
     player->dialoguesWithPeasant[0][0].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant1-0.wav");
-
-    player->dialoguesWithPeasant[0][1].text = "Gareth II: Você enlouqueceu? Eles vão te matar!";
     player->dialoguesWithPeasant[0][1].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant1-1.wav");
-
-    player->dialoguesWithPeasant[0][2].text = "Gareth II: Você veio sozinho?! Volte para\na vila agora antes que seja tarde demais!";
     player->dialoguesWithPeasant[0][2].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant1-2.wav");
-
-    player->dialoguesWithPeasant[1][0].text = "Gareth II: Vamos rápido, antes que os goblins\nnos vejam!";
+    
+    // MAP 2
     player->dialoguesWithPeasant[1][0].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant2-0.wav");
-
-    player->dialoguesWithPeasant[1][1].text = "Gareth II: Você está louco? Você é apenas um\nfazendeiro, está indo para a morte!";
     player->dialoguesWithPeasant[1][1].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant2-1.wav");
-
-    player->dialoguesWithPeasant[1][2].text = "Gareth II: Certo, vamos mais rápido.\nNão podemos perder mais tempo aqui!";
     player->dialoguesWithPeasant[1][2].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant2-2.wav");
-
-    player->dialoguesWithPeasant[2][0].text = "Gareth II: Mas… que estranho, há tão poucos\ngoblins por aqui...";
+    
+    // MAP 3
     player->dialoguesWithPeasant[2][0].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant3-0.wav");
-
-    player->dialoguesWithPeasant[2][1].text = "Gareth II: Sim, algo não está certo. Sinto que\nestamos sendo observados...";
     player->dialoguesWithPeasant[2][1].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant3-1.wav");
-
-    player->dialoguesWithPeasant[2][2].text = "Gareth II: ESCONDA-SE!";
     player->dialoguesWithPeasant[2][2].sound = LoadSound("assets/resources/sounds/voices/player/player-peasant3-2.wav");
 
+
     player->attackSoundPlayed = false;
-    player->jumpSoundPlayed   = false;
-    player->walkSoundPlayingCastle  = false;
-    player->walkSoundPlayingGrass   = false;
+    player->jumpSoundPlayed = false;
+    player->walkSoundPlayingCastle = false;
+    player->walkSoundPlayingGrass = false;
 
-    // Carregar sprites
-    player->spritePlayerRun      = LoadTexture("assets/resources/sprites/player/RUN.png");
-    player->spritePlayerWalk     = LoadTexture("assets/resources/sprites/player/WALK.png");
-    player->spritePlayerIdle     = LoadTexture("assets/resources/sprites/player/IDLE.png");
-    player->spritePlayerJump     = LoadTexture("assets/resources/sprites/player/JUMP.png");
-    player->spritePlayerAttack1  = LoadTexture("assets/resources/sprites/player/ATTACK 1.png");
-    player->spritePlayerAttack2  = LoadTexture("assets/resources/sprites/player/ATTACK 2.png");
-    player->spritePlayerHurt     = LoadTexture("assets/resources/sprites/player/HURT.png");
-    player->spritePlayerDead     = LoadTexture("assets/resources/sprites/player/DEATH.png");
-    player->playerSpeech         = LoadTexture("assets/resources/sprites/player/player-speech.png");
+    // Textures
+    player->spritePlayerRun = LoadTexture("assets/resources/sprites/player/RUN.png");
+    player->spritePlayerWalk = LoadTexture("assets/resources/sprites/player/WALK.png");
+    player->spritePlayerIdle = LoadTexture("assets/resources/sprites/player/IDLE.png");
+    player->spritePlayerJump = LoadTexture("assets/resources/sprites/player/JUMP.png");
+    player->spritePlayerAttack1 = LoadTexture("assets/resources/sprites/player/ATTACK 1.png");
+    player->spritePlayerAttack2 = LoadTexture("assets/resources/sprites/player/ATTACK 2.png");
+    player->spritePlayerHurt = LoadTexture("assets/resources/sprites/player/HURT.png");
+    player->spritePlayerDead = LoadTexture("assets/resources/sprites/player/DEATH.png");
 
-    // Quantidade de frames de cada animação
-    player->frameRun    = 8;
-    player->frameWalk   = 8;
-    player->frameIdle   = 7;
-    player->frameJump   = 5;
-    player->frameAtk    = 6;
-    player->frameHurt   = 4;
-    player->frameDead   = 12;
+    player->playerSpeech = LoadTexture("assets/resources/sprites/player/player-speech.png");
 
-    // Frame padrão
-    player->frameWidth  = player->spritePlayerWalk.width / player->frameWalk;
-    player->frameHeight = player->spritePlayerWalk.height;
+    // Position
+    player->position = (Vector2){120, 518};
+    player->direction = 1;
 
-    // Posição inicial
-    player->position = (Vector2){ 120, 518 };
-
-    // Física
-    player->speedWalk = 200.0f;
-    player->speedRun  = 300.0f;
-    player->gravity   = 950.0f;
-    player->groundY   = 518.0f;
-    player->velocityY = 0.0f;
-    player->walkTimeCastle   = 0.0f;
-    player->walkTimeGrass    = 0.0f;
-
-    // Direção inicial
-    player->direction = 1.0f;
-
-    
-    player->scale = 2;
-    player->currentFrame = 0;
-    player->frameCounter = 0;
-
-    // Estados
-    player->isRunning   = false;
-    player->isMoving    = false;
-    player->isJumping   = false;
-    player->isAttacking = false;
-    player->isAttackingHeavy = false;
-    player->isAttackingLight = false;
-    player->hasHit      = false;
-    player->isDead      = false;
-    player->deathAnimationDone = false;
-
-    player->attackCooldownTimer = 0.0f;
-    player->attackTimer = 0.0f;
-    player->isAttackingInProgress = false;
-
-    // Atributos
+    // Stats
     player->stamina = 150;
-    player->life    = 100;
-
-    player->hitTimer = 0.0f;
-    player->attackRange = 115.0f;
+    player->life = 100;
+    player->speedWalk = 200.0f;
+    player->speedRun = 300.0f;
     player->lightDamage = 50;
     player->heavyDamage = 70;
 
-    player->walkingInCastle = LoadSound("assets/resources/sounds/sound_effects/player/walking-castle.wav");
-    player->walkingInGrass = LoadSound("assets/resources/sounds/sound_effects/player/walking-grass.wav");
+    // Animation frame count
+    player->frameRun = 8;
+    player->frameWalk = 8;
+    player->frameIdle = 7;
+    player->frameJump = 5;
+    player->frameAtk = 6;
+    player->frameHurt = 4;
+    player->frameDead = 12;
 
-    player->playerHurtSound = LoadSound("assets/resources/sounds/sound_effects/player/player-hurt.wav");
-    player->death = LoadSound("assets/resources/sounds/sound_effects/player/game-over.wav");
+    player->scale = 2;
+
+    // Frame size   
+    player->frameWidth = player->spritePlayerWalk.width / player->frameWalk;
+    player->frameHeight = player->spritePlayerWalk.height;
+
+    player->currentFrame = 0;
+    player->frameCounter = 0;
+
+    // Combat & range
+    player->attackCooldownTimer = 0.0f;
+    player->attackTimer = 0.0f;
+    player->hitTimer = 0.0f;
+
+    player->attackRange = 115.0f;
+
+    // Physical
+    player->gravity = 950.0f;
+    player->groundY = 518.0f;
+    player->velocityY = 0.0f;
+
+    // Time
+    player->walkTimeCastle = 0.0f;
+    player->walkTimeGrass = 0.0f;
+
+    // States
+    player->isRunning = false;
+    player->isMoving = false;
+    player->isJumping = false;
+    player->isAttacking = false;
+    player->isAttackingHeavy = false;
+    player->isAttackingLight = false;
+    player->hasHit = false;
+    player->isDead = false;
+    player->deathAnimationDone = false;
+
+    player->isAttackingInProgress = false;
+    
+    // Sounds
+    player->walkingInCastle =
+        LoadSound("assets/resources/sounds/sound_effects/player/walking-castle.wav");
+
+    player->walkingInGrass =
+        LoadSound("assets/resources/sounds/sound_effects/player/walking-grass.wav");
+
+    player->playerHurtSound =
+        LoadSound("assets/resources/sounds/sound_effects/player/player-hurt.wav");
+
+    player->death =
+        LoadSound("assets/resources/sounds/sound_effects/player/game-over.wav");
+
+    player->attackLightSound = 
+        LoadSound("assets/resources/sounds/sound_effects/player/attack-1.wav");
+
+    player->attackHeavySound = 
+        LoadSound("assets/resources/sounds/sound_effects/player/attack-2.wav");
+
+    player->jumpSound = 
+        LoadSound("assets/resources/sounds/sound_effects/player/jump.wav");
 }
 
-// Atualiza o estado do jogador (movimento, física e animação).
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, Goblin *redGoblin, 
-    GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc, Boss *boss, GoblinTank *goblinTank, BombGoblin *bombGoblin)
-{  
-    // Verificar se morreu pela primeira vez
-    if (player->life <= 0 && !player->isDead)
+void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin,
+                  Goblin *redGoblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc,
+                  Boss *boss, GoblinTank *goblinTank, BombGoblin *bombGoblin)
+{
+    if (player->life <= LIFE_ZERO && !player->isDead)
     {
         PlaySound(player->death);
         player->isDead = true;
@@ -227,11 +228,11 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         player->isJumping = false;
         player->isAttacking = false;
         player->hasHit = false;
-        player->attackCooldownTimer = 0.0f;
-        player->attackTimer = 0.0f;
-        player->currentFrame = 0;
-        player->frameCounter = 0;
-        player->deathAnimTimer = 0.0f;
+        player->attackCooldownTimer = COOLDOWN_ZERO;
+        player->attackTimer = TIMER_ZERO;
+        player->currentFrame = CURRENT_FRAME_ZERO;
+        player->frameCounter = FRAME_COUNTER_ZERO;
+        player->deathAnimTimer = TIMER_ZERO;
         player->deathAnimationDone = false;
     }
 
@@ -239,38 +240,36 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     {
         player->deathAnimTimer += delta;
 
-        if (player->deathAnimTimer >= 0.15f) 
+        if (player->deathAnimTimer >= DEATH_ANIM_FRAME_TIME)
         {
-            player->deathAnimTimer = 0.0f;
+            player->deathAnimTimer = ANIM_DEAD_ZERO;
             player->currentFrame++;
 
             if (player->currentFrame >= player->frameDead)
             {
-                player->currentFrame = player->frameDead - 1; 
+                player->currentFrame = player->frameDead - PREVIOUS_FRAME;
                 player->deathAnimationDone = true;
             }
         }
-        return; 
+        return;
     }
 
-    // Verificar entradas de movimento
-    bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > 0);
-    bool isWalking = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && (!IsKeyDown(KEY_LEFT_SHIFT) || player->stamina <= 0));
+    bool isRunning = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && IsKeyDown(KEY_LEFT_SHIFT) && player->stamina > STAMINA_ZERO);
+    bool isWalking = ((IsKeyDown(KEY_D) || IsKeyDown(KEY_A)) && (!IsKeyDown(KEY_LEFT_SHIFT) || player->stamina <= STAMINA_ZERO));
 
     player->isRunning = isRunning;
     player->isMoving = isRunning || isWalking;
 
-    // Movimento horizontal
     if (isRunning)
     {
         if (IsKeyDown(KEY_D))
         {
-            player->direction = 1.0f;
+            player->direction = DIRECTION_RIGHT;
             player->position.x += player->speedRun * delta;
         }
         if (IsKeyDown(KEY_A))
         {
-            player->direction = -1.0f;
+            player->direction = DIRECTION_LEFT;
             player->position.x -= player->speedRun * delta;
         }
     }
@@ -278,37 +277,36 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     {
         if (IsKeyDown(KEY_D))
         {
-            player->direction = 1.0f;
+            player->direction = DIRECTION_RIGHT;
             player->position.x += player->speedWalk * delta;
         }
         if (IsKeyDown(KEY_A))
         {
-            player->direction = -1.0f;
+            player->direction = DIRECTION_LEFT;
             player->position.x -= player->speedWalk * delta;
         }
     }
 
-    //WOLFS
+    // WOLFS
     AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redWolf->isDead, redWolf->position.x, &redWolf->wolfHasHit, &redWolf->life, &redWolf->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
     AttackMonsters(currentMapIndex, MAP_WOLF_WHITE_AREA, &whiteWolf->isDead, whiteWolf->position.x, &whiteWolf->wolfHasHit, &whiteWolf->life, &whiteWolf->wolfHitSound, &whiteWolf->wolfHitSoundHeavy, player);
     AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolf->isDead, wolf->position.x, &wolf->wolfHasHit, &wolf->life, &wolf->wolfHitSound, &wolf->wolfHitSoundHeavy, player);
     AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolfRun->isDead, wolfRun->position.x, &wolfRun->wolfHasHit, &wolfRun->life, &wolfRun->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
 
-    //GOBLINS
+    // GOBLINS
     AttackMonsters(currentMapIndex, GOBLIN_MAP, &goblin->base.isDead, goblin->base.position.x, &goblin->base.monsterHasHit, &goblin->life, &goblin->goblinDeathSound, &goblin->goblinDeathSound, player);
     AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redGoblin->base.isDead, redGoblin->base.position.x, &redGoblin->base.monsterHasHit, &redGoblin->life, &redGoblin->RedGoblinHitSound, &redGoblin->RedGoblinHitSound, player);
     AttackMonsters(currentMapIndex, MAP_GOBLIN_ARCHER_AREA, &goblinArcher->base.isDead, goblinArcher->base.position.x, &goblinArcher->base.monsterHasHit, &goblinArcher->life, &goblinArcher->goblinArcherDeathSound, &goblinArcher->goblinArcherDeathSound, player);
     AttackMonsters(currentMapIndex, GOBLIN_TANK_MAP, &goblinTank->base.isDead, goblinTank->base.position.x + GOBLIN_TANK_HURTBOX_OFFSET_X, &goblinTank->base.monsterHasHit, &goblinTank->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
     AttackMonsters(currentMapIndex, MAP_BOMB_GOBLIN, &bombGoblin->base.isDead, bombGoblin->base.position.x + PLAYER_HITBOX_OFFSET_X, &bombGoblin->base.monsterHasHit, &bombGoblin->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
-    
-    //BOSS
+
+    // BOSS
     AttackMonsters(currentMapIndex, BOSS_MAP, &boss->isDead, boss->position.x, &boss->bossHasHit, &boss->life, &boss->bossHurtSound, &boss->bossHurtSound, player);
 
-    // Ataque com cooldown
     player->attackCooldownTimer -= delta;
     player->attackTimer -= delta;
 
-    if (!player->isAttackingInProgress && player->attackCooldownTimer <= 0.0f)
+    if (!player->isAttackingInProgress && player->attackCooldownTimer <= COOLDOWN_ZERO)
     {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && player->stamina > 30)
         {
@@ -316,10 +314,10 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             player->isAttacking = true;
             player->isAttackingLight = true;
             player->isAttackingHeavy = false;
-            player->attackTimer = 0.6f;
-            player->attackCooldownTimer = 0.3f;
+            player->attackTimer = PLAYER_ATTACK_TIMER;
+            player->attackCooldownTimer = PLAYER_ATTACK_COOLDOWN_TIMER;
 
-            player->stamina -= 30.0f;
+            player->stamina -= PLAYER_STAMINA_SPENT_LIGHT_ATTACKS;
         }
         else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && player->stamina > 45)
         {
@@ -327,15 +325,17 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
             player->isAttacking = true;
             player->isAttackingLight = false;
             player->isAttackingHeavy = true;
-            player->attackTimer = 0.5f;
-            player->attackCooldownTimer = 0.3f;
+            player->attackTimer = PLAYER_ATTACK_TIMER;
+            player->attackCooldownTimer = PLAYER_ATTACK_COOLDOWN_TIMER;
 
-            player->stamina -= 75.0f;
+            player->stamina -= PLAYER_STAMINA_SPENT_HEAVY_ATTACKS;
         }
+
+        if (player->stamina <= STAMINA_ZERO)
+            player->stamina = STAMINA_ZERO;
     }
 
-    // Finaliza ataque após o tempo
-    if (player->isAttackingInProgress && player->attackTimer <= 0.0f)
+    if (player->isAttackingInProgress && player->attackTimer <= TIMER_ZERO)
     {
         player->isAttackingInProgress = false;
         player->isAttacking = false;
@@ -343,15 +343,14 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         player->isAttackingHeavy = false;
     }
 
-    // Controle de animação (10 FPS)
     player->frameCounter++;
-    if (player->frameCounter >= (60 / 10))
+    if (player->frameCounter >= (GAME_FPS / ANIMATION_FPS))
     {
-        player->frameCounter = 0;
+        player->frameCounter = FRAME_COUNTER_ZERO;
 
-        if (player->hasHit) 
+        if (player->hasHit)
         {
-            player->currentFrame = (player->currentFrame + 1) % player->frameHurt;
+            player->currentFrame = (player->currentFrame + NEXT_FRAME) % player->frameHurt;
 
             if (player->currentFrame == 2)
             {
@@ -360,92 +359,86 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
         }
         else if (player->isJumping)
         {
-            player->currentFrame = (player->currentFrame + 1) % player->frameJump;
+            player->currentFrame = (player->currentFrame + NEXT_FRAME) % player->frameJump;
         }
         else if (player->isAttacking)
         {
-            player->currentFrame = (player->currentFrame + 1) % player->frameAtk;
+            player->currentFrame = (player->currentFrame + NEXT_FRAME) % player->frameAtk;
         }
         else if (player->isRunning)
         {
-            player->currentFrame = (player->currentFrame + 1) % player->frameRun;
+            player->currentFrame = (player->currentFrame + NEXT_FRAME) % player->frameRun;
         }
         else if (player->isMoving)
         {
-            player->currentFrame = (player->currentFrame + 1) % player->frameWalk;
+            player->currentFrame = (player->currentFrame + NEXT_FRAME) % player->frameWalk;
         }
         else
         {
-            player->currentFrame = (player->currentFrame + 1) % player->frameIdle;
+            player->currentFrame = (player->currentFrame + NEXT_FRAME) % player->frameIdle;
         }
     }
 
-    if (player->hitTimer > 0) 
+    if (player->hitTimer > TIMER_ZERO)
     {
         player->hitTimer -= delta;
     }
-    else 
+    else
     {
         player->hasHit = false;
     }
-    
-    float jumpForce = 0.0f;
+
+    float jumpForce = JUMP_FORCE_NONE;
     float jumpCost = 0.0f;
 
     if (IsKeyPressed(KEY_SPACE) && !player->isJumping)
     {
-        if (player->stamina >= 40.0f)
+        if (player->stamina >= JUMP_STAMINA_HIGH)
         {
-            jumpForce = -400.0f;
-            jumpCost = 35.0f;
-        }  
-        else if (player->stamina >= 20)
-        {
-            jumpForce = -300.0f;
-            jumpCost = 20.0f;
+            jumpForce = JUMP_FORCE_HIGH;
+            jumpCost = JUMP_COST_HIGH;
         }
-        else
+        else if (player->stamina >= JUMP_STAMINA_MEDIUM)
         {
-            jumpForce = 0.0f;
-            jumpCost = 0.0f;
+            jumpForce = JUMP_FORCE_MEDIUM;
+            jumpCost = JUMP_COST_MEDIUM;
         }
 
-        if (jumpForce != 0.0f)
+        if (jumpForce != JUMP_FORCE_NONE)
         {
             player->velocityY = jumpForce;
             player->isJumping = true;
 
             player->stamina -= jumpCost;
-            if (player->stamina < 0) player->stamina = 0;
+            if (player->stamina < STAMINA_ZERO)
+                player->stamina = STAMINA_ZERO;
         }
     }
 
-    // Gravidade
+    // Gravity
     player->velocityY += player->gravity * delta;
     player->position.y += player->velocityY * delta;
 
-    // Colisão com chão
+    // Ground colision
     if (player->position.y >= player->groundY)
     {
         player->position.y = player->groundY;
-        player->velocityY  = 0;
-        player->isJumping  = false;
+        player->velocityY = 0;
+        player->isJumping = false;
     }
 
-    // Limites da tela
-    if (player->position.x < 0) player->position.x = 0;
-    if (player->position.y < 0) player->position.y = 0;
+    // Screen limits
+    if (player->position.x < POSITION_ZERO)
+        player->position.x = POSITION_ZERO;
+    if (player->position.y < POSITION_ZERO)
+        player->position.y = POSITION_ZERO;
 }
 
-
-// Desenha o jogador na tela
 void DrawPlayer(Player *player)
 {
-    DrawText(TextFormat("stamina: %.2f", player->stamina), 10, 10, 20, BLACK);
-
     Rectangle source;
     Rectangle dest;
-    Vector2 origin = { 0, 0 };
+    Vector2 origin = ORIGIN_TOPLEFT;
 
     int frameWidth;
     Texture2D texture;
@@ -459,15 +452,15 @@ void DrawPlayer(Player *player)
     {
         texture = player->spritePlayerHurt;
         frameWidth = texture.width / player->frameHurt;
-    }   
+    }
     else if (player->isJumping)
-    {   
+    {
         if (player->currentFrame == 2 && !player->jumpSoundPlayed)
         {
             PlaySound(player->jumpSound);
             player->jumpSoundPlayed = true;
         }
-        
+
         texture = player->spritePlayerJump;
         frameWidth = texture.width / player->frameJump;
     }
@@ -490,7 +483,6 @@ void DrawPlayer(Player *player)
                 player->attackSoundPlayed = true;
                 player->jumpSoundPlayed = false;
             }
-                
         }
 
         if (player->isAttackingLight)
@@ -522,25 +514,25 @@ void DrawPlayer(Player *player)
         player->jumpSoundPlayed = false;
     }
 
-    source = (Rectangle){
+    source = (Rectangle)
+    {
         player->currentFrame * frameWidth,
-        0,
+        SPRITE_ROW_BASE,
         frameWidth * player->direction,
-        player->frameHeight
+        player->frameHeight 
     };
 
-    dest = (Rectangle){
+    dest = (Rectangle)
+    {
         player->position.x,
         player->position.y,
         frameWidth * player->scale,
-        player->frameHeight * player->scale
+        player->frameHeight * player->scale 
     };
 
-    DrawTexturePro(texture, source, dest, origin, 0.0f, WHITE);
-    DrawText(TextFormat("vida: %.2f", player->life), 10, 80, 20, BLACK);
+    DrawTexturePro(texture, source, dest, origin, ROTATION, WHITE);
 }
 
-// Libera as texturas do jogador da memória
 void UnloadPlayer(Player *player)
 {
     UnloadTexture(player->spritePlayerRun);
@@ -550,13 +542,16 @@ void UnloadPlayer(Player *player)
     UnloadTexture(player->spritePlayerAttack1);
     UnloadTexture(player->spritePlayerAttack2);
     UnloadTexture(player->spritePlayerHurt);
+
+    UnloadTexture(player->playerSpeech);
+    UnloadTexture(player->spritePlayerDead);
+    
     UnloadSound(player->attackLightSound);
     UnloadSound(player->attackHeavySound);
     UnloadSound(player->jumpSound);
     UnloadSound(player->playerDialogueWithNPC1);
     UnloadSound(player->playerDialogueWithNPC2);
-    UnloadTexture(player->playerSpeech);
-    UnloadTexture(player->spritePlayerDead);
+
     UnloadSound(player->walkingInCastle);
     UnloadSound(player->walkingInGrass);
     UnloadSound(player->playerHurtSound);
@@ -566,7 +561,7 @@ void UnloadPlayer(Player *player)
     {
         for (int i = 0; i < 6; i++)
         {
-            if (player->dialogues[map][i].sound.frameCount > 0)
+            if (player->dialogues[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {
                 UnloadSound(player->dialogues[map][i].sound);
             }
@@ -577,7 +572,7 @@ void UnloadPlayer(Player *player)
     {
         for (int i = 0; i < 3; i++)
         {
-            if (player->dialoguesWithPeasant[map][i].sound.frameCount > 0)
+            if (player->dialoguesWithPeasant[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {
                 UnloadSound(player->dialoguesWithPeasant[map][i].sound);
             }

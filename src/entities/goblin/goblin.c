@@ -129,7 +129,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         goblin->base.monsterHasHit = false;
         goblin->base.currentFrame = CURRENT_FRAME_ZERO;
         goblin->goblinHasHitPlayer = false;
-        goblin->attackTimer = COOL_DOWN_ZERO;
+        goblin->attackTimer = COOLDOWN_ZERO;
         goblin->frameDead = GOBLIN_FRAME_DEATH;
         goblin->deathAnimationDone = false;
         goblin->base.isWalking = false;
@@ -170,7 +170,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
             if (goblin->deathAnimTimer >= DEATH_ANIM_FRAME_TIME)
             {
                 goblin->frameDead++;
-                goblin->deathAnimTimer = COOL_DOWN_ZERO;
+                goblin->deathAnimTimer = COOLDOWN_ZERO;
 
                 if (goblin->frameDead >= GOBLIN_TOTAL_FRAME_DEATH)
                 {
@@ -198,7 +198,7 @@ void UpdateGoblin(Goblin *goblin, Player *player, int currentMapIndex, float del
         }
     }
 
-    if (goblin->attackTimer > COOL_DOWN_ZERO)
+    if (goblin->attackTimer > COOLDOWN_ZERO)
     {
         goblin->attackTimer -= delta;
         goblin->base.isAtacking = true;

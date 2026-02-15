@@ -30,9 +30,6 @@ void InitNpc(Npc *npc)
     npc->frameHeight = npc->spriteNpc.height; 
     npc->currentFrame = 0; 
     npc->frameCounter = 0; 
-     
-    bool isTalking = false;
-    bool isIdle = true; 
 }
 
 void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogState, float *dialogTimer)
@@ -170,7 +167,6 @@ void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dia
     int speechFontSize = 30;
     int hintFontSize = 14;
     float textSpacing = 0.0f;
-    int lineHeightOffset = 20;
 
     int speechMarginBottom = 10;
     int speechMarginSide = 20;

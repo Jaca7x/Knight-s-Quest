@@ -1,6 +1,5 @@
 #include "wolf.h"
 
-/// Função de colisão AABB
 bool CheckCollisionAABB(float x1, float y1, float w1, float h1,
                         float x2, float y2, float w2, float h2)
 {
@@ -24,20 +23,21 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
     wolf->frameCounter = 0;
 
     wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/wolf/walk.png");
-    wolf->spriteAtkWolf  = LoadTexture("assets/resources/sprites/wolf/Attack_1.png");
+    wolf->spriteAtkWolf = LoadTexture("assets/resources/sprites/wolf/Attack_1.png");
     wolf->spriteIdleWolf = LoadTexture("assets/resources/sprites/wolf/Idle.png");
     wolf->spriteDeadWolf = LoadTexture("assets/resources/sprites/wolf/Dead.png");
     wolf->spriteHurtWolf = LoadTexture("assets/resources/sprites/wolf/Hurt.png");
 
-    wolf->frameWalk  = 11;
-    wolf->frameAtk   = 6;
-    wolf->frameIdle  = 8;
-    wolf->frameDead  = 2;
-    wolf->frameHurt  = 2;
+    wolf->frameWalk = 11;
+    wolf->frameAtk = 6;
+    wolf->frameIdle = 8;
+    wolf->frameDead = 2;
+    wolf->frameHurt = 2;
 
     wolf->frameWidth  = wolf->spriteWalkWolf.width / wolf->frameWalk;
     wolf->frameHeight = wolf->spriteWalkWolf.height;
 
+    wolf->scale = 1.5f;
     wolf->direction = 1;
     wolf->isMoving = true;
 
@@ -63,13 +63,12 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
     wolf->wolfDeathSound = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-death.wav");
     wolf->wolfScratch = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-scratch.wav");
 
-
     wolf->wolfGrowl = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-growl.wav");
     wolf->growlPlayed = true;
     wolf->timeSinceLastGrowl = 0.0f;
 }
 
-void InitWhiteWolf(Wolf *wolf, Vector2 pos) 
+void InitWhiteWolf(Wolf *wolf, Vector2 pos)
 {
     InitWolfBase(wolf, pos);
 
@@ -78,7 +77,7 @@ void InitWhiteWolf(Wolf *wolf, Vector2 pos)
     wolf->maxLife = 100;
 
     wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/whiteWolf/Walk.png");
-    wolf->spriteAtkWolf  = LoadTexture("assets/resources/sprites/whiteWolf/Attack.png");
+    wolf->spriteAtkWolf = LoadTexture("assets/resources/sprites/whiteWolf/Attack.png");
     wolf->spriteIdleWolf = LoadTexture("assets/resources/sprites/whiteWolf/Idle.png");
     wolf->spriteDeadWolf = LoadTexture("assets/resources/sprites/whiteWolf/Dead.png");
     wolf->spriteHurtWolf = LoadTexture("assets/resources/sprites/whiteWolf/Hurt.png");
@@ -89,7 +88,7 @@ void InitWhiteWolf(Wolf *wolf, Vector2 pos)
     wolf->wolfScratch = LoadSound("assets/resources/sounds/sound_effects/wolf/white-wolf-scratch.wav");
 }
 
-void InitRedWolf(Wolf *wolf, Vector2 pos) 
+void InitRedWolf(Wolf *wolf, Vector2 pos)
 {
     InitWolfBase(wolf, pos);
 
@@ -99,13 +98,13 @@ void InitRedWolf(Wolf *wolf, Vector2 pos)
     wolf->maxLife = 200;
 
     wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/redWolf/Walk.png");
-    wolf->spriteAtkWolf  = LoadTexture("assets/resources/sprites/redWolf/Attack.png");
+    wolf->spriteAtkWolf = LoadTexture("assets/resources/sprites/redWolf/Attack.png");
     wolf->spriteIdleWolf = LoadTexture("assets/resources/sprites/redWolf/Idle.png");
     wolf->spriteDeadWolf = LoadTexture("assets/resources/sprites/redWolf/Dead.png");
     wolf->spriteHurtWolf = LoadTexture("assets/resources/sprites/redWolf/Hurt.png");
     wolf->spriteWalkWolf = LoadTexture("assets/resources/sprites/redWolf/Walk.png");
-    
-    wolf->frameAtk   = 5;
+
+    wolf->frameAtk = 5;
 
     wolf->wolfHitSound = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-hit-deep.wav");
     wolf->wolfHitSoundHeavy = LoadSound("assets/resources/sounds/sound_effects/wolf/wolf-hit-heavy-deep.wav");
@@ -115,7 +114,7 @@ void InitRedWolf(Wolf *wolf, Vector2 pos)
 
 void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
 {
-if (wolf->life <= 0 && !wolf->isDead)
+    if (wolf->life <= LIFE_ZERO && !wolf->isDead)
     {
         StopSound(wolf->wolfGrowl);
         PlaySound(wolf->wolfDeathSound);
@@ -124,9 +123,9 @@ if (wolf->life <= 0 && !wolf->isDead)
         wolf->hasHitPlayer = false;
         wolf->wolfHasHit = false;
         wolf->frameDead = 1;
-        wolf->deathAnimTimer = 0.0f;
+        wolf->deathAnimTimer = TIMER_ZERO;
         wolf->deathAnimationDone = false;
-        wolf->currentFrame = 0;
+        wolf->currentFrame = CURRENT_FRAME_ZERO;
         wolf->isPatrolling = false;
         wolf->isAttacking = false;
     }
@@ -134,109 +133,107 @@ if (wolf->life <= 0 && !wolf->isDead)
     if (wolf->isDead && wolf->deathAnimationDone)
         return;
 
-    // ====== PATRULHA ======
-if (wolf->isPatrolling)
-{   
-    if (wolf->isMoving)
+    if (wolf->isPatrolling)
     {
-        if (wolf->growlPlayed)
+        if (wolf->isMoving)
         {
-            PlaySound(wolf->wolfGrowl);
-            wolf->growlPlayed = false;
-            wolf->timeSinceLastGrowl = 8.0f;
-        }
-        else
-        {
-            wolf->timeSinceLastGrowl += delta;
-            if (wolf->timeSinceLastGrowl <= 0.0f)
+            if (wolf->growlPlayed)
             {
-                wolf->growlPlayed = true;
+                PlaySound(wolf->wolfGrowl);
+                wolf->growlPlayed = false;
+                wolf->timeSinceLastGrowl = 8.0f;
+            }
+            else
+            {
+                wolf->timeSinceLastGrowl += delta;
+                if (wolf->timeSinceLastGrowl <= COOLDOWN_ZERO)
+                {
+                    wolf->growlPlayed = true;
+                }
+            }
+
+            wolf->position.x += wolf->speed * wolf->direction * delta;
+
+            if (wolf->position.x <= wolf->start.x)
+            {
+                wolf->direction = DIRECTION_RIGHT;
+            }
+            else if (wolf->position.x >= wolf->end.x)
+            {
+                wolf->direction = DIRECTION_LEFT;
             }
         }
-    
-        wolf->position.x += wolf->speed * wolf->direction * delta;
-
-        if (wolf->position.x <= wolf->start.x)
-        {
-            wolf->direction = 1;
-        }
-        else if (wolf->position.x >= wolf->end.x)
-        {
-            wolf->direction = -1;
-        }
     }
-}
 
-    // ====== ANIMAÇÃO ======
     wolf->frameCounter++;
-    if (wolf->frameCounter >= (60 / 10))
+    if (wolf->frameCounter >= (GAME_FPS / ANIMATION_FPS))
     {
-        wolf->frameCounter = 0;
-        
+        wolf->frameCounter = FRAME_COUNTER_ZERO;
+
         if (wolf->wolfHasHit && !wolf->isDead)
         {
-            wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameHurt;
+            wolf->currentFrame = (wolf->currentFrame + NEXT_FRAME) % wolf->frameHurt;
         }
         else if (wolf->isDead && !wolf->deathAnimationDone)
         {
             wolf->deathAnimTimer += delta;
 
-            if (wolf->deathAnimTimer >= 0.2f)
-            {   
-            wolf->frameDead++;
-            wolf->deathAnimTimer = 0.3f;
-
-            if (wolf->frameDead >= 2)
+            if (wolf->deathAnimTimer >= DEATH_ANIM_FRAME_TIME)
             {
-                wolf->frameDead = 1;
-                wolf->deathAnimationDone = true;
-                wolf->speed = 0.0f;
-            }
+                wolf->frameDead++;
+                wolf->deathAnimTimer = TIMER_ZERO;
+
+                if (wolf->frameDead >= 2)
+                {
+                    wolf->frameDead = 1;
+                    wolf->deathAnimationDone = true;
+                    wolf->speed = SPEED_ZERO;
+                }
             }
             wolf->currentFrame = wolf->frameDead;
-        } 
-        else if (!wolf->isDead && wolf->isPatrolling) 
+        }
+        else if (!wolf->isDead && wolf->isPatrolling)
         {
             if (wolf->isAttacking)
             {
-                wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameAtk;
+                wolf->currentFrame = (wolf->currentFrame + NEXT_FRAME) % wolf->frameAtk;
             }
             else if (wolf->isMoving)
             {
-                wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameWalk;
+                wolf->currentFrame = (wolf->currentFrame + NEXT_FRAME) % wolf->frameWalk;
             }
             else
             {
-                wolf->currentFrame = (wolf->currentFrame + 1) % wolf->frameIdle;
+                wolf->currentFrame = (wolf->currentFrame + NEXT_FRAME) % wolf->frameIdle;
             }
         }
     }
 
-    
     // ====== ATAQUE ======
     float distance = fabs(player->position.x - wolf->position.x);
 
     if (wolf->wolfHasHit)
     {
-        wolf->speed = 0.0f;
-    } else 
+        wolf->speed = SPEED_ZERO;
+    }
+    else
     {
         wolf->speed = 95.0f;
     }
-    
+
     if (!wolf->isDead && wolf->isAttacking)
     {
         PlaySound(wolf->wolfScratch);
         wolf->attackDamageTimer -= delta;
 
-        if (wolf->attackDamageTimer <= 0 && !wolf->hasHitPlayer)
+        if (wolf->attackDamageTimer <= TIMER_ZERO && !wolf->hasHitPlayer)
         {
             if (distance <= wolf->attackRange)
             {
                 player->life -= wolf->damage;
                 wolf->hasHitPlayer = true;
                 player->hasHit = true;
-                player->hitTimer = 0.5f; 
+                player->hitTimer = HIT_TIMER;
 
                 if (player->position.x < wolf->position.x)
                 {
@@ -250,9 +247,9 @@ if (wolf->isPatrolling)
         }
 
         wolf->attackCooldown -= delta;
-        if (wolf->attackCooldown <= 0)
+        if (wolf->attackCooldown <= COOLDOWN_ZERO)
         {
-            wolf->attackCooldown = 0;
+            wolf->attackCooldown = COOLDOWN_ZERO;
             wolf->isAttacking = false;
             wolf->isMoving = true;
             wolf->hasHitPlayer = false;
@@ -271,12 +268,12 @@ if (wolf->isPatrolling)
     }
 
     // ====== COLISÃO FÍSICA (BLOQUEAR PLAYER) ======
-   if (!wolf->isDead && CheckCollisionAABB(
-            player->position.x, player->position.y, player->frameWidth, player->frameHeight,
-            wolf->position.x, wolf->position.y, wolf->frameWidth, wolf->frameHeight))
+    if (!wolf->isDead && CheckCollisionAABB(
+                             player->position.x, player->position.y, player->frameWidth, player->frameHeight,
+                             wolf->position.x, wolf->position.y, wolf->frameWidth, wolf->frameHeight))
     {
         player->hasHit = true;
-        player->hitTimer = 0.5f;
+        player->hitTimer = HIT_TIMER;
 
         if (player->position.x < wolf->position.x)
             player->position.x = wolf->position.x - player->frameWidth;
@@ -297,35 +294,33 @@ void DrawWolf(Wolf *wolf)
 
     Rectangle source = {
         wolf->currentFrame * wolf->frameWidth,
-        0,
+        SPRITE_ROW_BASE,
         wolf->frameWidth * wolf->direction,
-        wolf->frameHeight
-    };
+        wolf->frameHeight};
 
     Rectangle dest = {
         wolf->position.x,
         wolf->position.y,
-        wolf->frameWidth * 1.5f,
-        wolf->frameHeight * 1.5f
-    };
+        wolf->frameWidth * wolf->scale,
+        wolf->frameHeight * wolf->scale};
 
-    Vector2 origin = {0, 0};
+    Vector2 origin = ORIGIN_TOPLEFT;
 
     if (wolf->isDead)
     {
-        DrawTexturePro(wolf->spriteDeadWolf, source, dest, origin, 0.0f, WHITE);
+        DrawTexturePro(wolf->spriteDeadWolf, source, dest, origin, ROTATION, WHITE);
     }
     else if (wolf->wolfHasHit)
     {
-        DrawTexturePro(wolf->spriteHurtWolf, source, dest, origin, 0.0f, WHITE);
+        DrawTexturePro(wolf->spriteHurtWolf, source, dest, origin, ROTATION, WHITE);
     }
     else if (wolf->isAttacking)
     {
-        DrawTexturePro(wolf->spriteAtkWolf, source, dest, origin, 0.0f, WHITE);
+        DrawTexturePro(wolf->spriteAtkWolf, source, dest, origin, ROTATION, WHITE);
     }
-    else  
+    else
     {
-        DrawTexturePro(wolf->spriteWalkWolf, source, dest, origin, 0.0f, WHITE);
+        DrawTexturePro(wolf->spriteWalkWolf, source, dest, origin, ROTATION, WHITE);
     }
 }
 
@@ -336,6 +331,7 @@ void UnloadWolf(Wolf *wolf)
     UnloadTexture(wolf->spriteIdleWolf);
     UnloadTexture(wolf->spriteDeadWolf);
     UnloadTexture(wolf->spriteHurtWolf);
+    
     UnloadSound(wolf->wolfHitSound);
     UnloadSound(wolf->wolfHitSoundHeavy);
     UnloadSound(wolf->wolfDeathSound);

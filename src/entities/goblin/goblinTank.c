@@ -124,10 +124,10 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
     if (goblinTank->base.isDead && goblinTank->deathAnimationDone)
         return;
 
-    if (goblinTank->atackCooldownTimer > COOL_DOWN_ZERO)
+    if (goblinTank->atackCooldownTimer > COOLDOWN_ZERO)
         goblinTank->atackCooldownTimer -= delta;
 
-    if (goblinTank->atackAnimTimer > COOL_DOWN_ZERO)
+    if (goblinTank->atackAnimTimer > COOLDOWN_ZERO)
     {
         goblinTank->atackAnimTimer -= delta;
         goblinTank->base.isAtacking = true;
@@ -171,7 +171,7 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
 
         if (goblinTank->deathAnimTimer >= DEATH_ANIM_FRAME_TIME)
         {
-            goblinTank->deathAnimTimer = COOL_DOWN_ZERO;
+            goblinTank->deathAnimTimer = COOLDOWN_ZERO;
             goblinTank->base.currentFrame++;
 
             if (goblinTank->base.currentFrame >= goblinTank->frameDead - PREVIOUS_FRAME)
@@ -235,10 +235,10 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         (
             distanceToViewPlayer <= goblinTank->goblinTankAttackRange 
             && goblinTank->base.direction == DIRECTION_LEFT 
-            && goblinTank->atackCooldownTimer <= COOL_DOWN_ZERO
+            && goblinTank->atackCooldownTimer <= COOLDOWN_ZERO
         )
         {
-            goblinTank->atackAnimTimer = COOL_DOWN_ATTACK;
+            goblinTank->atackAnimTimer = COOLDOWN_ATTACK;
 
             if 
             (
@@ -259,10 +259,10 @@ void UpdateGoblinTank(GoblinTank *goblinTank, float delta, Player *player)
         (
             distanceToViewPlayer <= goblinTank->goblinTankAttackRangeRight 
             && goblinTank->base.direction == DIRECTION_RIGHT 
-            && goblinTank->atackCooldownTimer <= COOL_DOWN_ZERO
+            && goblinTank->atackCooldownTimer <= COOLDOWN_ZERO
         )
         {
-            goblinTank->atackAnimTimer = COOL_DOWN_ATTACK;
+            goblinTank->atackAnimTimer = COOLDOWN_ATTACK;
 
             if (
                 goblinTank->base.isAtacking

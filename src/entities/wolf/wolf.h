@@ -25,6 +25,7 @@ typedef struct wolf
     int maxLife;
 
     float speed;
+    float scale;
 
     int currentFrame;
     int frameCounter;
