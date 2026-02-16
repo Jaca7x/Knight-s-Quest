@@ -97,10 +97,10 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
     ChanceSpawnDrop(hearts, goblinTank->base.isDead, &goblinTank->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, GOBLIN_SPAWNING_DROP_CHANCE, goblinTank->base.position.x + GOBLIN_TANK_HEART_OFFSET_X, goblinTank->base.position.y + GOBLIN_TANK_HEART_OFFSET_Y, hearts[7].spawnSound);
     ChanceSpawnDrop(hearts, bombGoblin->base.isDead, &bombGoblin->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, GOBLIN_SPAWNING_DROP_CHANCE, bombGoblin->base.position.x + BOMB_GOBLIN_HEART_OFFSET_X, bombGoblin->base.position.y + BOMB_GOBLIN_HEART_OFFSET_Y, hearts[8].spawnSound);
 
-    ChanceSpawnDrop(hearts, wolf->isDead, &wolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, wolf->position.x + HEART_SPAWN_WOLF_OFFSET_X, wolf->position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[2].spawnSound);
+    ChanceSpawnDrop(hearts, wolf->base.isDead, &wolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, wolf->base.position.x + HEART_SPAWN_WOLF_OFFSET_X, wolf->base.position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[2].spawnSound);
     ChanceSpawnDrop(hearts, wolfRun->isDead, &wolfRun->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, wolfRun->position.x + HEART_SPAWN_WOLF_OFFSET_X, wolfRun->position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[3].spawnSound);
-    ChanceSpawnDrop(hearts, redWolf->isDead, &redWolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, redWolf->position.x + HEART_SPAWN_WOLF_OFFSET_X, redWolf->position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[5].spawnSound);
-    ChanceSpawnDrop(hearts, whiteWolf->isDead, &whiteWolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, whiteWolf->position.x + HEART_SPAWN_WOLF_OFFSET_X, whiteWolf->position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[6].spawnSound);
+    ChanceSpawnDrop(hearts, redWolf->base.isDead, &redWolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, redWolf->base.position.x + HEART_SPAWN_WOLF_OFFSET_X, redWolf->base.position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[5].spawnSound);
+    ChanceSpawnDrop(hearts, whiteWolf->base.isDead, &whiteWolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, whiteWolf->base.position.x + HEART_SPAWN_WOLF_OFFSET_X, whiteWolf->base.position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[6].spawnSound);
 
     Rectangle playerRect =
         {

@@ -288,9 +288,9 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     }
 
     // WOLFS
-    AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redWolf->isDead, redWolf->position.x, &redWolf->wolfHasHit, &redWolf->life, &redWolf->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
-    AttackMonsters(currentMapIndex, MAP_WOLF_WHITE_AREA, &whiteWolf->isDead, whiteWolf->position.x, &whiteWolf->wolfHasHit, &whiteWolf->life, &whiteWolf->wolfHitSound, &whiteWolf->wolfHitSoundHeavy, player);
-    AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolf->isDead, wolf->position.x, &wolf->wolfHasHit, &wolf->life, &wolf->wolfHitSound, &wolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redWolf->base.isDead, redWolf->base.position.x, &redWolf->base.monsterHasHit, &redWolf->life, &redWolf->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, MAP_WOLF_WHITE_AREA, &whiteWolf->base.isDead, whiteWolf->base.position.x, &whiteWolf->base.monsterHasHit, &whiteWolf->life, &whiteWolf->wolfHitSound, &whiteWolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolf->base.isDead, wolf->base.position.x, &wolf->base.monsterHasHit, &wolf->life, &wolf->wolfHitSound, &wolf->wolfHitSoundHeavy, player);
     AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolfRun->isDead, wolfRun->position.x, &wolfRun->wolfHasHit, &wolfRun->life, &wolfRun->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
 
     // GOBLINS

@@ -42,7 +42,7 @@
 #define MIN_SPAWN_CHANCE 0
 
 #define GOBLIN_SPAWNING_DROP_CHANCE 70
-#define WOLF_SPAWNING_DROP_CHANCE 70
+#define WOLF_SPAWNING_DROP_CHANCE 60
 
 typedef struct player Player;
 typedef struct wolf Wolf;

@@ -8,62 +8,63 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "core/define.h"
+#include "render/drawMonsters.h"
 
+// MAPS
 #define MAP_WOLF_RUNNING_AREA 2
 #define MAP_WOLF_WHITE_AREA 4
+
+// STATS
+#define WOLF_BASE_SPEED 95.0f
+
+// TIMERS & COOLDOWN
+#define TIME_SINCE_LAST_GROWL 15.0f
+#define WOLF_ATTACK_COOLDOWN_AND_DAMAGE 0.4f
+
+// FRAMES
+#define WOLF_FRAME_DEAD 1
+#define WOLF_MAX_FRAMES_DEAD 2
+
+// OFFSETS
+#define WOLF_OFFSET_X_LIFE_BAR 20
+#define WOLF_OFFSET_Y_LIFE_BAR -30
 
 typedef struct player Player;
 
 typedef struct wolf
 {
     Entity entity;
-    
-    Vector2 position;
+    Monsters base;
+
     Vector2 start;
     Vector2 end;
 
+    float speed;
+    float push;
+
     int life;
     int maxLife;
+    bool droppedHeart;
 
-    float speed;
-    float scale;
-
-    int currentFrame;
     int frameCounter;
 
-    Texture2D spriteWalkWolf;
-    Texture2D spriteAtkWolf;
-    Texture2D spriteIdleWolf;
-    Texture2D spriteDeadWolf;
-    Texture2D spriteHurtWolf;
-    
-    int frameWidth;
-    int frameHeight;
-
+    int frameIdle;
     int frameWalk;
     int frameAtk;
-    int frameIdle;
-    int frameDead;
     int frameHurt;
+    int frameDead;
 
-    int direction;
     bool isMoving;
+    bool isPatrolling;
 
-    bool isDead;
     float deathAnimTimer;
     bool deathAnimationDone;
 
-    bool isPatrolling;
-
-    bool isAttacking;
     float attackRange;
     float attackCooldown;
-    bool hasHitPlayer;
-    bool wolfHasHit;
     float attackDamageTimer;
     int damage;
-
-    bool droppedHeart; 
+    bool hasHitPlayer;
 
     Sound wolfHitSound;
     Sound wolfHitSoundHeavy;
@@ -73,7 +74,7 @@ typedef struct wolf
     Sound wolfGrowl;
     bool growlPlayed;
     float timeSinceLastGrowl;
-    
+
 } Wolf;
 
 void InitWolfBase(Wolf *wolf, Vector2 pos);
