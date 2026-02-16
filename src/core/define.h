@@ -12,7 +12,8 @@
 #define ROTATION 0.0f
 #define SPACING 1.0f 
 #define STAMINA_ZERO 0.0f
-
+#define WIDTH_LIFE_BAR 60.0f
+#define HEIGHT_LIFE_BAR 8.0f
 #define VOLUME_MAX 1.0f
 
 /* ===================== COMBAT / COOLDOWN ===================== */
@@ -61,3 +62,7 @@
 // FONT
 #define CODEPOINT_BASE   0
 #define CODEPOINT_COUNT  250.0f
+
+#define WOLFS_FRAME_DEAD 1
+#define WOLFS_MAX_FRAMES_DEAD 2
+#define WOLFS_ATTACK_COOLDOWN_AND_DAMAGE 0.4f

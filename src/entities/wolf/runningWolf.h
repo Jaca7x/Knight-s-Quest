@@ -1,31 +1,23 @@
-#ifndef WOLF_H
-#define WOLF_H
+#ifndef RUNNING_WOLF_H
+#define RUNNING_WOLF_H
 
 #include "raylib.h"
 #include "entities/player/player.h"
 #include "ui/lifeBar/lifeBarMob.h"
 #include "math.h"
-#include <stdlib.h>
-#include <stdio.h>
 #include "core/define.h"
 #include "render/drawMonsters.h"
 
-// MAPS
-#define MAP_WOLF_WHITE_AREA 4
-
-// STATS
-#define WOLF_BASE_SPEED 95.0f
-
-// TIMERS & COOLDOWN
-#define TIME_SINCE_LAST_GROWL 15.0f
+// MAP
+#define MAP_WOLF_RUNNING_AREA 2
 
 // OFFSETS
-#define WOLF_OFFSET_X_LIFE_BAR 20
-#define WOLF_OFFSET_Y_LIFE_BAR -30
+#define RUNNING_WOLF_OFFSET_X_LIFE_BAR 80
+#define RUNNING_WOLF_OFFSET_Y_LIFE_BAR -30
 
 typedef struct player Player;
 
-typedef struct wolf
+typedef struct runningWolf
 {
     Entity entity;
     Monsters base;
@@ -33,52 +25,50 @@ typedef struct wolf
     Vector2 start;
     Vector2 end;
 
+    Texture2D spriteRunWolf;
+
     float speed;
+    float speedRun;
     float push;
 
     int life;
-    int maxLife;
+    float maxLife;
     bool droppedHeart;
 
     int frameCounter;
 
     int frameIdle;
     int frameWalk;
+    int frameRun;
     int frameAtk;
     int frameHurt;
     int frameDead;
 
-    bool isMoving;
-    bool isPatrolling;
+    bool isRunning;
 
     float deathAnimTimer;
     bool deathAnimationDone;
 
+    bool hasRunAttack;
     float attackRange;
     float attackCooldown;
     float attackDamageTimer;
     int damage;
+    float viewPlayer;
     bool hasHitPlayer;
 
     Sound wolfHitSound;
     Sound wolfHitSoundHeavy;
     Sound wolfDeathSound;
     Sound wolfScratch;
-
     Sound wolfGrowl;
-    bool growlPlayed;
-    float timeSinceLastGrowl;
 
-} Wolf;
+} RunningWolf;
 
-void InitWolfBase(Wolf *wolf, Vector2 pos);
 
-void InitWhiteWolf(Wolf *wolf, Vector2 pos);
+void InitRunningWolf(RunningWolf *runningWolf);
+void UpdateRunningWolf(RunningWolf *runningWolf, Player *player, float delta);
+void DrawRunningWolf(RunningWolf *runningWolf);
+void UnloadRunningWolf(RunningWolf *runningWolf);
 
-void InitRedWolf(Wolf *wolf, Vector2 pos);
-
-void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex);
-void DrawWolf(Wolf *wolf);
-void UnloadWolf(Wolf *wolf);
-
-#endif // WOLF_H
+#endif

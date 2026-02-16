@@ -1,11 +1,11 @@
 #include "lifeBarMob.h"
 
-void DrawBar(Entity *entity, int offsetX, int offsetY)
+void DrawBar(Entity *entity, int offsetX, int offsetY, float width, float height)
 {
     if (entity->isDead) return;
-
-    float barWidth = 60.0f;
-    float barHeight = 8.0f;
+    
+    float barWidth = width;
+    float barHeight = height;
     float x = entity->position.x + offsetX;
     float y = entity->position.y - offsetY;
 

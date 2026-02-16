@@ -10,6 +10,6 @@ typedef struct entity
     float maxLife;
 } Entity;
 
-void DrawBar(Entity *entity, int offsetX, int offsetY);
+void DrawBar(Entity *entity, int offsetX, int offsetY, float width, float height);
 
 #endif // LIFE_BAR_MOB_H

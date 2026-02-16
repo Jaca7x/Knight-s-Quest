@@ -6,7 +6,7 @@
 #include "entities/wolf/wolf.h" 
 #include "entities/goblin/goblin.h" 
 #include "entities/goblin/goblinArcher.h" 
-#include "entities/wolf/wolfRunning.h" 
+#include "entities/wolf/runningWolf.h" 
 #include "entities/goblin/goblinTank.h"
 #include "entities/goblin/bombGoblin.h"
 #include "core/define.h"
@@ -48,7 +48,7 @@ typedef struct player Player;
 typedef struct wolf Wolf;
 typedef struct goblin Goblin;
 typedef struct goblinArcher GoblinArcher;
-typedef struct wolfRun WolfRun;
+typedef struct runningWolf RunningWolf;
 typedef struct goblinTank GoblinTank;
 typedef struct bombGoblin BombGoblin;
 
@@ -71,7 +71,7 @@ void InitHearts(Heart hearts[]);
 void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, 
                     Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin, 
                     Goblin *redGoblin, GoblinArcher *goblinArcher, 
-                    WolfRun *wolfRun, GoblinTank *goblinTank, 
+                    RunningWolf *runningWolf, GoblinTank *goblinTank, 
                     BombGoblin *bombGoblin);
 void DrawHearts(const Heart hearts[], float delta, Player *player);
 void UnloadHearts(Heart hearts[]);

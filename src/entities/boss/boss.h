@@ -3,11 +3,13 @@
 
 #include "raylib.h"
 #include "entities/player/player.h"
+#include "ui/lifeBar/lifeBarMob.h"
 
 #define BOSS_MAP 8
 
 typedef struct boss
 {
+    Entity entity;
     Vector2 position;
 
     Texture2D spriteWalk;
@@ -65,6 +67,7 @@ typedef struct boss
     float speed;
 
     int life;
+    float maxLife;
     bool bossHasHit;
 
     float viewPlayer;

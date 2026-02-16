@@ -13,7 +13,7 @@
 		"interaction.h": "c",
 		"ghost.h": "c",
 		"player.h": "c",
-		"wolfrunning.h": "c",
+		"runningWolf.h": "c",
 		"raylib.h": "c",
 		"goblinarcher.h": "c",
 		"npc.h": "c",

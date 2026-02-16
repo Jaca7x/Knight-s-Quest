@@ -274,7 +274,7 @@ void DrawGoblin(Goblin *goblin)
     goblin->entity.position.x = goblin->base.position.x;
     goblin->entity.position.y = goblin->base.position.y;
 
-    DrawBar(&goblin->entity, GOBLIN_BAR_LIFE_OFFSET_X, GOBLIN_BAR_LIFE_OFFSET_Y);
+    DrawBar(&goblin->entity, GOBLIN_BAR_LIFE_OFFSET_X, GOBLIN_BAR_LIFE_OFFSET_Y, WIDTH_LIFE_BAR, HEIGHT_LIFE_BAR);
 
     DrawMonsters(&goblin->base, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO);
 }

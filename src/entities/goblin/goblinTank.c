@@ -346,7 +346,7 @@ void DrawGoblinTank(GoblinTank *goblinTank, Player *player)
     goblinTank->entity.position.y = goblinTank->base.position.y;
     goblinTank->entity.isDead = goblinTank->base.isDead;
 
-    DrawBar(&goblinTank->entity, OFFSET_BAR_LIFE_X_GOBLIN_TANK, OFFSET_BAR_LIFE_Y_GOBLIN_TANK);
+    DrawBar(&goblinTank->entity, OFFSET_BAR_LIFE_X_GOBLIN_TANK, OFFSET_BAR_LIFE_Y_GOBLIN_TANK, WIDTH_LIFE_BAR, HEIGHT_LIFE_BAR);
 
     DrawMonsters
     (

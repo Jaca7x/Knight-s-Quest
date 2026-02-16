@@ -9,30 +9,6 @@ bool CheckCollisionBoss(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
-void DrawBossfLifeBar(Boss *boss)
-{
-    if (boss->isDead) return;
-
-    float barWidth = 800.0f;
-    float barHeight = 18.0f;
-    float x = (GetScreenWidth() / 2) - (barWidth / 2); 
-    float y = 20;
-
-    float maxLife = 2000.0f;
-    float lifePercent = boss->life / maxLife;
-    if (lifePercent < 0) lifePercent = 0;
-
-    float currentBarWidth = barWidth * lifePercent;
-
-    DrawText("Brakkor, o Dourado", x + barWidth / 2 - MeasureText("Brakkor, o Dourado", 10) / 2, y - 18 , 20, BLACK);
-
-    DrawRectangle(x, y, barWidth, barHeight, RED);
-
-    DrawRectangle(x, y, currentBarWidth, barHeight, GREEN);
-
-    DrawRectangleLines(x, y, barWidth, barHeight, BLACK);
-}
-
 Rectangle GetSourceValueRec(int frame, int frameWidth, float direction, int frameHeigth)
 {
     Rectangle r;
@@ -118,7 +94,9 @@ void InitBoss(Boss *boss)
 
     boss->speed = 10.0f;
     
-    boss->life = 2000;
+    boss->maxLife = 2000.0f;
+    boss->life = boss->maxLife;
+   
     boss->bossHasHit = false;
     
     boss->damage = 40;
@@ -360,10 +338,14 @@ void DrawBoss(Boss *boss)
         DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
     }
 
-    if (boss->position.y == targetY)
-    {
-        DrawBossfLifeBar(boss);
-    }
+    boss->entity.isDead = boss->isDead;
+    boss->entity.life = boss->life;
+    boss->entity.maxLife = boss->maxLife;
+    boss->entity.position.x = boss->position.x;
+    boss->entity.position.y = boss->position.y;
+
+    DrawText("Brakkor, o Dourado", (GetScreenWidth() / 2) - (800 / 2) + 800 / 2 - MeasureText("Brakkor, o Dourado", 10) / 2, 2, 20, BLACK);
+    DrawBar(&boss->entity, (GetScreenWidth() / 2) - (800 / 2), 20, 800.0f, 18.0f);
 }
 
 void UnloadBoss(Boss *boss)

@@ -27,7 +27,7 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
     //Vision 
     wolf->attackRange = 100.0f;
 
-    //Animation frame couts
+    //Animation frame counts
     wolf->frameWalk = 11;
     wolf->frameAtk = 6;
     wolf->frameIdle = 8;
@@ -154,7 +154,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
         wolf->isMoving = false;
         wolf->hasHitPlayer = false;
         wolf->base.monsterHasHit = false;
-        wolf->frameDead = WOLF_FRAME_DEAD;
+        wolf->frameDead = WOLFS_FRAME_DEAD;
         wolf->deathAnimTimer = TIMER_ZERO;
         wolf->deathAnimationDone = false;
         wolf->base.currentFrame = CURRENT_FRAME_ZERO;
@@ -217,9 +217,9 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
                 wolf->frameDead++;
                 wolf->deathAnimTimer = TIMER_ZERO;
 
-                if (wolf->frameDead >= WOLF_MAX_FRAMES_DEAD)
+                if (wolf->frameDead >= WOLFS_MAX_FRAMES_DEAD)
                 {
-                    wolf->frameDead = WOLF_FRAME_DEAD;
+                    wolf->frameDead = WOLFS_FRAME_DEAD;
                     wolf->deathAnimationDone = true;
                     wolf->speed = SPEED_ZERO;
                 }
@@ -295,8 +295,8 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
         {
             wolf->base.isAtacking = true;
             wolf->isMoving = false;
-            wolf->attackCooldown = WOLF_ATTACK_COOLDOWN_AND_DAMAGE;
-            wolf->attackDamageTimer = WOLF_ATTACK_COOLDOWN_AND_DAMAGE;
+            wolf->attackCooldown = WOLFS_ATTACK_COOLDOWN_AND_DAMAGE;
+            wolf->attackDamageTimer = WOLFS_ATTACK_COOLDOWN_AND_DAMAGE;
             wolf->hasHitPlayer = false;
         }
     }
@@ -323,7 +323,7 @@ void DrawWolf(Wolf *wolf)
     wolf->entity.position.x = wolf->base.position.x;
     wolf->entity.position.y = wolf->base.position.y;
 
-    DrawBar(&wolf->entity, WOLF_OFFSET_X_LIFE_BAR, WOLF_OFFSET_Y_LIFE_BAR);
+    DrawBar(&wolf->entity, WOLF_OFFSET_X_LIFE_BAR, WOLF_OFFSET_Y_LIFE_BAR, WIDTH_LIFE_BAR, HEIGHT_LIFE_BAR);
 
     DrawMonsters(&wolf->base, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO);
 }

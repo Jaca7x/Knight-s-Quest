@@ -3,7 +3,7 @@
 
 #include "raylib.h"      
 #include "src/entities/wolf/wolf.h"            
-#include "src/entities/wolf/wolfRunning.h" 
+#include "src/entities/wolf/runningWolf.h" 
 #include "entities/goblin/goblin.h" 
 #include "entities/goblin/goblinArcher.h" 
 #include "entities/npcs/npc.h"   
@@ -44,7 +44,7 @@ void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
 void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogueIndex);
 
 typedef struct wolf Wolf; 
-typedef struct wolfRun WolfRun; 
+typedef struct runningWolf RunningWolf; 
 typedef struct goblin Goblin; 
 typedef struct goblinArcher GoblinArcher;
 typedef struct npc Npc;
@@ -145,7 +145,7 @@ typedef struct player
 } Player;
 
 void InitPlayer(Player *player);
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf,
+void UpdatePlayer(Player *player, Wolf *wolf, RunningWolf *runningWolf, Wolf *redWolf, Wolf *whiteWolf,
     Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, 
     Npc *npc, Boss *boss, GoblinTank *goblinTank, BombGoblin *bombGoblin);
 void DrawPlayer(Player *player);

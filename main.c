@@ -10,7 +10,7 @@
 #include "src/entities/player/player.h"       
 #include "src/ui/staminaBar/stamina.h"   
 #include "src/entities/wolf/wolf.h"
-#include "src/entities/wolf/wolfRunning.h"
+#include "src/entities/wolf/runningWolf.h"
 #include "src/ui/lifeBar/lifeBar.h"
 #include "src/entities/goblin/goblin.h"
 #include "src/entities/goblin/goblinArcher.h"
@@ -251,7 +251,7 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
 
 int currentMapIndex = 0;
 
-void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfRun *wolfRun, 
+void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, RunningWolf *runningWolf, 
                 Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, Heart hearts[],
                 Npc *npc, Ghost *ghost, Interaction *interaction, Boss *boss, GoblinTank *goblinTank, 
                 Peasant *peasant, BombGoblin *bombGoblin, TileMap *map, const char *mapFiles[])
@@ -260,7 +260,7 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, WolfR
     InitWolfBase(wolf, (Vector2){500, 450});
     InitWhiteWolf(wolf, (Vector2){800, 450});
     InitRedWolf(redWolf, (Vector2){800, 450});
-    InitRunningWolf(wolfRun);
+    InitRunningWolf(runningWolf);
     InitGoblinBase(goblin, (Vector2){780, 567});
     InitRedGoblin(redGoblin, (Vector2){450, 569});
     InitGoblinArcher(goblinArcher);
@@ -784,8 +784,8 @@ int main(void)
     Wolf redWolf;
     InitRedWolf(&redWolf, (Vector2){800, 450});
 
-    WolfRun wolfRun;
-    InitRunningWolf(&wolfRun);
+    RunningWolf runningWolf;
+    InitRunningWolf(&runningWolf);
 
     Goblin goblin;
     InitGoblinBase(&goblin, (Vector2){780, 567});
@@ -886,11 +886,11 @@ int main(void)
     wolf.wolfScratch,
     wolf.wolfGrowl,
 
-    wolfRun.wolfHitSound,
-    wolfRun.wolfHitSoundHeavy,
-    wolfRun.wolfDeathSound,
-    wolfRun.wolfScratch,
-    wolfRun.wolfGrowl,
+    runningWolf.wolfHitSound,
+    runningWolf.wolfHitSoundHeavy,
+    runningWolf.wolfDeathSound,
+    runningWolf.wolfScratch,
+    runningWolf.wolfGrowl,
 
     redWolf.wolfHitSound,
     redWolf.wolfHitSoundHeavy,
@@ -1373,8 +1373,8 @@ while (!WindowShouldClose())
             
             if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
             {
-                UpdateRunningWolf(&wolfRun, &player, delta);
-                DrawRunningWolf(&wolfRun);
+                UpdateRunningWolf(&runningWolf, &player, delta);
+                DrawRunningWolf(&runningWolf);
 
                 UpdateWolf(&wolf, &player, delta, currentMapIndex);
                 DrawWolf(&wolf);
@@ -1387,7 +1387,7 @@ while (!WindowShouldClose())
             }
 
             UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &redGoblin, 
-                &goblinArcher, &wolfRun, &goblinTank, &bombGoblin);
+                &goblinArcher, &runningWolf, &goblinTank, &bombGoblin);
             DrawHearts(hearts, delta, &player);
 
             if (MAP_NPC == currentMapIndex) {
@@ -1406,7 +1406,7 @@ while (!WindowShouldClose())
                 DrawText("Aperte 'K', para abrir às configurações", player.position.x - 40, player.position.y + 7, 16, WHITE);
             }
     
-            UpdatePlayer(&player, &wolf, &wolfRun, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, 
+            UpdatePlayer(&player, &wolf, &runningWolf, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, 
                 &npc, &boss, &goblinTank, &bombGoblin);
             DrawPlayer(&player);
 
@@ -1757,7 +1757,7 @@ while (!WindowShouldClose())
             {
                 gameState = MENU;
                 PlaySound(buttonSelect);
-                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &bombGoblin, &map, mapFiles);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &runningWolf, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &bombGoblin, &map, mapFiles);
             }
         } break;
 
@@ -1776,7 +1776,7 @@ while (!WindowShouldClose())
             {
                 gameState = MENU;
                 PlaySound(buttonSelect);
-                resetGame(&player, &wolf, &redWolf, &whiteWolf, &wolfRun, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &bombGoblin, &map, mapFiles);
+                resetGame(&player, &wolf, &redWolf, &whiteWolf, &runningWolf, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &bombGoblin, &map, mapFiles);
             }
         } break;
 
@@ -1809,7 +1809,7 @@ while (!WindowShouldClose())
     UnloadTexture(staminaBar);
     UnloadTexture(barLifeSprite);
     UnloadWolf(&wolf);
-    UnloadRunningWolf(&wolfRun);
+    UnloadRunningWolf(&runningWolf);
     UnloadGoblin(&goblin);
     UnloadGoblinArcher(&goblinArcher);
     UnloadHearts(hearts);

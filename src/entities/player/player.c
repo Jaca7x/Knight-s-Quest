@@ -215,7 +215,7 @@ void InitPlayer(Player *player)
         LoadSound("assets/resources/sounds/sound_effects/player/jump.wav");
 }
 
-void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin,
+void UpdatePlayer(Player *player, Wolf *wolf, RunningWolf *runningWolf, Wolf *redWolf, Wolf *whiteWolf, Goblin *goblin,
                   Goblin *redGoblin, GoblinArcher *goblinArcher, int currentMapIndex, float delta, Npc *npc,
                   Boss *boss, GoblinTank *goblinTank, BombGoblin *bombGoblin)
 {
@@ -291,7 +291,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, WolfRun *wolfRun, Wolf *redWolf, W
     AttackMonsters(currentMapIndex, RED_GOBLIN_MAP, &redWolf->base.isDead, redWolf->base.position.x, &redWolf->base.monsterHasHit, &redWolf->life, &redWolf->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
     AttackMonsters(currentMapIndex, MAP_WOLF_WHITE_AREA, &whiteWolf->base.isDead, whiteWolf->base.position.x, &whiteWolf->base.monsterHasHit, &whiteWolf->life, &whiteWolf->wolfHitSound, &whiteWolf->wolfHitSoundHeavy, player);
     AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolf->base.isDead, wolf->base.position.x, &wolf->base.monsterHasHit, &wolf->life, &wolf->wolfHitSound, &wolf->wolfHitSoundHeavy, player);
-    AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &wolfRun->isDead, wolfRun->position.x, &wolfRun->wolfHasHit, &wolfRun->life, &wolfRun->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
+    AttackMonsters(currentMapIndex, MAP_WOLF_RUNNING_AREA, &runningWolf->base.isDead, runningWolf->base.position.x, &runningWolf->base.monsterHasHit, &runningWolf->life, &runningWolf->wolfHitSound, &redWolf->wolfHitSoundHeavy, player);
 
     // GOBLINS
     AttackMonsters(currentMapIndex, GOBLIN_MAP, &goblin->base.isDead, goblin->base.position.x, &goblin->base.monsterHasHit, &goblin->life, &goblin->goblinDeathSound, &goblin->goblinDeathSound, player);

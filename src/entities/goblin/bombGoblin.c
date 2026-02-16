@@ -451,7 +451,7 @@ void DrawBombGoblin(BombGoblin *bombGoblin, Player *player)
     bombGoblin->entity.position.x = bombGoblin->base.position.x;
     bombGoblin->entity.position.y = bombGoblin->base.position.y;
 
-    DrawBar(&bombGoblin->entity, BOMB_GOBLIN_OFFSET_X_LIFE_BAR, BOMB_GOBLIN_OFFSET_Y_LIFE_BAR);
+    DrawBar(&bombGoblin->entity, BOMB_GOBLIN_OFFSET_X_LIFE_BAR, BOMB_GOBLIN_OFFSET_Y_LIFE_BAR, WIDTH_LIFE_BAR, HEIGHT_LIFE_BAR);
 
     Rectangle source;
     Rectangle dest;

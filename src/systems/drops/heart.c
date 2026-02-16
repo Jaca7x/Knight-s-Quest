@@ -87,7 +87,7 @@ void InitHearts(Heart hearts[])
 }
 
 void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf,
-                  Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, WolfRun *wolfRun, GoblinTank *goblinTank,
+                  Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, RunningWolf *RunningWolf, GoblinTank *goblinTank,
                   BombGoblin *bombGoblin)
 {
 
@@ -98,7 +98,7 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
     ChanceSpawnDrop(hearts, bombGoblin->base.isDead, &bombGoblin->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, GOBLIN_SPAWNING_DROP_CHANCE, bombGoblin->base.position.x + BOMB_GOBLIN_HEART_OFFSET_X, bombGoblin->base.position.y + BOMB_GOBLIN_HEART_OFFSET_Y, hearts[8].spawnSound);
 
     ChanceSpawnDrop(hearts, wolf->base.isDead, &wolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, wolf->base.position.x + HEART_SPAWN_WOLF_OFFSET_X, wolf->base.position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[2].spawnSound);
-    ChanceSpawnDrop(hearts, wolfRun->isDead, &wolfRun->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, wolfRun->position.x + HEART_SPAWN_WOLF_OFFSET_X, wolfRun->position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[3].spawnSound);
+    ChanceSpawnDrop(hearts, RunningWolf->base.isDead, &RunningWolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, RunningWolf->base.position.x + HEART_SPAWN_WOLF_OFFSET_X, RunningWolf->base.position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[3].spawnSound);
     ChanceSpawnDrop(hearts, redWolf->base.isDead, &redWolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, redWolf->base.position.x + HEART_SPAWN_WOLF_OFFSET_X, redWolf->base.position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[5].spawnSound);
     ChanceSpawnDrop(hearts, whiteWolf->base.isDead, &whiteWolf->droppedHeart, MAX_SPAWN_CHANCE, MIN_SPAWN_CHANCE, WOLF_SPAWNING_DROP_CHANCE, whiteWolf->base.position.x + HEART_SPAWN_WOLF_OFFSET_X, whiteWolf->base.position.y + HEART_SPAWN_WOLF_OFFSET_Y, hearts[6].spawnSound);
 

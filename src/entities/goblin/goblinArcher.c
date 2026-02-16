@@ -282,7 +282,7 @@ void DrawGoblinArcher(GoblinArcher *goblinArcher)
     goblinArcher->entity.position.x = goblinArcher->base.position.x;
     goblinArcher->entity.position.y = goblinArcher->base.position.y;
 
-    DrawBar(&goblinArcher->entity, GOBLIN_ARCHER_OFFSET_BAR_LIFE_X, GOBLIN_ARCHER_OFFSET_BAR_LIFE_Y);
+    DrawBar(&goblinArcher->entity, GOBLIN_ARCHER_OFFSET_BAR_LIFE_X, GOBLIN_ARCHER_OFFSET_BAR_LIFE_Y, WIDTH_LIFE_BAR, HEIGHT_LIFE_BAR);
 
     DrawMonsters(&goblinArcher->base, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO);
 
