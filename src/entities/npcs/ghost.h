@@ -1,15 +1,29 @@
 #ifndef GHOST_H
 #define GHOST_H
-#define NUM_MAPS 4
-#define DIALOGS_PER_MAP 3
 
 #include "raylib.h"
 #include "entities/player/player.h"
 #include "npc.h"
 #include "interaction.h"
+#include "core/define.h"
 
 typedef struct npc Npc;
 typedef struct interaction Interaction;
+
+// MAP
+#define START_MAP 1
+
+// FRAME
+#define NPCS_FRAME_SPEED (200 / 5)
+
+// OFFSETS
+#define GHOST_INTERACTION_OFFSET_X 15
+#define GHOST_INTERACTION_OFFSET_Y -35
+#define GHOST_EXCLAMATION_OFFSET 25
+
+// DIALOG
+#define NUM_MAPS 4
+#define DIALOGS_PER_MAP 3
 
 typedef enum {
     DIALOG_CLOSED_GHOST,
@@ -27,24 +41,26 @@ typedef struct {
 
 typedef struct ghost {
     Vector2 position;
+
     Texture2D ghostSpeech;
     Texture2D ghostIdle;
     Texture2D ghostBtnE;
     Texture2D ghostExclamation;
 
-    Dialogue dialogues[NUM_MAPS][6];
-
-    int frameIdle;
+    Dialogue dialogues[NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
 
     bool isInteraction;
 
+    int frameIdle;
+
     int frameWidth;   
     int frameHeight; 
+    float scale;
+
     int currentFrame; 
     int frameCounter; 
 
     Font textFont; 
-
     int speechFontSize;
 } Ghost;
 
@@ -54,4 +70,4 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
 void MapsGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction, float delta, int currentMapIndex);
 void UnloadGhost(Ghost *ghost);
 
-#endif // GHOST_H
+#endif

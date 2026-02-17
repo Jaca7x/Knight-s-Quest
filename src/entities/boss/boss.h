@@ -7,18 +7,23 @@
 #include "core/define.h"
 #include "render/drawMonsters.h"
 
+// Map
 #define BOSS_MAP 8
 
+// Speed
 #define DESCENT_SPEED 250.0f;
 
+// Frames
 #define BOSS_FRAME_DEAD 4
-
-#define BOSS_ATACK_COOLDOWN 1.5f
 
 #define BOSS_BASE_FRAME_ANIMATION 40
 #define BOSS_HURT_FRAME_ANIMATION 30
 #define BOSS_ATACK_FRAME_ANIMATION 10
 
+// Cooldown
+#define BOSS_ATACK_COOLDOWN 1.5f
+
+// Life bar
 #define BOSS_WIDTH_LIFE_BAR 800.0f
 #define BOSS_HEIGHT_LIFE_BAR 18.0f
 

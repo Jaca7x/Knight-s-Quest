@@ -243,7 +243,7 @@ void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dia
             {
                 DrawTexture(npc->npcSpeech, npcSpeechX, speechY, WHITE);
                 DrawTextEx(npc->textSpeech,
-                           TextSubtext(lines[lineIndex], 0, visibleLetters),
+                           TextSubtext(lines[lineIndex], POSITION_ZERO, visibleLetters),
                            (Vector2){npcSpeechX + npcSpeechTextOffsetX, speechY + npcSpeechTextOffsetY},
                            speechFontSize, textSpacing, BLACK);
 
@@ -254,7 +254,7 @@ void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dia
             {
                 DrawTexture(player->playerSpeech, playerSpeechX, speechY, WHITE);
                 DrawTextEx(npc->textSpeech,
-                           TextSubtext(lines[lineIndex], 0, visibleLetters),
+                           TextSubtext(lines[lineIndex], POSITION_ZERO, visibleLetters),
                            (Vector2){playerSpeechX + playerSpeechTextOffsetX, speechY + playerSpeechTextOffsetY},
                            speechFontSize, textSpacing, BLACK);
 

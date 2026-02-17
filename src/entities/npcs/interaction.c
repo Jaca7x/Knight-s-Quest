@@ -1,6 +1,6 @@
 #include "interaction.h"
 
-void InitInteraction(Interaction *interaction) 
+void InitInteraction(Interaction *interaction)
 {
     interaction->currentFrame = 0;
     interaction->frameCounter = 0;
@@ -16,81 +16,63 @@ void InitInteraction(Interaction *interaction)
     interaction->frameHeight = interaction->interactionTexture.height / interaction->rows;
 }
 
-void UpdateInteraction(Interaction *interaction, float delta) 
+void UpdateInteraction(Interaction *interaction, float delta)
 {
-        interaction->frameCounter++;
-        if (interaction->frameCounter >= (100 / 5))
-        {
-            interaction->frameCounter = 0;
-            interaction->currentFrame = (interaction->currentFrame + 1) % interaction->totalFrames;
-        }
-    
+    interaction->frameCounter++;
+    if (interaction->frameCounter >= INTERACTION_FRAME_SPEED)
+    {
+        interaction->frameCounter = FRAME_COUNTER_ZERO;
+        interaction->currentFrame = (interaction->currentFrame + NEXT_FRAME) % interaction->totalFrames;
+    }
 }
 
-void DrawInteractionGhost(Ghost *ghost, Interaction *interaction) 
+void DrawInteractionGhost(Ghost *ghost, Interaction *interaction)
 {
-    Vector2 offset = {20, -20};
-
     Rectangle source = {
         (interaction->currentFrame % interaction->columns) * interaction->frameWidth,
         (interaction->currentFrame / interaction->columns) * interaction->frameHeight,
         interaction->frameWidth,
-        interaction->frameHeight
-    };
+        interaction->frameHeight};
 
     Rectangle dest = {
-        ghost->position.x + offset.x,
-        ghost->position.y + offset.y,
+        ghost->position.x + GHOST_INTERACTION_OFFSET,
+        ghost->position.y - GHOST_INTERACTION_OFFSET,
         interaction->frameWidth,
-        interaction->frameHeight
-    };
+        interaction->frameHeight};
 
-    Vector2 origin = {0, 0};
-
-    DrawTexturePro(interaction->interactionTexture, source, dest, origin, 0.0f, WHITE);
+    DrawTexturePro(interaction->interactionTexture, source, dest, ORIGIN_TOPLEFT, ROTATION, WHITE);
 }
 
-void DrawInteractionPeasant(Peasant *peasant, Interaction *interaction) 
+void DrawInteractionPeasant(Peasant *peasant, Interaction *interaction)
 {
-    Vector2 offset = {18, -22};
-
     Rectangle source = {
         (interaction->currentFrame % interaction->columns) * interaction->frameWidth,
         (interaction->currentFrame / interaction->columns) * interaction->frameHeight,
         interaction->frameWidth,
-        interaction->frameHeight
-    };
+        interaction->frameHeight};
 
     Rectangle dest = {
-        peasant->position.x + offset.x,
-        peasant->position.y + offset.y,
+        peasant->position.x + PEASANT_INTERACTION_OFFSET_X,
+        peasant->position.y + PEASANT_INTERACTION_OFFSET_Y,
         interaction->frameWidth,
-        interaction->frameHeight
-    };
-
-    Vector2 origin = {0, 0};
-
-    DrawTexturePro(interaction->interactionTexture, source, dest, origin, 0.0f, WHITE);
+        interaction->frameHeight};
+        
+    DrawTexturePro(interaction->interactionTexture, source, dest, ORIGIN_TOPLEFT, ROTATION, WHITE);
 }
 
-void DrawInteractionNPC(Npc *npc, Interaction *interaction) 
+void DrawInteractionNPC(Npc *npc, Interaction *interaction)
 {
-    Vector2 offset = {12, -25};
     Rectangle source = {
         (interaction->currentFrame % interaction->columns) * interaction->frameWidth,
         (interaction->currentFrame / interaction->columns) * interaction->frameHeight,
         interaction->frameWidth,
-        interaction->frameHeight
-    };
+        interaction->frameHeight};
 
     Rectangle dest = {
-        npc->position.x + offset.x,
-        npc->position.y + offset.y,
+        npc->position.x + NPC_INTERACTION_OFFSET_X,
+        npc->position.y + NPC_INTERACTION_OFFSET_Y,
         interaction->frameWidth,
-        interaction->frameHeight
-    };
+        interaction->frameHeight};
 
-    Vector2 origin = {0, 0};
-
-    DrawTexturePro(interaction->interactionTexture, source, dest, origin, 0.0f, WHITE);
+    DrawTexturePro(interaction->interactionTexture, source, dest, ORIGIN_TOPLEFT, ROTATION, WHITE);
 }

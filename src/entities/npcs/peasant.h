@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include "entities/player/player.h"
 #include "interaction.h"
+#include "core/define.h"
 
 typedef struct interaction Interaction;
 
@@ -29,7 +30,7 @@ typedef struct peasant {
     Texture2D peasantBtnE;
     Texture2D peasantExclamation;
     
-    DialoguePeasant dialogues[NUM_MAPS_PEASANT][3];
+    DialoguePeasant dialogues[NUM_MAPS_PEASANT][TOTAL_DIALOGUES_PER_MAP];
 
     int frameIdle;
 
@@ -54,4 +55,4 @@ void DrawPeasant(Peasant *peasant, Player *player, Interaction *interaction, int
 void DrawMapsPeasant(Peasant *peasant, Player *player, Interaction *interaction, int currentMapIndex, float delta, DialogStatePeasant *dialogStatePeasant);
 void UnloadPeasant(Peasant *peasant);
 
-#endif // PEASANT_H
+#endif 

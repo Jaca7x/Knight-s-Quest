@@ -3,16 +3,16 @@
 bool InteractionWithGhost(const Ghost *ghost, Player *player)
 {
     float dx = player->position.x - ghost->position.x;
-    return (dx > -150.0f && dx < 10.0f);
+    return (dx > MIN_DISTANCE_FOR_INTERACTION_NPCS && dx < MAX_DISTANCE_FOR_INTERACTION_NPCS);
 }
 
 void PlayGhostSound(Ghost *ghost, int currentMapIndex, int dialogueIndex)
 {
-    if (currentMapIndex >= 1 && currentMapIndex <= 4)
+    if (currentMapIndex >= START_MAP && currentMapIndex <= NUM_MAPS)
     {
-        Sound s = ghost->dialogues[currentMapIndex - 1][dialogueIndex].sound;
+        Sound s = ghost->dialogues[currentMapIndex - PREVIOUS_FRAME][dialogueIndex].sound;
 
-        if (s.frameCount > 0)  
+        if (s.frameCount > FRAME_COUNTER_ZERO)
         {
             StopSound(s);
             PlaySound(s);
@@ -22,28 +22,19 @@ void PlayGhostSound(Ghost *ghost, int currentMapIndex, int dialogueIndex)
 
 const char **GetGhostDialog(int mapIndex, int *numLines)
 {
-    static const char *dialogs[4][3] = {
-        {
-            "Cavaleiro Fantasma: Olá, eu sou um cavaleiro\nfantasma, irei te ajudar na sua jornada\naté o reino goblin!",
-            "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin.",
-            "Cavaleiro Fantasma: Foque em defender o reino,\ndepois conversamos mais sobre isso."
-        },
-        {
-            "Cavaleiro Fantasma: São lobos sombrios de Eldruin,\neles vivem juntos com os goblins e atacam\nqualquer um que se aproxime.",
-            "Cavaleiro Fantasma: Sim!, Cuidado, eles são rápidos\ne ferozes.\nUse sua espada com sabedoria.",
-            "Cavaleiro Fantasma: Boa sorte, cavaleiro!."
-        },
-        {
-            "Cavaleiro Fantasma: Sim, aqui sua jornada\nrealmente começa.\nO bosque estará tomado pelos goblins.",
-            "Cavaleiro Fantasma: Lembre-se, cavaleiro, a\ncoragem e a sabedoria serão suas maiores armas.",
-            "Cavaleiro Fantasma: Sim, esses monstros vermelhos\nsão mais fortes e brutos do que os outros,\ncuidado e redobre sua atenção."
-        },
-        {
-            "Cavaleiro Fantasma: Sim, você está indo bem,\nmas a parte mais difícil ainda está por vir.",
-            "Cavaleiro Fantasma: Logo à frente você irá chegar\nà floresta negra, onde é o reino goblin,\no mais perigoso de todos.",
-            "Cavaleiro Fantasma: Exatamente, esses lobos\nbrancos são os mais rápidos e inteligentes,\neles são os guardiões da floresta goblin."
-        }
-    };
+    static const char *dialogs[NUM_MAPS][DIALOGS_PER_MAP] = {
+        {"Cavaleiro Fantasma: Olá, eu sou um cavaleiro\nfantasma, irei te ajudar na sua jornada\naté o reino goblin!",
+         "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin.",
+         "Cavaleiro Fantasma: Foque em defender o reino,\ndepois conversamos mais sobre isso."},
+        {"Cavaleiro Fantasma: São lobos sombrios de Eldruin,\neles vivem juntos com os goblins e atacam\nqualquer um que se aproxime.",
+         "Cavaleiro Fantasma: Sim!, Cuidado, eles são rápidos\ne ferozes.\nUse sua espada com sabedoria.",
+         "Cavaleiro Fantasma: Boa sorte, cavaleiro!."},
+        {"Cavaleiro Fantasma: Sim, aqui sua jornada\nrealmente começa.\nO bosque estará tomado pelos goblins.",
+         "Cavaleiro Fantasma: Lembre-se, cavaleiro, a\ncoragem e a sabedoria serão suas maiores armas.",
+         "Cavaleiro Fantasma: Sim, esses monstros vermelhos\nsão mais fortes e brutos do que os outros,\ncuidado e redobre sua atenção."},
+        {"Cavaleiro Fantasma: Sim, você está indo bem,\nmas a parte mais difícil ainda está por vir.",
+         "Cavaleiro Fantasma: Logo à frente você irá chegar\nà floresta negra, onde é o reino goblin,\no mais perigoso de todos.",
+         "Cavaleiro Fantasma: Exatamente, esses lobos\nbrancos são os mais rápidos e inteligentes,\neles são os guardiões da floresta goblin."}};
 
     *numLines = 3;
     return dialogs[mapIndex - 1];
@@ -51,7 +42,7 @@ const char **GetGhostDialog(int mapIndex, int *numLines)
 
 const char **GetPlayerDialog(int mapIndex, int *numLines)
 {
-    static const char *dialogs[4][3] = {
+    static const char *dialogs[NUM_MAPS][DIALOGS_PER_MAP] = {
         {
             "Ahh! Quem é você?!",
             "Ainda bem que apareceu! Quem são esses goblins?",
@@ -71,24 +62,36 @@ const char **GetPlayerDialog(int mapIndex, int *numLines)
             "Ufa!\nFinalmente passei daqueles monstros vermelhos.",
             "O que quer dizer com isso?",
             "Parece que tenho mais desafios pela frente!\nUm lobo branco logo à frente!"
-        }
-    };
+        }};
 
     *numLines = 3;
     return dialogs[mapIndex - 1];
 }
 
-
 void InitGhost(Ghost *ghost)
 {
+    // Position
     ghost->position = (Vector2){200, 540};
+
+    // Sprites
     ghost->ghostIdle = LoadTexture("assets/resources/sprites/npc/ghost-idle.png");
     ghost->ghostBtnE = LoadTexture("assets/resources/sprites/btns/btn-E.png");
     ghost->ghostSpeech = LoadTexture("assets/resources/sprites/npc/ghost-speech.png");
     ghost->ghostExclamation = LoadTexture("assets/resources/sprites/npc/exclamation.png");
 
-    ghost->frameIdle = 3;
+    //Sprite size
+    ghost->frameWidth = ghost->ghostIdle.width / ghost->frameIdle;
+    ghost->frameHeight = ghost->ghostIdle.height;
 
+    ghost->scale = 2.5f;
+
+    // Animation and control
+    ghost->currentFrame = 0;
+    ghost->frameCounter = 0;
+
+    // Frames
+    ghost->frameIdle = 3;
+   
     // MAPA 1
     ghost->dialogues[0][0].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue1-1.wav");
     ghost->dialogues[0][1].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue1-2.wav");
@@ -109,14 +112,11 @@ void InitGhost(Ghost *ghost)
     ghost->dialogues[3][1].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue4-2.wav");
     ghost->dialogues[3][2].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue4-3.wav");
 
+    // State
     bool isInteraction = false;
 
-    ghost->frameWidth = ghost->ghostIdle.width / ghost->frameIdle;
-    ghost->frameHeight = ghost->ghostIdle.height;
-    ghost->currentFrame = 0;
-    ghost->frameCounter = 0;
-
-    ghost->textFont = LoadFontEx("assets/resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250); 
+    // Text
+    ghost->textFont = LoadFontEx("assets/resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
     ghost->speechFontSize = 30;
 }
 
@@ -126,27 +126,27 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
     {
         UpdateInteraction(interaction, delta);
     }
-    
+
     ghost->frameCounter++;
     if (!ghost->isInteraction)
     {
-        if (ghost->frameCounter >= (200 / 5))
+        if (ghost->frameCounter >= (NPCS_FRAME_SPEED))
         {
-            ghost->frameCounter = 0;
-            ghost->currentFrame = (ghost->currentFrame + 1) % ghost->frameIdle;
+            ghost->frameCounter = FRAME_COUNTER_ZERO;
+            ghost->currentFrame = (ghost->currentFrame + NEXT_FRAME) % ghost->frameIdle;
         }
     }
 
     if (*dialogStateGhost == DIALOG_CLOSED_GHOST)
     {
         ghost->isInteraction = false;
-        
+
         if (InteractionWithGhost(ghost, player) && IsKeyPressed(KEY_E))
         {
             ghost->isInteraction = true;
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING;
-            *dialogoTimer = 0.0f;
-            PlayPlayerSound(player, currentMapIndex, 0);
+            *dialogoTimer = TIMER_ZERO;
+            PlayPlayerSound(player, currentMapIndex, DIALOGUE_ZERO);
         }
         return;
     }
@@ -159,8 +159,8 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         if (*dialogoTimer >= 1.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_GHOST_TALKING;
-            *dialogoTimer = 0.0f;
-            PlayGhostSound(ghost, currentMapIndex, 0);
+            *dialogoTimer = TIMER_ZERO;
+            PlayGhostSound(ghost, currentMapIndex, DIALOGUE_ZERO);
         }
     }
     else if (*dialogStateGhost == DIALOG_GHOST_TALKING)
@@ -170,8 +170,8 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         if (*dialogoTimer >= 5.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING2;
-            *dialogoTimer = 0.0f;
-            PlayPlayerSound(player, currentMapIndex, 1);
+            *dialogoTimer = TIMER_ZERO;
+            PlayPlayerSound(player, currentMapIndex, DIALOGUE_ONE);
         }
     }
     else if (*dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING2)
@@ -181,8 +181,8 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         if (*dialogoTimer >= 3.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_GHOST_TALKING2;
-            *dialogoTimer = 0.0f;
-            PlayGhostSound(ghost, currentMapIndex, 1);
+            *dialogoTimer = TIMER_ZERO;
+            PlayGhostSound(ghost, currentMapIndex, DIALOGUE_ONE);
         }
     }
     else if (*dialogStateGhost == DIALOG_GHOST_TALKING2)
@@ -192,8 +192,8 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         if (*dialogoTimer >= 6.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING3;
-            *dialogoTimer = 0.0f;
-            PlayPlayerSound(player, currentMapIndex, 2);
+            *dialogoTimer = TIMER_ZERO;
+            PlayPlayerSound(player, currentMapIndex, DIALOGUE_TWO);
         }
     }
     else if (*dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING3)
@@ -203,8 +203,8 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         if (*dialogoTimer >= 3.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_GHOST_TALKING3;
-            *dialogoTimer = 0.0f;
-            PlayGhostSound(ghost, currentMapIndex, 2);
+            *dialogoTimer = TIMER_ZERO;
+            PlayGhostSound(ghost, currentMapIndex, DIALOGUE_TWO);
         }
     }
     else if (*dialogStateGhost == DIALOG_GHOST_TALKING3)
@@ -214,7 +214,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         if (*dialogoTimer >= 4.5f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_CLOSED_GHOST;
-            *dialogoTimer = 0.0f;
+            *dialogoTimer = TIMER_ZERO;
             ghost->isInteraction = false;
         }
     }
@@ -224,42 +224,40 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
 {
     static int visibleLetters = 0;
     static float timeWriting = 0.0f;
-    float writingSpeed = 0.04f; 
+    float writingSpeed = 0.04f;
 
     Font textSpeech = ghost->textFont;
 
     Rectangle source = {
         ghost->currentFrame * ghost->frameWidth,
-        0,
+        SPRITE_ROW_BASE,
         ghost->frameWidth,
-        ghost->frameHeight
-    };
+        ghost->frameHeight};
 
     Rectangle dest = {
         ghost->position.x,
         ghost->position.y,
-        ghost->frameWidth / 2.5f,
-        ghost->frameHeight / 2.5f
-    };
+        ghost->frameWidth / ghost->scale,
+        ghost->frameHeight / ghost->scale};
 
-    Vector2 origin = {0, 0};
+    Vector2 origin = ORIGIN_TOPLEFT;
 
     if (ghost->isInteraction)
-    {   
-        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0, 0, 0, 160});
+    {
+        DrawRectangle(POSITION_ZERO, POSITION_ZERO, GetScreenWidth(), GetScreenHeight(), (Color){0, 0, 0, 160});
         DrawInteractionGhost(ghost, interaction);
     }
     else if (dialogStateGhost != DIALOG_CLOSED_GHOST)
-    {   
-        DrawTexturePro(ghost->ghostIdle, source, dest, origin, 0.0f, WHITE);
+    {
+        DrawTexturePro(ghost->ghostIdle, source, dest, origin, ROTATION, WHITE);
     }
     else if (InteractionWithGhost(ghost, player))
     {
-        DrawTexture(ghost->ghostBtnE, ghost->position.x + 15, ghost->position.y - 35, WHITE);
+        DrawTexture(ghost->ghostBtnE, ghost->position.x + GHOST_INTERACTION_OFFSET_X, ghost->position.y + GHOST_INTERACTION_OFFSET_Y, WHITE);
     }
     else
     {
-        DrawTexture(ghost->ghostExclamation, ghost->position.x + 25, ghost->position.y - 25, WHITE);
+        DrawTexture(ghost->ghostExclamation, ghost->position.x + GHOST_EXCLAMATION_OFFSET, ghost->position.y - GHOST_EXCLAMATION_OFFSET, WHITE);
     }
 
     int hintFontSize = 14;
@@ -291,9 +289,9 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
 
     const char **lines = NULL;
 
-    if (dialogStateGhost == DIALOG_GHOST_TALKING || 
-    dialogStateGhost == DIALOG_GHOST_TALKING2 || 
-    dialogStateGhost == DIALOG_GHOST_TALKING3)
+    if (dialogStateGhost == DIALOG_GHOST_TALKING ||
+        dialogStateGhost == DIALOG_GHOST_TALKING2 ||
+        dialogStateGhost == DIALOG_GHOST_TALKING3)
     {
         lines = ghostLines;
     }
@@ -303,14 +301,20 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
     }
 
     int lineIndex = -1;
-    if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING) lineIndex = 0;
-    else if (dialogStateGhost == DIALOG_GHOST_TALKING) lineIndex = 0;
-    else if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING2) lineIndex = 1;
-    else if (dialogStateGhost == DIALOG_GHOST_TALKING2) lineIndex = 1;
-    else if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING3) lineIndex = 2;
-    else if (dialogStateGhost == DIALOG_GHOST_TALKING3) lineIndex = 2;
+    if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING)
+        lineIndex = DIALOGUE_ZERO;
+    else if (dialogStateGhost == DIALOG_GHOST_TALKING)
+        lineIndex = DIALOGUE_ZERO;
+    else if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING2)
+        lineIndex = DIALOGUE_ONE;
+    else if (dialogStateGhost == DIALOG_GHOST_TALKING2)
+        lineIndex = DIALOGUE_ONE;
+    else if (dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING3)
+        lineIndex = DIALOGUE_TWO;
+    else if (dialogStateGhost == DIALOG_GHOST_TALKING3)
+        lineIndex = DIALOGUE_TWO;
 
-    static DialogStateGhost lastState = DIALOG_CLOSED_GHOST; 
+    static DialogStateGhost lastState = DIALOG_CLOSED_GHOST;
     if (dialogStateGhost != lastState)
     {
         visibleLetters = 0;
@@ -324,14 +328,14 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
         if (timeWriting >= writingSpeed && visibleLetters < (int)strlen(lines[lineIndex]))
         {
             visibleLetters++;
-            timeWriting = 0.0f;
+            timeWriting = TIMER_ZERO;
         }
 
         if (dialogStateGhost == DIALOG_GHOST_TALKING || dialogStateGhost == DIALOG_GHOST_TALKING2 || dialogStateGhost == DIALOG_GHOST_TALKING3)
         {
             DrawTexture(ghost->ghostSpeech, ghostSpeechX, speechY, WHITE);
             DrawTextEx(textSpeech,
-                       TextSubtext(lines[lineIndex], 0, visibleLetters),
+                       TextSubtext(lines[lineIndex], POSITION_ZERO, visibleLetters),
                        (Vector2){ghostSpeechX + npcSpeechTextOffsetX, speechY + npcSpeechTextOffsetY},
                        ghost->speechFontSize, textSpacing, BLACK);
 
@@ -342,7 +346,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
         {
             DrawTexture(player->playerSpeech, playerSpeechX, speechY, WHITE);
             DrawTextEx(textSpeech,
-                       TextSubtext(lines[lineIndex], 0, visibleLetters),
+                       TextSubtext(lines[lineIndex], POSITION_ZERO, visibleLetters),
                        (Vector2){playerSpeechX + playerSpeechTextOffsetX, speechY + playerSpeechTextOffsetY},
                        ghost->speechFontSize, textSpacing, BLACK);
 
@@ -351,7 +355,7 @@ void DrawGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, 
         }
     }
 
-    DrawTexturePro(ghost->ghostIdle, source, dest, origin, 0.0f, WHITE);
+    DrawTexturePro(ghost->ghostIdle, source, dest, origin, ROTATION, WHITE);
 }
 
 void MapsGhost(Ghost *ghost, Player *player, DialogStateGhost dialogStateGhost, Interaction *interaction, float delta, int currentMapIndex)
@@ -380,7 +384,7 @@ void UnloadGhost(Ghost *ghost)
     {
         for (int i = 0; i < 6; i++)
         {
-            if (ghost->dialogues[map][i].sound.frameCount > 0)
+            if (ghost->dialogues[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {
                 UnloadSound(ghost->dialogues[map][i].sound);
             }
