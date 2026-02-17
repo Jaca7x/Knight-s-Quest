@@ -1,7 +1,7 @@
 #include "boss.h"
 
 bool CheckCollisionBoss(float x1, float y1, float w1, float h1,
-                    float x2, float y2, float w2, float h2)
+                        float x2, float y2, float w2, float h2)
 {
     return (x1 < x2 + w2 &&
             x1 + w1 > x2 &&
@@ -9,352 +9,277 @@ bool CheckCollisionBoss(float x1, float y1, float w1, float h1,
             y1 + h1 > y2);
 }
 
-Rectangle GetSourceValueRec(int frame, int frameWidth, float direction, int frameHeigth)
-{
-    Rectangle r;
-    r.x = frame * frameWidth;
-    r.y = 0;
-    r.width = frameWidth * direction;
-    r.height = frameHeigth;
-
-    return r;
-}
-
-Rectangle GetDestValueRec(Vector2 position, int frameWidth, int frameHeight, float scale)
-{
-    Rectangle r;
-
-    r.x = position.x;
-    r.y = position.y;
-    r.width = frameWidth * scale;
-    r.height = frameHeight * scale;
-
-    return r;
-}
-
 float targetY = 340;
 
-void InitBoss(Boss *boss) 
+void InitBoss(Boss *boss)
 {
-    boss->position = (Vector2){600, -320};
+    // Position
+    boss->base.position = (Vector2){600, -320};
+    boss->base.direction = 1.0f;
 
-    boss->currentFrame = 0;
+    // Core stats
+    boss->push = 120.0f;
+    boss->speed = 10.0f;
+    boss->maxLife = 2000.0f;
+    boss->life = boss->maxLife;
+    boss->damage = 40;
+
+    // Animation frame count
+    boss->base.currentFrame = 0;
     boss->frameCounter = 0;
-    
-    boss->spriteAtk = LoadTexture("assets/resources/sprites/boss/boss_attack.png");
-    boss->spriteDead = LoadTexture("assets/resources/sprites/boss/boss_dead.png");
-    boss->spriteIdle = LoadTexture("assets/resources/sprites/boss/boss_idle.png");
-    boss->spriteHurt = LoadTexture("assets/resources/sprites/boss/boss_hurt.png");
-    boss->spriteWalk = LoadTexture("assets/resources/sprites/boss/boss_walk.png");
 
-    boss->frameAtk  = 9;
+    boss->frameAtk = 9;
     boss->frameDead = 4;
     boss->frameHurt = 2;
     boss->frameIdle = 4;
     boss->frameWalk = 6;
 
-    boss->scaleAtk = 1.5f;
-    boss->scaleIdle = 1.0f;
-    boss->scaleWalk = 1.5f;
-    boss->scaleHurt = 0.6f;
+    // Frame size calculation
+    boss->base.spriteAtack = LoadTexture("assets/resources/sprites/boss/boss_attack.png");
+    boss->base.spriteDead = LoadTexture("assets/resources/sprites/boss/boss_dead.png");
+    boss->base.spriteIdle = LoadTexture("assets/resources/sprites/boss/boss_idle.png");
+    boss->base.spriteHurt = LoadTexture("assets/resources/sprites/boss/boss_hurt.png");
+    boss->base.spriteWalk = LoadTexture("assets/resources/sprites/boss/boss_walk.png");
 
+    boss->base.frameWidthWalk = boss->base.spriteWalk.width / boss->frameWalk;
+    boss->base.frameHeightWalk = boss->base.spriteWalk.height;
+
+    boss->base.frameWidthIdle = boss->base.spriteIdle.width / boss->frameIdle;
+    boss->base.frameHeightIdle = boss->base.spriteIdle.height;
+
+    boss->base.frameWidthAtack = boss->base.spriteAtack.width / boss->frameAtk;
+    boss->base.frameHeightAtack = boss->base.spriteAtack.height;
+
+    boss->base.frameWidthHurt = boss->base.spriteHurt.width / boss->frameHurt;
+    boss->base.frameHeightHurt = boss->base.spriteHurt.height;
+
+    boss->base.frameWidthDead = boss->base.spriteDead.width / boss->frameDead;
+    boss->base.frameHeightDead = boss->base.spriteDead.height;
+
+    // Hurt
     boss->hurtTimer = 0.0f;
-    boss->hurtDuration= 1.0f;
+    boss->hurtDuration = 1.0f;
 
-    boss->frameWidth  = boss->spriteIdle.width / boss->frameIdle;
-    boss->frameHeight = boss->spriteIdle.height;
-    
-    boss->frameWidthAtk = boss->spriteAtk.width / boss->frameAtk;
-    boss->frameHeightAtk = boss->spriteAtk.height;
-
-    boss->frameWidthHurt = boss->spriteHurt.width / boss->frameHurt;
-    boss->frameHeightHurt = boss->spriteHurt.height;
-
-    boss->frameWidthDead = boss->spriteDead.width / boss->frameDead;
-    boss->frameHeightDead = boss->spriteDead.height;
-
+    // Atack 
     boss->attackTime = 0.0f;
     boss->attackCooldown = 0.0f;
-    boss->hitFrame = 4;         
+    boss->hitFrame = 4;
     boss->hasAppliedDamage = false;
 
+    // States
+    boss->base.isAtacking = false;
+    boss->base.isWalking = false;
+    boss->base.isIdle = true;
+    boss->base.isDead = false;
+    boss->base.monsterHasHit = false;
+    boss->musicStarted = false;
 
-    boss->frameWidthWalk = boss->spriteWalk.width / boss->frameWalk;
-    boss->frameHeightWalk = boss->spriteWalk.height; 
-
-    boss->direction = 1.0f;
-
-    boss->isAtacking = false;
-    boss->isWalking = false;
-    boss->isIdle = true;
-    boss->isDead = false;
-
+    // View
     boss->attackRange = 100.0f;
     boss->viewPlayer = 300.0f;
 
-    boss->speed = 10.0f;
+    // Sounds
+    boss->bossMusic = 
+        LoadMusicStream("assets/resources/music/boss-soundtrack.mp3");
+
+    boss->bossGrounImpact = 
+    LoadSound("assets/resources/sounds/sound_effects/boss/boss-impact.wav");
     
-    boss->maxLife = 2000.0f;
-    boss->life = boss->maxLife;
-   
-    boss->bossHasHit = false;
+    boss->bossWalkSound = 
+    LoadSound("assets/resources/sounds/sound_effects/boss/boss-walk.wav");
     
-    boss->damage = 40;
-
-    boss->bossMusic = LoadMusicStream("assets/resources/music/boss-soundtrack.mp3");
-
-    boss->musicStarted = false;
-
-    boss->bossGrounImpact = LoadSound("assets/resources/sounds/sound_effects/boss/boss-impact.wav");
-    boss->bossWalkSound = LoadSound("assets/resources/sounds/sound_effects/boss/boss-walk.wav");
-    boss->bossHurtSound = LoadSound("assets/resources/sounds/sound_effects/boss/boss-hurt.wav");
-    boss->bossDeathSound = LoadSound("assets/resources/sounds/sound_effects/boss/boss-death.wav");
-    boss->bossAttackSound = LoadSound("assets/resources/sounds/sound_effects/boss/boss-attack.wav");
+    boss->bossHurtSound = 
+    LoadSound("assets/resources/sounds/sound_effects/boss/boss-hurt.wav");
+    
+    boss->bossDeathSound = 
+    LoadSound("assets/resources/sounds/sound_effects/boss/boss-death.wav");
+    
+    boss->bossAttackSound = 
+    LoadSound("assets/resources/sounds/sound_effects/boss/boss-attack.wav");
 }
 
-void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered) 
+void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered)
 {
-    float speedY = 250.0f;
+    float speedY = DESCENT_SPEED;
 
-    if (boss->position.y < targetY && *bossTriggered)
+    if (boss->base.position.y < targetY && *bossTriggered)
     {
-        boss->position.y += speedY * delta;
-        boss->isIdle = false;
-        boss->isWalking = false;
-        boss->isAtacking = false;
+        boss->base.position.y += speedY * delta;
+        boss->base.isIdle = false;
+        boss->base.isWalking = false;
+        boss->base.isAtacking = false;
 
-        if (boss->position.y > targetY)
+        if (boss->base.position.y > targetY)
         {
             PlaySound(boss->bossGrounImpact);
-            boss->position.y = targetY;
+            boss->base.position.y = targetY;
         }
     }
 
-    if (boss->isDead)
+    if (boss->base.isDead)
     {
         boss->frameCounter++;
 
-        if (boss->frameCounter >= 40)
+        if (boss->frameCounter >= BOSS_BASE_FRAME_ANIMATION)
         {
-            boss->frameCounter = 0;
-            boss->currentFrame++;
+            boss->frameCounter = FRAME_COUNTER_ZERO;
+            boss->base.currentFrame++;
 
-            if (boss->currentFrame >= boss->frameDead)
-                boss->currentFrame = boss->frameDead - 1; 
-        }   
+            if (boss->base.currentFrame >= boss->frameDead)
+                boss->base.currentFrame = boss->frameDead - PREVIOUS_FRAME;
+        }
 
         return;
     }
 
-
-    if (boss->life <= 0 && !boss->isDead) 
+    if (boss->life <= LIFE_ZERO && !boss->base.isDead)
     {
         PlaySound(boss->bossDeathSound);
-        boss->isDead = true;
-        boss->bossHasHit = false;
-        boss->currentFrame = 0;
-        boss->frameDead = 4;
-        boss->isWalking = false;
-        boss->isAtacking = false;
-        boss->isIdle = false;
+        boss->base.isDead = true;
+        boss->base.monsterHasHit = false;
+        boss->base.currentFrame = CURRENT_FRAME_ZERO;
+        boss->frameDead = BOSS_FRAME_DEAD;
+        boss->base.isWalking = false;
+        boss->base.isAtacking = false;
+        boss->base.isIdle = false;
     }
 
-     if (boss->bossHasHit) 
+    if (boss->base.monsterHasHit)
     {
-        boss->isIdle = false;
-        boss->isWalking = false;
-        boss->isAtacking = false;
+        boss->base.isIdle = false;
+        boss->base.isWalking = false;
+        boss->base.isAtacking = false;
 
         boss->hurtTimer += delta;
 
-        if (boss->hurtTimer >= boss->hurtDuration) 
+        if (boss->hurtTimer >= boss->hurtDuration)
         {
-            boss->bossHasHit = false;
-            boss->hurtTimer = 0.0f;
-            boss->isIdle = true;
+            boss->base.monsterHasHit = false;
+            boss->hurtTimer = TIMER_ZERO;
+            boss->base.isIdle = true;
         }
     }
 
     boss->frameCounter++;
-    
-    if (boss->bossHasHit && boss->frameCounter >= 30)
+
+    if (boss->base.monsterHasHit && boss->frameCounter >= BOSS_HURT_FRAME_ANIMATION)
     {
-        boss->frameCounter = 0;
-        boss->currentFrame = (boss->currentFrame + 1) % boss->frameHurt;
+        boss->frameCounter = CURRENT_FRAME_ZERO;
+        boss->base.currentFrame = (boss->base.currentFrame + NEXT_FRAME) % boss->frameHurt;
     }
-    else if (boss->isAtacking && boss->frameCounter >= 10)
+    else if (boss->base.isAtacking && boss->frameCounter >= BOSS_ATACK_FRAME_ANIMATION)
     {
-        boss->frameCounter = 0;
-        boss->currentFrame = (boss->currentFrame + 1) % boss->frameAtk;
+        boss->frameCounter = FRAME_COUNTER_ZERO;
+        boss->base.currentFrame = (boss->base.currentFrame + NEXT_FRAME) % boss->frameAtk;
     }
-    else if (boss->isIdle && boss->frameCounter >= 40)
+    else if (boss->base.isIdle && boss->frameCounter >= BOSS_BASE_FRAME_ANIMATION)
     {
-        boss->frameCounter = 0;
-        boss->currentFrame = (boss->currentFrame + 1) % boss->frameIdle;
+        boss->frameCounter = FRAME_COUNTER_ZERO;
+        boss->base.currentFrame = (boss->base.currentFrame + NEXT_FRAME) % boss->frameIdle;
     }
-    else if (boss->isWalking && boss->frameCounter >= 40)
+    else if (boss->base.isWalking && boss->frameCounter >= BOSS_BASE_FRAME_ANIMATION)
     {
         PlaySound(boss->bossWalkSound);
-        boss->frameCounter = 0;
-        boss->currentFrame = (boss->currentFrame + 1) % boss->frameWalk;
+        boss->frameCounter = FRAME_COUNTER_ZERO;
+        boss->base.currentFrame = (boss->base.currentFrame + NEXT_FRAME) % boss->frameWalk;
     }
-    else if (boss->isDead && boss->frameCounter >= 40)
+    else if (boss->base.isDead && boss->frameCounter >= BOSS_BASE_FRAME_ANIMATION)
     {
-    boss->frameCounter = 0;
-    boss->currentFrame = (boss->currentFrame + 1);
+        boss->frameCounter = FRAME_COUNTER_ZERO;
+        boss->base.currentFrame = (boss->base.currentFrame + NEXT_FRAME);
 
-    if (boss->currentFrame >= boss->frameDead)
-        boss->currentFrame = boss->frameDead - 1;
+        if (boss->base.currentFrame >= boss->frameDead)
+            boss->base.currentFrame = boss->frameDead - PREVIOUS_FRAME;
     }
 
-
-    float distance = fabs(player->position.x - boss->position.x);
+    float distance = fabs(player->position.x - boss->base.position.x);
 
     if (distance >= boss->viewPlayer)
     {
-        boss->isIdle = true;
-        boss->isWalking = false;
-        boss->isAtacking = false;
+        boss->base.isIdle = true;
+        boss->base.isWalking = false;
+        boss->base.isAtacking = false;
         return;
     }
 
-    boss->direction = (player->position.x > boss->position.x) ? 1 : -1;
+    boss->base.direction = (player->position.x > boss->base.position.x) ? DIRECTION_RIGHT : DIRECTION_LEFT;
 
-    if (boss->isAtacking)
+    if (boss->base.isAtacking)
     {
         PlaySound(boss->bossAttackSound);
         boss->frameCounter++;
 
-        if (boss->frameCounter >= 10)
+        if (boss->frameCounter >= BOSS_ATACK_FRAME_ANIMATION)
         {
-            boss->frameCounter = 0;
-            boss->currentFrame++;
+            boss->frameCounter = FRAME_COUNTER_ZERO;
+            boss->base.currentFrame++;
 
-            if (boss->currentFrame >= boss->frameAtk)
+            if (boss->base.currentFrame >= boss->frameAtk)
             {
-                boss->currentFrame = 0;
-                boss->isAtacking = false;
-                boss->hasAppliedDamage = false;  
-                boss->attackCooldown = 1.5f;
+                boss->base.currentFrame = FRAME_COUNTER_ZERO;
+                boss->base.isAtacking = false;
+                boss->hasAppliedDamage = false;
+                boss->attackCooldown = BOSS_ATACK_COOLDOWN;
             }
         }
 
-        if (boss->currentFrame == boss->hitFrame && !boss->hasAppliedDamage)
+        if (boss->base.currentFrame == boss->hitFrame && !boss->hasAppliedDamage)
         {
             if (CheckCollisionBoss(
-                player->position.x, player->position.y, player->frameWidth, player->frameHeight,
-                boss->position.x, boss->position.y, boss->frameWidthAtk, boss->frameHeightAtk))
+                    player->position.x, player->position.y, player->frameWidth, player->frameHeight,
+                    boss->base.position.x, boss->base.position.y, boss->base.frameWidthAtack, boss->base.frameHeightAtack))
             {
                 player->life -= boss->damage;
                 player->hasHit = true;
-                player->hitTimer = 0.5f;
+                player->hitTimer = HIT_TIMER;
                 boss->hasAppliedDamage = true;
-                player->position.x -= 120;
+                player->position.x -= boss->push;
             }
         }
-        return; 
+        return;
     }
 
-    if (distance <= boss->attackRange && boss->attackCooldown <= 0)
+    if (distance <= boss->attackRange && boss->attackCooldown <= COOLDOWN_ZERO)
     {
-        boss->isAtacking = true;
-        boss->currentFrame = 0;
-        boss->frameCounter = 0;
+        boss->base.isAtacking = true;
+        boss->base.currentFrame = CURRENT_FRAME_ZERO;
+        boss->frameCounter = FRAME_COUNTER_ZERO;
         boss->hasAppliedDamage = false;
         return;
     }
 
     boss->attackCooldown -= delta;
 
-    boss->isWalking = true;
-    boss->isIdle = false;
-    
-    if (boss->isWalking)
+    boss->base.isWalking = true;
+    boss->base.isIdle = false;
+
+    if (boss->base.isWalking)
     {
-        boss->position.x += boss->speed * boss->direction * delta;
-    } 
+        boss->base.position.x += boss->speed * boss->base.direction * delta;
+    }
 }
 
-Rectangle source;
-Rectangle dest;
-
-void DrawBoss(Boss *boss) 
+void DrawBoss(Boss *boss)
 {
-    if (boss->isDead)
-    {
-        float hurtOffsetY = 45.0f;
-
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthDead,
-                               boss->direction, boss->frameHeightDead);
-        dest = GetDestValueRec(boss->position, boss->frameWidthDead,
-                           boss->frameHeightDead, boss->scaleWalk);
-
-        dest.y += hurtOffsetY;
-
-        DrawTexturePro(boss->spriteDead, source, dest, (Vector2){0,0}, 0.0f, WHITE);
-    }
-    else if (boss->bossHasHit)
-    {
-        float hurtOffsetY = -15.0f;
-
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthHurt,
-                               boss->direction, boss->frameHeightHurt);
-        dest = GetDestValueRec(boss->position, boss->frameWidthHurt,
-                           boss->frameHeightHurt, boss->scaleHurt);
-
-        dest.y += hurtOffsetY;
-
-        DrawTexturePro(boss->spriteHurt, source, dest, (Vector2){0,0}, 0.0f, WHITE);
-    }
-    else if (boss->isAtacking)
-    {
-        float attackOffsetY = -35.0f;
-
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthAtk,
-                               boss->direction, boss->frameHeightAtk);
-        dest = GetDestValueRec(boss->position, boss->frameWidthAtk,
-                           boss->frameHeightAtk, boss->scaleAtk);
-
-        dest.y += attackOffsetY;
-
-        DrawTexturePro(boss->spriteAtk, source, dest, (Vector2){0,0}, 0.0f, WHITE);
-    }
-    else if (boss->isWalking)
-    {
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidthWalk,
-                               boss->direction, boss->frameHeightWalk);
-        dest = GetDestValueRec(boss->position, boss->frameWidthWalk,
-                           boss->frameHeightWalk, boss->scaleWalk);
-
-        DrawTexturePro(boss->spriteWalk, source, dest, (Vector2){0,0}, 0.0f, WHITE);
-    }
-    else
-    {
-        source = GetSourceValueRec(boss->currentFrame, boss->frameWidth,
-                               boss->direction, boss->frameHeight);
-        dest = GetDestValueRec(boss->position, boss->frameWidth,
-                           boss->frameHeight, boss->scaleIdle);
-
-        DrawTexturePro(boss->spriteIdle, source, dest, (Vector2){0,0}, 0.0f, WHITE);
-    }
-
-    boss->entity.isDead = boss->isDead;
+    boss->entity.isDead = boss->base.isDead;
     boss->entity.life = boss->life;
     boss->entity.maxLife = boss->maxLife;
-    boss->entity.position.x = boss->position.x;
-    boss->entity.position.y = boss->position.y;
+    boss->entity.position.x = BOSS_POSITION_X_LIFE_BAR;
+    boss->entity.position.y = BOSS_POSITION_Y_LIFE_BAR;
 
-    DrawText("Brakkor, o Dourado", (GetScreenWidth() / 2) - (800 / 2) + 800 / 2 - MeasureText("Brakkor, o Dourado", 10) / 2, 2, 20, BLACK);
-    DrawBar(&boss->entity, (GetScreenWidth() / 2) - (800 / 2), 20, 800.0f, 18.0f);
+    DrawText("Brakkor, o Dourado", BOSS_NAME_WIDTH, BOSS_NAME_HEIGHT, BOSS_NAME_FONT_SIZE, BLACK);
+    DrawBar(&boss->entity, OFFSET_ZERO, OFFSET_ZERO, BOSS_WIDTH_LIFE_BAR, BOSS_HEIGHT_LIFE_BAR);
+
+    DrawBossAnim(&boss->base);
 }
 
 void UnloadBoss(Boss *boss)
 {
-    UnloadTexture(boss->spriteAtk);
-    UnloadTexture(boss->spriteDead);
-    UnloadTexture(boss->spriteHurt);
-    UnloadTexture(boss->spriteIdle);
-    UnloadTexture(boss->spriteWalk);
+    UnloadTexture(boss->base.spriteAtack);
+    UnloadTexture(boss->base.spriteDead);
+    UnloadTexture(boss->base.spriteHurt);
+    UnloadTexture(boss->base.spriteIdle);
+    UnloadTexture(boss->base.spriteWalk);
 
     UnloadMusicStream(boss->bossMusic);
 

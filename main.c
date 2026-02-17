@@ -1824,4 +1824,4 @@ while (!WindowShouldClose())
     UnloadBombGoblin(&bombGoblin);
     CloseWindow();
     return 0;
-}   
+}  

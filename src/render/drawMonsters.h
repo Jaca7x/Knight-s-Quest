@@ -3,6 +3,11 @@
 
 #include "raylib.h"
 #include "stdio.h"
+#include "core/define.h"
+
+#define BOSS_SCALE_ATK_AND_WALK_AND_DEATH 1.5f
+#define BOSS_SCALE_IDLE 1.0f
+#define BOSS_SCALE_HURT 0.6f
 
 typedef struct monsters
 {
@@ -45,5 +50,6 @@ typedef struct monsters
 } Monsters;
 
 void DrawMonsters(Monsters *monstersint, int rowBase, int offsetHurtY, int offsetDeadY, int offsetAtackY, int offsetWalkY, int offsetIdleY);
+void DrawBossAnim(Monsters *monsterint);
 
 #endif // DRAW_MONSTERS_H

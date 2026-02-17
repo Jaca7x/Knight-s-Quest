@@ -73,7 +73,8 @@ void InitBombGoblin(BombGoblin *bombGoblin)
     bombGoblin->timerForExplosion = 0.0f;
     bombGoblin->radiusToDamage = 50.0f;
     bombGoblin->bombRange = 200.0f;
-    bombGoblin->atackRange = 35.0f;
+    bombGoblin->atackRange = 50.0f;
+    bombGoblin->atackRangeRight = 150.0f;
     bombGoblin->push = 50;
     bombGoblin->viewPlayer = 150.0f;
 
@@ -263,7 +264,7 @@ void UpdateBombGoblin(BombGoblin *bombGoblin, float delta, Player *player)
 
     bombGoblin->base.direction = (player->position.x > bombGoblin->base.position.x) ? DIRECTION_RIGHT: DIRECTION_LEFT;
 
-    if (disatanceToAttack <= bombGoblin->viewPlayer && bombGoblin->hasThrownBomb)
+    if (disatanceToAttack > bombGoblin->viewPlayer && bombGoblin->hasThrownBomb && bombGoblin->base.direction == DIRECTION_LEFT)
     {
         if (disatanceToAttack > bombGoblin->atackRange)
         {
@@ -455,8 +456,8 @@ void DrawBombGoblin(BombGoblin *bombGoblin, Player *player)
 
     Rectangle source;
     Rectangle dest;
-    Vector2 origin = (Vector2){0, 0};
-    float rotation = 0.0f;
+    Vector2 origin = ORIGIN_TOPLEFT;
+    float rotation = ROTATION;
 
     DrawMonsters(&bombGoblin->base, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO, OFFSET_ZERO);
 

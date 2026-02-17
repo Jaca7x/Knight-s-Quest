@@ -4,86 +4,69 @@
 #include "raylib.h"
 #include "entities/player/player.h"
 #include "ui/lifeBar/lifeBarMob.h"
+#include "core/define.h"
+#include "render/drawMonsters.h"
 
 #define BOSS_MAP 8
+
+#define DESCENT_SPEED 250.0f;
+
+#define BOSS_FRAME_DEAD 4
+
+#define BOSS_ATACK_COOLDOWN 1.5f
+
+#define BOSS_BASE_FRAME_ANIMATION 40
+#define BOSS_HURT_FRAME_ANIMATION 30
+#define BOSS_ATACK_FRAME_ANIMATION 10
+
+#define BOSS_WIDTH_LIFE_BAR 800.0f
+#define BOSS_HEIGHT_LIFE_BAR 18.0f
+
+#define BOSS_NAME_WIDTH 625
+#define BOSS_NAME_HEIGHT 2
+#define BOSS_NAME_FONT_SIZE 20
+
+#define BOSS_POSITION_X_LIFE_BAR (GetScreenWidth() / 2) - (800 / 2)
+#define BOSS_POSITION_Y_LIFE_BAR 20
 
 typedef struct boss
 {
     Entity entity;
-    Vector2 position;
+    Monsters base;
 
-    Texture2D spriteWalk;
-    Texture2D spriteHurt;
-    Texture2D spriteAtk;
-    Texture2D spriteIdle;
-    Texture2D spriteDead;
+    int life;
+    float maxLife;
+    int damage;
+    float speed;
+    float push;
+
+    float viewPlayer;
+    float attackRange;
 
     int frameIdle;
     int frameWalk;
     int frameDead;
     int frameHurt;
     int frameAtk;
+    int frameCounter;
 
-    int currentFrame;     
-    int frameCounter;    
-
-    int frameWidthAtk;        
-    int frameHeightAtk; 
     float attackTime;
     float attackCooldown;
-    int hitFrame; 
+    int hitFrame;
     bool hasAppliedDamage;
-
-
-    int frameWidthWalk;
-    int frameHeightWalk; 
-
-    int frameWidth;        
-    int frameHeight; 
-
-    int frameWidthHurt;
-    int frameHeightHurt;
-
-    int frameHeightDead;
-    int frameWidthDead;
-
-    float scaleAtk;
-    float scaleIdle;
-    float scaleWalk;
-    float scaleHurt;
 
     float hurtTimer;
     float hurtDuration;
-    
-    float direction;
-
-    bool isWalking;
-    bool isAtacking;
-    bool isIdle;
-    bool isDead;
-
-    float attackRange;
-
-    float speed;
-
-    int life;
-    float maxLife;
-    bool bossHasHit;
-
-    float viewPlayer;
-
-    int damage;
 
     Music bossMusic;
-
-    bool musicStarted;  
+    bool musicStarted;
 
     Sound bossGrounImpact;
-
     Sound bossWalkSound;
     Sound bossHurtSound;
     Sound bossDeathSound;
     Sound bossAttackSound;
+
 } Boss;
 
 void InitBoss(Boss *boss);
@@ -91,4 +74,4 @@ void UpdateBoss(Boss *boss, Player *player, float delta, bool *bossTriggered);
 void DrawBoss(Boss *boss);
 void UnloadBoss(Boss *boss);
 
-#endif //BOSS_H
+#endif

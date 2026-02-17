@@ -54,8 +54,8 @@
 #define HIT_TIMER                         0.4f //Hit timer player
 
 /* ===================== OFFSET HITBOX ===================== */
-#define PLAYER_HITBOX_OFFSET_X   50 //Offset hitbox player
-#define PLAYER_HITBOX_OFFSET_Y   35 //Offset hitbox player
+#define PLAYER_HITBOX_OFFSET_X   60 //Offset hitbox player
+#define PLAYER_HITBOX_OFFSET_Y   40 //Offset hitbox player
 
 #define PLAYER_HITBOX_WIDTH_DIV  1.5f
 

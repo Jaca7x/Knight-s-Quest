@@ -301,7 +301,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, RunningWolf *runningWolf, Wolf *re
     AttackMonsters(currentMapIndex, MAP_BOMB_GOBLIN, &bombGoblin->base.isDead, bombGoblin->base.position.x + PLAYER_HITBOX_OFFSET_X, &bombGoblin->base.monsterHasHit, &bombGoblin->life, &goblinTank->soundHurtGoblinTank, &goblinTank->soundHurtGoblinTank, player);
 
     // BOSS
-    AttackMonsters(currentMapIndex, BOSS_MAP, &boss->isDead, boss->position.x, &boss->bossHasHit, &boss->life, &boss->bossHurtSound, &boss->bossHurtSound, player);
+    AttackMonsters(currentMapIndex, BOSS_MAP, &boss->base.isDead, boss->base.position.x, &boss->base.monsterHasHit, &boss->life, &boss->bossHurtSound, &boss->bossHurtSound, player);
 
     player->attackCooldownTimer -= delta;
     player->attackTimer -= delta;
