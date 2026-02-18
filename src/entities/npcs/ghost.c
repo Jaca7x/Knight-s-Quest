@@ -22,7 +22,7 @@ void PlayGhostSound(Ghost *ghost, int currentMapIndex, int dialogueIndex)
 
 const char **GetGhostDialog(int mapIndex, int *numLines)
 {
-    static const char *dialogs[NUM_MAPS][DIALOGS_PER_MAP] = {
+    static const char *dialogs[GHOST_NUM_MAPS][DIALOGS_PER_MAP] = {
         {"Cavaleiro Fantasma: Olá, eu sou um cavaleiro\nfantasma, irei te ajudar na sua jornada\naté o reino goblin!",
          "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin.",
          "Cavaleiro Fantasma: Foque em defender o reino,\ndepois conversamos mais sobre isso."},
@@ -42,7 +42,7 @@ const char **GetGhostDialog(int mapIndex, int *numLines)
 
 const char **GetPlayerDialog(int mapIndex, int *numLines)
 {
-    static const char *dialogs[NUM_MAPS][DIALOGS_PER_MAP] = {
+    static const char *dialogs[GHOST_NUM_MAPS][DIALOGS_PER_MAP] = {
         {
             "Ahh! Quem é você?!",
             "Ainda bem que apareceu! Quem são esses goblins?",

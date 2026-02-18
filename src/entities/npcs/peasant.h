@@ -1,11 +1,21 @@
 #ifndef PEASANT_H
 #define PEASANT_H
-#define NUM_MAPS_PEASANT 3
 
 #include "raylib.h"
 #include "entities/player/player.h"
 #include "interaction.h"
 #include "core/define.h"
+
+// MAPS
+#define PEASANT_NUM_MAPS 3
+#define PEASANT_LAST_MAP_DIALOGUE 8
+
+// OFFSET
+#define PEASANT_OFFSET_X_INTERACTION 10
+#define PEASANT_OFFSET_Y_INTERACTION 40
+
+#define PEASANT_OFFSET_X_EXCLAMATION 15
+#define PEASANT_OFFSET_Y_EXCLAMATION 25
 
 typedef struct interaction Interaction;
 
@@ -30,22 +40,22 @@ typedef struct peasant {
     Texture2D peasantBtnE;
     Texture2D peasantExclamation;
     
-    DialoguePeasant dialogues[NUM_MAPS_PEASANT][TOTAL_DIALOGUES_PER_MAP];
+    DialoguePeasant dialogues[PEASANT_NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
 
     int frameIdle;
 
     bool isInteraction;
+    bool dialogueFinished;
 
     int frameWidth;   
     int frameHeight; 
+    float scale;
+
     int currentFrame; 
     int frameCounter; 
 
     Font textFont; 
-
     int speechFontSize;
-
-    bool dialogueFinished;
 } Peasant;
 
 void PlayPeasantSound(Peasant *peasant, int currentMapIndex, int dialogueIndex);

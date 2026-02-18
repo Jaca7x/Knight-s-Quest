@@ -9,9 +9,14 @@
 
 #define MAP_NPC 0
 
+#define NPC_OFFSET_X_INTERACTION 5
+#define NPC_OFFSET_Y_INTERACTION 40
+
+#define NPC_OFFSET_X_EXCLAMATION 15
+#define NPC_OFFSET_Y_EXCLAMATION 30
+
 typedef struct Player player;
 typedef struct interaction Interaction;
-
 
 typedef enum {
     DIALOG_CLOSED,
@@ -22,27 +27,30 @@ typedef enum {
 } DialogState;
 
 typedef struct npc {
-    Texture2D spriteNpc; 
-    Texture2D btnE;     
+
+    Vector2 position;
+
+    Texture2D spriteNpc;
     Texture2D spriteNpcIdle;
-    Texture2D npcSpeech; 
+    Texture2D npcSpeech;
+    Texture2D btnE;
     Texture2D exclamation;
-    Vector2 position;   
 
     Sound dialogueWithPlayer1;
     Sound dialogueWithPlayer2;
-    
+
     Font textSpeech;
 
     bool showExclamation;
-    
+
     int frameTalking;
     int frameIdle;
 
-    int frameWidth;   
-    int frameHeight;  
-    int currentFrame; 
-    int frameCounter; 
+    int frameWidth;
+    int frameHeight;
+    int currentFrame;
+    int frameCounter;
+
 } Npc;
 
 void InitNpc(Npc *npc);
@@ -50,4 +58,4 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
 void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dialogState);
 void UnloadNpc(Npc *npc);
 
-#endif // NPC_H
+#endif

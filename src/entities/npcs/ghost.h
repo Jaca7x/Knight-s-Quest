@@ -13,17 +13,13 @@ typedef struct interaction Interaction;
 // MAP
 #define START_MAP 1
 
-// FRAME
-#define NPCS_FRAME_SPEED (200 / 5)
-
 // OFFSETS
 #define GHOST_INTERACTION_OFFSET_X 15
 #define GHOST_INTERACTION_OFFSET_Y -35
 #define GHOST_EXCLAMATION_OFFSET 25
 
 // DIALOG
-#define NUM_MAPS 4
-#define DIALOGS_PER_MAP 3
+#define GHOST_NUM_MAPS 4
 
 typedef enum {
     DIALOG_CLOSED_GHOST,
@@ -47,7 +43,7 @@ typedef struct ghost {
     Texture2D ghostBtnE;
     Texture2D ghostExclamation;
 
-    Dialogue dialogues[NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
+    Dialogue dialogues[GHOST_NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
 
     bool isInteraction;
 
