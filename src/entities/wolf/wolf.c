@@ -41,7 +41,7 @@ void InitWolfBase(Wolf *wolf, Vector2 pos)
 
     //State flags
     wolf->base.isDead = false;
-    wolf->isMoving = true;
+    wolf->base.isWalking = true;
     wolf->base.isAtacking = false;
     wolf->hasHitPlayer = false;
     wolf->base.monsterHasHit = false;
@@ -149,7 +149,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
         StopSound(wolf->wolfGrowl);
         PlaySound(wolf->wolfDeathSound);
         wolf->base.isDead = true;
-        wolf->isMoving = false;
+        wolf->base.isWalking = false;
         wolf->hasHitPlayer = false;
         wolf->base.monsterHasHit = false;
         wolf->frameDead = WOLFS_FRAME_DEAD;
@@ -165,7 +165,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
 
     if (wolf->isPatrolling)
     {
-        if (wolf->isMoving)
+        if (wolf->base.isWalking)
         {
             if (wolf->growlPlayed)
             {
@@ -230,7 +230,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
             {
                 wolf->base.currentFrame = (wolf->base.currentFrame + NEXT_FRAME) % wolf->frameAtk;
             }
-            else if (wolf->isMoving)
+            else if (wolf->base.isWalking)
             {
                 wolf->base.currentFrame = (wolf->base.currentFrame + NEXT_FRAME) % wolf->frameWalk;
             }
@@ -283,7 +283,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
         {
             wolf->attackCooldown = COOLDOWN_ZERO;
             wolf->base.isAtacking = false;
-            wolf->isMoving = true;
+            wolf->base.isWalking = true;
             wolf->hasHitPlayer = false;
         }
     }
@@ -292,7 +292,7 @@ void UpdateWolf(Wolf *wolf, Player *player, float delta, int currentMapIndex)
         if (distance <= wolf->attackRange)
         {
             wolf->base.isAtacking = true;
-            wolf->isMoving = false;
+            wolf->base.isWalking = false;
             wolf->attackCooldown = WOLFS_ATTACK_COOLDOWN_AND_DAMAGE;
             wolf->attackDamageTimer = WOLFS_ATTACK_COOLDOWN_AND_DAMAGE;
             wolf->hasHitPlayer = false;
