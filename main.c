@@ -1,22 +1,20 @@
-// ============================================================================
-// Inclusão de bibliotecas
-// ============================================================================
+// Include libs
 
-#include "lib/raylib.h"       
+#include "lib/raylib.h"
 #include "lib/raymath.h"
-#include "lib/cJSON.h"        
-#include <stdlib.h>               
-#include <stdio.h>                
-#include "src/entities/player/player.h"       
-#include "src/ui/staminaBar/stamina.h"   
+#include "lib/cJSON.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "src/entities/player/player.h"
+#include "src/ui/staminaBar/stamina.h"
 #include "src/entities/wolf/wolf.h"
 #include "src/entities/wolf/runningWolf.h"
 #include "src/ui/lifeBar/lifeBar.h"
 #include "src/entities/goblin/goblin.h"
 #include "src/entities/goblin/goblinArcher.h"
-#include "src/systems/drops/heart.h"         
-#include "src/entities/npcs/npc.h"   
-#include "src/entities/npcs/ghost.h"        
+#include "src/systems/drops/heart.h"
+#include "src/entities/npcs/npc.h"
+#include "src/entities/npcs/ghost.h"
 #include "src/entities/npcs/interaction.h"
 #include "src/entities/boss/boss.h"
 #include "src/entities/npcs/peasant.h"
@@ -24,26 +22,22 @@
 #include "src/entities/goblin/bombGoblin.h"
 #include "src/ui/lifeBar/lifeBarMob.h"
 #include "src/render/drawMonsters.h"
+#include "core/define.h"
 
-// ============================================================================
-// Definições constantes
-// ============================================================================
-#define TILE_SIZE 32              
-#define TILESET1_TILECOUNT 36     
-#define TILESET1_FIRSTGID 1       
-#define TILESET2_FIRSTGID 37     
-#define TILESET3_FIRSTGID 73      
-#define TILESET4_FIRSTGID 109    
-#define TILESET5_FIRSTGID 145   
-#define TILESET6_FIRSTGID 181 
+// Constant defines
+#define TILE_SIZE 32
+#define TILESET1_TILECOUNT 36
+#define TILESET1_FIRSTGID 1
+#define TILESET2_FIRSTGID 37
+#define TILESET3_FIRSTGID 73
+#define TILESET4_FIRSTGID 109
+#define TILESET5_FIRSTGID 145
+#define TILESET6_FIRSTGID 181
 #define TILESET7_FIRSTGID 217
-#define MAP_COUNT 9        
+#define MAP_COUNT 9
 
-// ============================================================================
-// Estruturas
-// ============================================================================
-
-typedef enum GameState 
+// Structs
+typedef enum GameState
 {
     MENU,
     CREDITS,
@@ -63,21 +57,22 @@ typedef enum ConfigState
     ATALHOS
 } ConfigState;
 
-typedef enum {
+typedef enum
+{
     MUSIC_MENU,
     MUSIC_GAMEPLAY,
     MUSIC_BOSS
 } MusicState;
 
-// Estrutura que representa um mapa carregado do Tiled
+// Map struct
 typedef struct
 {
-    int width, height;           
-    int tileWidth, tileHeight;   
-    int *data;                   
+    int width, height;
+    int tileWidth, tileHeight;
+    int *data;
 } TileMap;
 
-//Estrutura das telas de tutoriais
+// Tutorials struct
 typedef struct MonsterTutorial
 {
     const char *title1;
@@ -110,11 +105,6 @@ typedef struct MonsterTutorial
 
 } MonsterTutorial;
 
-// ============================================================================
-// Funções auxiliares para mapas
-// ============================================================================
-
-// Carrega um mapa no formato JSON exportado pelo Tiled
 TileMap LoadTileMap(const char *fileName)
 {
     TileMap map = {0};
@@ -144,13 +134,13 @@ TileMap LoadTileMap(const char *fileName)
         return map;
     }
 
-    map.width      = cJSON_GetObjectItem(root, "width")->valueint;
-    map.height     = cJSON_GetObjectItem(root, "height")->valueint;
-    map.tileWidth  = cJSON_GetObjectItem(root, "tilewidth")->valueint;
+    map.width = cJSON_GetObjectItem(root, "width")->valueint;
+    map.height = cJSON_GetObjectItem(root, "height")->valueint;
+    map.tileWidth = cJSON_GetObjectItem(root, "tilewidth")->valueint;
     map.tileHeight = cJSON_GetObjectItem(root, "tileheight")->valueint;
 
     cJSON *layer0 = cJSON_GetArrayItem(cJSON_GetObjectItem(root, "layers"), 0);
-    cJSON *data   = cJSON_GetObjectItem(layer0, "data");
+    cJSON *data = cJSON_GetObjectItem(layer0, "data");
 
     map.data = malloc(sizeof(int) * map.width * map.height);
 
@@ -171,10 +161,6 @@ void UnloadTileMap(TileMap *map)
     }
 }
 
-// ============================================================================
-// Função de desenho do mapa com múltiplos tilesets
-// ============================================================================
-
 void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3, Texture2D tileset4, Texture2D tileset5, Texture2D tileset6, Texture2D tileset7)
 {
     for (int y = 0; y < map->height; y++)
@@ -183,7 +169,8 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
         {
             int gid = map->data[y * map->width + x];
 
-            if (gid <= 0) continue; 
+            if (gid <= 0)
+                continue;
 
             Texture2D texture;
             int localId;
@@ -233,28 +220,23 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
                 (float)(localId % 6) * TILE_SIZE,
                 (float)(localId / 6) * TILE_SIZE,
                 TILE_SIZE,
-                TILE_SIZE
-            };
+                TILE_SIZE};
 
             Vector2 position = {
                 x * map->tileWidth,
-                y * map->tileHeight
-            };
-  
+                y * map->tileHeight};
+
             DrawTextureRec(texture, sourceRec, position, RAYWHITE);
         }
     }
 }
-// ============================================================================
-// Função principal
-// ============================================================================
 
 int currentMapIndex = 0;
 
-void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, RunningWolf *runningWolf, 
-                Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, Heart hearts[],
-                Npc *npc, Ghost *ghost, Interaction *interaction, Boss *boss, GoblinTank *goblinTank, 
-                Peasant *peasant, BombGoblin *bombGoblin, TileMap *map, const char *mapFiles[])
+void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, RunningWolf *runningWolf,
+               Goblin *goblin, Goblin *redGoblin, GoblinArcher *goblinArcher, Heart hearts[],
+               Npc *npc, Ghost *ghost, Interaction *interaction, Boss *boss, GoblinTank *goblinTank,
+               Peasant *peasant, BombGoblin *bombGoblin, TileMap *map, const char *mapFiles[])
 {
     InitPlayer(player);
     InitWolfBase(wolf, (Vector2){500, 450});
@@ -279,68 +261,65 @@ void resetGame(Player *player, Wolf *wolf, Wolf *redWolf, Wolf *whiteWolf, Runni
     *map = LoadTileMap(mapFiles[currentMapIndex]);
 }
 
-void drawTitleMaps(const char* titulo, Font titleMaps, float delta, int currentMapIndex)
+void drawTitleMaps(const char *titulo, Font titleMaps, float delta, int currentMapIndex)
 {
-    static float textTime = 0.0f;
+    static float textTime = TIMER_ZERO;
     static int lastMapIndex = -1;
 
     if (currentMapIndex != lastMapIndex)
     {
-        textTime = 0.0f;
+        textTime = TIMER_ZERO;
         lastMapIndex = currentMapIndex;
     }
 
     textTime += delta;
 
-    float fontSize = 60.0f;
-    float spacing = 1.0f;
+    float fontSize = TITLE_MAP_FONT_SIZE;
+    float spacing = TITLE_MAP_SPACING;
 
     Vector2 textSize = MeasureTextEx(titleMaps, titulo, fontSize, spacing);
     Vector2 textPosition =
-    {
-        GetScreenWidth() / 2 - textSize.x / 2,
-        GetScreenHeight() / 2 - 220
-    };
+        {
+            GetScreenWidth() / 2 - textSize.x / 2,
+            GetScreenHeight() / 2 - TITLE_MAP_OFFSET_Y};
 
-    if (textTime <= 2.0f)
+    if (textTime <= TITLE_MAP_DURATION)
     {
         DrawRectangle(
-            (int)(textPosition.x - 20),
-            (int)(textPosition.y - 10),
-            (int)(textSize.x + 40),
-            (int)(textSize.y + 20),
-            (Color){ 0, 0, 0, 160 }
-        );
+            (int)(textPosition.x - TITLE_MAP_PADDING_X),
+            (int)(textPosition.y - TITLE_MAP_PADDING_Y),
+            (int)(textSize.x + TITLE_MAP_PADDING_X * 2),
+            (int)(textSize.y + TITLE_MAP_PADDING_Y * 2),
+            (Color){0, 0, 0, TITLE_MAP_BG_ALPHA});
 
         DrawTextPro(
             titleMaps,
             titulo,
             textPosition,
-            (Vector2){ 0, 0 },
-            0.0f,
+            ORIGIN_TOPLEFT,
+            ROTATION,
             fontSize,
             spacing,
-            GOLD
-        );
+            GOLD);
     }
 }
 
 bool drawHoverButton(Rectangle button, Vector2 mousePos, const char *text)
 {
-    DrawRectangleLinesEx(button, 1, WHITE);
-    DrawText(text, button.x + 20, button.y + 10, 20, WHITE);   
+    DrawRectangleLinesEx(button, BUTTON_BORDER_THICKNESS, WHITE);
+    DrawText(text, button.x + BUTTON_TEXT_OFFSET_X, button.y + BUTTON_TEXT_OFFSET_Y, BUTTON_FONT_SIZE, WHITE);
 
-    if (CheckCollisionPointRec(mousePos, button)) 
+    if (CheckCollisionPointRec(mousePos, button))
     {
-        DrawRectangleLinesEx(button, 1, GOLD);
-        DrawText(text, button.x + 20, button.y + 10, 20, GOLD);     
-        
+        DrawRectangleLinesEx(button, BUTTON_BORDER_THICKNESS, GOLD);
+        DrawText(text, button.x + BUTTON_TEXT_OFFSET_X, button.y + BUTTON_TEXT_OFFSET_Y, BUTTON_FONT_SIZE, GOLD);
+
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            return true;;
+            return true;
+            ;
         }
     }
-
     return false;
 }
 
@@ -349,7 +328,7 @@ void UpdateMonsterTutorial(MonsterTutorial *t, float delta)
     t->timer1 += delta;
     if (t->timer1 >= t->time1)
     {
-        t->timer1 = 0.0f;
+        t->timer1 = TIMER_ZERO;
         t->current1++;
 
         if (t->current1 >= t->frames1)
@@ -359,7 +338,7 @@ void UpdateMonsterTutorial(MonsterTutorial *t, float delta)
     t->timer2 += delta;
     if (t->timer2 >= t->time2)
     {
-        t->timer2 = 0.0f;
+        t->timer2 = TIMER_ZERO;
         t->current2++;
 
         if (t->current2 >= t->frames2)
@@ -369,10 +348,10 @@ void UpdateMonsterTutorial(MonsterTutorial *t, float delta)
 
 void ShowTutorial(MonsterTutorial *tutorials, int *currentTutorial, int currentMap, bool *show, float delta, bool *close, float *alpha, Sound sound)
 {
-	static int lastMapIndex = -1;
+    static int lastMapIndex = -1;
 
     bool foundMap = false;
-    
+
     int maps[6] = {1, 2, 3, 4, 5, 7};
 
     if (currentMap != lastMapIndex)
@@ -394,7 +373,7 @@ void ShowTutorial(MonsterTutorial *tutorials, int *currentTutorial, int currentM
             }
         }
     }
-    
+
     if (*show && *currentTutorial >= 0)
     {
         UpdateMonsterTutorial(&tutorials[*currentTutorial], delta);
@@ -423,56 +402,54 @@ float tutorialAlpha = 0.85f;
 
 void DrawMonsterTutorial(MonsterTutorial *t)
 {
-    Rectangle panel = {250, 100, 1000, 600};
+    Rectangle panel = {TUTORIAL_PANEL_X, TUTORIAL_PANEL_Y, TUTORIAL_PANEL_WIDTH, TUTORIAL_PANEL_HEIGHT};
 
     DrawRectangleRec(panel, Fade(BLACK, tutorialAlpha));
-    DrawRectangleLinesEx(panel, 2, Fade(WHITE, tutorialAlpha));
+    DrawRectangleLinesEx(panel, TUTORIAL_BORDER_THICKNESS, Fade(WHITE, tutorialAlpha));
 
-    DrawText(t->title1, panel.x + 150, panel.y + 100, 26, Fade(GREEN, tutorialAlpha));
-    DrawText(t->title2, panel.x + 650, panel.y + 100, 26, Fade(GREEN, tutorialAlpha));
+    DrawText(t->title1, panel.x + TUTORIAL_TITLE1_OFFSET_X, panel.y + TUTORIAL_TITLE_OFFSET_Y, TUTORIAL_TITLE_FONT_SIZE, Fade(GREEN, tutorialAlpha));
+    DrawText(t->title2, panel.x + TUTORIAL_TITLE2_OFFSET_X, panel.y + TUTORIAL_TITLE_OFFSET_Y, TUTORIAL_TITLE_FONT_SIZE, Fade(GREEN, tutorialAlpha));
 
-    DrawText(t->info1, panel.x + 50,  panel.y + 380, 18, Fade(WHITE, tutorialAlpha));
-    DrawText(t->info2, panel.x + 580, panel.y + 380, 18, Fade(WHITE, tutorialAlpha));
+    DrawText(t->info1, panel.x + TUTORIAL_INFO1_OFFSET_X, panel.y + TUTORIAL_INFO_OFFSET_Y, TUTORIAL_INFO_FONT_SIZE, Fade(WHITE, tutorialAlpha));
+    DrawText(t->info2, panel.x + TUTORIAL_INFO2_OFFSET_X, panel.y + TUTORIAL_INFO_OFFSET_Y, TUTORIAL_INFO_FONT_SIZE, Fade(WHITE, tutorialAlpha));
 
     Rectangle source1 = {
         t->frameW1 * t->current1,
         0,
         t->frameW1,
-        t->frameH1
-    };
+        t->frameH1};
 
     Rectangle dest1 = t->dest1;
-    dest1.width  = t->frameW1 * t->scale1;
+    dest1.width = t->frameW1 * t->scale1;
     dest1.height = t->frameH1 * t->scale1;
 
     Rectangle source2 = {
         t->frameW2 * t->current2,
         0,
         t->frameW2,
-        t->frameH2
-    };
+        t->frameH2};
 
     Rectangle dest2 = t->dest2;
-    dest2.width  = t->frameW2 * t->scale2;
+    dest2.width = t->frameW2 * t->scale2;
     dest2.height = t->frameH2 * t->scale2;
 
-    DrawTexturePro(t->tex1, source1, dest1, (Vector2){0, 0}, 0.0f, Fade(WHITE, tutorialAlpha));
-    DrawTexturePro(t->tex2, source2, dest2, (Vector2){0, 0}, 0.0f, Fade(WHITE, tutorialAlpha));
+    DrawTexturePro(t->tex1, source1, dest1, ORIGIN_TOPLEFT, ROTATION, Fade(WHITE, tutorialAlpha));
+    DrawTexturePro(t->tex2, source2, dest2, ORIGIN_TOPLEFT, ROTATION, Fade(WHITE, tutorialAlpha));
 
     DrawText("Pressione [ESPACO] para fechar",
-             panel.x + 20,
-             panel.y + panel.height - 25,
-             14,
+             panel.x + TUTORIAL_CLOSE_OFFSET_X,
+             panel.y + panel.height - TUTORIAL_CLOSE_OFFSET_Y,
+             TUTORIAL_CLOSE_FONT_SIZE,
              Fade(WHITE, tutorialAlpha));
 }
 
 int main(void)
 {
     bool bossTriggered = false;
-    float timeForTutorial = 0.0f;
+    float timeForTutorial = TIMER_ZERO;
     bool tutorialStarted = false;
 
-    float timeForComplete = 0.0f;
+    float timeForComplete = TIMER_ZERO;
     bool gameComplete = false;
 
     InitAudioDevice();
@@ -482,8 +459,8 @@ int main(void)
 
     Sound buttonSelect = LoadSound("assets/resources/sounds/sound_effects/buttons/menu-select-button.wav");
     Sound onOFF = LoadSound("assets/resources/sounds/sound_effects/buttons/ON-OFF.wav");
-    
-    float textTime = 0.0f;
+
+    float textTime = TIMER_ZERO;
 
     GameState gameState = MENU;
     static MusicState currentMusic = MUSIC_MENU;
@@ -500,28 +477,26 @@ int main(void)
         "assets/maps/florest3.json",
         "assets/maps/goblin1.json",
         "assets/maps/goblin2.json",
-        "assets/maps/goblin3.json"
-    };
-    
+        "assets/maps/goblin3.json"};
+
     TileMap map = LoadTileMap(mapFiles[currentMapIndex]);
-    if (!map.data) return 1;
+    if (!map.data)
+        return 1;
 
     InitWindow(
         map.width * map.tileWidth,
         map.height * map.tileHeight,
-        "Knights`s Quest the Goblin Saga"
-    );
+        "Knights`s Quest the Goblin Saga");
 
-    Image icon = LoadImage("icon/icon.png"); // PNG, não ICO
+    Image icon = LoadImage("icon/icon.png");
     SetWindowIcon(icon);
     UnloadImage(icon);
 
-    SetTargetFPS(60);
+    SetTargetFPS(GAME_FPS);
 
     MonsterTutorial tutorials[7];
 
-    tutorials[0] = (MonsterTutorial)
-    {
+    tutorials[0] = (MonsterTutorial){
         "GOBLIN",
         "GOBLIN ARQUEIRO",
         "Um pequeno inimigo, mas feroz\ncuidado com suas rápidas facadas.",
@@ -530,15 +505,14 @@ int main(void)
         LoadTexture("assets/resources/sprites/goblin/goblin-atk.png"),
         LoadTexture("assets/resources/sprites/goblinArcher/goblinArcher-atk.png"),
 
-        6, 0, 0.15f, 0.0f, 0, 0,   
         6, 0, 0.15f, 0.0f, 0, 0,
-        
+        6, 0, 0.15f, 0.0f, 0, 0,
+
         0.3f,
         0.3f,
 
         (Rectangle){360, 300, 0, 0},
-        (Rectangle){900, 300, 0, 0}
-    };
+        (Rectangle){900, 300, 0, 0}};
 
     tutorials[0].frameW1 = tutorials[0].tex1.width / tutorials[0].frames1;
     tutorials[0].frameH1 = tutorials[0].tex1.height;
@@ -546,8 +520,7 @@ int main(void)
     tutorials[0].frameW2 = tutorials[0].tex1.width / tutorials[0].frames2;
     tutorials[0].frameH2 = tutorials[0].tex1.height;
 
-    tutorials[1] = (MonsterTutorial)
-    {
+    tutorials[1] = (MonsterTutorial){
         "LOBO SENTINELA",
         "LOBO PERSEGUIDOR",
         "O lobo sentinela dificilmente ira atrás de você,\nele apenas ataca se entrar na área dele.",
@@ -556,16 +529,16 @@ int main(void)
         LoadTexture("assets/resources/sprites/wolf/Attack_1.png"),
         LoadTexture("assets/resources/sprites/wolf/Run.png"),
 
-        6,       
-        0,       
-        0.15f,    
+        6,
+        0,
+        0.15f,
         0.0f,
         0,
         0,
 
-        9,       
-        0,       
-        0.15f,    
+        9,
+        0,
+        0.15f,
         0.0f,
         0,
         0,
@@ -573,9 +546,8 @@ int main(void)
         2.0f,
         2.0f,
 
-        (Rectangle){360, 200, 0, 0 },
-        (Rectangle){900, 200, 0, 0}
-    };
+        (Rectangle){360, 200, 0, 0},
+        (Rectangle){900, 200, 0, 0}};
 
     tutorials[1].frameW1 = tutorials[1].tex1.width / tutorials[1].frames1;
     tutorials[1].frameH1 = tutorials[1].tex1.height;
@@ -583,11 +555,10 @@ int main(void)
     tutorials[1].frameW2 = tutorials[1].tex2.width / tutorials[1].frames2;
     tutorials[1].frameH2 = tutorials[1].tex2.height;
 
-    tutorials[2] = (MonsterTutorial)
-    {
-        "GOBLIN VERMELHO", 
-        "LOBO DE SANGUE", 
-        "O goblin vermelho é quase idêntico aos seus\nirmãos verdes, exceto por sua faca, sempre\nmanchada pelo sangue de suas últimas vítimas.", 
+    tutorials[2] = (MonsterTutorial){
+        "GOBLIN VERMELHO",
+        "LOBO DE SANGUE",
+        "O goblin vermelho é quase idêntico aos seus\nirmãos verdes, exceto por sua faca, sempre\nmanchada pelo sangue de suas últimas vítimas.",
         "O lobo de sangue, e o variação mais feroz\ndos lobos seus ataques são muito poderosos.",
 
         LoadTexture("assets/resources/sprites/redGoblin/Attack.png"),
@@ -601,8 +572,7 @@ int main(void)
         2.0f,
 
         (Rectangle){420, 270, 0, 0},
-        (Rectangle){900, 170, 0, 0}
-    };
+        (Rectangle){900, 170, 0, 0}};
 
     tutorials[2].frameW1 = tutorials[2].tex1.width / tutorials[2].frames1;
     tutorials[2].frameH1 = tutorials[2].tex1.height;
@@ -610,9 +580,7 @@ int main(void)
     tutorials[2].frameW2 = tutorials[2].tex2.width / tutorials[2].frames2;
     tutorials[2].frameH2 = tutorials[2].tex2.height;
 
-
-    tutorials[3] = (MonsterTutorial)
-    {
+    tutorials[3] = (MonsterTutorial){
         "LOBO ALBINO",
         "VELOCIDADE",
         "O lobo albino é o mais rápido de todos os lobos, cuidado",
@@ -621,16 +589,16 @@ int main(void)
         LoadTexture("assets/resources/sprites/whiteWolf/Attack.png"),
         LoadTexture("assets/resources/sprites/whiteWolf/Walk.png"),
 
-        4,       
-        0,       
-        0.15f,    
+        4,
+        0,
+        0.15f,
         0.0f,
         0,
         0,
 
-        11,       
-        0,       
-        0.15f,    
+        11,
+        0,
+        0.15f,
         0.0f,
         0,
         0,
@@ -639,8 +607,7 @@ int main(void)
         2.0f,
 
         (Rectangle){360, 200, 0, 0},
-        (Rectangle){860, 200, 0, 0}
-    };
+        (Rectangle){860, 200, 0, 0}};
 
     tutorials[3].frameW1 = tutorials[3].tex1.width / tutorials[3].frames1;
     tutorials[3].frameH1 = tutorials[3].tex1.height;
@@ -648,8 +615,7 @@ int main(void)
     tutorials[3].frameW2 = tutorials[3].tex2.width / tutorials[3].frames2;
     tutorials[3].frameH2 = tutorials[3].tex2.height;
 
-    tutorials[4] = (MonsterTutorial)
-    {
+    tutorials[4] = (MonsterTutorial){
         "GOBLIN PESADO",
         "SEU MARTELO",
         "O goblin pesado, e muito poderoso\nseus ataques fazem toda a floresta\ntremer.",
@@ -658,17 +624,17 @@ int main(void)
         LoadTexture("assets/resources/sprites/goblinTank/goblinTank-idle.png"),
         LoadTexture("assets/resources/sprites/goblinTank/goblinTank-attack.png"),
 
-        8,       
-        0,       
-        0.15f,    
+        8,
+        0,
+        0.15f,
         0.0f,
         0,
         0,
 
-        10,       
-        0,       
-        0.15f,    
-        0.0f, 
+        10,
+        0,
+        0.15f,
+        0.0f,
         0,
         0,
 
@@ -676,8 +642,7 @@ int main(void)
         0.3f,
 
         (Rectangle){360, 240, 0, 0},
-        (Rectangle){900, 200, 0, 0}
-    };
+        (Rectangle){900, 200, 0, 0}};
 
     tutorials[4].frameW1 = tutorials[4].tex1.width / tutorials[4].frames1;
     tutorials[4].frameH1 = tutorials[4].tex1.height;
@@ -685,8 +650,7 @@ int main(void)
     tutorials[4].frameW2 = tutorials[4].tex2.width / tutorials[4].frames2;
     tutorials[4].frameH2 = tutorials[4].tex2.height;
 
-     tutorials[5] = (MonsterTutorial)
-    {
+    tutorials[5] = (MonsterTutorial){
         "GOBLIN BOMBA",
         "EXPLOSÃO",
         "O Goblin Bomba é um dos tipos mais difíceis\nde se encontrar, pois muitas vezes eles acabam\nse explodindo antes mesmo de serem vistos.",
@@ -695,17 +659,17 @@ int main(void)
         LoadTexture("assets/resources/sprites/bombGoblin/Idle.png"),
         LoadTexture("assets/resources/sprites/bombGoblin/Bomb_sprite.png"),
 
-        4,       
-        0,       
-        0.15f,    
+        4,
+        0,
+        0.15f,
         0.0f,
         0,
         0,
-        
-        18,       
-        0,       
-        0.15f,    
-        0.0f, 
+
+        18,
+        0,
+        0.15f,
+        0.0f,
         0,
         0,
 
@@ -713,8 +677,7 @@ int main(void)
         2.0f,
 
         (Rectangle){360, 180, 0, 0},
-        (Rectangle){900, 200, 0, 0}
-    };
+        (Rectangle){900, 200, 0, 0}};
 
     tutorials[5].frameW1 = tutorials[5].tex1.width / tutorials[5].frames1;
     tutorials[5].frameH1 = tutorials[5].tex1.height;
@@ -722,8 +685,7 @@ int main(void)
     tutorials[5].frameW2 = tutorials[5].tex2.width / tutorials[5].frames2;
     tutorials[5].frameH2 = tutorials[5].tex2.height;
 
-    tutorials[6] = (MonsterTutorial)
-    {
+    tutorials[6] = (MonsterTutorial){
         "BRAKKOR",
         "O DOURADO",
         "Brakkor é o grande rei dos goblins\ndizem que ele chegou ao trono após\nderrotar seus outros irmãos.",
@@ -732,17 +694,17 @@ int main(void)
         LoadTexture("assets/resources/sprites/boss/boss_attack.png"),
         LoadTexture("assets/resources/sprites/boss/boss_idle.png"),
 
-        9,       
-        0,       
-        0.15f,    
+        9,
+        0,
+        0.15f,
         0.0f,
         0,
         0,
-        
-        4,       
-        0,       
-        0.15f,    
-        0.0f, 
+
+        4,
+        0,
+        0.15f,
+        0.0f,
         0,
         0,
 
@@ -750,8 +712,7 @@ int main(void)
         0.9f,
 
         (Rectangle){360, 160, 0, 0},
-        (Rectangle){900, 200, 0, 0}
-    };
+        (Rectangle){900, 200, 0, 0}};
 
     tutorials[6].frameW1 = tutorials[6].tex1.width / tutorials[6].frames1;
     tutorials[6].frameH1 = tutorials[6].tex1.height;
@@ -759,18 +720,16 @@ int main(void)
     tutorials[6].frameW2 = tutorials[6].tex2.width / tutorials[6].frames2;
     tutorials[6].frameH2 = tutorials[6].tex2.height;
 
-   
-
     bool showTutorial = false;
     bool tutorialIsColsing = false;
     int currentTutorial = -1;
-    
+
     DialogState dialogState = DIALOG_CLOSED;
     DialogStateGhost dialogStateGhost = DIALOG_CLOSED_GHOST;
 
     DialogStatePeasant dialogStatePeasant = DIALOG_CLOSED_PEASANT;
-    float dialogoTimer = 0.0f;  
-    float dialogoTimerPeasant = 0.0f;
+    float dialogoTimer = TIMER_ZERO;
+    float dialogoTimerPeasant = TIMER_ZERO;
 
     Player player;
     InitPlayer(&player);
@@ -856,121 +815,116 @@ int main(void)
     Rectangle button_rect = {750, 195, 70, 20};
     bool button_pressed = false;
 
-    Rectangle checkX 
-            = {
-                5,
-                5,
-                120 - 5,
-                40 - 5
-            };
+    Rectangle checkX = {
+        5,
+        5,
+        120 - 5,
+        40 - 5};
 
-    Rectangle checkXConfigs
-            = {
-                250,
-                100,
-                120 - 5,
-                40 - 5
-            };
-    
+    Rectangle checkXConfigs = {
+        250,
+        100,
+        120 - 5,
+        40 - 5};
+
     Sound effectSounds[] = {
-    player.attackLightSound,
-    player.attackHeavySound,
-    player.jumpSound,
-    player.walkingInCastle,
-    player.walkingInGrass,
-    player.playerHurtSound,
+        player.attackLightSound,
+        player.attackHeavySound,
+        player.jumpSound,
+        player.walkingInCastle,
+        player.walkingInGrass,
+        player.playerHurtSound,
 
-    wolf.wolfHitSound,
-    wolf.wolfHitSoundHeavy,
-    wolf.wolfDeathSound,
-    wolf.wolfScratch,
-    wolf.wolfGrowl,
+        wolf.wolfHitSound,
+        wolf.wolfHitSoundHeavy,
+        wolf.wolfDeathSound,
+        wolf.wolfScratch,
+        wolf.wolfGrowl,
 
-    runningWolf.wolfHitSound,
-    runningWolf.wolfHitSoundHeavy,
-    runningWolf.wolfDeathSound,
-    runningWolf.wolfScratch,
-    runningWolf.wolfGrowl,
+        runningWolf.wolfHitSound,
+        runningWolf.wolfHitSoundHeavy,
+        runningWolf.wolfDeathSound,
+        runningWolf.wolfScratch,
+        runningWolf.wolfGrowl,
 
-    redWolf.wolfHitSound,
-    redWolf.wolfHitSoundHeavy,
-    redWolf.wolfDeathSound,
-    redWolf.wolfScratch,
-    redWolf.wolfGrowl,
+        redWolf.wolfHitSound,
+        redWolf.wolfHitSoundHeavy,
+        redWolf.wolfDeathSound,
+        redWolf.wolfScratch,
+        redWolf.wolfGrowl,
 
-    whiteWolf.wolfScratch,
-    whiteWolf.wolfGrowl,
-    whiteWolf.wolfHitSound,
-    whiteWolf.wolfHitSoundHeavy,
-    whiteWolf.wolfDeathSound,
+        whiteWolf.wolfScratch,
+        whiteWolf.wolfGrowl,
+        whiteWolf.wolfHitSound,
+        whiteWolf.wolfHitSoundHeavy,
+        whiteWolf.wolfDeathSound,
 
-    goblin.goblinCutSound,
-    goblin.goblinDeathSound,
+        goblin.goblinCutSound,
+        goblin.goblinDeathSound,
 
-    redGoblin.RedGoblinHitSound,    
-    redGoblin.goblinDeathSound,
-    redGoblin.goblinCutSound,
+        redGoblin.RedGoblinHitSound,
+        redGoblin.goblinDeathSound,
+        redGoblin.goblinCutSound,
 
-    goblinArcher.arrowHitSound,
-    goblinArcher.goblinArcherDeathSound,
-    goblinArcher.goblinArcherLoadingSound,
+        goblinArcher.arrowHitSound,
+        goblinArcher.goblinArcherDeathSound,
+        goblinArcher.goblinArcherLoadingSound,
 
-    goblinTank.soundAttackGoblinTank,
-    goblinTank.soundDeathGolbinTank,
-    goblinTank.soundGrowlGoblinTank,
-    goblinTank.soundHurtGoblinTank,
+        goblinTank.soundAttackGoblinTank,
+        goblinTank.soundDeathGolbinTank,
+        goblinTank.soundGrowlGoblinTank,
+        goblinTank.soundHurtGoblinTank,
 
-    boss.bossAttackSound,
-    boss.bossDeathSound,
-    boss.bossGrounImpact,
-    boss.bossWalkSound,
-    boss.bossHurtSound,
+        boss.bossAttackSound,
+        boss.bossDeathSound,
+        boss.bossGrounImpact,
+        boss.bossWalkSound,
+        boss.bossHurtSound,
 
-    bombGoblin.bomb.explosion,
-    bombGoblin.bomb.timer,
-    bombGoblin.soundAttack,
-    bombGoblin.soundBagGoblin
-};
+        bombGoblin.bomb.explosion,
+        bombGoblin.bomb.timer,
+        bombGoblin.soundAttack,
+        bombGoblin.soundBagGoblin};
 
-int effectSoundCount = sizeof(effectSounds) / sizeof(effectSounds[0]);
+    int effectSoundCount = sizeof(effectSounds) / sizeof(effectSounds[0]);
 
-while (!WindowShouldClose())
-{
-    UpdateMusicStream(menuMusic);
-    UpdateMusicStream(soundTrack);
-    UpdateMusicStream(boss.bossMusic);
-
-    float delta = GetFrameTime();
-
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
-    
-    Vector2 mousePos = GetMousePosition();
-    printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
-
-    MusicState desiredMusic;
-
-    if (gameState == MENU)
+    while (!WindowShouldClose())
     {
-        desiredMusic = MUSIC_MENU;
-    }
-    else if (bossTriggered)
-    {
-        desiredMusic = MUSIC_BOSS;
-    }
-    else
-    {
-        desiredMusic = MUSIC_GAMEPLAY;
-    }
+        UpdateMusicStream(menuMusic);
+        UpdateMusicStream(soundTrack);
+        UpdateMusicStream(boss.bossMusic);
 
-    if (desiredMusic != currentMusic)
-    {
-        StopMusicStream(menuMusic);
-        StopMusicStream(soundTrack);
-        StopMusicStream(boss.bossMusic);
+        float delta = GetFrameTime();
 
-        switch (desiredMusic)
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        Vector2 mousePos = GetMousePosition();
+        printf("Mouse X: %i | Mouse Y: %i\n", (int)mousePos.x, (int)mousePos.y);
+
+        MusicState desiredMusic;
+
+        if (gameState == MENU)
         {
+            desiredMusic = MUSIC_MENU;
+        }
+        else if (bossTriggered)
+        {
+            desiredMusic = MUSIC_BOSS;
+        }
+        else
+        {
+            desiredMusic = MUSIC_GAMEPLAY;
+        }
+
+        if (desiredMusic != currentMusic)
+        {
+            StopMusicStream(menuMusic);
+            StopMusicStream(soundTrack);
+            StopMusicStream(boss.bossMusic);
+
+            switch (desiredMusic)
+            {
             case MUSIC_MENU:
                 PlayMusicStream(menuMusic);
                 break;
@@ -980,68 +934,57 @@ while (!WindowShouldClose())
             case MUSIC_BOSS:
                 PlayMusicStream(boss.bossMusic);
                 break;
+            }
+
+            currentMusic = desiredMusic;
         }
 
-        currentMusic = desiredMusic;
-    }
-
-    switch (gameState)
-    {
-        // ========================================================
-        // ESTADO: MENU
-        // ========================================================
+        switch (gameState)
+        {
         case MENU:
         {
-
             bossTriggered = false;
 
-            float x1Play = 930, y1Play = 418;  
-            float x2Play = 1300, y2Play = 532;  
+            float x1Play = 930, y1Play = 418;
+            float x2Play = 1300, y2Play = 532;
             float checkY1Play = 418, checkY2Play = 530;
 
-            Rectangle rectPlay
-            = {
+            Rectangle rectPlay = {
                 x1Play,
                 y1Play,
-                x2Play - x1Play,   
-                y2Play - y1Play    
-            };
-    
-            Rectangle checkPlay
-            = {
+                x2Play - x1Play,
+                y2Play - y1Play};
+
+            Rectangle checkPlay = {
                 x1Play,
                 checkY1Play,
                 x2Play - x1Play,
-                checkY2Play - checkY1Play
-            };
+                checkY2Play - checkY1Play};
 
-            float x1Credits = 890, y1Credits = 555;  
+            float x1Credits = 890, y1Credits = 555;
             float x2Credits = 1340, y2Credits = 660;
             float checkY1Credits = 554, checkY2Credits = 660;
-            
-            Rectangle rectCredits
-            = {
+
+            Rectangle rectCredits = {
                 x1Credits,
                 y1Credits,
-                x2Credits - x1Credits,  
-                y2Credits - y1Credits    
-            };
-    
-            Rectangle checkCredits
-            = {
+                x2Credits - x1Credits,
+                y2Credits - y1Credits};
+
+            Rectangle checkCredits = {
                 x1Credits,
                 checkY1Credits,
                 x2Credits - x1Credits,
-                checkY2Credits - checkY1Credits
-            };
+                checkY2Credits - checkY1Credits};
 
             Vector2 center = {1352, 835};
             float radius = 59;
 
             DrawTexture(menuImage, 0, 0, WHITE);
 
-            if (CheckCollisionPointRec(mousePos, checkPlay)) {
-                DrawRectangleRec(rectPlay, (Color){247,173,7,75});
+            if (CheckCollisionPointRec(mousePos, checkPlay))
+            {
+                DrawRectangleRec(rectPlay, (Color){247, 173, 7, 75});
             }
 
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
@@ -1052,8 +995,9 @@ while (!WindowShouldClose())
                 gameState = PLAYING;
             }
 
-            if (CheckCollisionPointRec(mousePos, checkCredits)) {
-                DrawRectangleRec(rectCredits, (Color){247,173,7,75});
+            if (CheckCollisionPointRec(mousePos, checkCredits))
+            {
+                DrawRectangleRec(rectCredits, (Color){247, 173, 7, 75});
             }
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
                 CheckCollisionPointRec(GetMousePosition(), rectCredits))
@@ -1063,78 +1007,65 @@ while (!WindowShouldClose())
                 gameState = CREDITS;
             }
 
-            if (CheckCollisionPointCircle(GetMousePosition(), center, radius)) 
+            if (CheckCollisionPointCircle(GetMousePosition(), center, radius))
             {
-                DrawCircleV(center, radius, (Color){247,173,7,75});
+                DrawCircleV(center, radius, (Color){247, 173, 7, 75});
 
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
                     PlaySound(buttonSelect);
                     WaitTime(0.5f);
 
-                    #if defined(_WIN32)
-                        system("start https://github.com/Jaca7x/Knight-s-Quest");
-                    #elif defined(__APPLE__)
-                        system("open https://github.com/Jaca7x/Knight-s-Quest");
-                    #else
-                        system("xdg-open https://github.com/Jaca7x/Knight-s-Quest");
-                    #endif
+#if defined(_WIN32)
+                    system("start https://github.com/Jaca7x/Knight-s-Quest");
+#elif defined(__APPLE__)
+                    system("open https://github.com/Jaca7x/Knight-s-Quest");
+#else
+                    system("xdg-open https://github.com/Jaca7x/Knight-s-Quest");
+#endif
 
                     gameState = GITHUB;
                 }
             }
-        } break;
-
-        // ========================================================
-        // ESTADO: PLAYING
-        // ========================================================
+        }
+        break;
         case PLAYING:
         {
             ShowTutorial(tutorials, &currentTutorial, currentMapIndex, &showTutorial, delta,
-                        &tutorialIsColsing, &tutorialAlpha, buttonSelect);
+                         &tutorialIsColsing, &tutorialAlpha, buttonSelect);
 
-             Rectangle configAudio
-                = {
-                    520,
-                    280,
-                    280,
-                    40
-                };
+            Rectangle configAudio = {
+                520,
+                280,
+                280,
+                40};
 
-                Rectangle configGame
-                = {
-                    520,
-                    380,
-                    280,
-                    40
-                };
+            Rectangle configGame = {
+                520,
+                380,
+                280,
+                40};
 
-                Rectangle atalhos
-                = {
-                    520, 
-                    280,
-                    280,
-                    40
-                };
+            Rectangle atalhos = {
+                520,
+                280,
+                280,
+                40};
 
-                Rectangle ajuda 
-                = {
-                    520,
-                    380,
-                    280,
-                    40
-                };
+            Rectangle ajuda = {
+                520,
+                380,
+                280,
+                40};
 
-                Rectangle buttonFontSize
-                = {
-                    750,
-                    280,
-                    80,
-                    30
-                };
+            Rectangle buttonFontSize = {
+                750,
+                280,
+                80,
+                30};
 
             switch (configState)
-            { 
+            {
             case CONFIG_CLOSED:
                 if (IsKeyPressed(KEY_K))
                     configState = CONFIG_OPEN;
@@ -1154,7 +1085,7 @@ while (!WindowShouldClose())
                     PlaySound(buttonSelect);
                     configState = CONFIG;
                 }
-                
+
                 if (IsKeyPressed(KEY_K))
                 {
                     configState = CONFIG_CLOSED;
@@ -1184,7 +1115,7 @@ while (!WindowShouldClose())
                     PlaySound(buttonSelect);
                     configState = AJUDA;
                 }
-        
+
                 if (IsKeyPressed(KEY_K))
                 {
                     configState = CONFIG_CLOSED;
@@ -1199,7 +1130,7 @@ while (!WindowShouldClose())
                     configState = CONFIG_CLOSED;
                 }
                 break;
-                
+
             case AJUDA:
                 player.isAttacking = false;
 
@@ -1209,7 +1140,7 @@ while (!WindowShouldClose())
                 }
                 break;
             }
-            
+
             if ((currentMapIndex == 0 || currentMapIndex == 1) && player.isMoving && !player.isJumping)
             {
                 if (!player.walkSoundPlayingCastle)
@@ -1284,9 +1215,9 @@ while (!WindowShouldClose())
             UpdateNpc(&npc, delta, &player, &dialogState, &dialogoTimer);
             UpdateGhost(&ghost, &player, delta, &interaction, &dialogStateGhost, &dialogoTimer, currentMapIndex);
             UpdatePeasant(&peasant, &player, delta, &interaction, &dialogStatePeasant, &dialogoTimerPeasant, currentMapIndex, &bossTriggered);
-            UpdateInteraction(&interaction, delta); 
+            UpdateInteraction(&interaction, delta);
 
-            if (player.life <= 0 )
+            if (player.life <= 0)
             {
                 if (player.deathAnimationDone)
                 {
@@ -1305,8 +1236,7 @@ while (!WindowShouldClose())
                     gameState = GAME_COMPLETE;
                 }
             }
-            
-            // --- Desenho ---
+
             DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7);
 
             if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
@@ -1322,25 +1252,24 @@ while (!WindowShouldClose())
 
                 SetWindowSize(
                     map.width * map.tileWidth,
-                    map.height * map.tileHeight
-                );
+                    map.height * map.tileHeight);
 
                 player.position.x = 0;
                 player.position.y = 520;
-            }   
+            }
 
             if (currentMapIndex == MAP_BOMB_GOBLIN)
             {
                 DrawBombGoblin(&bombGoblin, &player);
                 UpdateBombGoblin(&bombGoblin, delta, &player);
             }
-            
+
             if (bossTriggered)
             {
                 DrawBoss(&boss);
                 UpdateBoss(&boss, &player, delta, &bossTriggered);
             }
-            
+
             if (currentMapIndex == MAP_WOLF_WHITE_AREA)
             {
                 UpdateWolf(&whiteWolf, &player, delta, currentMapIndex);
@@ -1352,7 +1281,7 @@ while (!WindowShouldClose())
                 UpdateWolf(&redWolf, &player, delta, currentMapIndex);
                 DrawWolf(&redWolf);
             }
-            
+
             if (currentMapIndex == GOBLIN_MAP)
             {
                 DrawGoblin(&goblin);
@@ -1364,13 +1293,13 @@ while (!WindowShouldClose())
                 DrawGoblin(&redGoblin);
                 UpdateGoblin(&redGoblin, &player, currentMapIndex, delta);
             }
-            
+
             if (currentMapIndex == GOBLIN_TANK_MAP)
             {
                 DrawGoblinTank(&goblinTank, &player);
                 UpdateGoblinTank(&goblinTank, delta, &player);
             }
-            
+
             if (currentMapIndex == MAP_WOLF_RUNNING_AREA)
             {
                 UpdateRunningWolf(&runningWolf, &player, delta);
@@ -1386,35 +1315,36 @@ while (!WindowShouldClose())
                 UpdateGoblinArcher(&goblinArcher, &player, delta);
             }
 
-            UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &redGoblin, 
-                &goblinArcher, &runningWolf, &goblinTank, &bombGoblin);
+            UpdateHearts(hearts, delta, &player, &wolf, &redWolf, &whiteWolf, &goblin, &redGoblin,
+                         &goblinArcher, &runningWolf, &goblinTank, &bombGoblin);
             DrawHearts(hearts, delta, &player);
 
-            if (MAP_NPC == currentMapIndex) {
+            if (MAP_NPC == currentMapIndex)
+            {
                 DrawNpc(&npc, &player, &interaction, dialogState);
                 UpdateInteraction(&interaction, delta);
             }
 
             MapsGhost(&ghost, &player, dialogStateGhost, &interaction, delta, currentMapIndex);
             DrawMapsPeasant(&peasant, &player, &interaction, currentMapIndex, delta, &dialogStatePeasant);
-            
+
             textTime += delta;
-            
+
             if (currentMapIndex == 0 && textTime <= 2)
             {
-                DrawRectangle(player.position.x - 60, player.position.y, 340, 30, (Color){0,0,0,180});
+                DrawRectangle(player.position.x - 60, player.position.y, 340, 30, (Color){0, 0, 0, 180});
                 DrawText("Aperte 'K', para abrir às configurações", player.position.x - 40, player.position.y + 7, 16, WHITE);
             }
-    
-            UpdatePlayer(&player, &wolf, &runningWolf, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta, 
-                &npc, &boss, &goblinTank, &bombGoblin);
+
+            UpdatePlayer(&player, &wolf, &runningWolf, &redWolf, &whiteWolf, &goblin, &redGoblin, &goblinArcher, currentMapIndex, delta,
+                         &npc, &boss, &goblinTank, &bombGoblin);
             DrawPlayer(&player);
 
             DrawStaminaBar(staminaBar, player.stamina, (Vector2){1350, 20}, 2.0f, &player, button_pressed);
             DrawLifeBar(barLifeSprite, player.life, (Vector2){20, 10}, 2.0f);
 
             if (configState == CONFIG_OPEN)
-            {   
+            {
                 player.stamina = MAX_STAMINA;
 
                 DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
@@ -1429,77 +1359,79 @@ while (!WindowShouldClose())
             {
                 player.stamina = MAX_STAMINA;
 
-                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
-                && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mousePos, (Rectangle){slideX, slideY - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                {
+                    float percent = (mousePos.x - slideX) / slideWidth;
+                    if (percent < 0)
+                        percent = 0;
+                    if (percent > 1)
+                        percent = 1;
+
+                    volume = percent;
+
+                    SetMusicVolume(menuMusic, volume);
+                    SetMusicVolume(soundTrack, volume);
+                    SetMusicVolume(boss.bossMusic, volume);
+                }
+
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mousePos, (Rectangle){slideXEfects, slideYEfects - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                {
+                    float percent = (mousePos.x - slideXEfects) / slideWidth;
+                    if (percent < 0)
+                        percent = 0;
+                    if (percent > 1)
+                        percent = 1;
+
+                    volumeEfects = percent;
+
+                    for (int i = 0; i < effectSoundCount; i++)
                     {
-                        float percent = (mousePos.x - slideX) / slideWidth;
-                        if (percent < 0) percent = 0;
-                        if (percent > 1) percent = 1;
-
-                        volume = percent;
-
-                        SetMusicVolume(menuMusic, volume);
-                        SetMusicVolume(soundTrack, volume);
-                        SetMusicVolume(boss.bossMusic, volume);
+                        SetSoundVolume(effectSounds[i], volumeEfects);
                     }
 
-                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
-                && CheckCollisionPointRec(mousePos, (Rectangle){slideXEfects, slideYEfects - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                    for (int i = 0; i < MAX_HEARTS; i++)
                     {
-                        float percent = (mousePos.x - slideXEfects) / slideWidth;
-                        if (percent < 0) percent = 0;
-                        if (percent > 1) percent = 1;
+                        SetSoundVolume(hearts[i].collectSound, volumeEfects);
+                        SetSoundVolume(hearts[i].spawnSound, volumeEfects);
+                    }
+                }
 
-                        volumeEfects = percent;
+                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(mousePos, (Rectangle){slideXDialogue, slideYDialogue - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                {
+                    float percent = (mousePos.x - slideXDialogue) / slideWidth;
+                    if (percent < 0)
+                        percent = 0;
+                    if (percent > 1)
+                        percent = 1;
 
-                        for (int i = 0; i < effectSoundCount; i++)
+                    volumeDialogue = percent;
+
+                    SetSoundVolume(player.playerDialogueWithNPC1, volumeDialogue);
+                    SetSoundVolume(player.playerDialogueWithNPC2, volumeDialogue);
+
+                    SetSoundVolume(npc.dialogueWithPlayer1, volumeDialogue);
+                    SetSoundVolume(npc.dialogueWithPlayer2, volumeDialogue);
+
+                    for (int i = 0; i < GHOST_NUM_MAPS; i++)
+                    {
+                        for (int j = 0; j < DIALOGS_PER_MAP; j++)
                         {
-                            SetSoundVolume(effectSounds[i], volumeEfects);
-                        }
-
-                        for (int i = 0; i < MAX_HEARTS; i++)
-                        {
-                            SetSoundVolume(hearts[i].collectSound, volumeEfects);
-                            SetSoundVolume(hearts[i].spawnSound, volumeEfects);
+                            SetSoundVolume(player.dialogues[i][j].sound, volumeDialogue);
+                            SetSoundVolume(ghost.dialogues[i][j].sound, volumeDialogue);
                         }
                     }
 
-                if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)
-                && CheckCollisionPointRec(mousePos, (Rectangle){slideXDialogue, slideYDialogue - ballRadius, slideWidth, slideHeight + ballRadius * 2}))
+                    for (int i = 0; i < PEASANT_NUM_MAPS; i++)
                     {
-                        float percent = (mousePos.x - slideXDialogue) / slideWidth;
-                        if (percent < 0) percent = 0;
-                        if (percent > 1) percent = 1;
-
-                        volumeDialogue = percent;
-
-                        SetSoundVolume(player.playerDialogueWithNPC1, volumeDialogue);
-                        SetSoundVolume(player.playerDialogueWithNPC2, volumeDialogue);
-
-                        SetSoundVolume(npc.dialogueWithPlayer1, volumeDialogue);
-                        SetSoundVolume(npc.dialogueWithPlayer2, volumeDialogue);
-
-                        for (int i = 0; i < GHOST_NUM_MAPS; i++)
+                        for (int j = 0; j < DIALOGS_PER_MAP; j++)
                         {
-                            for (int j = 0; j < DIALOGS_PER_MAP; j++)
-                            {   
-                                SetSoundVolume(player.dialogues[i][j].sound, volumeDialogue);
-                                SetSoundVolume(ghost.dialogues[i][j].sound, volumeDialogue);
-                            }
+                            SetSoundVolume(peasant.dialogues[i][j].sound, volumeDialogue);
+                            SetSoundVolume(player.dialoguesWithPeasant[i][j].sound, volumeDialogue);
                         }
-
-                        for (int i = 0; i < PEASANT_NUM_MAPS; i++)
-                        {
-                            for (int j = 0; j < DIALOGS_PER_MAP; j++)
-                            {
-                                SetSoundVolume(peasant.dialogues[i][j].sound, volumeDialogue);
-                                SetSoundVolume(player.dialoguesWithPeasant[i][j].sound, volumeDialogue);
-                            }
-                        }
-
                     }
+                }
 
-                DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+                DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
 
                 if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
                 {
@@ -1537,11 +1469,11 @@ while (!WindowShouldClose())
                 DrawCircle(slideXDialogue + slideWidth * volumeDialogue, slideYDialogue + slideHeight / 2, ballRadius, DARKBLUE);
             }
 
-             if (configState == CONFIG)
+            if (configState == CONFIG)
             {
                 player.stamina = MAX_STAMINA;
 
-                DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+                DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
 
                 if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
                 {
@@ -1555,9 +1487,9 @@ while (!WindowShouldClose())
                 DrawText("Configurações (Pressione 'K' para fechar)", 450, 120, 20, WHITE);
 
                 drawHoverButton(atalhos, mousePos, "Atalhos");
-                drawHoverButton(ajuda, mousePos, "Ajuda");      
+                drawHoverButton(ajuda, mousePos, "Ajuda");
             }
-            
+
             if (configState == AJUDA)
             {
                 player.stamina = MAX_STAMINA;
@@ -1565,12 +1497,12 @@ while (!WindowShouldClose())
                 button_hovered = CheckCollisionPointRec(GetMousePosition(), button_rect);
 
                 if (button_hovered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-                    {
-                        PlaySound(onOFF);
-                        button_pressed = !button_pressed;
-                    }
+                {
+                    PlaySound(onOFF);
+                    button_pressed = !button_pressed;
+                }
 
-                DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+                DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
 
                 if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
                 {
@@ -1617,10 +1549,10 @@ while (!WindowShouldClose())
 
                 DrawText("Assistência de estamina:", 450, 195, 20, WHITE);
 
-                DrawRectangleRounded(button_rect, 0.30f, 0, (Color){128,128,128,160});
+                DrawRectangleRounded(button_rect, 0.30f, 0, (Color){128, 128, 128, 160});
 
                 if (button_pressed)
-                {   
+                {
                     DrawText("OFF", 755, 200, 11, WHITE);
                     Rectangle button_rect = {750 + 30, 195, 40, 20};
                     DrawRectangleRounded(button_rect, 0.30f, 0, GREEN);
@@ -1636,16 +1568,14 @@ while (!WindowShouldClose())
             if (configState == ATALHOS)
             {
                 player.stamina = MAX_STAMINA;
-                
-                Rectangle table 
-                = {
+
+                Rectangle table = {
                     460,
                     200,
                     400,
-                    460
-                };
+                    460};
 
-                DrawRectangle(250, 100, 800, 600, (Color){0,0,0,200});
+                DrawRectangle(250, 100, 800, 600, (Color){0, 0, 0, 200});
 
                 if (drawHoverButton(checkXConfigs, mousePos, "VOLTAR"))
                 {
@@ -1658,7 +1588,7 @@ while (!WindowShouldClose())
 
                 DrawText("Atalhos (Pressione 'K' para fechar)", 480, 120, 20, WHITE);
 
-                DrawRectangleLinesEx(table, 1 , WHITE);
+                DrawRectangleLinesEx(table, 1, WHITE);
                 DrawRectangleLines(620, 200, 0, 460, WHITE);
                 for (int i = 0; i < 8; i++)
                 {
@@ -1666,48 +1596,47 @@ while (!WindowShouldClose())
 
                     DrawRectangleLines(460, posY, 400, 0, WHITE);
                 }
-                
+
                 DrawText("      W                  ANDAR PARA FRENTE", 505, 220, 16, WHITE);
                 DrawText("      A                  ANDAR PARA ESQUERDA", 505, 270, 16, WHITE);
                 DrawText("      S                  ANDAR PARA TRÁS", 505, 320, 16, WHITE);
-                DrawText("      D                  ANDAR PARA DIREITA", 505,370, 16, WHITE);
+                DrawText("      D                  ANDAR PARA DIREITA", 505, 370, 16, WHITE);
 
                 DrawText("ESPAÇO                       PULAR", 515, 420, 16, WHITE);
                 DrawText("      E                         INTERAGIR", 505, 470, 16, WHITE);
                 DrawText("      K                      CONFIGURAÇÕES", 505, 520, 16, WHITE);
-
 
                 DrawText("SHIFT                       CORRER", 520, 570, 16, WHITE);
 
                 DrawText("M1 & M2           ATAQUE PESADO & LEVE", 515, 620, 16, WHITE);
             }
 
-        const char* titulo = NULL;
+            const char *titulo = NULL;
 
-        if (currentMapIndex == 0)
-        {
-            titulo = "Castelo Bastion de Eldurin";
-        }
-        else if (currentMapIndex == 3)
-        {
-            titulo = "Bosque de Arvendel";
-        }
-        else if (currentMapIndex == 6)
-        {
-            titulo = "Floresta Negra de Eldruin";
-        }
-        
-        if (showTutorial && currentTutorial != -1)
-        {
-            DrawMonsterTutorial(&tutorials[currentTutorial]);
-        }
+            if (currentMapIndex == 0)
+            {
+                titulo = "Castelo Bastion de Eldurin";
+            }
+            else if (currentMapIndex == 3)
+            {
+                titulo = "Bosque de Arvendel";
+            }
+            else if (currentMapIndex == 6)
+            {
+                titulo = "Floresta Negra de Eldruin";
+            }
 
-        if (titulo != NULL)
-        {
-            drawTitleMaps(titulo, titleMaps, GetFrameTime(), currentMapIndex);
+            if (showTutorial && currentTutorial != -1)
+            {
+                DrawMonsterTutorial(&tutorials[currentTutorial]);
+            }
+
+            if (titulo != NULL)
+            {
+                drawTitleMaps(titulo, titleMaps, GetFrameTime(), currentMapIndex);
+            }
         }
-           
-        } break;
+        break;
 
         case CREDITS:
         {
@@ -1721,37 +1650,32 @@ while (!WindowShouldClose())
             }
 
             ClearBackground(BLACK);
-            DrawText("Créditos", GetScreenWidth()/2 - 70, 50, 40, WHITE);
-            DrawText("Obrigado por jogar este jogo!\n", GetScreenWidth()/2 - 140, 150, 20, WHITE);
-            DrawText("Ele foi uma das minhas primeiras experiencias\n", GetScreenWidth()/2 - 210, 180, 20, WHITE);
-            DrawText("no mundo do game dev, e com certeza ainda existem\n", GetScreenWidth()/2 - 230, 210, 20, WHITE);
-            DrawText("alguns problemas (como era de se esperar).\n", GetScreenWidth()/2 - 210, 240, 20, WHITE);
-            DrawText("\n", GetScreenWidth()/2 - 140, 270, 20, WHITE);
-            DrawText("Mas esse e apenas o inicio da minha jornada\n", GetScreenWidth()/2 - 210, 300, 20, WHITE);
-            DrawText("no desenvolvimento de jogos, e cada passo dado\n", GetScreenWidth()/2 - 230, 330, 20, WHITE);
-            DrawText("me motiva a aprender e evoluir cada vez mais.\n", GetScreenWidth()/2 - 210, 360, 20, WHITE);
-            DrawText("\n", GetScreenWidth()/2 - 140, 390, 20, WHITE);
-            DrawText("Muito obrigado por me dar essa chance\n", GetScreenWidth()/2 - 210, 420, 20, WHITE);
-            DrawText("e por dedicar seu tempo a jogar algo que\n", GetScreenWidth()/2 - 220, 450, 20, WHITE);
-            DrawText("fiz com tanto carinho e dedicação.\n", GetScreenWidth()/2 - 190, 480, 20, WHITE);
-            DrawText("\n", GetScreenWidth()/2 - 140, 510, 20, WHITE);
-            DrawText("Ass: Jaca7x\n", GetScreenWidth()/2 - 70, 540, 20, WHITE);
-
-        } break; 
-
-        // ========================================================
-        // ESTADO: GAME_OVER
-        // ========================================================
+            DrawText("Créditos", GetScreenWidth() / 2 - 70, 50, 40, WHITE);
+            DrawText("Obrigado por jogar este jogo!\n", GetScreenWidth() / 2 - 140, 150, 20, WHITE);
+            DrawText("Ele foi uma das minhas primeiras experiencias\n", GetScreenWidth() / 2 - 210, 180, 20, WHITE);
+            DrawText("no mundo do game dev, e com certeza ainda existem\n", GetScreenWidth() / 2 - 230, 210, 20, WHITE);
+            DrawText("alguns problemas (como era de se esperar).\n", GetScreenWidth() / 2 - 210, 240, 20, WHITE);
+            DrawText("\n", GetScreenWidth() / 2 - 140, 270, 20, WHITE);
+            DrawText("Mas esse e apenas o inicio da minha jornada\n", GetScreenWidth() / 2 - 210, 300, 20, WHITE);
+            DrawText("no desenvolvimento de jogos, e cada passo dado\n", GetScreenWidth() / 2 - 230, 330, 20, WHITE);
+            DrawText("me motiva a aprender e evoluir cada vez mais.\n", GetScreenWidth() / 2 - 210, 360, 20, WHITE);
+            DrawText("\n", GetScreenWidth() / 2 - 140, 390, 20, WHITE);
+            DrawText("Muito obrigado por me dar essa chance\n", GetScreenWidth() / 2 - 210, 420, 20, WHITE);
+            DrawText("e por dedicar seu tempo a jogar algo que\n", GetScreenWidth() / 2 - 220, 450, 20, WHITE);
+            DrawText("fiz com tanto carinho e dedicação.\n", GetScreenWidth() / 2 - 190, 480, 20, WHITE);
+            DrawText("\n", GetScreenWidth() / 2 - 140, 510, 20, WHITE);
+            DrawText("Ass: Jaca7x\n", GetScreenWidth() / 2 - 70, 540, 20, WHITE);
+        }
+        break;
         case GAME_OVER:
         {
-            // Tela de morte
-            DrawTexture(deathImage, 
-                        (GetScreenWidth() - deathImage.width) / 2, 
-                        (GetScreenHeight() - deathImage.height) / 2, 
+            DrawTexture(deathImage,
+                        (GetScreenWidth() - deathImage.width) / 2,
+                        (GetScreenHeight() - deathImage.height) / 2,
                         WHITE);
 
             DrawText("Pressione ENTER para voltar ao menu",
-                     GetScreenWidth()/2 - 200, GetScreenHeight() - 100, 20, RAYWHITE);
+                     GetScreenWidth() / 2 - 200, GetScreenHeight() - 100, 20, RAYWHITE);
 
             if (IsKeyPressed(KEY_ENTER))
             {
@@ -1759,18 +1683,19 @@ while (!WindowShouldClose())
                 PlaySound(buttonSelect);
                 resetGame(&player, &wolf, &redWolf, &whiteWolf, &runningWolf, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &bombGoblin, &map, mapFiles);
             }
-        } break;
+        }
+        break;
 
         case GAME_COMPLETE:
         {
             StopMusicStream(boss.bossMusic);
-            DrawTexture(completGame, 
-                        (GetScreenWidth() - completGame.width) / 2, 
-                        (GetScreenHeight() - completGame .height) / 2, 
+            DrawTexture(completGame,
+                        (GetScreenWidth() - completGame.width) / 2,
+                        (GetScreenHeight() - completGame.height) / 2,
                         WHITE);
 
             DrawText("Pressione ENTER para voltar ao menu",
-                     GetScreenWidth()/2 - 200, GetScreenHeight() - 100, 20, RAYWHITE);
+                     GetScreenWidth() / 2 - 200, GetScreenHeight() - 100, 20, RAYWHITE);
 
             if (IsKeyPressed(KEY_ENTER))
             {
@@ -1778,9 +1703,10 @@ while (!WindowShouldClose())
                 PlaySound(buttonSelect);
                 resetGame(&player, &wolf, &redWolf, &whiteWolf, &runningWolf, &goblin, &redGoblin, &goblinArcher, hearts, &npc, &ghost, &interaction, &boss, &goblinTank, &peasant, &bombGoblin, &map, mapFiles);
             }
-        } break;
+        }
+        break;
 
-        case GITHUB: 
+        case GITHUB:
         {
             if (drawHoverButton(checkX, mousePos, "VOLTAR"))
             {
@@ -1790,13 +1716,13 @@ while (!WindowShouldClose())
                     gameState = MENU;
                 }
             }
-            
+
             ClearBackground(BLACK);
-            DrawText("Abrindo repositório no seu navegador! Aguarde...", GetScreenWidth()/2 - 500, GetScreenHeight()/2, 40, WHITE);
+            DrawText("Abrindo repositório no seu navegador! Aguarde...", GetScreenWidth() / 2 - 500, GetScreenHeight() / 2, 40, WHITE);
         }
+        }
+        EndDrawing();
     }
-    EndDrawing();
-}
 
     UnloadTexture(tileset1);
     UnloadTexture(tileset2);
@@ -1824,4 +1750,4 @@ while (!WindowShouldClose())
     UnloadBombGoblin(&bombGoblin);
     CloseWindow();
     return 0;
-}  
+}

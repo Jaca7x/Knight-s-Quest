@@ -1,3 +1,46 @@
+//Main defines 
+
+//Title maps defines
+#define TITLE_MAP_DURATION        2.0f
+#define TITLE_MAP_FONT_SIZE       60.0f
+#define TITLE_MAP_SPACING         1.0f
+
+#define TITLE_MAP_OFFSET_Y        220
+
+#define TITLE_MAP_PADDING_X       20
+#define TITLE_MAP_PADDING_Y       10
+
+#define TITLE_MAP_BG_ALPHA        160
+
+// Button UI Config
+#define BUTTON_BORDER_THICKNESS 1
+#define BUTTON_TEXT_OFFSET_X    20
+#define BUTTON_TEXT_OFFSET_Y    10
+#define BUTTON_FONT_SIZE        20
+
+// Monster Tutorial UI Config
+#define TUTORIAL_PANEL_X              250
+#define TUTORIAL_PANEL_Y              100
+#define TUTORIAL_PANEL_WIDTH          1000
+#define TUTORIAL_PANEL_HEIGHT         600
+
+#define TUTORIAL_BORDER_THICKNESS     2
+
+#define TUTORIAL_TITLE_FONT_SIZE      26
+#define TUTORIAL_INFO_FONT_SIZE       18
+#define TUTORIAL_CLOSE_FONT_SIZE      14
+
+#define TUTORIAL_TITLE_OFFSET_Y       100
+#define TUTORIAL_TITLE1_OFFSET_X      150
+#define TUTORIAL_TITLE2_OFFSET_X      650
+
+#define TUTORIAL_INFO_OFFSET_Y        380
+#define TUTORIAL_INFO1_OFFSET_X       50
+#define TUTORIAL_INFO2_OFFSET_X       580
+
+#define TUTORIAL_CLOSE_OFFSET_X       20
+#define TUTORIAL_CLOSE_OFFSET_Y       25
+
 // Base defines
 #define SPRITE_ROW_BASE 0 // Base row in sprite sheet
 #define OFFSET_ZERO 0   
