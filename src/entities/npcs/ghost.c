@@ -73,13 +73,16 @@ void InitGhost(Ghost *ghost)
     // Position
     ghost->position = (Vector2){200, 540};
 
+     // Frames
+    ghost->frameIdle = 3;
+
     // Sprites
     ghost->ghostIdle = LoadTexture("assets/resources/sprites/npc/ghost-idle.png");
     ghost->ghostBtnE = LoadTexture("assets/resources/sprites/btns/btn-E.png");
     ghost->ghostSpeech = LoadTexture("assets/resources/sprites/npc/ghost-speech.png");
     ghost->ghostExclamation = LoadTexture("assets/resources/sprites/npc/exclamation.png");
 
-    //Sprite size
+   //Sprite size
     ghost->frameWidth = ghost->ghostIdle.width / ghost->frameIdle;
     ghost->frameHeight = ghost->ghostIdle.height;
 
@@ -89,9 +92,6 @@ void InitGhost(Ghost *ghost)
     ghost->currentFrame = 0;
     ghost->frameCounter = 0;
 
-    // Frames
-    ghost->frameIdle = 3;
-   
     // MAPA 1
     ghost->dialogues[0][0].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue1-1.wav");
     ghost->dialogues[0][1].sound = LoadSound("assets/resources/sounds/voices/ghost/ghost-dialogue1-2.wav");
@@ -382,7 +382,7 @@ void UnloadGhost(Ghost *ghost)
 
     for (int map = 0; map < GHOST_NUM_MAPS; map++)
     {
-        for (int i = 0; i < TOTAL_DIALOGUES_PER_MAP; i++)
+        for (int i = 0; i < DIALOGS_PER_MAP; i++)
         {
             if (ghost->dialogues[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {

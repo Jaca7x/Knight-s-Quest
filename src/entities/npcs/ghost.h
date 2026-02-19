@@ -41,7 +41,7 @@ typedef struct ghost {
     Texture2D ghostBtnE;
     Texture2D ghostExclamation;
 
-    Dialogue dialogues[GHOST_NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
+    Dialogue dialogues[GHOST_NUM_MAPS][DIALOGS_PER_MAP];
 
     bool isInteraction;
 

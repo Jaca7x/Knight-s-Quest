@@ -79,6 +79,10 @@ void InitPeasant(Peasant *peasant)
     // Position
     peasant->position = (Vector2){50.0f, 526.0f};
 
+    // Frames 
+    peasant->frameIdle = 2;
+
+
     // Sprites
     peasant->peasantSpeech = LoadTexture("assets/resources/sprites/npc/peasant-speech.png");
     peasant->peasantIdle = LoadTexture("assets/resources/sprites/npc/peasant.png");
@@ -91,10 +95,7 @@ void InitPeasant(Peasant *peasant)
 
     // Scale
     peasant->scale = 7.50f;
-
-    // Frames 
-    peasant->frameIdle = 2;
-
+ 
     // Map 1
     peasant->dialogues[0][0].sound = 
         LoadSound("assets/resources/sounds/voices/peasant/peasant-dialogue1-0.wav");

@@ -75,7 +75,6 @@
 #define DIALOGUE_TWO 2
 #define DIALOGUE_THREE 3
 
-#define TOTAL_DIALOGUES_PER_MAP 6
 #define DIALOGS_PER_MAP 3
 #define NPCS_FRAME_SPEED (200 / 5)
 

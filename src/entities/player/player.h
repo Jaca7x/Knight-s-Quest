@@ -71,8 +71,8 @@ typedef struct player
     Sound playerDialogueWithNPC1;
     Sound playerDialogueWithNPC2;
 
-    DialoguePlayer dialogues[GHOST_NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
-    DialoguePlayerWithPeasant dialoguesWithPeasant[PEASANT_NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
+    DialoguePlayer dialogues[GHOST_NUM_MAPS][DIALOGS_PER_MAP];
+    DialoguePlayerWithPeasant dialoguesWithPeasant[PEASANT_NUM_MAPS][DIALOGS_PER_MAP];
 
     bool attackSoundPlayed;
     bool jumpSoundPlayed;

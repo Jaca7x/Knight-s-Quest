@@ -15,7 +15,7 @@ void DrawLifeBar(Texture2D barLifeSprite, float life, Vector2 position, float sc
 
     Rectangle source = 
     {
-        0,                       
+        SPRITE_ROW_BASE,                       
         frame * LIFE_FRAME_WIDTH, 
         LIFE_FRAME_WIDTH,        
         LIFE_FRAME_HEIGHT        
@@ -25,8 +25,8 @@ void DrawLifeBar(Texture2D barLifeSprite, float life, Vector2 position, float sc
     {
         position.x,                     
         position.y,                     
-        LIFE_FRAME_WIDTH * scale* 2,
-        LIFE_FRAME_HEIGHT * scale* 2 
+        LIFE_FRAME_WIDTH * scale,
+        LIFE_FRAME_HEIGHT * scale
     };
 
     Vector2 origin = ORIGIN_TOPLEFT;

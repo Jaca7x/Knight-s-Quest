@@ -560,7 +560,7 @@ void UnloadPlayer(Player *player)
 
     for (int map = 0; map < GHOST_NUM_MAPS; map++)
     {
-        for (int i = 0; i < TOTAL_DIALOGUES_PER_MAP; i++)
+        for (int i = 0; i < DIALOGS_PER_MAP; i++)
         {
             if (player->dialogues[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {
@@ -571,7 +571,7 @@ void UnloadPlayer(Player *player)
 
     for (int map = 0; map < PEASANT_NUM_MAPS; map++)
     {
-        for (int i = 0; i < TOTAL_DIALOGUES_PER_MAP; i++)
+        for (int i = 0; i < DIALOGS_PER_MAP; i++)
         {
             if (player->dialoguesWithPeasant[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {

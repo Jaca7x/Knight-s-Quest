@@ -39,7 +39,7 @@ typedef struct peasant {
     Texture2D peasantBtnE;
     Texture2D peasantExclamation;
     
-    DialoguePeasant dialogues[PEASANT_NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
+    DialoguePeasant dialogues[PEASANT_NUM_MAPS][DIALOGS_PER_MAP];
 
     int frameIdle;
 

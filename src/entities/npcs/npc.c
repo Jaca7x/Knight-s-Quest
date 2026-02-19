@@ -24,6 +24,10 @@ void InitNpc(Npc *npc)
 
     npc->textSpeech = LoadFontEx("assets/resources/fonts/UncialAntiqua-Regular.ttf", 32, 0, 250);
 
+    // Frames
+    npc->frameTalking = 4;
+    npc->frameIdle = 4;
+
     // Sizes 
     npc->frameWidth = npc->spriteNpc.width / npc->frameIdle;
     npc->frameHeight = npc->spriteNpc.height;
@@ -33,10 +37,6 @@ void InitNpc(Npc *npc)
         LoadSound("assets/resources/sounds/voices/npc/npc-1-dialogue.wav");
     npc->dialogueWithPlayer2 = 
         LoadSound("assets/resources/sounds/voices/npc/npc-2-dialogue.wav");
-
-    // Frames
-    npc->frameTalking = 4;
-    npc->frameIdle = 4;
 
     // States
     npc->showExclamation = true;
@@ -152,8 +152,10 @@ void UpdateNpc(Npc *npc, float deltaTime, Player *player, DialogState *dialogSta
     }
 }
 
+
 void DrawNpc(Npc *npc, Player *player, Interaction *interaction, DialogState dialogState)
 {
+    
     static int visibleLetters = 0;
     static float timeWriting = TIMER_ZERO;
     float writingSpeed = 0.04f;
