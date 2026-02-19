@@ -2,26 +2,27 @@
 
 Rectangle GetPlayerHitbox(Player *player)
 {
-    float scale = 2.0f;
-    float hitboxWidth = player->frameWidth * scale * 0.3f;    // Reduz largura
-    float hitboxHeight = player->frameHeight * scale * 0.35f; // Reduz altura
+    float scale = PLAYER_SCALE;
+    float hitboxWidth = player->frameWidth * scale * PLAYER_HITBOX_WIDTH_RATIO;    
+    float hitboxHeight = player->frameHeight * scale * PLAYER_HITBOX_HEIGHT_RATIO; 
 
-    // Centraliza a hitbox no sprite
     float offsetX = (player->frameWidth * scale - hitboxWidth) / 2.0f;
     float offsetY = (player->frameHeight * scale - hitboxHeight) / 2.0f;
 
-    return (Rectangle){
+    return (Rectangle)
+    {
         player->position.x + offsetX,
         player->position.y + offsetY,
         hitboxWidth,
-        hitboxHeight};
+        hitboxHeight
+    };
 }
 
-void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex)
+void PlayPlayerSoundWithGhost(Player *player, int currentMapIndex, int dialogueIndex)
 {
     if (currentMapIndex >= 1 && currentMapIndex <= 4)
     {
-        Sound s = player->dialogues[currentMapIndex - 1][dialogueIndex].sound;
+        Sound s = player->dialogues[currentMapIndex - PREVIOUS_FRAME][dialogueIndex].sound;
 
         if (s.frameCount > FRAME_COUNTER_ZERO)
         {
@@ -308,7 +309,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, RunningWolf *runningWolf, Wolf *re
 
     if (!player->isAttackingInProgress && player->attackCooldownTimer <= COOLDOWN_ZERO)
     {
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && player->stamina > 30)
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && player->stamina > MIN_STAMINA_FOR_LIGHT_ATTACK)
         {
             player->isAttackingInProgress = true;
             player->isAttacking = true;
@@ -319,7 +320,7 @@ void UpdatePlayer(Player *player, Wolf *wolf, RunningWolf *runningWolf, Wolf *re
 
             player->stamina -= PLAYER_STAMINA_SPENT_LIGHT_ATTACKS;
         }
-        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && player->stamina > 45)
+        else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && player->stamina > MIN_STAMINA_FOR_HEAVY_ATTACK)
         {
             player->isAttackingInProgress = true;
             player->isAttacking = true;
@@ -557,9 +558,9 @@ void UnloadPlayer(Player *player)
     UnloadSound(player->playerHurtSound);
     UnloadSound(player->death);
 
-    for (int map = 0; map < NUM_MAPS; map++)
+    for (int map = 0; map < GHOST_NUM_MAPS; map++)
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < TOTAL_DIALOGUES_PER_MAP; i++)
         {
             if (player->dialogues[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {
@@ -568,9 +569,9 @@ void UnloadPlayer(Player *player)
         }
     }
 
-    for (int map = 0; map < NUM_MAPS_WITH_PEASANT; map++)
+    for (int map = 0; map < PEASANT_NUM_MAPS; map++)
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < TOTAL_DIALOGUES_PER_MAP; i++)
         {
             if (player->dialoguesWithPeasant[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {

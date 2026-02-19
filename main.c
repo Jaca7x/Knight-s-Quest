@@ -1479,7 +1479,7 @@ while (!WindowShouldClose())
                         SetSoundVolume(npc.dialogueWithPlayer1, volumeDialogue);
                         SetSoundVolume(npc.dialogueWithPlayer2, volumeDialogue);
 
-                        for (int i = 0; i < NUM_MAPS; i++)
+                        for (int i = 0; i < GHOST_NUM_MAPS; i++)
                         {
                             for (int j = 0; j < DIALOGS_PER_MAP; j++)
                             {   
@@ -1488,9 +1488,9 @@ while (!WindowShouldClose())
                             }
                         }
 
-                        for (int i = 0; i < NUM_MAPS_PEASANT; i++)
+                        for (int i = 0; i < PEASANT_NUM_MAPS; i++)
                         {
-                            for (int j = 0; j < 3; j++)
+                            for (int j = 0; j < DIALOGS_PER_MAP; j++)
                             {
                                 SetSoundVolume(peasant.dialogues[i][j].sound, volumeDialogue);
                                 SetSoundVolume(player.dialoguesWithPeasant[i][j].sound, volumeDialogue);

@@ -66,11 +66,14 @@ void InitHearts(Heart hearts[])
 {
     for (int i = 0; i < MAX_HEARTS; i++)
     {
-        //POSITION
+        // POSITION
         hearts[i].position = (Vector2){POSITION_ZERO, POSITION_ZERO};
 
         // SPRITE
         hearts[i].texture = LoadTexture("assets/resources/sprites/life/heartDrop.png");
+
+        // SCALE 
+        hearts[i].scale = 2.0f;
 
         // STATES
         hearts[i].isActive = false;
@@ -79,9 +82,9 @@ void InitHearts(Heart hearts[])
         hearts[i].healthValue = VALUE_OF_THE_HEART;
 
         // SOUNDS
-        hearts[i].collectSound = 
+        hearts[i].collectSound =
             LoadSound("assets/resources/sounds/sound_effects/drops/heart-collect.wav");
-        hearts[i].spawnSound = 
+        hearts[i].spawnSound =
             LoadSound("assets/resources/sounds/sound_effects/drops/heart-spawn.wav");
     }
 }
@@ -113,11 +116,13 @@ void UpdateHearts(Heart hearts[], float delta, Player *player, Wolf *wolf, Wolf 
     {
         if (hearts[i].isActive)
         {
-            Rectangle heartRect = {
-                hearts[i].position.x,
-                hearts[i].position.y,
-                hearts[i].texture.width,
-                hearts[i].texture.height};
+            Rectangle heartRect =
+                {
+                    hearts[i].position.x,
+                    hearts[i].position.y,
+                    hearts[i].texture.width,
+                    hearts[i].texture.height
+                };
 
             if (CheckCollisionRecs(heartRect, playerRect))
             {
@@ -140,24 +145,27 @@ void DrawHearts(const Heart hearts[], float delta, Player *player)
     {
         if (hearts[i].isActive)
         {
-            Vector2 origin = {
-                hearts[i].texture.width / 2.0f,
-                hearts[i].texture.height / 2.0f
-            };
+            Vector2 origin =
+                {
+                    hearts[i].texture.width / hearts[i].scale,
+                    hearts[i].texture.height / hearts[i].scale
+                };
 
-            Rectangle source = {
-                0,
-                0,
-                hearts[i].texture.width,
-                hearts[i].texture.height
-            };
+            Rectangle source =
+                {
+                    0,
+                    0,
+                    hearts[i].texture.width,
+                    hearts[i].texture.height
+                };
 
-            Rectangle dest = {
-                hearts[i].position.x + HEART_DRAW_OFFSET_X,
-                hearts[i].position.y + HEART_DRAW_OFFSET_Y,
-                hearts[i].texture.width * HEART_DRAW_SCALE,
-                hearts[i].texture.height * HEART_DRAW_SCALE
-            };
+            Rectangle dest =
+                {
+                    hearts[i].position.x + HEART_DRAW_OFFSET_X,
+                    hearts[i].position.y + HEART_DRAW_OFFSET_Y,
+                    hearts[i].texture.width * HEART_DRAW_SCALE,
+                    hearts[i].texture.height * HEART_DRAW_SCALE
+                };
 
             DrawTexturePro(
                 hearts[i].texture,
@@ -165,8 +173,7 @@ void DrawHearts(const Heart hearts[], float delta, Player *player)
                 dest,
                 origin,
                 HEART_DRAW_ROTATION,
-                WHITE
-            );
+                WHITE);
         }
     }
     drawMassage(delta, player);

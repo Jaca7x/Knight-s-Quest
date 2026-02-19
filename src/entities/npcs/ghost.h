@@ -9,6 +9,7 @@
 
 typedef struct npc Npc;
 typedef struct interaction Interaction;
+typedef struct player Player;
 
 // MAP
 #define START_MAP 1
@@ -17,9 +18,6 @@ typedef struct interaction Interaction;
 #define GHOST_INTERACTION_OFFSET_X 15
 #define GHOST_INTERACTION_OFFSET_Y -35
 #define GHOST_EXCLAMATION_OFFSET 25
-
-// DIALOG
-#define GHOST_NUM_MAPS 4
 
 typedef enum {
     DIALOG_CLOSED_GHOST,

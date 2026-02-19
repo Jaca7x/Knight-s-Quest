@@ -7,7 +7,6 @@
 #include "core/define.h"
 
 // MAPS
-#define PEASANT_NUM_MAPS 3
 #define PEASANT_LAST_MAP_DIALOGUE 8
 
 // OFFSET

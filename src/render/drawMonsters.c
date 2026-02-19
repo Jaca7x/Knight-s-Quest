@@ -102,8 +102,8 @@ void DrawMonsters(Monsters *monsters, int rowBase, int offsetHurtY, int offsetDe
         dest.y += hurtOffSetY;
     }
 
-    Vector2 origin = {0, 0};
-    float rotation = 0.0f;
+    Vector2 origin = ORIGIN_TOPLEFT;
+    float rotation = ROTATION;
 
     DrawTexturePro(currentTexture, source, dest, origin, rotation, WHITE);
 }

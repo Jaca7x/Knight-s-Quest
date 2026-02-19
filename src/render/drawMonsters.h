@@ -5,6 +5,7 @@
 #include "stdio.h"
 #include "core/define.h"
 
+// SCALES
 #define BOSS_SCALE_ATK_AND_WALK_AND_DEATH 1.5f
 #define BOSS_SCALE_IDLE 1.0f
 #define BOSS_SCALE_HURT 0.6f

@@ -57,6 +57,7 @@ typedef struct heart
     Vector2 position;   
 
     Texture2D texture; 
+    float scale;
 
     bool isActive;    
 

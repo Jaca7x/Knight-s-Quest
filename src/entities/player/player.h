@@ -12,14 +12,11 @@
 #include "entities/goblin/bombGoblin.h"
 #include "core/define.h"
 
-// MAPS & DIALOGS
-
-#define NUM_MAPS 4
-#define NUM_MAPS_WITH_PEASANT 3
-#define DIALOGS_PER_MAP 3
-
 // STATS
 #define PLAYER_MAX_LIFE 100
+
+#define MIN_STAMINA_FOR_LIGHT_ATTACK 30
+#define MIN_STAMINA_FOR_HEAVY_ATTACK 45
 
 #define PLAYER_STAMINA_SPENT_LIGHT_ATTACKS 30.0f
 #define PLAYER_STAMINA_SPENT_HEAVY_ATTACKS 75.0f
@@ -29,18 +26,23 @@
 #define PLAYER_ATTACK_COOLDOWN_TIMER 0.3f
 
 // JUMP
-#define JUMP_FORCE_HIGH        -400.0f
-#define JUMP_FORCE_MEDIUM      -300.0f
+#define JUMP_FORCE_HIGH -400.0f
+#define JUMP_FORCE_MEDIUM -300.0f
 
-#define JUMP_COST_HIGH         35.0f
-#define JUMP_COST_MEDIUM       20.0f
+#define JUMP_COST_HIGH 35.0f
+#define JUMP_COST_MEDIUM 20.0f
 
-#define JUMP_STAMINA_HIGH      40.0f
-#define JUMP_STAMINA_MEDIUM    20.0f
+#define JUMP_STAMINA_HIGH 40.0f
+#define JUMP_STAMINA_MEDIUM 20.0f
 
-#define JUMP_FORCE_NONE        0.0f
+#define JUMP_FORCE_NONE 0.0f
 
-void PlayPlayerSound(Player *player, int currentMapIndex, int dialogueIndex);
+// OFFSETS
+#define PLAYER_SCALE 2.0f
+#define PLAYER_HITBOX_WIDTH_RATIO 0.3f
+#define PLAYER_HITBOX_HEIGHT_RATIO 0.35f
+
+void PlayPlayerSoundWithGhost(Player *player, int currentMapIndex, int dialogueIndex);
 void PlayPlayerSoundWithPeasant(Player *player, int currentMapIndex, int dialogueIndex);
 
 typedef struct wolf Wolf; 
@@ -69,8 +71,8 @@ typedef struct player
     Sound playerDialogueWithNPC1;
     Sound playerDialogueWithNPC2;
 
-    DialoguePlayer dialogues[NUM_MAPS][6];
-    DialoguePlayerWithPeasant dialoguesWithPeasant[NUM_MAPS_WITH_PEASANT][3];
+    DialoguePlayer dialogues[GHOST_NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
+    DialoguePlayerWithPeasant dialoguesWithPeasant[PEASANT_NUM_MAPS][TOTAL_DIALOGUES_PER_MAP];
 
     bool attackSoundPlayed;
     bool jumpSoundPlayed;
@@ -153,4 +155,4 @@ void UnloadPlayer(Player *player);
 
 Rectangle GetPlayerHitbox(Player *player);
 
-#endif // PLAYER_H
+#endif 

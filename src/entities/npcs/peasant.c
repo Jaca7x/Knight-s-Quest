@@ -419,7 +419,7 @@ void UnloadPeasant(Peasant *peasant)
 
     UnloadFont(peasant->textFont);
 
-    for (int map = 0; map < NUM_MAPS; map++)
+    for (int map = 0; map < PEASANT_NUM_MAPS; map++)
     {
         for (int i = 0; i < 3; i++)
         {

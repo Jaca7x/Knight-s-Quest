@@ -8,7 +8,7 @@ bool InteractionWithGhost(const Ghost *ghost, Player *player)
 
 void PlayGhostSound(Ghost *ghost, int currentMapIndex, int dialogueIndex)
 {
-    if (currentMapIndex >= START_MAP && currentMapIndex <= NUM_MAPS)
+    if (currentMapIndex >= START_MAP && currentMapIndex <= GHOST_NUM_MAPS)
     {
         Sound s = ghost->dialogues[currentMapIndex - PREVIOUS_FRAME][dialogueIndex].sound;
 
@@ -146,7 +146,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
             ghost->isInteraction = true;
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING;
             *dialogoTimer = TIMER_ZERO;
-            PlayPlayerSound(player, currentMapIndex, DIALOGUE_ZERO);
+            PlayPlayerSoundWithGhost(player, currentMapIndex, DIALOGUE_ZERO);
         }
         return;
     }
@@ -171,7 +171,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING2;
             *dialogoTimer = TIMER_ZERO;
-            PlayPlayerSound(player, currentMapIndex, DIALOGUE_ONE);
+            PlayPlayerSoundWithGhost(player, currentMapIndex, DIALOGUE_ONE);
         }
     }
     else if (*dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING2)
@@ -193,7 +193,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING3;
             *dialogoTimer = TIMER_ZERO;
-            PlayPlayerSound(player, currentMapIndex, DIALOGUE_TWO);
+            PlayPlayerSoundWithGhost(player, currentMapIndex, DIALOGUE_TWO);
         }
     }
     else if (*dialogStateGhost == DIALOG_PLAYER_GHOST_TALKING3)
@@ -380,9 +380,9 @@ void UnloadGhost(Ghost *ghost)
     UnloadTexture(ghost->ghostExclamation);
     UnloadFont(ghost->textFont);
 
-    for (int map = 0; map < NUM_MAPS; map++)
+    for (int map = 0; map < GHOST_NUM_MAPS; map++)
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < TOTAL_DIALOGUES_PER_MAP; i++)
         {
             if (ghost->dialogues[map][i].sound.frameCount > FRAME_COUNTER_ZERO)
             {
