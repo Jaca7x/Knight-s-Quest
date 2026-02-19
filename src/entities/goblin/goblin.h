@@ -12,7 +12,7 @@ typedef struct player Player;
 
 // MAPS
 #define GOBLIN_MAP 1
-#define RED_GOBLIN_MAP 0
+#define RED_GOBLIN_MAP 3
 
 //OFFSETS
 #define GOBLIN_BAR_LIFE_OFFSET_X 0
