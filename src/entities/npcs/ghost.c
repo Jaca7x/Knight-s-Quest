@@ -23,18 +23,28 @@ void PlayGhostSound(Ghost *ghost, int currentMapIndex, int dialogueIndex)
 const char **GetGhostDialog(int mapIndex, int *numLines)
 {
     static const char *dialogs[GHOST_NUM_MAPS][DIALOGS_PER_MAP] = {
-        {"Cavaleiro Fantasma: Olá, eu sou um cavaleiro\nfantasma, irei te ajudar na sua jornada\naté o reino goblin!",
+        {
+         "Cavaleiro Fantasma: Olá, eu sou um cavaleiro\nfantasma, irei te ajudar na sua jornada\naté o reino goblin!",
          "Cavaleiro Fantasma: Eles são do reino de Gorzugar!\nUm antigo reino na Floresta Negra de Eldruin.",
-         "Cavaleiro Fantasma: Foque em defender o reino,\ndepois conversamos mais sobre isso."},
-        {"Cavaleiro Fantasma: São lobos sombrios de Eldruin,\neles vivem juntos com os goblins e atacam\nqualquer um que se aproxime.",
+         "Cavaleiro Fantasma: Foque em defender o reino,\ndepois conversamos mais sobre isso."
+        },
+
+        {
+         "Cavaleiro Fantasma: São lobos sombrios de Eldruin,\neles vivem juntos com os goblins e atacam\nqualquer um que se aproxime.",
          "Cavaleiro Fantasma: Sim!, Cuidado, eles são rápidos\ne ferozes.\nUse sua espada com sabedoria.",
-         "Cavaleiro Fantasma: Boa sorte, cavaleiro!."},
-        {"Cavaleiro Fantasma: Sim, aqui sua jornada\nrealmente começa.\nO bosque estará tomado pelos goblins.",
+         "Cavaleiro Fantasma: Boa sorte, cavaleiro!."
+        },
+        {
+         "Cavaleiro Fantasma: Sim, aqui sua jornada\nrealmente começa.\nO bosque estará tomado pelos goblins.",
          "Cavaleiro Fantasma: Lembre-se, cavaleiro, a\ncoragem e a sabedoria serão suas maiores armas.",
-         "Cavaleiro Fantasma: Sim, esses monstros vermelhos\nsão mais fortes e brutos do que os outros,\ncuidado e redobre sua atenção."},
-        {"Cavaleiro Fantasma: Sim, você está indo bem,\nmas a parte mais difícil ainda está por vir.",
+         "Cavaleiro Fantasma: Sim, esses monstros vermelhos\nsão mais fortes e brutos do que os outros,\ncuidado e redobre sua atenção."
+        },
+        {
+         "Cavaleiro Fantasma: Sim, você está indo bem,\nmas a parte mais difícil ainda está por vir.",
          "Cavaleiro Fantasma: Logo à frente você irá chegar\nà floresta negra, onde é o reino goblin,\no mais perigoso de todos.",
-         "Cavaleiro Fantasma: Exatamente, esses lobos\nbrancos são os mais rápidos e inteligentes,\neles são os guardiões da floresta goblin."}};
+         "Cavaleiro Fantasma: Exatamente, esses lobos\nbrancos são os mais rápidos e inteligentes,\neles são os guardiões da floresta goblin."
+        }
+    };
 
     *numLines = 3;
     return dialogs[mapIndex - 1];
@@ -44,24 +54,24 @@ const char **GetPlayerDialog(int mapIndex, int *numLines)
 {
     static const char *dialogs[GHOST_NUM_MAPS][DIALOGS_PER_MAP] = {
         {
-            "Ahh! Quem é você?!",
-            "Ainda bem que apareceu! Quem são esses goblins?",
-            "Mas... por que esse ataque? Estávamos em paz\nhá 200 anos!"
+            "Gareth II: Ahh! Quem é você?!",
+            "Gareth II: Ainda bem que apareceu!\nQuem são esses goblins?",
+            "Gareth II: Mas...\npor que esse ataque? Estávamos em paz\nhá 200 anos!"
         },
         {
-            "O quê é aquilo!?",
-            "Preciso passar por eles para chegar até a floresta?",
-            "Entendido, obrigado pela dica!"
+            "Gareth II: O quê é aquilo!?",
+            "Gareth II: Preciso passar por eles para chegar\naté a floresta?",
+            "Gareth II: Entendido, obrigado pela dica!"
         },
         {
-            "Esse é o bosque de Arvendel?!",
-            "Sim, terei que ser cauteloso daqui pra frente.",
-            "Mas, espera aí aqueles monstros...\nSão vermelhos! eles parecem diferentes"
+            "Gareth II: Esse é o bosque de Arvendel?!",
+            "Gareth II: Sim, terei que ser cauteloso daqui\npra frente.",
+            "Gareth II: Mas, espera aí aqueles monstros...\nSão vermelhos! eles parecem diferentes"
         },
         {
-            "Ufa!\nFinalmente passei daqueles monstros vermelhos.",
-            "O que quer dizer com isso?",
-            "Parece que tenho mais desafios pela frente!\nUm lobo branco logo à frente!"
+            "Gareth II: Ufa!\nFinalmente passei daqueles monstros vermelhos.",
+            "Gareth II: O que quer dizer com isso?",
+            "Gareth II: Parece que tenho mais desafios!\nUm lobo branco logo à frente!"
         }};
 
     *numLines = 3;
@@ -167,7 +177,7 @@ void UpdateGhost(Ghost *ghost, Player *player, float delta, Interaction *interac
     {
         ghost->isInteraction = true;
         *dialogoTimer += delta;
-        if (*dialogoTimer >= 5.5f && IsKeyPressed(KEY_SPACE))
+        if (*dialogoTimer >= 6.0f && IsKeyPressed(KEY_SPACE))
         {
             *dialogStateGhost = DIALOG_PLAYER_GHOST_TALKING2;
             *dialogoTimer = TIMER_ZERO;
