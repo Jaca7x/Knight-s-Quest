@@ -2,8 +2,8 @@
 #define PLAYER_H
 
 #include "raylib.h"      
-#include "src/entities/wolf/wolf.h"            
-#include "src/entities/wolf/runningWolf.h" 
+#include "entities/wolf/wolf.h"            
+#include "entities/wolf/runningWolf.h" 
 #include "entities/goblin/goblin.h" 
 #include "entities/goblin/goblinArcher.h" 
 #include "entities/npcs/npc.h"   

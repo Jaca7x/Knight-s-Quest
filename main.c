@@ -72,6 +72,22 @@ typedef struct
     int *data;
 } TileMap;
 
+typedef struct
+{
+    int width;
+    int height;
+    int tileWidth;
+    int tileHeight;
+
+    int *data;
+
+    Texture2D backgroundTexture;
+    Vector2 backgroundPosition;
+
+} Background;
+
+Background background;
+
 // Tutorials struct
 typedef struct MonsterTutorial
 {
@@ -130,23 +146,76 @@ TileMap LoadTileMap(const char *fileName)
 
     if (!root)
     {
-        fprintf(stderr, "Erro ao parsear JSON: %s\n", cJSON_GetErrorPtr());
+        fprintf(stderr, "Erro ao parsear JSON\n");
         return map;
     }
 
-    map.width = cJSON_GetObjectItem(root, "width")->valueint;
-    map.height = cJSON_GetObjectItem(root, "height")->valueint;
-    map.tileWidth = cJSON_GetObjectItem(root, "tilewidth")->valueint;
-    map.tileHeight = cJSON_GetObjectItem(root, "tileheight")->valueint;
+    cJSON *width = cJSON_GetObjectItem(root, "width");
+    cJSON *height = cJSON_GetObjectItem(root, "height");
+    cJSON *tw = cJSON_GetObjectItem(root, "tilewidth");
+    cJSON *th = cJSON_GetObjectItem(root, "tileheight");
 
-    cJSON *layer0 = cJSON_GetArrayItem(cJSON_GetObjectItem(root, "layers"), 0);
-    cJSON *data = cJSON_GetObjectItem(layer0, "data");
-
-    map.data = malloc(sizeof(int) * map.width * map.height);
-
-    for (int i = 0; i < map.width * map.height; i++)
+    if (!width || !height || !tw || !th)
     {
-        map.data[i] = cJSON_GetArrayItem(data, i)->valueint;
+        printf("Erro: campo essencial do mapa nao encontrado.\n");
+        cJSON_Delete(root);
+        return map;
+    }
+
+    map.width = width->valueint;
+    map.height = height->valueint;
+    map.tileWidth = tw->valueint;
+    map.tileHeight = th->valueint;
+
+    cJSON *layers = cJSON_GetObjectItem(root, "layers");
+    if (!layers || !cJSON_IsArray(layers))
+    {
+        printf("Erro: layers nao encontrado ou nao e array\n");
+        cJSON_Delete(root);
+        return map;
+    }
+
+    int layerCount = cJSON_GetArraySize(layers);
+
+    for (int l = 0; l < layerCount; l++)
+    {
+        cJSON *layer = cJSON_GetArrayItem(layers, l);
+        cJSON *type = cJSON_GetObjectItem(layer, "type");
+
+        if (!type)
+            continue;
+
+        if (strcmp(type->valuestring, "imagelayer") == 0)
+        {
+            cJSON *image = cJSON_GetObjectItem(layer, "image");
+            cJSON *offsetx = cJSON_GetObjectItem(layer, "x");
+            cJSON *offsety = cJSON_GetObjectItem(layer, "y");
+
+            if (image && image->valuestring)
+            {
+                background.backgroundTexture = LoadTexture(image->valuestring);
+            }
+
+            background.backgroundPosition.x = offsetx ? offsetx->valueint : 0;
+            background.backgroundPosition.y = offsety ? offsety->valueint : 0;
+        }
+
+        else if (strcmp(type->valuestring, "tilelayer") == 0)
+        {
+            cJSON *data = cJSON_GetObjectItem(layer, "data");
+            if (!data)
+                continue;
+
+            int total = map.width * map.height;
+
+            map.data = malloc(sizeof(int) * total);
+
+            for (int i = 0; i < total; i++)
+            {
+                cJSON *tile = cJSON_GetArrayItem(data, i);
+                map.data[i] = tile ? tile->valueint : 0;
+            }
+        }
     }
 
     cJSON_Delete(root);
@@ -159,9 +228,19 @@ void UnloadTileMap(TileMap *map)
     {
         free(map->data);
     }
+
+    if (background.backgroundTexture.id != 0)
+        UnloadTexture(background.backgroundTexture);
 }
 
-void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D tileset2, Texture2D tileset3, Texture2D tileset4, Texture2D tileset5, Texture2D tileset6, Texture2D tileset7)
+void DrawTileMapIndividual(const TileMap *map,
+                           Texture2D tileset1,
+                           Texture2D tileset2,
+                           Texture2D tileset3,
+                           Texture2D tileset4,
+                           Texture2D tileset5,
+                           Texture2D tileset6,
+                           Texture2D tileset7)
 {
     for (int y = 0; y < map->height; y++)
     {
@@ -175,7 +254,6 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
             Texture2D texture;
             int localId;
 
-            // Determina qual tileset usar baseado no GID
             if (gid >= TILESET1_FIRSTGID && gid < TILESET2_FIRSTGID)
             {
                 texture = tileset1;
@@ -216,15 +294,29 @@ void DrawTileMapIndividual(const TileMap *map, Texture2D tileset1, Texture2D til
                 continue;
             }
 
+            if (texture.id == 0)
+                continue;
+
+            int tilesPerRow = texture.width / TILE_SIZE;
+
+            if (tilesPerRow <= 0)
+                continue;
+
             Rectangle sourceRec = {
-                (float)(localId % 6) * TILE_SIZE,
-                (float)(localId / 6) * TILE_SIZE,
+                (float)(localId % tilesPerRow) * TILE_SIZE,
+                (float)(localId / tilesPerRow) * TILE_SIZE,
                 TILE_SIZE,
                 TILE_SIZE};
 
             Vector2 position = {
                 x * map->tileWidth,
                 y * map->tileHeight};
+
+            if (localId < 0)
+                continue;
+
+            if (localId >= (texture.width / TILE_SIZE) * (texture.height / TILE_SIZE))
+                continue;
 
             DrawTextureRec(texture, sourceRec, position, RAYWHITE);
         }
@@ -477,7 +569,8 @@ int main(void)
         "assets/maps/florest3.json",
         "assets/maps/goblin1.json",
         "assets/maps/goblin2.json",
-        "assets/maps/goblin3.json"};
+        "assets/maps/goblin3.json",
+    };
 
     TileMap map = LoadTileMap(mapFiles[currentMapIndex]);
     if (!map.data)
@@ -489,6 +582,7 @@ int main(void)
         "Knights`s Quest the Goblin Saga");
 
     Image icon = LoadImage("icon/icon.png");
+
     SetWindowIcon(icon);
     UnloadImage(icon);
 
@@ -1237,6 +1331,14 @@ int main(void)
                 }
             }
 
+            if (background.backgroundTexture.id != 0)
+            {
+                DrawTexture(background.backgroundTexture,
+                            background.backgroundPosition.x,
+                            background.backgroundPosition.y,
+                            WHITE);
+            }
+
             DrawTileMapIndividual(&map, tileset1, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7);
 
             if (player.position.x + player.frameWidth * 2 > map.tileWidth * map.width)
@@ -1730,6 +1832,7 @@ int main(void)
     UnloadTexture(tileset4);
     UnloadTexture(tileset5);
     UnloadTexture(tileset6);
+    UnloadTexture(tileset7);
     UnloadTileMap(&map);
     UnloadPlayer(&player);
     UnloadTexture(staminaBar);
